@@ -1,5 +1,5 @@
 {
-"name" : "lrboston-analysis",
+"name" : "wso2-ml-linear-regression-sample-analysis",
 "comments" : "Linear regression for Boston housing prices",
 "projectId" : 1
 }

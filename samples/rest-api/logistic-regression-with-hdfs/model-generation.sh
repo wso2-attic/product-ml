@@ -3,27 +3,8 @@
 set -e
 
 echo "#create a dataset"
-path=$(pwd)
-
-# General commands
-if [ "$(uname)" == "Darwin" ]; then
-    # Do something under Mac OS X platform
-	sed -i '' "s~PATH~$path~g"  create-dataset
-else
-    # Do something else under some other platform
-	sed -i "s~PATH~$path~g"  create-dataset
-fi
-
-curl -X POST -d @'create-dataset' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/datasets -k
+curl -X POST -b cookies  https://localhost:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='diabetes' -F version='1.0.0' -F description='Diabetes Dataset' -F sourceType='hdfs' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F sourcePath='hdfs://localhost:9000/ml/IndiansDiabetes.csv' -k
 sleep 10
-# changing create-dataset file back to original
-if [ "$(uname)" == "Darwin" ]; then
-    # Do something under Mac OS X platform
-	sed -i '' "s~$path~PATH~g"  create-dataset
-else
-    # Do something else under some other platform
-	sed -i "s~$path~PATH~g"  create-dataset
-fi
 
 echo "#create a project"
 curl -X POST -d @'create-project' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects -k
