@@ -1,5 +1,5 @@
 {
-"name" : "wso2-ml-project",
+"name" : "wso2-ml-decesion-tree-sample-project",
 "description" : "decision-tree test",
 "datasetName" : "diabetes"
 }

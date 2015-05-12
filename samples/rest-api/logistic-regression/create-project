@@ -1,5 +1,5 @@
 {
-"name" : "wso2-ml-project",
+"name" : "wso2-ml-logistic-regression-sample-project",
 "description" : "nirmal test",
 "datasetName" : "diabetes"
 }
