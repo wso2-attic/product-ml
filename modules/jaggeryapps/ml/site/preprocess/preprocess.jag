@@ -95,7 +95,7 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
-            <h1 class="title">Summary Statistics for first 10,000 data rows</h1>
+            <h1 class="title">Summary statistics for a random sample of the dataset</h1>
 			    	<!--h4>Pre Process Data</h4-->				    	
 			<table id="datasetTable">
                 <!-- <div>Summary Statistics for the first 10,000 data rows: </div> -->
