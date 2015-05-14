@@ -59,13 +59,13 @@ public class GetDatasetsTestCase extends MLBaseTest {
     @Test(description = "Get a dataset with a known ID")
     public void testGetDataset() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
-                    .DATASET_ID);
+                    .DATASET_ID_DIABETES);
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                     .getStatusCode());
         // Check whether the correct dataset is returned.
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         JSONObject responseJson = new JSONObject(bufferedReader.readLine());
-        assertEquals("Incorrect dataset retrieved", MLIntegrationTestConstants.DATASET_ID, responseJson.getInt("id"));
+        assertEquals("Incorrect dataset retrieved", MLIntegrationTestConstants.DATASET_ID_DIABETES, responseJson.getInt("id"));
         bufferedReader.close();
         response.close();
     }
@@ -104,7 +104,7 @@ public class GetDatasetsTestCase extends MLBaseTest {
     @Test(description = "Get all available versions of a dataset")
     public void testGetVersionSetsOfdataset() throws MLHttpClientException, IOException  {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
-                .DATASET_ID + "/versions");
+                .DATASET_ID_DIABETES + "/versions");
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         // Check whether the version set exists

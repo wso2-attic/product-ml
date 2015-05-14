@@ -48,9 +48,9 @@ public class CreateProjectsTestCase extends MLBaseTest {
         mlHttpclient = new MLHttpClient(instance, userInfo);
         //Check whether the dataset exists.
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
-                .DATASET_ID);
+                .DATASET_ID_DIABETES);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests becasue dataset with ID: " + MLIntegrationTestConstants.DATASET_ID
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_DIABETES
                     + " is not available");
         }
     }
@@ -62,8 +62,8 @@ public class CreateProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project")
     public void testCreateProject() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME, 
-                MLIntegrationTestConstants.DATASET_NAME);
+        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
+                MLIntegrationTestConstants.DATASET_NAME_DIABETES);
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
@@ -78,7 +78,7 @@ public class CreateProjectsTestCase extends MLBaseTest {
     @Test(description = "Create a project with duplicate Name", dependsOnMethods = "testCreateProject")
     public void testCreateProjectWithDuplicateName() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject("TestProjectForCreatProjectTestCase", 
-                MLIntegrationTestConstants.DATASET_NAME);
+                MLIntegrationTestConstants.DATASET_NAME_DIABETES);
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
@@ -91,7 +91,7 @@ public class CreateProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project without name", dependsOnMethods = "testCreateProject")
     public void testCreateProjectWithoutName() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createProject(null, MLIntegrationTestConstants.DATASET_NAME);
+        CloseableHttpResponse response = mlHttpclient.createProject(null, MLIntegrationTestConstants.DATASET_NAME_DIABETES);
         assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode() , response
                 .getStatusLine().getStatusCode());
         response.close();

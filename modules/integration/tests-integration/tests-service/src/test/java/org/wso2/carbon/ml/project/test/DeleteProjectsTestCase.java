@@ -47,10 +47,10 @@ public class DeleteProjectsTestCase extends MLBaseTest {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
         //Check whether the dataset exists.
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID);
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_DIABETES);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusLine().getStatusCode());
         // Create a project to delete
-        mlHttpclient.createProject(projectName, MLIntegrationTestConstants.DATASET_NAME);
+        mlHttpclient.createProject(projectName, MLIntegrationTestConstants.DATASET_NAME_DIABETES);
     }
     
     /**

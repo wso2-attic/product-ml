@@ -41,15 +41,32 @@ public class MLIntegrationTestConstants {
 	public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
 
 	// Constants for Test cases - Happy scenario
-	public static final String FOREST_COVER_DATASET_SAMPLE = "data/fcSample.csv";
 	public static final String DIABETES_DATASET_SAMPLE = "data/pIndiansDiabetes.csv";
-	public static final String DATASET_NAME = "Forest_Cover";
-	public static final int DATASET_ID = 1;
+	public static final String CONCRETE_SLUMP_SAMPLE = "data/concreteSlump.csv";
+	public static final String BREAST_CANCER_SAMPLE = "data/breastCancerWisconsin.csv";
+
+	public static final String DATASET_NAME_DIABETES = "Diabetes";
+	public static final int DATASET_ID_DIABETES = 1;
+	public static final String DATASET_NAME_CONCRETE_SLUMP = "Concrete_Slump";
+	public static final int DATASET_ID_CONCRETE_SLUMP = 2;
+	public static final String DATASET_NAME_BREAST_CANCER = "Breast_Cancer";
+	public static final int DATASET_ID_BREAST_CANCER = 3;
 	public static final int VERSIONSET_ID = 1;
-	public static final String PROJECT_NAME = "Forest_Cover_Project";
-	public static final int PROJECT_ID = 1;
-	public static final String ANALYSIS_NAME = "Forest_Cover_Analysis";
+
+	public static final String RESPONSE_ATTRIBUTE_DIABETES = "Class";
+	public static final String RESPONSE_ATTRIBUTE_CONCRETE_SLUMP = "CompressiveStrength(28-day)(Mpa)";
+	public static final String RESPONSE_ATTRIBUTE_BREAST_CANCER = "Class";
+
+	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
+	public static final int PROJECT_ID_DIABETES = 1;
+	public static final String PROJECT_NAME_CONCRETE_SLUMP = "Concrete_Slump_Project";
+	public static final int PROJECT_ID_CONCRETE_SLUMP = 2;
+	public static final String PROJECT_NAME_BREAST_CANCER = "Breast_Cancer_Project";
+	public static final int PROJECT_ID_BREAST_CANCER = 3;
+
+	public static final String ANALYSIS_NAME = "Diabetes_Analysis";
 	public static final int ANALYSIS_ID = 1;
+
 	public static String MODEL_NAME;
     public static final int MODEL_ID = 1;
     

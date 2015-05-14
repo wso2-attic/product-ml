@@ -34,65 +34,50 @@ import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
 
 /**
- * Class contains test cases related to creating analyses
+ * Creates tests related to creating analyses in projects for different datasets.
  */
-@Test(groups="createAnalyses")
-public class CreateAnalysesTestCase extends MLBaseTest {
+@Test(groups="createAdditionalAnalyses")
+public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
-    
+
     @BeforeClass(alwaysRun = true, groups = "wso2.ml.integration")
     public void initTest() throws Exception {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
-        // Check whether the project exists.
+        // Check whether the projects exists.
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_DIABETES);
+                .PROJECT_NAME_CONCRETE_SLUMP);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_BREAST_CANCER);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
     }
 
     /**
-     * Test creating an analysis.
-     * 
-     * @throws MLHttpClientException 
-     * @throws IOException 
+     * Test creating an analysis for concrete slump dataset
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(groups = "createAnalysisSuccess", description = "Create an analysis")
-    public void testCreateAnalysis() throws MLHttpClientException, IOException {
+    @Test(groups = "createAnalysisConcreteSlump", description = "Create an analysis for concrete slump dataset")
+    public void testCreateAnalysisConcreteSlump() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP));
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
-    
-    /**
-     * Test creating an analysis without the Name.
-     * 
-     * @throws MLHttpClientException 
-     * @throws IOException 
-     */
-    @Test(groups = "wso2.ml.integration", description = "Create an analysis without a name")
-    public void testCreateAnalysisWithoutName() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createAnalysis(null, MLIntegrationTestConstants.PROJECT_ID_DIABETES);
-        assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode(), response
-                .getStatusLine().getStatusCode());
-        response.close();
-    }
-    
-    /**
-     * Test creating an analysis without a project ID.
-     * 
-     * @throws MLHttpClientException 
-     * @throws IOException 
-     */
-    @Test(description = "Create an analysis without a ProjectId")
-    public void testCreateAnalysisWithoutProjectID() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createAnalysis("TestAnalysisForAnalysis", -1);
-        assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode(), response
-                .getStatusLine().getStatusCode());
+
+    @Test(groups = "createAnalysisBreastCancer", description = "Create an analysis for breast cancer dataset")
+    public void testCreateAnalysisBreastCancer() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER));
+        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
         response.close();
     }
 }

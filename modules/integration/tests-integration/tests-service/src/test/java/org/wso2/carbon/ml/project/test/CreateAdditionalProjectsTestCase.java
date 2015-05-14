@@ -19,6 +19,7 @@
 package org.wso2.carbon.ml.project.test;
 
 import static org.testng.AssertJUnit.assertEquals;
+
 import java.io.IOException;
 
 import javax.ws.rs.core.Response;
@@ -33,43 +34,47 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
 
 /**
- * Contains test cases related to retrieving projects
+ * Creating test cases related to additional projects for different datasets
  */
-@Test(groups="getProjects", dependsOnGroups="createProjects")
-public class GetProjectsTestCase extends MLBaseTest {
-    
+@Test(groups="createAdditionalProjects")
+public class CreateAdditionalProjectsTestCase extends MLBaseTest {
+
     private MLHttpClient mlHttpclient;
-    
+
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLIntegrationBaseTestException {
+    public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
     }
-    
+
     /**
-     * Test retrieving all projects.
-     * @throws MLHttpClientException 
-     * @throws IOException 
+     * Creates a test case for creating a project for concrete slump data set
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(description = "Retrieve a project")
-    public void testGetAllProjects() throws MLHttpClientException, IOException   {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects");
+    @Test(description = "Create a project for concrete slump dataset")
+    public void testCreateProjectConcreteSlump() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP,
+                MLIntegrationTestConstants.DATASET_NAME_CONCRETE_SLUMP);
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
-    
+
     /**
-     * Test retrieving a project.
-     * @throws MLHttpClientException 
-     * @throws IOException 
+     * Creates a test case for creating a project for breast cancer dataset
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(description = "Retrieve a project")
-    public void testGetProject() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_DIABETES);
+    @Test(description = "Create a project")
+    public void testCreateProjectBreastCancer() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER,
+                MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER);
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
-    //TODO: Add retrieving a non existing project
+
+
+
 }
