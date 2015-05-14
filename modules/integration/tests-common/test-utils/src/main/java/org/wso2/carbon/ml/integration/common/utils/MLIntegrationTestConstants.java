@@ -78,8 +78,10 @@ public class MLIntegrationTestConstants {
 	public static final int PROJECT_ID_CONCRETE_SLUMP = 2;
 	public static final String PROJECT_NAME_BREAST_CANCER = "Breast_Cancer_Project";
 	public static final int PROJECT_ID_BREAST_CANCER = 3;
+	public static final String PROJECT_NAME_FOREST_FIRES = "Forest_Fires_Project";
+	public static final int PROJECT_ID_FOREST_FIRES = 4;
 
-	public static final String ANALYSIS_NAME = "Diabetes_Analysis";
+	public static final String ANALYSIS_NAME = "Dummy_Analysis";
 	public static final int ANALYSIS_ID = 1;
 
 	public static String MODEL_NAME;

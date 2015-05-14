@@ -56,6 +56,11 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_FOREST_FIRES);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
     }
 
     /**
@@ -72,6 +77,25 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
         response.close();
     }
 
+    /**
+     * Test creating an analysis for forest fires dataset
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(groups = "createAnalysisForestFires", description = "Create an analysis for forest fires dataset")
+    public void testCreateAnalysisForestFires() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES));
+        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Test creating an analysis for breast cancer dataset
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
     @Test(groups = "createAnalysisBreastCancer", description = "Create an analysis for breast cancer dataset")
     public void testCreateAnalysisBreastCancer() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,

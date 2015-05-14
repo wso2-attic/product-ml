@@ -31,7 +31,6 @@ import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
-import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
 
 /**
  * Contains test cases related to creating additional datasets for different algorithms
@@ -49,28 +48,42 @@ public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
     }
 
     /**
-     * Creates dataset for numerical prediction tests
+     * Creates dataset for numerical prediction tests - Concrete slump
      * @throws MLHttpClientException
      * @throws IOException
      */
     @Test(description = "Create a dataset of concrete slump data from a CSV file")
-    public void testCreateDatasetNumericalPrediction() throws MLHttpClientException, IOException {
+    public void testCreateDatasetConcreteSlump() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_CONCRETE_SLUMP,
-                "1.0", MLIntegrationTestConstants.CONCRETE_SLUMP_SAMPLE);
+                "1.0", MLIntegrationTestConstants.CONCRETE_SLUMP_DATASET_SAMPLE);
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
 
     /**
-     * Creates dataset for classification and clustering tests
+     * Creates dataset for classification and clustering tests - Forest Fires
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a dataset of Forest fires data from a CSV file")
+    public void testCreateDatasetForestFires() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES,
+                "1.0", MLIntegrationTestConstants.FOREST_FIRES_DATASET_SAMPLE);
+        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates dataset for classification and clustering tests - Breast Cancer
      * @throws MLHttpClientException
      * @throws IOException
      */
     @Test(description = "Create a dataset of breast cancer Wisconsin data from a CSV file")
     public void testCreateDatasetClassification() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER,
-                "1.0", MLIntegrationTestConstants.BREAST_CANCER_SAMPLE);
+                "1.0", MLIntegrationTestConstants.BREAST_CANCER_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

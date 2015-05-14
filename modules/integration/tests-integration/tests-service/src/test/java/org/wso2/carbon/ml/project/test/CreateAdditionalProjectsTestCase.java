@@ -62,6 +62,20 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
     }
 
     /**
+     * Creates a test case for creating a project for forest fires data set
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a project for forest fires dataset")
+    public void testCreateProjectForestFires() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES,
+                MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES);
+        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
      * Creates a test case for creating a project for breast cancer dataset
      * @throws MLHttpClientException
      * @throws IOException
