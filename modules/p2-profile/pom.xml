@@ -104,11 +104,14 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.registry:org.wso2.carbon.registry.ui.menu.feature:${carbon.registry.version}
                                 </featureArtifactDef>
+				<featureArtifactDef>
+                                    org.wso2.carbon.registry:org.wso2.carbon.registry.contentsearch.feature:${carbon.registry.version}
+                                </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.registry:org.wso2.carbon.registry.resource.properties.feature:${carbon.registry.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.ml.feature:${ml.version}
+                                    org.wso2.carbon.ml:org.wso2.carbon.ml.feature:${carbon.ml.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.common.feature:${carbon.multitenancy.version}
@@ -187,7 +190,7 @@
                                 
                                 <!-- Email Adapter Feature -->
                                 <featureArtifactDef>
-                                     org.wso2.carbon.event-processing:org.wso2.carbon.event.output.adapter.server.feature:${carbon.event.processing.version}
+                                     org.wso2.carbon.analytics-common:org.wso2.carbon.event.output.adapter.server.feature:${carbon.analytics.common.version}
                                 </featureArtifactDef>
                             </featureArtifacts>
                         </configuration>
@@ -230,6 +233,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.registry.core.feature.group</id>
+                                    <version>${carbon.registry.version}</version>
+                                </feature>
+				<feature>
+                                    <id>org.wso2.carbon.registry.contentsearch.feature.group</id>
                                     <version>${carbon.registry.version}</version>
                                 </feature>
                                 <feature>
@@ -287,7 +294,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.ml.feature.group</id>
-                                    <version>${ml.version}</version>
+                                    <version>${carbon.ml.version}</version>
                                 </feature>
                                 <!--Jaggery Features-->
                                 <feature>
@@ -342,7 +349,7 @@
                                 <!-- Email Adapter Feature -->
                                 <feature>
                                     <id>org.wso2.carbon.event.output.adapter.server.feature.group</id>
-                                    <version>${carbon.event.processing.version}</version>
+                                    <version>${carbon.analytics.common.version}</version>
                                 </feature>
                             </features>
                         </configuration>
