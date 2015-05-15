@@ -297,6 +297,7 @@ do
     -Denable.hdfs.datanode="false" \
     -Denable.hdfs.startup="false" \
     -Dfile.encoding=UTF8 \
+    -Dorg.apache.cxf.io.CachedOutputStream.Threshold=104857600 \
     org.wso2.carbon.bootstrap.Bootstrap $*
     status=$?
 done
