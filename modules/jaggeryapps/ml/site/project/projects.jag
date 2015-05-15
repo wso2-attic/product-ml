@@ -260,6 +260,7 @@
                                                 '</td>' +
                                                 '<td class="c-right">' +
                                                     '<div>' +
+                                                        '<a href="#" data-projid="'+projid+'" data-projectname="'+projna+'" id="compare-models" class="cu-reg-btn btn-compare" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Compare models</span></a>' +
                                                         '<a href="#" data-projna="'+projna+'" id="delete-project" class="cu-reg-btn btn-delete">Delete Project</a>' +
                                                     '</div>' +
                                                 '</td>' +
@@ -335,6 +336,14 @@
             var projectName = $(this).data('projectname');
 
             window.location.href = '../explore/explore.jag?projid='+projectId+'&projna='+projectName+'&wfid='+workflowid;
+        });
+
+        $(document).on('click', '#compare-models', function(e){ 
+            e.preventDefault();
+            var projectId = $(this).data('projid');
+            var projectName = $(this).data('projectname');
+
+            window.location.href = 'compare.jag?projectId='+projectId+'&projectName='+projectName;
         });
 
         // function that deletes a project
