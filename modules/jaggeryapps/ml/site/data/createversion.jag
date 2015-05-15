@@ -120,6 +120,7 @@
 					</div>	
 
 					<label class="input-label">Data Source<span class="File Location"></span></label>
+					<span class="fld-required">*</span>
 		                        <div id="source-file" class="input-control file info-state" data-role="input-control">
 			       			<input type="file" id="fileInput" name="file"/>
 			    		</div>

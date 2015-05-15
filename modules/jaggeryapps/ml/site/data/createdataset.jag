@@ -100,12 +100,14 @@
 
 			   	<form id="create-dataset-form" method="POST" enctype="multipart/form-data">
 					<label class="input-label">Dataset Name<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+					<span class="fld-required">*</span>
 					<div class="input-control text">
 					    <input type="text" value="" placeholder="e.g. Iris" id="dataset-name" name="datasetName"/>
 					    <!--span class="form-val-error">* Name for this Dataset is required.</span-->
 					</div>
 
 					<label class="input-label">Version<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+					<span class="fld-required">*</span>
 					<div class="input-control text">
 					    <input type="text" value="1.0.0" placeholder="" id="dataset-version" name="version"/>
 					</div>				
@@ -125,6 +127,7 @@
 					</div>	
 
 					<label class="input-label">Data Source<span class="File Location"></span></label>
+					<span class="fld-required">*</span>
 		                        <div id="source-file" class="input-control file info-state" data-role="input-control">
 			       			<input type="file" id="fileInput" name="file"/>
 			    		</div>
