@@ -158,15 +158,23 @@ $( document ).ready(function() {
 	    
         // set customized features
 	    var customizedFeatures = [];
-	    $("#datasetTable tr.dataRow").each(function() {
-	    	var featureRow = {};
-	    	featureRow['type'] = $(this).find(".fieldType option:selected").text();
-	    	featureRow['name'] = $(this).find(".feature").text();
-	    	featureRow['include'] = $(this).find(".includeFeature").is(':checked');
-	    	featureRow['imputeOption'] = $(this).find(".imputeMethod option:selected").text();
+	    
+        var datasetTable = $('#datasetTable').dataTable();
 
-	    	customizedFeatures.push(featureRow);
-        });
+        var features =  datasetTable.$(".feature", {"page": "all"});
+        var fieldTypes =  datasetTable.$(".fieldType", {"page": "all"});        
+        var includeFeatures =  datasetTable.$(".includeFeature", {"page": "all"});
+        var imputeMethods =  datasetTable.$(".imputeMethod", {"page": "all"});
+
+        for(var i = 0; i < features.length; i++) {
+            var featureRow = {};
+            featureRow['type'] = $(fieldTypes[i]).val();
+            featureRow['name'] = $(features[i]).html();
+            featureRow['include'] = $(includeFeatures[i]).is(':checked');
+            featureRow['imputeOption'] = $(imputeMethods[i]).val();
+
+            customizedFeatures.push(featureRow);            
+        }
         
         $.ajax({
 	        type: 'POST',
