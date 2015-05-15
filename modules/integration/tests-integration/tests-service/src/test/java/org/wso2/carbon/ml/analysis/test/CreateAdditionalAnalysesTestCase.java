@@ -61,6 +61,11 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
     }
 
     /**
@@ -100,6 +105,20 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
     public void testCreateAnalysisBreastCancer() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER));
+        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Test creating an analysis for protein tertiary structure dataset
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(groups = "createAnalysisProteinTertiaryStructure", description = "Create an analysis for protein tertiary structure dataset")
+    public void testCreateAnalysisProteinTertiaryStructure() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE));
         assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

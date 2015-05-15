@@ -94,7 +94,7 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
         // Check whether the project exists.
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants
+        response = mlHttpclient.doHttpGet("/api/projects/" + org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants
                 .PROJECT_NAME_DIABETES);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
@@ -109,42 +109,52 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_FOREST_FIRES);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
     }
 
     // Tests for classification algorithms
 
-//    @Test(description = "Build a SVM model")
-//    public void testBuildSVMModel() throws MLHttpClientException, IOException{
-//        setConfiguration("SVM", MLIntegrationTestConstants.CLASSIFICATION,
-//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-//                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES), "");
-//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-//                .getStatusCode());
-//        response.close();
-//    }
-//
-//    @Test(description = "Build a Decision Tree model")
-//    public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException {
-//        setConfiguration("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION,
-//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-//                mlHttpclient.getProjectId(org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants.PROJECT_NAME_DIABETES), "");
-//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-//                .getStatusCode());
-//        response.close();
-//    }
-//
-//    @Test(description = "Build a Naive Bayes model")
-//    public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException {
-//        setConfiguration("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION,
-//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-//                mlHttpclient.getProjectId(org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants.PROJECT_NAME_DIABETES), "");
-//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-//                .getStatusCode());
-//        response.close();
-//    }
+    @Test(description = "Build a SVM model")
+    public void testBuildSVMModel() throws MLHttpClientException, IOException{
+        setConfiguration("SVM", MLIntegrationTestConstants.CLASSIFICATION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES), "");
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    @Test(description = "Build a Decision Tree model")
+    public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException {
+        setConfiguration("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants.PROJECT_NAME_DIABETES), "");
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    @Test(description = "Build a Naive Bayes model")
+    public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException {
+        setConfiguration("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants.PROJECT_NAME_DIABETES), "");
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
 
     @Test(description = "Build a Logistic Regression model")
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException {
@@ -170,27 +180,27 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
     }
 
-//    @Test(description = "Build a Ridge Regression model")
-//    public void testBuildRidgeRegressionModel() throws MLHttpClientException, IOException {
-//        setConfiguration("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
-//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_CONCRETE_SLUMP, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-//                mlHttpclient.getProjectId(org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP), "");
-//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-//                .getStatusCode());
-//        response.close();
-//    }
-//
-//    @Test(description = "Build a Lasso Regression model")
-//    public void testBuildLassoRegressionModel() throws MLHttpClientException, IOException {
-//        setConfiguration("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
-//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_CONCRETE_SLUMP, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-//                mlHttpclient.getProjectId(org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP), "");
-//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-//                .getStatusCode());
-//        response.close();
-//    }
+    @Test(description = "Build a Ridge Regression model")
+    public void testBuildRidgeRegressionModel() throws MLHttpClientException, IOException {
+        setConfiguration("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_CONCRETE_SLUMP, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP), "");
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    @Test(description = "Build a Lasso Regression model")
+    public void testBuildLassoRegressionModel() throws MLHttpClientException, IOException {
+        setConfiguration("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_CONCRETE_SLUMP, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP), "");
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
 
     // Tests for clustering algorithms
 
@@ -214,16 +224,16 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
 
     // Classification
 
-    @Test(description = "Build a SVM model for additional dataset-1")
-    public void testBuildSVMModelAdditional01() throws MLHttpClientException, IOException {
-        setConfiguration("SVM", MLIntegrationTestConstants.CLASSIFICATION,
-                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_BREAST_CANCER, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER), "-additional-1");
-        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
-    }
+//    @Test(description = "Build a SVM model for additional dataset-1")
+//    public void testBuildSVMModelAdditional01() throws MLHttpClientException, IOException {
+//        setConfiguration("SVM", MLIntegrationTestConstants.CLASSIFICATION,
+//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_BREAST_CANCER, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+//                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER), "-additional-1");
+//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+//                .getStatusCode());
+//        response.close();
+//    }
 
 //    @Test(description = "Build a Decision Tree model for additional dataset-1")
 //    public void testBuildDecisionTreeModelAdditional01() throws MLHttpClientException, IOException {
@@ -236,16 +246,16 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
 //        response.close();
 //    }
 //
-//    @Test(description = "Build a Naive Bayes model for additional dataset-1")
-//    public void testBuildNaiveBayesModelAdditional01() throws MLHttpClientException, IOException {
-//        setConfiguration("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION,
-//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_BREAST_CANCER, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-//                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER), "-additional-1");
-//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-//                .getStatusCode());
-//        response.close();
-//    }
+    @Test(description = "Build a Naive Bayes model for additional dataset-1")
+    public void testBuildNaiveBayesModelAdditional01() throws MLHttpClientException, IOException {
+        setConfiguration("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_BREAST_CANCER, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER), "-additional-1");
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
 //
 //    @Test(description = "Build a Logistic Regression model for additional dataset-1")
 //    public void testBuildLogisticRegressionModelAdditional01() throws MLHttpClientException, IOException{
@@ -260,17 +270,17 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
 
     // Numerical Prediction
 
-//    @Test(description = "Build a Linear Regression model for additional dataset-2")
-//    public void testBuildLinearRegressionModelAdditional02() throws MLHttpClientException, IOException {
-//        setConfiguration("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
-//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_FOREST_FIRES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-//                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES), "-additional-2");
-//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-//                .getStatusCode());
-//        response.close();
-//    }
-//
+    @Test(description = "Build a Linear Regression model for additional dataset-2")
+    public void testBuildLinearRegressionModelAdditional02() throws MLHttpClientException, IOException {
+        setConfiguration("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_FOREST_FIRES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES), "-additional-2");
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
 //    @Test(description = "Build a Ridge Regression model for additional dataset-2")
 //    public void testBuildRidgeRegressionModelAdditional02() throws MLHttpClientException, IOException {
 //        setConfiguration("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
@@ -293,9 +303,26 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
     }
 
+    /**
+     * Tests for datasets of different sizes.
+     * Following datasets are used:
+     *      Protein tertiary structre dataset (3.5MB) - for numerical prediction
+     */
+
+    @Test(description = "Build a Linear Regression model for larger dataset")
+    public void testBuildLinearRegressionModelLargeDataset() throws MLHttpClientException, IOException {
+        setConfiguration("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_PROTEIN_TERTIARY_STRUCTURE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE), "large");
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
     @AfterClass(alwaysRun = true)
     public void tearDown() throws IOException, InterruptedException {
         // FIXME:
-        Thread.sleep(50000);
+        Thread.sleep(20000);
     }
 }

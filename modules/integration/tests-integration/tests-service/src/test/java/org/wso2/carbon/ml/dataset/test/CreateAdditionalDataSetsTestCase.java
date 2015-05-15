@@ -81,9 +81,23 @@ public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
      * @throws IOException
      */
     @Test(description = "Create a dataset of breast cancer Wisconsin data from a CSV file")
-    public void testCreateDatasetClassification() throws MLHttpClientException, IOException {
+    public void testCreateDatasetBreastCancer() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER,
                 "1.0", MLIntegrationTestConstants.BREAST_CANCER_DATASET_SAMPLE);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates dataset for numerical predictions tests - Protein tertiary structure
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a dataset of protein tertiary structure data from a CSV file")
+    public void testCreateDatasetProteinTertiaryStructure() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE,
+                "1.0", MLIntegrationTestConstants.PROTEIN_TERTIARY_STRUCTURE_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

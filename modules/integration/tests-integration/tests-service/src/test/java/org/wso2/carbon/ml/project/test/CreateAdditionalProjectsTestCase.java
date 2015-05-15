@@ -80,7 +80,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(description = "Create a project")
+    @Test(description = "Create a project for breast cancer dataset")
     public void testCreateProjectBreastCancer() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER,
                 MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER);
@@ -89,6 +89,17 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
         response.close();
     }
 
-
-
+    /**
+     * Creates a test case for creating a project for protein tertiary structure dataset
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a project protein tertiary structure dataset")
+    public void testCreateProjectProteinTertiaryStructure() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE,
+                MLIntegrationTestConstants.DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE);
+        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
 }
