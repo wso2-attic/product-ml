@@ -63,7 +63,7 @@ public class CreateAnalysesTestCase extends MLBaseTest {
     public void testCreateAnalysis() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -77,7 +77,7 @@ public class CreateAnalysesTestCase extends MLBaseTest {
     @Test(groups = "wso2.ml.integration", description = "Create an analysis without a name")
     public void testCreateAnalysisWithoutName() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(null, MLIntegrationTestConstants.PROJECT_ID_DIABETES);
-        assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode(), response
+        assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode(), response
                 .getStatusLine().getStatusCode());
         response.close();
     }
@@ -91,7 +91,7 @@ public class CreateAnalysesTestCase extends MLBaseTest {
     @Test(description = "Create an analysis without a ProjectId")
     public void testCreateAnalysisWithoutProjectID() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis("TestAnalysisForAnalysis", -1);
-        assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode(), response
+        assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode(), response
                 .getStatusLine().getStatusCode());
         response.close();
     }

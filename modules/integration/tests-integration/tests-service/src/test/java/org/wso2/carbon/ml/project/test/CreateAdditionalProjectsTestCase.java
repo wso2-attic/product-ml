@@ -56,7 +56,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
     public void testCreateProjectConcreteSlump() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP,
                 MLIntegrationTestConstants.DATASET_NAME_CONCRETE_SLUMP);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -70,7 +70,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
     public void testCreateProjectForestFires() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES,
                 MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -84,7 +84,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
     public void testCreateProjectBreastCancer() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER,
                 MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -98,7 +98,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
     public void testCreateProjectProteinTertiaryStructure() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE,
                 MLIntegrationTestConstants.DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }

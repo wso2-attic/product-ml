@@ -50,13 +50,13 @@ public class CreateModelTestCase extends MLBaseTest {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/versions/" + MLIntegrationTestConstants
                 .VERSIONSET_ID);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests becasue a version-set is not available");
+            throw new SkipException("Skipping tests because a version-set is not available");
         }
         response.close();
         //Check whether analysis exists.
         response = mlHttpclient.doHttpGet("/api/analyses/" + MLIntegrationTestConstants.ANALYSIS_NAME);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests becasue an analysis is not available");
+            throw new SkipException("Skipping tests because an analysis is not available");
         }
     }
 

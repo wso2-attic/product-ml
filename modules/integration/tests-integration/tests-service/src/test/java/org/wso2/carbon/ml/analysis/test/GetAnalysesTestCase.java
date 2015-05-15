@@ -53,7 +53,7 @@ public class GetAnalysesTestCase extends MLBaseTest {
     @Test(description = "Get all analyses")
     public void testGetAllAnalyzes() throws MLHttpClientException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/");
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
     }
     
@@ -67,7 +67,7 @@ public class GetAnalysesTestCase extends MLBaseTest {
     public void testGetAnalysis() throws MLHttpClientException, IOException  {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + MLIntegrationTestConstants
                 .ANALYSIS_NAME);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -81,7 +81,7 @@ public class GetAnalysesTestCase extends MLBaseTest {
     @Test(description = "Retrieve a non-existing analysis")
     public void testGetNonExistingAnalysis() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + "nonExistinfAnalysisName");
-        assertEquals("Unexpected response recieved", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }

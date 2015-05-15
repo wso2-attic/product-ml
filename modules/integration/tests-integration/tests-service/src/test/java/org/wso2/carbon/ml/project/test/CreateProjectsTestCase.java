@@ -64,7 +64,7 @@ public class CreateProjectsTestCase extends MLBaseTest {
     public void testCreateProject() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -79,7 +79,7 @@ public class CreateProjectsTestCase extends MLBaseTest {
     public void testCreateProjectWithDuplicateName() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject("TestProjectForCreatProjectTestCase", 
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -92,7 +92,7 @@ public class CreateProjectsTestCase extends MLBaseTest {
     @Test(description = "Create a project without name", dependsOnMethods = "testCreateProject")
     public void testCreateProjectWithoutName() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createProject(null, MLIntegrationTestConstants.DATASET_NAME_DIABETES);
-        assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode() , response
+        assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode() , response
                 .getStatusLine().getStatusCode());
         response.close();
     }
@@ -105,7 +105,7 @@ public class CreateProjectsTestCase extends MLBaseTest {
     @Test(description = "Create a project without a dataset")
     public void testCreateProjectWithoutDataset() throws MLHttpClientException, IOException  {
         CloseableHttpResponse response = mlHttpclient.createProject("TestProjectForCreatProjectTestCase-2", null);
-        assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode() , response
+        assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode() , response
                 .getStatusLine().getStatusCode());
         response.close();
     }

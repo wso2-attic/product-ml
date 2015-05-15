@@ -61,7 +61,7 @@ public class DeleteProjectsTestCase extends MLBaseTest {
     @Test(description = "Delete an exsisting project")
     public void testDeleteProject() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/projects/" + projectName);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -74,7 +74,7 @@ public class DeleteProjectsTestCase extends MLBaseTest {
     @Test(description = "Delete an exsisting project")
     public void testDeleteNonExistingProject() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/projects/" + "NonExistingProjectName");
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
