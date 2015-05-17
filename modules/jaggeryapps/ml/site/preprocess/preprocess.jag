@@ -102,7 +102,7 @@
                 <thead>
                     <tr>
                         <th>Feature</th>
-                        <th>Input</th>
+                        <th>Include</th>
                         <th>Type</th>
                         <th>Summary Statistics</th>
                         <th>Impute</th>
