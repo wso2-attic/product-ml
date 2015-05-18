@@ -267,11 +267,18 @@
                                             '</tr>' +
                                         '</table>' +
                                     '</h4>' +
-                                '</div>' +
-                                '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">' +
+                                '</div>';
+                                // first panel will be expanded on page load
+                                if(i == 0) {
+                                    accordionPanel += '' +
+                                '<div id="collapse'+i+'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'+i+'">';
+                                }
+                                else {
+                                    accordionPanel += '' +
+                                '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">';
+                                }
+                                    accordionPanel += '' +
                                     '<div class="panel-body">';
-                                        
-
                                 if (tenantProjects[i]['analyses'].length == 0) {
                                     accordionPanel += buildEmptyProjectDisplay(description, projid, projna, datasetId);
                                 }
