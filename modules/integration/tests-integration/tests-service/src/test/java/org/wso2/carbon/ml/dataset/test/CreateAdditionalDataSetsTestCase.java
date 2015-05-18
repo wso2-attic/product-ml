@@ -62,7 +62,7 @@ public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
     }
 
     /**
-     * Creates dataset for classification and clustering tests - Forest Fires
+     * Creates dataset for numerical prediction tests - Forest Fires
      * @throws MLHttpClientException
      * @throws IOException
      */

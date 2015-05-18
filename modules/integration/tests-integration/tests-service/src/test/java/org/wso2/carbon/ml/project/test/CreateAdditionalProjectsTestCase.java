@@ -25,6 +25,7 @@ import java.io.IOException;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
@@ -40,11 +41,37 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTe
 public class CreateAdditionalProjectsTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
+    private CloseableHttpResponse response;
 
     @BeforeClass(alwaysRun = true)
     public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
+        //Check whether the datasets exists.
+        response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                .DATASET_ID_CONCRETE_SLUMP);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_CONCRETE_SLUMP
+                    + " is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                .DATASET_ID_BREAST_CANCER);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_BREAST_CANCER
+                    + " is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                .DATASET_ID_FOREST_FIRES);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_FOREST_FIRES
+                    + " is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                .DATASET_ID_PROTEIN_TERTIARY_STRUCTURE);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_PROTEIN_TERTIARY_STRUCTURE
+                    + " is not available");
+        }
     }
 
     /**
@@ -54,7 +81,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project for concrete slump dataset")
     public void testCreateProjectConcreteSlump() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP,
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP,
                 MLIntegrationTestConstants.DATASET_NAME_CONCRETE_SLUMP);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
@@ -68,7 +95,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project for forest fires dataset")
     public void testCreateProjectForestFires() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES,
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES,
                 MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
@@ -82,7 +109,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project for breast cancer dataset")
     public void testCreateProjectBreastCancer() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER,
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER,
                 MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
@@ -96,7 +123,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project protein tertiary structure dataset")
     public void testCreateProjectProteinTertiaryStructure() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE,
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE,
                 MLIntegrationTestConstants.DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());

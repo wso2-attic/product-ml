@@ -66,7 +66,7 @@ public class MLIntegrationTestConstants {
 	public static final int DATASET_ID_BREAST_CANCER = 3;
 	public static final String DATASET_NAME_FOREST_FIRES = "Forest_Fires";
 	public static final int DATASET_ID_FOREST_FIRES = 4;
-    public static final String DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE = "Protein_Tertiary_Structure";
+    public static final String DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE = "Protein_Structure";
     public static final int DATASET_ID_PROTEIN_TERTIARY_STRUCTURE = 5;
 	public static final int VERSIONSET_ID = 1;
 
@@ -84,7 +84,7 @@ public class MLIntegrationTestConstants {
 	public static final int PROJECT_ID_BREAST_CANCER = 3;
 	public static final String PROJECT_NAME_FOREST_FIRES = "Forest_Fires_Project";
 	public static final int PROJECT_ID_FOREST_FIRES = 4;
-    public static final String PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE = "Protein_Tertiary_Structure_Project";
+    public static final String PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE = "Protein_Structure_Project";
     public static final int PROJECT_ID_PROTEIN_TERTIARY_STRUCTURE = 5;
 
 	public static final String ANALYSIS_NAME = "Dummy_Analysis";
