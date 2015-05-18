@@ -97,7 +97,7 @@ public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
     @Test(description = "Create a dataset of protein tertiary structure data from a CSV file")
     public void testCreateDatasetProteinTertiaryStructure() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE,
-                "1.0", MLIntegrationTestConstants.PROTEIN_TERTIARY_STRUCTURE_DATASET_SAMPLE);
+                "1.0", MLIntegrationTestConstants.GAMMA_TELESCOPE_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

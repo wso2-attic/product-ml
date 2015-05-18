@@ -67,9 +67,9 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
                     + " is not available");
         }
         response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
-                .DATASET_ID_PROTEIN_TERTIARY_STRUCTURE);
+                .DATASET_ID_GAMMA_TELESCOPE);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_PROTEIN_TERTIARY_STRUCTURE
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE
                     + " is not available");
         }
     }
@@ -123,7 +123,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project protein tertiary structure dataset")
     public void testCreateProjectProteinTertiaryStructure() throws MLHttpClientException, IOException {
-        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE,
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE,
                 MLIntegrationTestConstants.DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());

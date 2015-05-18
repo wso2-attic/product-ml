@@ -30,7 +30,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONException;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
@@ -54,25 +53,6 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
     private static int analysisId;
     private static int modelId;
     private CloseableHttpResponse response;
-
-    /**
-     * Gets the version set ID of a dataset
-     * @param datasetID     Name of the dataset
-     * @return versionSetID
-     * @throws MLHttpClientException
-     * @throws IOException
-     * @throws JSONException
-     */
-    private int getVersionSetID(int datasetID) throws MLHttpClientException, IOException, JSONException {
-        response = mlHttpclient.doHttpGet("/api/datasets/" + datasetID + "/versions");
-        // get version set ID from the dataset the version set exists
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        JSONArray responseJson = new JSONArray(bufferedReader.readLine());
-        JSONObject datsetVersionJson = (JSONObject) responseJson.get(0);
-        response.close();
-        bufferedReader.close();
-        return datsetVersionJson.getInt("id");
-    }
 
     /**
      * Sets the configuration of the model to be trained
@@ -105,7 +85,7 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
 
         // Create a model
-        CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, getVersionSetID(datasetID));
+        CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, mlHttpclient.getAVersionSetIdOfDataset(datasetID));
         modelName = mlHttpclient.getModelName(httpResponse);
         modelId = mlHttpclient.getModelId(modelName);
 
@@ -139,7 +119,7 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
             throw new SkipException("Skipping tests because a project is not available");
         }
         response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE);
+                .PROJECT_NAME_GAMMA_TELESCOPE);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
@@ -345,15 +325,15 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
     /**
      * Tests for datasets of different sizes.
      * Following datasets are used:
-     *      Protein tertiary structre dataset (3.5MB) - for numerical prediction
+     *      Protein tertiary structre dataset (1.5MB) - for numerical prediction
      */
 
     @Test(description = "Build a Linear Regression model for larger dataset")
     public void testBuildLinearRegressionModelLargeDataset() throws MLHttpClientException, IOException, JSONException  {
-        setConfiguration("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION,
-                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_PROTEIN_TERTIARY_STRUCTURE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_PROTEIN_TERTIARY_STRUCTURE),
-                MLIntegrationTestConstants.DATASET_ID_PROTEIN_TERTIARY_STRUCTURE);
+        setConfiguration("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE),
+                MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
@@ -361,8 +341,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
     }
 
     @AfterClass(alwaysRun = true)
-    public void tearDown() throws IOException, InterruptedException {
-        // FIXME:
-        Thread.sleep(20000);
+    public void tearDown() throws MLHttpClientException, IOException, InterruptedException, JSONException   {
+        // Waiting for building models to end
+        Thread.sleep(50000);
     }
 }

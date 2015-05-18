@@ -15,3 +15,6 @@ Citatoins
 
 5. Physicochemical Properties of Protein Tertiary Structure Data Set.
     Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+
+6. MAGIC Gamma Telescope Data Set.
+	Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science. 
