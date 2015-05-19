@@ -328,8 +328,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
      *      Protein tertiary structre dataset (1.5MB) - for numerical prediction
      */
 
-    @Test(description = "Build a Linear Regression model for larger dataset")
-    public void testBuildLinearRegressionModelLargeDataset() throws MLHttpClientException, IOException, JSONException  {
+    @Test(description = "Build a Logistic Regression model for larger dataset")
+    public void testBuildLogisticRegressionModelLargeDataset() throws MLHttpClientException, IOException, JSONException  {
         setConfiguration("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE),
@@ -341,7 +341,7 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
     }
 
     @AfterClass(alwaysRun = true)
-    public void tearDown() throws MLHttpClientException, IOException, InterruptedException, JSONException   {
+    public void tearDown() throws InterruptedException {
         // Waiting for building models to end
         Thread.sleep(50000);
     }
