@@ -158,8 +158,9 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
-    }
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
+        }
 
     @Test(description = "Build a Decision Tree model")
     public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
@@ -172,8 +173,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
-    }
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");    }
 
     @Test(description = "Build a Naive Bayes model")
     public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
@@ -186,7 +187,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     @Test(description = "Build a Logistic Regression model")
@@ -200,7 +202,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     // Tests for Numerical Prediction algorithms
@@ -216,7 +219,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     @Test(description = "Build a Ridge Regression model")
@@ -230,7 +234,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     @Test(description = "Build a Lasso Regression model")
@@ -244,7 +249,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     // Tests for clustering algorithms
@@ -260,7 +266,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     /**
@@ -298,7 +305,6 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
 //        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
 //                .getStatusCode());
 //        response.close();
-//        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
 //    }
 
     @Test(description = "Build a Naive Bayes model for additional dataset-1")
@@ -312,7 +318,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     // Not supported for multi-class classification
@@ -342,7 +349,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     @Test(description = "Build a Ridge Regression model for additional dataset-2")
@@ -356,7 +364,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     @Test(description = "Build a Lasso Regression model for additional dataset-2")
@@ -370,7 +379,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     /**
@@ -390,7 +400,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-        assertEquals("Model building did not complete successfully.", true, checkModelStatus(modelName));
+        if (!checkModelStatus(modelName))
+            throw new SkipException("Skipping tests because a model building did not complete successfully");
     }
 
     @AfterClass(alwaysRun = true)
