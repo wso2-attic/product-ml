@@ -60,7 +60,7 @@ public class GetModelTestCase extends MLBaseTest {
     @Test(description = "retrieve a model")
     public void testGetModel() throws MLHttpClientException, IOException, JSONException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + MLIntegrationTestConstants.MODEL_NAME);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         JSONObject responseJson = new JSONObject(bufferedReader.readLine());

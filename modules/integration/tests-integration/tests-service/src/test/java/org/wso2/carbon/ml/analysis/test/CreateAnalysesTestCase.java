@@ -47,9 +47,9 @@ public class CreateAnalysesTestCase extends MLBaseTest {
         mlHttpclient = new MLHttpClient(instance, userInfo);
         // Check whether the project exists.
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME);
+                .PROJECT_NAME_DIABETES);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests becasue a project is not available");
+            throw new SkipException("Skipping tests because a project is not available");
         }
     }
 
@@ -61,9 +61,9 @@ public class CreateAnalysesTestCase extends MLBaseTest {
      */
     @Test(groups = "createAnalysisSuccess", description = "Create an analysis")
     public void testCreateAnalysis() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME, 
-                MLIntegrationTestConstants.PROJECT_ID);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -76,8 +76,8 @@ public class CreateAnalysesTestCase extends MLBaseTest {
      */
     @Test(groups = "wso2.ml.integration", description = "Create an analysis without a name")
     public void testCreateAnalysisWithoutName() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createAnalysis(null, MLIntegrationTestConstants.PROJECT_ID);
-        assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode(), response
+        CloseableHttpResponse response = mlHttpclient.createAnalysis(null, MLIntegrationTestConstants.PROJECT_ID_DIABETES);
+        assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode(), response
                 .getStatusLine().getStatusCode());
         response.close();
     }
@@ -91,7 +91,7 @@ public class CreateAnalysesTestCase extends MLBaseTest {
     @Test(description = "Create an analysis without a ProjectId")
     public void testCreateAnalysisWithoutProjectID() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis("TestAnalysisForAnalysis", -1);
-        assertEquals("Unexpected response recieved", Response.Status.BAD_REQUEST.getStatusCode(), response
+        assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode(), response
                 .getStatusLine().getStatusCode());
         response.close();
     }

@@ -48,12 +48,12 @@ public class DeleteAnalysesTestCase extends MLBaseTest {
         mlHttpclient = new MLHttpClient(instance, userInfo);
         // Check whether a project exists.
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME);
+                .PROJECT_NAME_DIABETES);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests becasue a project is not available");
+            throw new SkipException("Skipping tests because a project is not available");
         }
         //Create an analysis in the project, for deletion
-        mlHttpclient.createAnalysis(analysisName, MLIntegrationTestConstants.PROJECT_ID);
+        mlHttpclient.createAnalysis(analysisName, MLIntegrationTestConstants.PROJECT_ID_DIABETES);
         
         analysisId = mlHttpclient.getAnalysisId(analysisName);
     }
@@ -67,7 +67,7 @@ public class DeleteAnalysesTestCase extends MLBaseTest {
     @Test(description = "Delete an analysis by name")
     public void testDeleteAnalysis() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/analyses/" + analysisId);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -81,7 +81,7 @@ public class DeleteAnalysesTestCase extends MLBaseTest {
     @Test(description = "Delete a non-existing analysis")
     public void testDeleteNonExistingAnalysis() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/analyses/" + 100);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
