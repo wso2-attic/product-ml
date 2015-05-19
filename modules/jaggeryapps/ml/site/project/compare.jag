@@ -111,6 +111,14 @@
                         </div>                    
                     </div>
 
+                    <h1 class="title">Clustering</h1>
+
+                    <div class="panel-group" id="clustering-accordion" role="tablist" aria-multiselectable="true">
+                        <div id="no-clustering" class="ctrl-info-panel col-md-12 col-centered">
+                            <h4>You do not have any clustering models created at the moment.</h4>
+                        </div>                    
+                    </div>                    
+
                 </div>
                 <!-- /content -->
 
@@ -149,7 +157,6 @@
     var analysisName = getParameterByName('analysisName');
     var analysisId = getParameterByName('analysisId');
     var datasetId = getParameterByName('datasetId');
-    //var projectId;
 
     $(document).ready(function() {
 
@@ -183,10 +190,74 @@
         '<p>' + message + '</p>'
         '</div>';
         return builtErrors;
-    }     
-
-    function loadModels() {
-        
+    }
+    // compare function for classification models
+    function sortByAccuracy(a, b) {
+        var sortStatus = 0;
+     
+        if (a.modelSummary.modelAccuracy > b.modelSummary.modelAccuracy) {
+            sortStatus = -1;
+        } else if (a.modelSummary.modelAccuracy < b.modelSummary.modelAccuracy) {
+            sortStatus = 1;
+        }
+        return sortStatus;
+    }
+    // compare function for numerical prediction models
+    function sortByError(a, b) {
+        var sortStatus = 0;
+     
+        if (a.modelSummary.meanSquaredError < b.modelSummary.meanSquaredError) {
+            sortStatus = -1;
+        } else if (a.modelSummary.meanSquaredError > b.modelSummary.meanSquaredError) {
+            sortStatus = 1;
+        }
+        return sortStatus;
+    }
+    // function to generate accordion panels
+    function createAccordionPanels(models, modelType) {
+        var accordionPanels = '';
+        for (var i = 0; i < models.length; i++) {
+            accordionPanels += '' + 
+                '<div class="panel panel-default">' +
+                    '<div class="panel-heading" role="tab" id="heading'+i+'">' +
+                        '<h4 class="panel-title">' +
+                            '<table class="tbl-projects" projectID="' + models[i].id + '">' +
+                                '<tr>' +
+                                    '<td>' +
+                                        '<a data-toggle="collapse" data-parent="#'+modelType+'-accordion" href="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" class="ctrl-exp-col">' +
+                                            '<span class="cu-acc-head-title">' + models[i].name + '</span>' +
+                                            '<span class="cu-acc-head-workflow"></span>' +
+                                            '<span class="cu-acc-head-created">[ Algorithm: ' + models[i].modelSummary.algorithm.replace("_", " ") + ' ]</span>';
+                                            if(modelType == 'classification') {
+                                                accordionPanels += '<span class="cu-acc-head-created">[ Accuracy: <b>' + parseFloat(models[i].modelSummary.modelAccuracy).toFixed(4)*100 + '%</b> ]</span>';
+                                            }
+                                            else if(modelType == 'numerical-prediction') {
+                                                accordionPanels += '<span class="cu-acc-head-created">[ Mean squared error: <b>' + models[i].modelSummary.meanSquaredError + '</b> ]</span>';
+                                            }
+                                            else if(modelType == 'clustering') {
+                                                accordionPanels += '<span class="cu-acc-head-created">[ Comparison not supported ]</span>';
+                                            }                                                                                        
+                                    accordionPanels += '</a>' +
+                                    '</td>' +
+                                    '<td class="c-right">' +
+                                        '<div>' +
+                                            '<a href="#" id="view-model" class="cu-reg-btn btn-compare" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-toggle="tooltip" data-original-title="Compare models in this project"><span>View</span></a>' +
+                                            '<a href="#" id="predict" class="cu-reg-btn btn-compare" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Predict</span></a>' +
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>' +
+                            '</table>' +
+                        '</h4>' +
+                    '</div>' +
+                    '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">' +
+                        '<div class="panel-body">' + buildNotifications(models[i].error) + '</div>' +
+                    '</div>' +
+                '</div>';
+        };
+        return accordionPanels;
+    }    
+    // function to load models
+    function loadModels() {        
         $.ajax({
             type: "GET",
             url: serverUrl+"/api/projects/"+projectId+"/models",
@@ -195,57 +266,43 @@
             },
             success: function(data) {
                 var projectModels = data;
-                
                 if (projectModels.length > 0) {
 
-                    for (var i = 0; i < projectModels.length; i++) {
-                        accordionPanel = '' + 
-                            '<div class="panel panel-default">' +
-                                '<div class="panel-heading" role="tab" id="heading'+i+'">' +
-                                    '<h4 class="panel-title">' +
-                                        '<table class="tbl-projects" projectID="' + projectModels[i]['id'] + '">' +
-                                            '<tr>' +
-                                                '<td>' +
-						    '<a data-toggle="collapse" data-parent="#classification-accordion" href="#collapse'+i+'" aria-expanded="true" aria-' + 'controls="collapse1" class="ctrl-exp-col">' +
-                                                    '<span class="cu-acc-head-title">' + projectModels[i]['name'] + '</span>' +
-                                                    /*'<span class="cu-acc-head-created">[ Created: ' + projectModels[i]['createdTime'] + ' ]</span>' +*/
-                                                    '<span class="cu-acc-head-workflow"></span>' +
-                                                    '<span class="cu-acc-head-created">[ Algorithm: ' + projectModels[i].modelSummary.algorithm.replace("_", " ") + ' ]</span>';
-                                                    if(projectModels[i].modelSummary.algorithm == 'LOGISTIC_REGRESSION' || projectModels[i].modelSummary.algorithm == 'SVM' || projectModels[i].modelSummary.algorithm == 'DECISION_TREE' || projectModels[i].modelSummary.algorithm == 'NAIVE_BAYES') {
-                                                        accordionPanel += '<span class="cu-acc-head-created">[ Accuracy: <b>' + parseFloat(projectModels[i].modelSummary.modelAccuracy).toFixed(4)*100 + '%</b> ]</span>';
-                                                    }
-                                                    else if(projectModels[i].modelSummary.algorithm == 'LINEAR_REGRESSION' || projectModels[i].modelSummary.algorithm == 'RIDGE_REGRESSION' || projectModels[i].modelSummary.algorithm == 'LASSO_REGRESSION') {
-                                                        accordionPanel += '<span class="cu-acc-head-created">[ Mean squared error: <b>' + projectModels[i].modelSummary.meanSquaredError + '</b> ]</span>';
-                                                    }
-                                                    accordionPanel += '</a>' +
-                                                '</td>' +
-                                                '<td class="c-right">' +
-                                                    '<div>' +
-                                                        // TODO: disable below links when running
-                                                        '<a href="#" id="view-model" class="cu-reg-btn btn-compare" data-modelname="'+projectModels[i]['name']+'" data-modelid="'+projectModels[i]['id']+'" data-toggle="tooltip" data-original-title="Compare models in this project"><span>View</span></a>' +
-                                                        '<a href="#" id="predict" class="cu-reg-btn btn-compare" data-modelname="'+projectModels[i]['name']+'" data-modelid="'+projectModels[i]['id']+'" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Predict</span></a>' +
-                                                    '</div>' +
-                                                '</td>' +
-                                            '</tr>' +
-                                        '</table>' +
-                                    '</h4>' +
-                                '</div>' +
-                                '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">' +
-                                    '<div class="panel-body">' +
-					buildNotifications(projectModels[i]['error']);
-                                    '</div>' +
-                                '</div>' +
-                            '</div>';
+                    var classificationModels = [];
+                    var numPredictionModels = [];
+                    var clusteringModels = [];
 
-                            if(projectModels[i].modelSummary.algorithm == 'LOGISTIC_REGRESSION' || projectModels[i].modelSummary.algorithm == 'SVM' || projectModels[i].modelSummary.algorithm == 'DECISION_TREE' || projectModels[i].modelSummary.algorithm == 'NAIVE_BAYES') {  
-                                $('#no-classification').remove();                              
-                                $("#classification-accordion").append(accordionPanel);
-                            }
-                            else if(projectModels[i].modelSummary.algorithm == 'LINEAR_REGRESSION' || projectModels[i].modelSummary.algorithm == 'RIDGE_REGRESSION' || projectModels[i].modelSummary.algorithm == 'LASSO_REGRESSION') {
-                                $('#no-numerical-prediction').remove();
-                                $("#numerical-prediction-accordion").append(accordionPanel);
-                            }
-                    };
+                    for (var i = 0; i < projectModels.length; i++) {
+                        if(projectModels[i].modelSummary.algorithm == 'LOGISTIC_REGRESSION' || projectModels[i].modelSummary.algorithm == 'SVM' || projectModels[i].modelSummary.algorithm == 'DECISION_TREE' || projectModels[i].modelSummary.algorithm == 'NAIVE_BAYES') {
+                            classificationModels.push(projectModels[i]);
+                        }
+                        else if(projectModels[i].modelSummary.algorithm == 'LINEAR_REGRESSION' || projectModels[i].modelSummary.algorithm == 'RIDGE_REGRESSION' || projectModels[i].modelSummary.algorithm == 'LASSO_REGRESSION') {
+                            numPredictionModels.push(projectModels[i]);
+                        }
+                        else if(projectModels[i].modelSummary.algorithm == 'K_MEANS') {
+                            clusteringModels.push(projectModels[i]);
+                        }                        
+                    }
+
+                    if (classificationModels.length > 0) {
+                        var classificationModelsSorted = classificationModels.sort(sortByAccuracy);
+                        var classificationAccordionPanels = createAccordionPanels(classificationModelsSorted, 'classification');
+                        $('#no-classification').remove();                              
+                        $("#classification-accordion").append(classificationAccordionPanels);                        
+                    }
+
+                    if (numPredictionModels.length > 0) {
+                        var numPredictionModelsSorted = numPredictionModels.sort(sortByError);
+                        var numPredictionAccordionPanels = createAccordionPanels(numPredictionModelsSorted, 'numerical-prediction');
+                        $('#no-numerical-prediction').remove();
+                        $("#numerical-prediction-accordion").append(numPredictionAccordionPanels);
+                    }
+
+                    if (clusteringModels.length > 0) {
+                        var clusteringAccordionPanels = createAccordionPanels(clusteringModels, 'clustering');
+                        $('#no-clustering').remove();
+                        $("#clustering-accordion").append(clusteringAccordionPanels);
+                    }                    
                 }                
             },
             error: function() {
@@ -255,7 +312,7 @@
 
         bindEvents();            
     }
-
+    // function to bind events with elements
     function bindEvents() {
 
         $(document).on('click', '#predict', function(e){ 
