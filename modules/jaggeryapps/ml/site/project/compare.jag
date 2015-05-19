@@ -202,7 +202,7 @@
         }
         return sortStatus;
     }
-    // compare function for classification models numerical prediction models
+    // compare function for numerical prediction models
     function sortByError(a, b) {
         var sortStatus = 0;
      
