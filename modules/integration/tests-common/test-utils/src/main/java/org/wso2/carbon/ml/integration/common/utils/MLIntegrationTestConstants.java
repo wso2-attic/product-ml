@@ -53,33 +53,33 @@ public class MLIntegrationTestConstants {
 	public static final String TRAIN_DATA_FRACTION = "0.7";
 
 	public static final String DIABETES_DATASET_SAMPLE = "data/pIndiansDiabetes.csv";
-	public static final String CONCRETE_SLUMP_DATASET_SAMPLE = "data/concreteSlump.csv";
+	public static final String O_RING_DATASET_SAMPLE = "data/spaceShuttleORing.csv";
 	public static final String BREAST_CANCER_DATASET_SAMPLE = "data/breastCancerWisconsin.csv";
 	public static final String FOREST_FIRES_DATASET_SAMPLE = "data/forestfires.csv";
     public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = "data/gammaTelescope.csv";
 
 	public static final String DATASET_NAME_DIABETES = "Diabetes";
 	public static final int DATASET_ID_DIABETES = 1;
-	public static final String DATASET_NAME_CONCRETE_SLUMP = "Concrete_Slump";
-	public static final int DATASET_ID_CONCRETE_SLUMP = 2;
+	public static final String DATASET_NAME_O_RING = "Space_Shuttle_O_Ring";
+	public static final int DATASET_ID_O_RING = 2;
 	public static final String DATASET_NAME_BREAST_CANCER = "Breast_Cancer";
 	public static final int DATASET_ID_BREAST_CANCER = 3;
 	public static final String DATASET_NAME_FOREST_FIRES = "Forest_Fires";
 	public static final int DATASET_ID_FOREST_FIRES = 4;
-    public static final String DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE = "Gamma_Telescope";
+    public static final String DATASET_NAME_GAMMA_TELESCOPE = "Gamma_Telescope";
     public static final int DATASET_ID_GAMMA_TELESCOPE = 5;
 	public static final int VERSIONSET_ID = 1;
 
 	public static final String RESPONSE_ATTRIBUTE_DIABETES = "Class";
-	public static final String RESPONSE_ATTRIBUTE_CONCRETE_SLUMP = "CompressiveStrength(28-day)(Mpa)";
+	public static final String RESPONSE_ATTRIBUTE_O_RING = "NumberOfOrings";
 	public static final String RESPONSE_ATTRIBUTE_BREAST_CANCER = "Class";
 	public static final String RESPONSE_ATTRIBUTE_FOREST_FIRES = "area";
     public static final String RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE = "class";
 
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
 	public static final int PROJECT_ID_DIABETES = 1;
-	public static final String PROJECT_NAME_CONCRETE_SLUMP = "Concrete_Slump_Project";
-	public static final int PROJECT_ID_CONCRETE_SLUMP = 2;
+	public static final String PROJECT_NAME_O_RING = "Space_Shuttle_O_Ring_Project";
+	public static final int PROJECT_ID_O_RING = 2;
 	public static final String PROJECT_NAME_BREAST_CANCER = "Breast_Cancer_Project";
 	public static final int PROJECT_ID_BREAST_CANCER = 3;
 	public static final String PROJECT_NAME_FOREST_FIRES = "Forest_Fires_Project";

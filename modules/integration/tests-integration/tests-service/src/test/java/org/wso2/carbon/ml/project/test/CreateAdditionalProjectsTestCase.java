@@ -49,9 +49,9 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
         mlHttpclient = new MLHttpClient(instance, userInfo);
         //Check whether the datasets exists.
         response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
-                .DATASET_ID_CONCRETE_SLUMP);
+                .DATASET_ID_O_RING);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_CONCRETE_SLUMP
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_O_RING
                     + " is not available");
         }
         response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
@@ -81,8 +81,8 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project for concrete slump dataset")
     public void testCreateProjectConcreteSlump() throws MLHttpClientException, IOException {
-        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP,
-                MLIntegrationTestConstants.DATASET_NAME_CONCRETE_SLUMP);
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_O_RING,
+                MLIntegrationTestConstants.DATASET_NAME_O_RING);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
@@ -124,7 +124,7 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
     @Test(description = "Create a project protein tertiary structure dataset")
     public void testCreateProjectProteinTertiaryStructure() throws MLHttpClientException, IOException {
         response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE,
-                MLIntegrationTestConstants.DATASET_NAME_PROTEIN_TERTIARY_STRUCTURE);
+                MLIntegrationTestConstants.DATASET_NAME_GAMMA_TELESCOPE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

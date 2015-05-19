@@ -47,7 +47,7 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
         mlHttpclient = new MLHttpClient(instance, userInfo);
         // Check whether the projects exists.
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_CONCRETE_SLUMP);
+                .PROJECT_NAME_O_RING);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
@@ -76,7 +76,7 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
     @Test(groups = "createAnalysisConcreteSlump", description = "Create an analysis for concrete slump dataset")
     public void testCreateAnalysisConcreteSlump() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_CONCRETE_SLUMP));
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_O_RING));
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
