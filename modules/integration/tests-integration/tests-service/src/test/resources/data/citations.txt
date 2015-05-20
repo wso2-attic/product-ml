@@ -22,3 +22,10 @@ Citatoins
 7. Challenger USA Space Shuttle O-Ring Data Set.
     Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
 
+8. Wine Quality Data Set
+	P. Cortez, A. Cerdeira, F. Almeida, T. Matos and J. Reis.
+	Modeling wine preferences by data mining from physicochemical properties. In Decision Support Systems, Elsevier, 47(4):547-553, 2009.
+
+9. Yacht Hydrodynamics Data Set
+	Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science. 
+

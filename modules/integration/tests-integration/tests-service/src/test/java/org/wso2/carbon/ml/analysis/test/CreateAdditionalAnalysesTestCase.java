@@ -47,7 +47,7 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
         mlHttpclient = new MLHttpClient(instance, userInfo);
         // Check whether the projects exists.
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_O_RING);
+                .PROJECT_NAME_YACHT);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
@@ -68,19 +68,6 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
         }
     }
 
-    /**
-     * Test creating an analysis for concrete slump dataset
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(groups = "createAnalysisConcreteSlump", description = "Create an analysis for concrete slump dataset")
-    public void testCreateAnalysisConcreteSlump() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_O_RING));
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
-    }
 
     /**
      * Test creating an analysis for forest fires dataset
@@ -91,6 +78,20 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
     public void testCreateAnalysisForestFires() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES));
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Test creating an analysis for Yacht hydrodynamics dataset
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(groups = "createAnalysisYachtHydrodynamics", description = "Create an analysis for yacht hydrodynamics dataset")
+    public void testCreateAnalysisYachtHydrodynamics() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_YACHT));
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
@@ -111,11 +112,11 @@ public class CreateAdditionalAnalysesTestCase extends MLBaseTest {
     }
 
     /**
-     * Test creating an analysis for protein tertiary structure dataset
+     * Test creating an analysis for gamma telescope dataset
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(groups = "createAnalysisProteinTertiaryStructure", description = "Create an analysis for protein tertiary structure dataset")
+    @Test(groups = "createAnalysisGammaTelescope", description = "Create an analysis for gamma telescope dataset")
     public void testCreateAnalysisProteinTertiaryStructure() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE));
