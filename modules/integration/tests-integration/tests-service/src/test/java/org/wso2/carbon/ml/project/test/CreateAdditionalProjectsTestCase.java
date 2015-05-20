@@ -49,9 +49,9 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
         mlHttpclient = new MLHttpClient(instance, userInfo);
         //Check whether the datasets exists.
         response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
-                .DATASET_ID_O_RING);
+                .DATASET_ID_YACHT);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_O_RING
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_YACHT
                     + " is not available");
         }
         response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
@@ -72,20 +72,6 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
             throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE
                     + " is not available");
         }
-    }
-
-    /**
-     * Creates a test case for creating a project for concrete slump data set
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a project for concrete slump dataset")
-    public void testCreateProjectConcreteSlump() throws MLHttpClientException, IOException {
-        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_O_RING,
-                MLIntegrationTestConstants.DATASET_NAME_O_RING);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
     }
 
     /**
@@ -117,14 +103,28 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating a project for protein tertiary structure dataset
+     * Creates a test case for creating a project for gamma telescope dataset
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(description = "Create a project protein tertiary structure dataset")
-    public void testCreateProjectProteinTertiaryStructure() throws MLHttpClientException, IOException {
+    @Test(description = "Create a project gamma telescope dataset")
+    public void testCreateProjectGammaTelescope() throws MLHttpClientException, IOException {
         response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE,
                 MLIntegrationTestConstants.DATASET_NAME_GAMMA_TELESCOPE);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates a test case for creating a project for Yacht hydrodynamics data set
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a project for yacht hydrodynamics dataset")
+    public void testCreateProjectYachtHydrodynamics() throws MLHttpClientException, IOException {
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_YACHT,
+                MLIntegrationTestConstants.DATASET_NAME_YACHT);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
