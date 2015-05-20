@@ -137,6 +137,7 @@ var serverUrl = window.location.origin;
 var datasetId = getParameterByName('datasetId');
 var analysisName = getParameterByName('analysisName');
 var analysisId = getParameterByName('analysisId');
+var fromAnalysis = getParameterByName('fromAnalysis');
 //var tenantId;
 //var userName;
 
@@ -199,7 +200,7 @@ $( document ).ready(function() {
 	        }
 	    });
 
-	    window.location.href = '../explore/explore.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId;
+	    window.location.href = '../explore/explore.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
     });
 
     // function that cancels an analysis

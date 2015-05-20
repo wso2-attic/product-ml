@@ -306,7 +306,7 @@
                 }
             });
 
-            window.location.href = '../model/model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName+"&fromModels=true"
+            window.location.href = '../model/model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName+"&fromAnalysis=true"
                                     +'&algorithmName='+algorithmName+'&algorithmType='+algorithmType;
         });
 
