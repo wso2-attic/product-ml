@@ -263,6 +263,14 @@ $( document ).ready(function() {
 	$('#datasetTable').dataTable( {
 	    "drawCallback": function( settings ) {
 	        drawSummeryStatistics();
+
+            // disable fields if the model is built from an existing analysis
+            if(fromAnalysis == 'true') {
+                var datasetTable = $('#datasetTable').dataTable();
+                datasetTable.$(".fieldType", {"page": "all"}).attr("disabled","disabled");
+                datasetTable.$(".includeFeature", {"page": "all"}).attr("disabled","disabled");
+                datasetTable.$(".imputeMethod", {"page": "all"}).attr("disabled","disabled");
+            }
 	    }
 	});
 
