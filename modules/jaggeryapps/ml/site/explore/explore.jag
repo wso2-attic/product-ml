@@ -253,7 +253,7 @@
 					            </div>
 
 					            <div class="filter-md">
-					                <label class="input-label-sm">Categorical Feature<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+					                <label class="input-label-sm">Number of Clusters<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
 					                <div class="input-control text">
 					                    <select class="form-control" id="cluster-num-clusters">
 										    <option value='1'>1</option>

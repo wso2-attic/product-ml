@@ -216,6 +216,7 @@
 
                     inputString = '' +
                                 '<label class="input-label">'+modelFeatures[i]+'<span class="help-tip glyphicon glyphicon-question-sign"></span></label>' +
+				'<span class="fld-required">*</span>'+
                                 '<div class="input-control text">' +
                                     '<input type="text" id="sgd-data-fraction" value="" placeholder=""/>' +
                                 '</div>';

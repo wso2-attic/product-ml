@@ -33,25 +33,65 @@ public class MLIntegrationTestConstants {
 	public static final String TLS = "TLS";
 
 	public static final String HTTPS = "https";
-    
-    // Constants related to REST calls
+
+	// Constants related to REST calls
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 	public static final String BASIC = "Basic ";
 	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
 
+	// Constants related to configuring models
+	public static final String TRAIN_DATA_FRACTION_CONFIG = "trainDataFraction";
+	public static final String RESPONSE = "responseVariable";
+	public static final String ALGORITHM_NAME = "algorithmName";
+	public static final String ALGORITHM_TYPE = "algorithmType";
+
 	// Constants for Test cases - Happy scenario
-	public static final String FOREST_COVER_DATASET_SAMPLE = "data/fcSample.csv";
+	public static final String CLASSIFICATION = "Classification";
+	public static final String NUMERICAL_PREDICTION = "Numerical_Prediction";
+	public static final String CLUSTERING = "Clustering";
+	public static final String TRAIN_DATA_FRACTION = "0.7";
+
 	public static final String DIABETES_DATASET_SAMPLE = "data/pIndiansDiabetes.csv";
-	public static final String DATASET_NAME = "Forest_Cover";
-	public static final int DATASET_ID = 1;
+	public static final String O_RING_DATASET_SAMPLE = "data/spaceShuttleORing.csv";
+	public static final String BREAST_CANCER_DATASET_SAMPLE = "data/breastCancerWisconsin.csv";
+	public static final String FOREST_FIRES_DATASET_SAMPLE = "data/forestfires.csv";
+    public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = "data/gammaTelescope.csv";
+
+	public static final String DATASET_NAME_DIABETES = "Diabetes";
+	public static final int DATASET_ID_DIABETES = 1;
+	public static final String DATASET_NAME_O_RING = "Space_Shuttle_O_Ring";
+	public static final int DATASET_ID_O_RING = 2;
+	public static final String DATASET_NAME_BREAST_CANCER = "Breast_Cancer";
+	public static final int DATASET_ID_BREAST_CANCER = 3;
+	public static final String DATASET_NAME_FOREST_FIRES = "Forest_Fires";
+	public static final int DATASET_ID_FOREST_FIRES = 4;
+    public static final String DATASET_NAME_GAMMA_TELESCOPE = "Gamma_Telescope";
+    public static final int DATASET_ID_GAMMA_TELESCOPE = 5;
 	public static final int VERSIONSET_ID = 1;
-	public static final String PROJECT_NAME = "Forest_Cover_Project";
-	public static final int PROJECT_ID = 1;
-	public static final String ANALYSIS_NAME = "Forest_Cover_Analysis";
+
+	public static final String RESPONSE_ATTRIBUTE_DIABETES = "Class";
+	public static final String RESPONSE_ATTRIBUTE_O_RING = "NumberOfOrings";
+	public static final String RESPONSE_ATTRIBUTE_BREAST_CANCER = "Class";
+	public static final String RESPONSE_ATTRIBUTE_FOREST_FIRES = "area";
+    public static final String RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE = "class";
+
+	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
+	public static final int PROJECT_ID_DIABETES = 1;
+	public static final String PROJECT_NAME_O_RING = "Space_Shuttle_O_Ring_Project";
+	public static final int PROJECT_ID_O_RING = 2;
+	public static final String PROJECT_NAME_BREAST_CANCER = "Breast_Cancer_Project";
+	public static final int PROJECT_ID_BREAST_CANCER = 3;
+	public static final String PROJECT_NAME_FOREST_FIRES = "Forest_Fires_Project";
+	public static final int PROJECT_ID_FOREST_FIRES = 4;
+    public static final String PROJECT_NAME_GAMMA_TELESCOPE = "Gamma_Telescope_Project";
+    public static final int PROJECT_ID_GAMMA_TELESCOPE = 5;
+
+	public static final String ANALYSIS_NAME = "Dummy_Analysis";
 	public static final int ANALYSIS_ID = 1;
+
 	public static String MODEL_NAME;
-    public static final int MODEL_ID = 1;
-    
-    public static final String FILE_STORAGE_LOCATION = "Models/file-storage";
+	public static final int MODEL_ID = 1;
+
+	public static final String FILE_STORAGE_LOCATION = "Models/file-storage";
 }

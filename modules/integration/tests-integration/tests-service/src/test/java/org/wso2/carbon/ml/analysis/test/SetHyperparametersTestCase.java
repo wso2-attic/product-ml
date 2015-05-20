@@ -49,7 +49,7 @@ public class SetHyperparametersTestCase extends MLBaseTest {
         // Check whether the analysis exists.
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + MLIntegrationTestConstants.ANALYSIS_NAME);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests becasue an analysis is not available");
+            throw new SkipException("Skipping tests because an analysis is not available");
         }
     }
 
@@ -63,7 +63,7 @@ public class SetHyperparametersTestCase extends MLBaseTest {
     public void testSetDefaultHyperparameters() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + MLIntegrationTestConstants
                 .ANALYSIS_ID + "/hyperParams/defaults", null);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -79,7 +79,7 @@ public class SetHyperparametersTestCase extends MLBaseTest {
         String payload ="[{\"key\" :\"Learning_Rate\",\"value\" : \"0.1\"},{\"key\":\"Iterations\",\"value\":\"100\"}]";
         CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + MLIntegrationTestConstants
                 .ANALYSIS_ID + "/hyperParams", payload);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }

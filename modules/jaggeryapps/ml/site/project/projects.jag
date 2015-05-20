@@ -260,17 +260,25 @@
                                                 '</td>' +
                                                 '<td class="c-right">' +
                                                     '<div>' +
+                                                        '<a href="#" data-projid="'+projid+'" data-projectname="'+projna+'" id="compare-models" class="cu-reg-btn btn-compare" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Compare models</span></a>' +
                                                         '<a href="#" data-projna="'+projna+'" id="delete-project" class="cu-reg-btn btn-delete">Delete Project</a>' +
                                                     '</div>' +
                                                 '</td>' +
                                             '</tr>' +
                                         '</table>' +
                                     '</h4>' +
-                                '</div>' +
-                                '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">' +
+                                '</div>';
+                                // first panel will be expanded on page load
+                                if(i == 0) {
+                                    accordionPanel += '' +
+                                '<div id="collapse'+i+'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'+i+'">';
+                                }
+                                else {
+                                    accordionPanel += '' +
+                                '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">';
+                                }
+                                    accordionPanel += '' +
                                     '<div class="panel-body">';
-                                        
-
                                 if (tenantProjects[i]['analyses'].length == 0) {
                                     accordionPanel += buildEmptyProjectDisplay(description, projid, projna, datasetId);
                                 }
@@ -335,6 +343,14 @@
             var projectName = $(this).data('projectname');
 
             window.location.href = '../explore/explore.jag?projid='+projectId+'&projna='+projectName+'&wfid='+workflowid;
+        });
+
+        $(document).on('click', '#compare-models', function(e){ 
+            e.preventDefault();
+            var projectId = $(this).data('projid');
+            var projectName = $(this).data('projectname');
+
+            window.location.href = 'compare.jag?projectId='+projectId+'&projectName='+projectName;
         });
 
         // function that deletes a project

@@ -1,5 +1,5 @@
 {
-"name" : "wso2-ml-analysis",
+"name" : "wso2-ml-kmeans-sample-analysis",
 "comments" : "k-means analysis test",
 "projectId" : 1
 }

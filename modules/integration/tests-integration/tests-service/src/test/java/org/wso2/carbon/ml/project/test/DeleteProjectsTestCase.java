@@ -47,10 +47,10 @@ public class DeleteProjectsTestCase extends MLBaseTest {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
         //Check whether the dataset exists.
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID);
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_DIABETES);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusLine().getStatusCode());
         // Create a project to delete
-        mlHttpclient.createProject(projectName, MLIntegrationTestConstants.DATASET_NAME);
+        mlHttpclient.createProject(projectName, MLIntegrationTestConstants.DATASET_NAME_DIABETES);
     }
     
     /**
@@ -61,7 +61,7 @@ public class DeleteProjectsTestCase extends MLBaseTest {
     @Test(description = "Delete an exsisting project")
     public void testDeleteProject() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/projects/" + projectName);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -74,7 +74,7 @@ public class DeleteProjectsTestCase extends MLBaseTest {
     @Test(description = "Delete an exsisting project")
     public void testDeleteNonExistingProject() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/projects/" + "NonExistingProjectName");
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }

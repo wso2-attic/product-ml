@@ -51,7 +51,7 @@ public class AddModelConfigurationsTestCase extends MLBaseTest {
         // Check whether the analysis exists.
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + MLIntegrationTestConstants.ANALYSIS_NAME);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests becasue an analysis is not available");
+            throw new SkipException("Skipping tests because an analysis is not available");
         }
     }
 
@@ -70,7 +70,7 @@ public class AddModelConfigurationsTestCase extends MLBaseTest {
         configurations.put(MLConstants.TRAIN_DATA_FRACTION, "0.7");
         CloseableHttpResponse response = mlHttpclient.setModelConfiguration(MLIntegrationTestConstants.ANALYSIS_ID,
                 configurations);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
