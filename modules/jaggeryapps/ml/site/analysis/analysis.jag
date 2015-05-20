@@ -274,7 +274,7 @@
                 type: "GET",
                 url: serverUrl+"/api/analyses/"+analysisId+"/algorithmName",
                 async : false,
-                dataType: 'json',
+                dataType: 'text',
                 beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
                 },
@@ -292,7 +292,7 @@
                 type: "GET",
                 url: serverUrl+"/api/analyses/"+analysisId+"/algorithmType",
                 async : false,
-                dataType: 'json',
+                dataType: 'text',
                 beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
                 },
