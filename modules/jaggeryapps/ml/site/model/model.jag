@@ -125,7 +125,7 @@ var analysisId = getParameterByName('analysisId');
 var datasetId = getParameterByName('datasetId');
 var algorithmName = getParameterByName('algorithmName');
 var algorithmType = getParameterByName('algorithmType');
-var fromModels = getParameterByName('fromModels');
+var fromAnalysis = getParameterByName('fromAnalysis');
 
 $( document ).ready(function() {
 
@@ -141,7 +141,7 @@ $( document ).ready(function() {
 
     $('#prev-btn').on('click', function(e){
         e.preventDefault();
-        window.location.href = '../parameters/parameters.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&datasetId='+datasetId;
+        window.location.href = '../parameters/parameters.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
     });
 
     loadDatasetVersions();
@@ -221,7 +221,7 @@ $( document ).ready(function() {
     $('#cancel-analysis').on('click', function(e){
         e.preventDefault();
         // if navigation is from analysis page do not delete the analysis
-        if (fromModels == 'true') {
+        if (fromAnalysis == 'true') {
             window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
         }
         else {

@@ -54,7 +54,7 @@ public class GetProjectsTestCase extends MLBaseTest {
     @Test(description = "Retrieve a project")
     public void testGetAllProjects() throws MLHttpClientException, IOException   {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects");
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -66,8 +66,8 @@ public class GetProjectsTestCase extends MLBaseTest {
      */
     @Test(description = "Retrieve a project")
     public void testGetProject() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_DIABETES);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }

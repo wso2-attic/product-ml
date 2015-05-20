@@ -148,6 +148,7 @@ $( document ).ready(function() {
     var datasetId = getParameterByName('datasetId');
     var algorithmName = getParameterByName('algorithmName');
     var algorithmType = getParameterByName('algorithmType');
+    var fromAnalysis = getParameterByName('fromAnalysis');
     var fromNext;
 
     var hyperParametersArray = [];
@@ -250,14 +251,23 @@ $( document ).ready(function() {
     // set built input HTML
 	$("#parameter-inputs").append(inputString);
 
+	// disable fields if the model is built from an existing analysis
+	if(fromAnalysis == 'true') {
+	    for (var i = 0; i < hyperParameterInputValues.length; i++) {
+            $('#'+hyperParameterInputValues[i][1]).attr("disabled","disabled");
+        }
+	}
+
     $('#prev-btn').on('click', function(e){
         e.preventDefault();
-        window.location.href = '../algorithm/algorithm.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId;
+        var fromAnalysis = getParameterByName('fromAnalysis')
+        window.location.href = '../algorithm/algorithm.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
     });	
 
     $('#btn-next').on('click', function(e){
     	e.preventDefault();
     	var algorithmName = getParameterByName('algorithmName');    	
+        var fromAnalysis = getParameterByName('fromAnalysis')
 
     	var jsonData;
     	var hyperParameters = [];
@@ -321,7 +331,7 @@ $( document ).ready(function() {
             contentType: "application/json",
             data: jsonData,
             success: function(res){
-                window.location.href = '../model/model.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&datasetId='+datasetId+'&algorithmName='+algorithmName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType;
+                window.location.href = '../model/model.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&datasetId='+datasetId+'&algorithmName='+algorithmName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&fromAnalysis='+fromAnalysis;
             },
             error: function(res){
                 var crtValArea = btnArea.prev(".ctrl-validation-panel");
