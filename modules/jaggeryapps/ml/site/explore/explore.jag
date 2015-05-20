@@ -458,12 +458,14 @@ $( document ).ready(function() {
 
     $('#prev-btn').on('click', function(e){
         e.preventDefault();
-        window.location.href = '../preprocess/preprocess.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId;
+        var fromAnalysis = getParameterByName('fromAnalysis');
+        window.location.href = '../preprocess/preprocess.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
     });
 
     $('#next-btn').on('click', function(e){
         e.preventDefault();
-	    window.location.href = '../algorithm/algorithm.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId;
+	    var fromAnalysis = getParameterByName('fromAnalysis');
+        window.location.href = '../algorithm/algorithm.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
     });
 
     // function that cancels an analysis
