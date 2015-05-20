@@ -283,7 +283,7 @@
                 },
                 error : function(res){
                     if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                        crtValArea.before(buildNotifications(res.responseJSON.status));
+                        crtValArea.before(buildNotifications(res.responseText));
                     }
                 }
             });
@@ -301,7 +301,7 @@
                 },
                 error : function(res){
                     if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                        crtValArea.before(buildNotifications(res.responseJSON.status));
+                        crtValArea.before(buildNotifications(res.responseText));
                     }
                 }
             });
