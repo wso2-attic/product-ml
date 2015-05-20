@@ -143,6 +143,7 @@ function buildAccordingHeader(collapseSection, datasetName, numVersions, dataset
 						    '<td class="c-right">' +			        
 						        '<div>' +
 						        	'<a href="#" id="create-project" class="cu-reg-btn btn-edit" data-dsname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Create project with this Dataset"><span>Create project</span></a>' +
+						        	'<a href="#" id="explore-dataset" class="cu-reg-btn btn-edit" data-dsid="'+ datasetId +'" data-dsname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Explore this Dataset"><span>Explore</span></a>' +
 									'<a href="#" id="delete-dataset" class="cu-reg-btn btn-delete" data-dsid="'+ datasetId +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete Dataset</span></a>' +
 								'</div>' +
 							'</td>'+
@@ -253,12 +254,18 @@ $( document ).ready(function() {
 
 function bindEvents() {
 	
-	$(document).on('click', '#create-project', function(e){			
+	$(document).on('click', '#create-project', function(e){
 		e.preventDefault();
-
 		var datasetName = $(this).data('dsname');
 		window.location = baseUrl + '/ml/site/project/create_project.jag?datasetName='+datasetName;
 	});
+
+	$(document).on('click', '#explore-dataset', function(e){
+		e.preventDefault();
+		var datasetId = $(this).data('dsid');
+		var datasetName = $(this).data('dsname');
+		window.location = baseUrl + '/ml/site/data/explore.jag?datasetId='+datasetId+'&datasetName='+datasetName;
+	});	
 
     // deletes a datasets
     $(document).on('click', '#delete-dataset', function(e){ 
