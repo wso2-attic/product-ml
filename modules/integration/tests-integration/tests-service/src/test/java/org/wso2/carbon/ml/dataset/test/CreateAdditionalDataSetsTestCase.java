@@ -36,7 +36,7 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
  * Contains test cases related to creating additional datasets for different algorithms
  */
 
-@Test(groups="createAdditionalDatasets")
+@Test(groups="createAdditionalDatasets", dependsOnGroups = "createDatasets")
 public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
 
     private MLHttpClient mlHttpclient;
@@ -48,20 +48,6 @@ public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
     }
 
     /**
-     * Creates dataset for numerical prediction tests - Concrete slump
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a dataset of concrete slump data from a CSV file")
-    public void testCreateDatasetConcreteSlump() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_O_RING,
-                "1.0", MLIntegrationTestConstants.O_RING_DATASET_SAMPLE);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
-    }
-
-    /**
      * Creates dataset for numerical prediction tests - Forest Fires
      * @throws MLHttpClientException
      * @throws IOException
@@ -70,7 +56,7 @@ public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
     public void testCreateDatasetForestFires() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES,
                 "1.0", MLIntegrationTestConstants.FOREST_FIRES_DATASET_SAMPLE);
-        assertEquals("Unexpected response recieved", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -90,14 +76,28 @@ public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
     }
 
     /**
-     * Creates dataset for numerical predictions tests - Protein tertiary structure
+     * Creates dataset for classification and clustering tests tests - Gamma telescope
      * @throws MLHttpClientException
      * @throws IOException
      */
     @Test(description = "Create a dataset of protein tertiary structure data from a CSV file")
-    public void testCreateDatasetProteinTertiaryStructure() throws MLHttpClientException, IOException {
+    public void testCreateDatasetGammaTelescope() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_GAMMA_TELESCOPE,
                 "1.0", MLIntegrationTestConstants.GAMMA_TELESCOPE_DATASET_SAMPLE);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates dataset for numerical prediction tests - Yacht hydrodynamics
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a dataset of yacht hydrodynamics data from a CSV file")
+    public void testCreateDatasetYachtHydrodynamics() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_YACHT,
+                "1.0", MLIntegrationTestConstants.YACHT_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

@@ -31,6 +31,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<!-- <module>tests-service</module> -->
+		<module>tests-service</module>
 	</modules>
 </project>
