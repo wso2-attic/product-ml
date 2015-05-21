@@ -37,7 +37,7 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTe
 /**
  * Creating test cases related to additional projects for different datasets
  */
-@Test(groups="createAdditionalProjects")
+@Test(groups="createAdditionalProjects", dependsOnGroups = "createProjects")
 public class CreateAdditionalProjectsTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
