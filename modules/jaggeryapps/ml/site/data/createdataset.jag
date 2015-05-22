@@ -132,9 +132,9 @@
 			       			<input type="file" id="fileInput" name="file"/>
 			    		</div>
 					<div id="source-hdfs-bam" class="input-control text">
-					    <input type="text" value="" placeholder="e.g. file:///home/datasets/iris.csv" id="src-path" name="sourcePath" />
 					</div>
 
+					<div id="not-related-to-bam">
 					<label class="input-label">Data Format<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
 					<div class="input-control text">
 						<select class="form-control" id="data-format" name="dataFormat">
@@ -157,6 +157,7 @@
 		              			  <option value="file">File</option>
 						  <option value="hdfs">HDFS</option>					  
 						</select>				
+					</div>
 					</div>
 					<div class="btn-group-actions">
 			    			<button class="btn btn-main" type="submit" id="submit-dataset">Create Dataset</button>
@@ -205,12 +206,20 @@ console.log(builtErrors);
 
 function displayDataSource() {
 	var dataSourceType = $('#src-type option:selected').text();
-	if (dataSourceType == 'HDFS' || dataSourceType == 'BAM') {
+	if (dataSourceType == 'HDFS') {
 		$('#source-file').hide();
+		$('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. file:///home/datasets/iris.csv" id="src-path" name="sourcePath" />');
 		$('#source-hdfs-bam').show();
+		$('#not-related-to-bam').show();
+	} else if (dataSourceType == 'BAM') {
+		$('#source-file').hide();
+		$('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. <table_name>:<col_1_name>,<col_1_type>;<col_2_name>,<col_2_type>" id="src-path" name="sourcePath" />');
+                $('#source-hdfs-bam').show();
+		$('#not-related-to-bam').hide();
 	}
 	else {
 		$('#source-hdfs-bam').hide();
+		$('#not-related-to-bam').show();
 		$('#source-file').show();	
 	}
 }

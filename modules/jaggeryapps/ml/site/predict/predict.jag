@@ -241,7 +241,7 @@
             var inputArray = [];
             $('input').each(function(index, item){
                 var val = $(item).val();
-                inputArray[index] = parseFloat(val);
+                inputArray[index] = val;
             });
             
             jsonData = JSON.stringify(inputArray);
