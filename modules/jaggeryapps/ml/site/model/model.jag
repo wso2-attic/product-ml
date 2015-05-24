@@ -159,9 +159,9 @@ $( document ).ready(function() {
             type: 'POST',
             url: serverUrl+"/api/models",
             async: false,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             contentType: "application/json",
             data: jsonData,
             success: function(res){
@@ -181,9 +181,9 @@ $( document ).ready(function() {
         $.ajax({
             type: 'GET',
             url: serverUrl+"/api/models/"+modelName,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             async: false,
             success: function(res){
                 modelId = res['id'];
@@ -200,9 +200,9 @@ $( document ).ready(function() {
         $.ajax({
             type: 'POST',
             url: serverUrl+"/api/models/"+modelId,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success: function(res){
                 console.log("Build success.");
                 window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&analysisName='+analysisName+'&projectName='+projectName+'&datasetId='+datasetId;
@@ -228,9 +228,9 @@ $( document ).ready(function() {
             $.ajax({
                 type: 'DELETE',
                 url: serverUrl+"/api/analyses/"+analysisId,
-                beforeSend : function(xhr) {
+                /*beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },
+                },*/
                 success: function(res){
                     window.location.href = '../project/projects.jag';
                 },
@@ -249,9 +249,9 @@ function loadDatasetVersions() {
     $.ajax({
         type: "GET",
         url: serverUrl+"/api/datasets/"+datasetId+"/versions",
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success: function(res) {
             var datasetVersions = res;
             $.each(datasetVersions, function (i, item) {

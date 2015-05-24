@@ -230,9 +230,9 @@ $( document ).ready(function() {
         type: 'GET',
         url: serverUrl+"/api/analyses/"+analysisName,        
         async : false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success: function(res){
             analysisId = res['id'];
             tenantId = res['tenantId'];
@@ -256,9 +256,9 @@ $( document ).ready(function() {
         type: 'GET',
         url: serverUrl+"/api/models/"+modelId+"/summary",
         async : false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success: function(res){
             if (res.algorithm == 'LOGISTIC_REGRESSION') {                
                 // format data and draw ROC graph

@@ -254,9 +254,9 @@ $( document ).ready(function() {
 
         $('#create-dataset-form').ajaxForm({
 	    url: baseUrl + '/api/datasets',
-	    beforeSend: function(xhr) {
+	    /*beforeSend: function(xhr) {
 	        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	    },
+	    },*/
             success : function(res){
         	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
             },

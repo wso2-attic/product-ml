@@ -189,9 +189,9 @@
             type: "GET",
             url: serverUrl+"/api/analyses/"+analysisId+"/responseVariables",
             async: false,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             dataType: 'text',
             success: function(data) {
             	responseVariable = data;
@@ -204,9 +204,9 @@
         $.ajax({
             type: "GET",
             url: serverUrl+"/api/models/"+modelId+"/summary",
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success: function(data) {
                 var modelFeatures = data['features'];
                 
@@ -251,9 +251,9 @@
                 url: serverUrl+"/api//models/"+modelId+"/predict",
                 contentType: "application/json",
                 data: jsonData,
-                beforeSend : function(xhr) {
+                /*beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },
+                },*/
                 success : function(res){
                     $("#prediction").html("Prediction: "+res);
                 },

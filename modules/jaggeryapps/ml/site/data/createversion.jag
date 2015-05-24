@@ -276,9 +276,9 @@ $( document ).ready(function() {
 		    'version' : getParameterByName('datasetVersion')
 		   },
 	    url: baseUrl + '/api/datasets',
-	    beforeSend: function(xhr) {
+	    /*beforeSend: function(xhr) {
 	        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	    },
+	    },*/
             success : function(res){
         	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
             },
