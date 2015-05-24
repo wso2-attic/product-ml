@@ -172,9 +172,9 @@ $( document ).ready(function() {
         url: serverUrl+"/api/analyses/"+analysisId+"/responseVariables",
         async : false,
         dataType: 'text',
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success: function(res) {
             setResponseVariable = res;
         },
@@ -188,9 +188,9 @@ $( document ).ready(function() {
         url: serverUrl+"/api/analyses/"+analysisId+"/algorithmName",
         async : false,
         dataType: 'text',
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success: function(res) {
             var setAlgorithmName = res;
             if (setAlgorithmName != '') {
@@ -207,9 +207,9 @@ $( document ).ready(function() {
         url: serverUrl+"/api/analyses/"+analysisId+"/trainDataFraction",
         async : false,
         dataType: 'text',
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success: function(res) {
             var setTrainDataFraction = res;
             if (setTrainDataFraction >= 0) {
@@ -286,9 +286,9 @@ $( document ).ready(function() {
         $.ajax({
             type: 'DELETE',
             url: serverUrl+"/api/analyses/"+analysisId,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success: function(res){
                 window.location.href = '../project/projects.jag';
             },
@@ -306,9 +306,9 @@ function loadDatasetFeatures(setResponseVariable) {
     $.ajax({
         type: "GET",
         url: serverUrl+"/api/analyses/"+analysisId+"/allFeatures",
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success: function(res) {
             var datasetFeatures = res;
             $.each(datasetFeatures,function(index, feature){

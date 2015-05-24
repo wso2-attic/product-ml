@@ -143,7 +143,7 @@ function authenticate(){
 			url : './ajax/authenticate.jag',
 			data : {userName: user, password: passwd, authEncoded: authEncoded},
 			success : function(res){
-				window.location.href = "../home/home.jag"
+				getSessionCookie();
 			},
 			error : function(res){
 				console.log(res);
@@ -154,6 +154,32 @@ function authenticate(){
 	} else {
 		$('.wr-validation-summary').show();
 	}
+}
+
+function getSessionCookie() {
+	var user = $('#userName').val();
+	var passwd = $('#password').val(); 
+	var baseUrl = window.location.origin;
+	var auth = user+":"+passwd;
+    	var authEncoded = btoa(auth)
+	// start a new login seesion and retrieve the cookie. Login must be authenticated with basic auth.
+	$.ajax({
+		type: "POST",
+		url : baseUrl + '/api/login',
+		contentType: "application/json",
+		dataType: 'text',
+		beforeSend : function(xhr) {
+            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
+        },
+		success : function(res){
+			window.location.href = "../home/home.jag"
+		},
+		error : function(res){
+			console.log(res);
+			$('.wr-validation-summary').html('<p>'+res.responseJSON.status+'</p>');
+            $('.wr-validation-summary').show();	
+		}
+	});
 }
 
 function validate(text){

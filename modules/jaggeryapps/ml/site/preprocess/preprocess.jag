@@ -185,9 +185,9 @@ $( document ).ready(function() {
   			},
   			url: serverUrl+"/api/analyses/"+analysisId+"/features",
 	        async : false,            
-	        beforeSend : function(xhr) {
+	        /*beforeSend : function(xhr) {
 	            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	        },
+	        },*/
 	        data: JSON.stringify(customizedFeatures),
 	        success: function(res){
 	            console.log("Customized features set.");
@@ -209,9 +209,9 @@ $( document ).ready(function() {
         $.ajax({
             type: 'DELETE',
             url: serverUrl+"/api/analyses/"+analysisId,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success: function(res){
                 window.location.href = '../project/projects.jag';
             },
@@ -231,9 +231,9 @@ $( document ).ready(function() {
         type: "GET",
         url: serverUrl+"/api/analyses/"+analysisId+"/features?limit=0&offset=0",        
         async: false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success : function(res){
         	var features = res;
 

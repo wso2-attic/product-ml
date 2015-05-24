@@ -152,9 +152,9 @@ $( document ).ready(function() {
 	    $.ajax({
             type: 'GET',
             url: serverUrl+"/api/models/"+modelName,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             async: false,
             success: function(res){
                 modelId = res['id'];
@@ -170,9 +170,9 @@ $( document ).ready(function() {
         $.ajax({
             type: 'POST',
             url: serverUrl+"/api/models/"+modelId,
-            beforeSend : function(xhr) {
+           /* beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success: function(res){
                 console.log("Build success.");
                 window.location.href = '../project/projects.jag';
