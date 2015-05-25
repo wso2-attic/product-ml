@@ -192,6 +192,17 @@
                                 <featureArtifactDef>
                                      org.wso2.carbon.analytics-common:org.wso2.carbon.event.output.adapter.server.feature:${carbon.analytics.common.version}
                                 </featureArtifactDef>
+				
+				<!-- WSO2 DAS integration -->
+				<featureArtifactDef>
+                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.spark.server.feature:${carbon.analytics.version}
+                                </featureArtifactDef>
+				<featureArtifactDef>
+                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.core.server.feature:${carbon.analytics.version}
+                                </featureArtifactDef>
+				<featureArtifactDef>
+                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.datasource.feature:${carbon.analytics.version}
+                                </featureArtifactDef>
                             </featureArtifacts>
                         </configuration>
                     </execution>
@@ -350,6 +361,20 @@
                                 <feature>
                                     <id>org.wso2.carbon.event.output.adapter.server.feature.group</id>
                                     <version>${carbon.analytics.common.version}</version>
+                                </feature>
+				
+				<!-- WSO2 DAS related features -->
+				<feature>
+                                    <id>org.wso2.carbon.analytics.spark.server.feature.group</id>
+                                    <version>${carbon.analytics.version}</version>
+                                </feature>
+				<feature>
+                                    <id>org.wso2.carbon.analytics.core.server.feature.group</id>
+                                    <version>${carbon.analytics.version}</version>
+                                </feature>
+				<feature>
+                                    <id>org.wso2.carbon.analytics.datasource.feature.group</id>
+                                    <version>${carbon.analytics.version}</version>
                                 </feature>
                             </features>
                         </configuration>

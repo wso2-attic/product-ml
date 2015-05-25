@@ -830,9 +830,9 @@
 		<carbon.deployment.version>4.4.0</carbon.deployment.version>
 		<carbon.multitenancy.version>4.4.0</carbon.multitenancy.version>
 		<carbon.commons.version>4.4.0</carbon.commons.version>
-		<carbon.analytics.version>1.0.0</carbon.analytics.version>
-        <carbon.analytics.common.version>1.0.1-SNAPSHOT</carbon.analytics.common.version>
-        <carbon.kernel.version>4.4.0</carbon.kernel.version>
+		<carbon.analytics.version>1.0.3-SNAPSHOT</carbon.analytics.version>
+        	<carbon.analytics.common.version>1.0.1-SNAPSHOT</carbon.analytics.common.version>
+        	<carbon.kernel.version>4.4.0</carbon.kernel.version>
 		<carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
 
 		<!-- Spark dependency versions -->
@@ -871,7 +871,7 @@
 		<uuid.feature.version>1.0.0</uuid.feature.version>
 		<!-- End of jaggery dependency versions -->
 		<scala.version>2.10.4</scala.version>
-		<commons.math.version>3.3</commons.math.version>
+		<commons.math.version>3.1.1</commons.math.version>
 		<commons.csv.version>1.0</commons.csv.version>
 		<commons.lang.version>2.6</commons.lang.version>
 		<commons-lang3.version>3.3.2</commons-lang3.version>
