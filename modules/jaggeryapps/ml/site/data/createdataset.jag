@@ -126,7 +126,7 @@
 						</select>				
 					</div>	
 
-					<label class="input-label">Data Source<span class="File Location"></span></label>
+					<label class="input-label">Data Source<span class="File Location"></span>  <span><label class="input-label" id="size-limit">(max size: 100MB)</label></span></label>
 					<span class="fld-required">*</span>
 		                        <div id="source-file" class="input-control file info-state" data-role="input-control">
 			       			<input type="file" id="fileInput" name="file"/>
@@ -208,17 +208,20 @@ function displayDataSource() {
 	var dataSourceType = $('#src-type option:selected').text();
 	if (dataSourceType == 'HDFS') {
 		$('#source-file').hide();
+		$('#size-limit').hide();
 		$('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. file:///home/datasets/iris.csv" id="src-path" name="sourcePath" />');
 		$('#source-hdfs-bam').show();
 		$('#not-related-to-bam').show();
 	} else if (dataSourceType == 'BAM') {
 		$('#source-file').hide();
+		$('#size-limit').hide();
 		$('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. <table_name>:<col_1_name>,<col_1_type>;<col_2_name>,<col_2_type>" id="src-path" name="sourcePath" />');
                 $('#source-hdfs-bam').show();
 		$('#not-related-to-bam').hide();
 	}
 	else {
 		$('#source-hdfs-bam').hide();
+		$('#size-limit').show();
 		$('#not-related-to-bam').show();
 		$('#source-file').show();	
 	}
