@@ -46,56 +46,85 @@ public class MLIntegrationTestConstants {
 	public static final String ALGORITHM_NAME = "algorithmName";
 	public static final String ALGORITHM_TYPE = "algorithmType";
 
-	// Constants for Test cases - Happy scenario
+	// Constants for Test cases
 	public static final String CLASSIFICATION = "Classification";
 	public static final String NUMERICAL_PREDICTION = "Numerical_Prediction";
 	public static final String CLUSTERING = "Clustering";
 	public static final String TRAIN_DATA_FRACTION = "0.7";
 
+	// Constants for locations of datasets - Happy scenario
 	public static final String DIABETES_DATASET_SAMPLE = "data/pIndiansDiabetes.csv";
 	public static final String YACHT_DATASET_SAMPLE = "data/yachtHydrodynamics.csv";
 	public static final String BREAST_CANCER_DATASET_SAMPLE = "data/breastCancerWisconsin.csv";
 	public static final String FOREST_FIRES_DATASET_SAMPLE = "data/forestfires.csv";
     public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = "data/gammaTelescope.csv";
 
+    // Datasets with missing values and categorical features
+	public static final String AZURE_STREAMING_DATASET_SAMPLE = "data/azure-stream-analytics_entry.csv";
+    public static final String TITANIC_DATASET_SAMPLE = "data/titanic.csv";
+    public static final String AUTOMOBILE_DATASET_SAMPLE = "data/automobile.csv";
+
+    // External datasets
+    // Download the dataset indicated in readme and store in the relavent location.
+    public static final String DIGIT_RECOGNITION_DATASET_SAMPLE = "data/digitRecognition.csv";
+
 	public static final String DATASET_NAME_DIABETES = "Diabetes";
 	public static final int DATASET_ID_DIABETES = 1;
 
 	// Number the datasets in lexicographical order starting from number 2 (number 1 reserved for Diabetes dataset)
 	public static final String DATASET_NAME_YACHT = "Yacht_Hydrodynamics";
-	public static final int DATASET_ID_YACHT = 5;
+	public static final int DATASET_ID_YACHT = 8;
 	public static final String DATASET_NAME_BREAST_CANCER = "Breast_Cancer";
-	public static final int DATASET_ID_BREAST_CANCER = 2;
+	public static final int DATASET_ID_BREAST_CANCER = 4;
 	public static final String DATASET_NAME_FOREST_FIRES = "Forest_Fires";
-	public static final int DATASET_ID_FOREST_FIRES = 3;
+	public static final int DATASET_ID_FOREST_FIRES = 5;
     public static final String DATASET_NAME_GAMMA_TELESCOPE = "Gamma_Telescope";
-    public static final int DATASET_ID_GAMMA_TELESCOPE = 4;
+    public static final int DATASET_ID_GAMMA_TELESCOPE = 6;
+    public static final String DATASET_NAME_AZURE_STREAMING = "Azure_Streaming";
+    public static final int DATASET_ID_AZURE_STREAMING = 3;
+    public static final String DATASET_NAME_TITANIC = "Titanic";
+    public static final int DATASET_ID_TITANIC = 7;
+    public static final String DATASET_NAME_AUTOMOBILE = "Automobile";
+    public static final int DATASET_ID_AUTOMOBILE = 2;
+
 	public static final int VERSIONSET_ID = 1;
 
+    // Response attributes for supervised learning
 	public static final String RESPONSE_ATTRIBUTE_DIABETES = "Class";
 	public static final String RESPONSE_ATTRIBUTE_YACHT = "ResiduaryResistance";
 	public static final String RESPONSE_ATTRIBUTE_BREAST_CANCER = "Class";
 	public static final String RESPONSE_ATTRIBUTE_FOREST_FIRES = "area";
     public static final String RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE = "class";
+    public static final String RESPONSE_ATTRIBUTE_TITANIC = "Embarked";
 
+    // Projects
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
 	public static final int PROJECT_ID_DIABETES = 1;
 
     // Number the projects in lexicographical order starting from number 2 (number 1 reserved for Diabetes dataset)
 	public static final String PROJECT_NAME_YACHT = "Yacht_Hydrodynamics_Project";
-	public static final int PROJECT_ID_YACHT = 5;
+	public static final int PROJECT_ID_YACHT = 8;
 	public static final String PROJECT_NAME_BREAST_CANCER = "Breast_Cancer_Project";
-	public static final int PROJECT_ID_BREAST_CANCER = 2;
+	public static final int PROJECT_ID_BREAST_CANCER = 4;
 	public static final String PROJECT_NAME_FOREST_FIRES = "Forest_Fires_Project";
-	public static final int PROJECT_ID_FOREST_FIRES = 3;
+	public static final int PROJECT_ID_FOREST_FIRES = 5;
     public static final String PROJECT_NAME_GAMMA_TELESCOPE = "Gamma_Telescope_Project";
-    public static final int PROJECT_ID_GAMMA_TELESCOPE = 4;
+    public static final int PROJECT_ID_GAMMA_TELESCOPE = 6;
+    public static final String PROJECT_NAME_AZURE_STREAMING = "Azure_Streaming_Project";
+    public static final int PROJECT_ID_AZURE_STREAMING = 3;
+    public static final String PROJECT_NAME_TITANIC = "Titanic_Project";
+    public static final int PROJECT_ID_TITANIC = 7;
+    public static final String PROJECT_NAME_AUTOMOBILE = "Automobile_Project";
+    public static final int PROJECT_ID_AUTOMOBILE = 2;
 
+    // Default analysis
 	public static final String ANALYSIS_NAME = "Dummy_Analysis";
 	public static final int ANALYSIS_ID = 1;
 
+    // Default model
 	public static String MODEL_NAME;
 	public static final int MODEL_ID = 1;
 
+    // Storage file location
 	public static final String FILE_STORAGE_LOCATION = "Models/file-storage";
 }

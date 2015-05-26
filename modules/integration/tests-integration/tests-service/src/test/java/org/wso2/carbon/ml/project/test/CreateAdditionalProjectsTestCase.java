@@ -72,6 +72,24 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
             throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE
                     + " is not available");
         }
+        response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                .DATASET_ID_AZURE_STREAMING);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE
+                    + " is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                .DATASET_ID_TITANIC);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE
+                    + " is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                .DATASET_ID_AUTOMOBILE);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE
+                    + " is not available");
+        }
     }
 
     /**
@@ -125,6 +143,48 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
     public void testCreateProjectYachtHydrodynamics() throws MLHttpClientException, IOException {
         response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_YACHT,
                 MLIntegrationTestConstants.DATASET_NAME_YACHT);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates a test case for creating a project for Azure streaming data set
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a project for azure streaming dataset")
+    public void testCreateProjectAzureStreaming() throws MLHttpClientException, IOException {
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_AZURE_STREAMING,
+                MLIntegrationTestConstants.DATASET_NAME_AZURE_STREAMING);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates a test case for creating a project for Titanic data set
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a project for titanic dataset")
+    public void testCreateProjectTitanic() throws MLHttpClientException, IOException {
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_TITANIC,
+                MLIntegrationTestConstants.DATASET_NAME_TITANIC);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates a test case for creating a project for Automobile data set
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a project for automobile dataset")
+    public void testCreateProjectAutomobile() throws MLHttpClientException, IOException {
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE,
+                MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

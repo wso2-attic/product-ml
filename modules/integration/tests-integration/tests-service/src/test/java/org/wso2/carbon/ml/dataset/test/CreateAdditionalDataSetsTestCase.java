@@ -102,4 +102,46 @@ public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
                 .getStatusCode());
         response.close();
     }
+
+    /**
+     * Creates dataset for Missing values and categorical values tests - Azure streaming
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a dataset of azure streaming data from a CSV file")
+    public void testCreateDatasetAzureStreaming() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_AZURE_STREAMING,
+                "1.0", MLIntegrationTestConstants.AZURE_STREAMING_DATASET_SAMPLE);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates dataset for Missing values and categorical values tests - Titanic
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a dataset of titanic data from a CSV file")
+    public void testCreateDatasetTitanic() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_TITANIC,
+                "1.0", MLIntegrationTestConstants.TITANIC_DATASET_SAMPLE);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Creates dataset for Missing values and categorical values tests - Automobile
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a dataset of automobile data from a CSV file")
+    public void testCreateDatasetAutomobile() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE,
+                "1.0", MLIntegrationTestConstants.AUTOMOBILE_DATASET_SAMPLE);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
 }

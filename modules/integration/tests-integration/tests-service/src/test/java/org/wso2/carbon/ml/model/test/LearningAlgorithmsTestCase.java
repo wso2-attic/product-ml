@@ -118,7 +118,7 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
     public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
-        // Check whether the project exists.
+        // Check whether the projects exists.
         response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
                 .PROJECT_NAME_DIABETES);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
@@ -141,6 +141,21 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         }
         response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
                 .PROJECT_NAME_GAMMA_TELESCOPE);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_AZURE_STREAMING);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_TITANIC);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_AUTOMOBILE);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
@@ -400,6 +415,59 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
                 MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         Thread.sleep(10000);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+        // Checks whether model building completed successfully is true
+        assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+    }
+
+    /**
+     * Tests for datasets with missing values and mixed attributes
+     * Following datasets are used:
+     *      Azure streaming dataset
+     *      Titanic dataset
+     *      Automobile dataset
+     */
+    // Test case temporarily disabled until support for handling "" values in feature vectors is added
+//    @Test(description = "Build a Decision tree model for mixed (numerical and categorical values) dataset - 2")
+//    public void testBuildDecisionTreeModelMixedDataset2() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+//        setConfiguration("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION,
+//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_TITANIC, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+//                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_TITANIC),
+//                MLIntegrationTestConstants.DATASET_ID_TITANIC);
+//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+//        Thread.sleep(10000);
+//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+//                .getStatusCode());
+//        response.close();
+//        // Checks whether model building completed successfully is true
+//        assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+//    }
+
+    @Test(description = "Build a K-Means model for mixed (numerical and categorical values) dataset - 1")
+    public void testBuildKMeansMixedModelDataset1() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        setConfiguration("K_MEANS", MLIntegrationTestConstants.CLUSTERING, null,
+                MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_AZURE_STREAMING),
+                MLIntegrationTestConstants.DATASET_ID_AZURE_STREAMING);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        Thread.sleep(1000);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+        // Checks whether model building completed successfully is true
+        assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+    }
+
+    @Test(description = "Build a K-Means model for mixed (numerical and categorical values) dataset -3")
+    public void testBuildKMeansModelMixedDataset3() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        setConfiguration("K_MEANS", MLIntegrationTestConstants.CLUSTERING, null,
+                MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE),
+                MLIntegrationTestConstants.DATASET_ID_AUTOMOBILE);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        Thread.sleep(5000);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
