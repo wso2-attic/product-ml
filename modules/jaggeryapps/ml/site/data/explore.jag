@@ -356,9 +356,9 @@ $( document ).ready(function() {
         type: "GET",
         url: serverUrl+"/api/datasets/"+datasetId+"/filteredFeatures?featureType=CATEGORICAL",
         async: false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success : function(res) {
             categoricalFeatureNames = res;
         },
@@ -372,9 +372,9 @@ $( document ).ready(function() {
         type: "GET",
         url: serverUrl+"/api/datasets/"+datasetId+"/filteredFeatures?featureType=NUMERICAL",
         async: false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success : function(res) {
             numericalFeatureNames = res;
         },
@@ -470,9 +470,9 @@ function drawPlotsAjax() {
         url: serverUrl+"/api/datasets/"+datasetId+"/scatter",
 		data: jsonData,
         async: false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success : function(res) {
 
             // transforming response data to array of arrays: [[-5.1, 11.5, 'setosa'],[1.9, 3.0, 'versicolor'],...]
@@ -510,9 +510,9 @@ function drawPlotsAjax() {
   		},
         url: serverUrl+"/api/datasets/"+datasetId+"/stats?feature="+numFeatureIndependent,
         async: false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success : function(res){
         	var jsonObj = res;
 		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp;  Median: " + jsonObj[0].median + "&emsp;&emsp;&emsp; Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
@@ -536,9 +536,9 @@ function drawPlotsAjax() {
   		},
         url: serverUrl+"/api/datasets/"+datasetId+"/stats?feature="+numFeatureDependent,
         async: false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success : function(res){
         	var jsonObj = res;
 		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp; Median: " + jsonObj[0].median + "&emsp;&emsp;&emsp; Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
@@ -628,9 +628,9 @@ function drawParallelSets() {
             type: "GET",
             url: serverUrl+"/api/datasets/"+datasetId+"/charts?features="+catFeaturesDropdownValues.toString(),
             async: false,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success : function(res){
 
             	var categoricalFeatureArray = [catFeaturesDropdownValues.length];
@@ -693,9 +693,9 @@ function drawTrellisChart() {
         type: "GET",
         url: serverUrl+"/api/datasets/"+datasetId+"/charts?features="+featureNames.toString(),
         async: false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success : function(res){
         	/* D3.js Trellis Chart code */
             var width = 960,
@@ -871,9 +871,9 @@ function drawClusterDiagram() {
     $.ajax({        
         type: "GET",
         url: serverUrl+"/api/datasets/"+datasetId+"/cluster?features="+numericalFeatureIndependent+","+numericalFeatureDependent+"&noOfClusters="+noOfClusters,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success: function(response) {
             var dataArray = response;
             // transforming response data to array of arrays: [[-5.1, 11.5, 'setosa'],[1.9, 3.0, 'versicolor'],...]

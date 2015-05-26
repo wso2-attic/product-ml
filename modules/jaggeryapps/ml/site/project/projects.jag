@@ -199,9 +199,9 @@
         $.ajax({
             type: "GET",
             url: serverUrl+"/api/projects/analyses",
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success: function(data) {
                 var tenantProjects = data;
 
@@ -361,9 +361,9 @@
             $.ajax({
                 type: "DELETE",
                 url: serverUrl+"/api/projects/"+projectName,
-                beforeSend : function(xhr) {
+                /*beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },
+                },*/
                 success : function(res){
                     $('#accordion').empty();
                     loadProjects();
@@ -406,9 +406,9 @@
                 type: "POST",
                 url: serverUrl+"/api/analyses",
                 async : false,
-                beforeSend : function(xhr) {
+                /*beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },
+                },*/
                 contentType: "application/json",
                 data: createAnalysisData,
                 success : function(res){
@@ -431,9 +431,9 @@
                 type: 'GET',
                 url: serverUrl+"/api/projects/"+projectId+"/analyses/"+analysisName,        
                 async : false,
-                beforeSend : function(xhr) {
+                /*beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },
+                },*/
                 success: function(res){
                     analysisId = res['id'];
                 },
@@ -451,9 +451,9 @@
             $.ajax({
                 type: 'POST',
                 url: serverUrl+"/api//analyses/"+analysisId+"/features/defaults",
-                beforeSend : function(xhr) {
+                /*beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },
+                },*/
                 contentType: "application/json",
                 data: featureDefaultsData,
                 success: function(res){
@@ -478,9 +478,9 @@
             $.ajax({
                 type: 'DELETE',
                 url: serverUrl+"/api/analyses/"+workflowId,
-                beforeSend : function(xhr) {
+                /*beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },
+                },*/
                 success: function(res){
                 	$('#accordion').empty();
                     loadProjects();

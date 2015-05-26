@@ -275,9 +275,9 @@ function bindEvents() {
         $.ajax({
             type: "DELETE",
             url: baseUrl+"/api/datasets/"+datasetId,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success : function(res){
                 $('.panel-group').empty();
                 loadDatasets();
@@ -300,9 +300,9 @@ function bindEvents() {
         $.ajax({
             type: "DELETE",
             url: baseUrl+"/api/datasets/versions/"+versionId,
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success : function(res){
                 $('.panel-group').empty();
                 loadDatasets();
@@ -323,9 +323,9 @@ function loadDatasets() {
         type : 'GET',
         url: baseUrl + '/api/datasets/versions',
         async: false,
-        beforeSend : function(xhr) {
+        /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },
+        },*/
         success : function(res){
         	if (res.length == 0) {
         		var accordionPanelNoDatasets = '<h2>You do not have any datasets created at the moment.</h2>';

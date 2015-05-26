@@ -261,9 +261,9 @@
         $.ajax({
             type: "GET",
             url: serverUrl+"/api/projects/"+projectId+"/models",
-            beforeSend : function(xhr) {
+            /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            },*/
             success: function(data) {
                 var projectModels = data;
                 if (projectModels.length > 0) {

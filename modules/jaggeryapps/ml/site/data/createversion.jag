@@ -119,7 +119,7 @@
 						</select>				
 					</div>	
 
-					<label class="input-label">Data Source<span class="File Location"></span></label>
+					<label class="input-label">Data Source<span class="File Location"></span>  <span><label class="input-label" id="size-limit">(max size: 100MB)</label></span></label>
 					<span class="fld-required">*</span>
 		                        <div id="source-file" class="input-control file info-state" data-role="input-control">
 			       			<input type="file" id="fileInput" name="file"/>
@@ -226,10 +226,12 @@ console.log(builtErrors);
 function displayDataSource() {
 	var dataSourceType = $('#src-type option:selected').text();
 	if (dataSourceType == 'HDFS' || dataSourceType == 'BAM') {
+		$('#size-limit').hide();
 		$('#source-file').hide();
 		$('#source-hdfs-bam').show();
 	}
 	else {
+		$('#size-limit').show();
 		$('#source-hdfs-bam').hide();
 		$('#source-file').show();	
 	}
@@ -276,9 +278,9 @@ $( document ).ready(function() {
 		    'version' : getParameterByName('datasetVersion')
 		   },
 	    url: baseUrl + '/api/datasets',
-	    beforeSend: function(xhr) {
+	    /*beforeSend: function(xhr) {
 	        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	    },
+	    },*/
             success : function(res){
         	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
             },
