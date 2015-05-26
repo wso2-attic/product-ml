@@ -127,6 +127,19 @@
 				<div id="slider"></div>
                 <br><br>
             </div>
+
+            <div class="col-md-6">
+                <h4 class="title">Predicted vs. Actual</h4>
+                <div id="predicted-vs-actual-chart"></div>
+                <br>
+                <div class="filter-md">
+                    <label class="input-label-sm">Feature<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                    <div class="input-control text">
+                        <select class="form-control" id="dataset-features"></select>
+                    </div>
+                </div>                 
+            </div>
+
 		</div>
 		<!-- /content -->
 
@@ -174,21 +187,11 @@ var tenantId;
 var userName;
 var predictedVsActuals;
 
+var featuresWithPredictedVsActualSample;
+var features;
 // redraw charts upon changes in selections
-$(document).on('change','select[class="numFeaturesIndependentDropdown"], select[class="numFeaturesDependentDropdown"], select[class="catFeaturesDropdown"]',function() {
-    drawPlotsAjax();
-});
-$(document).on('change','input[class="categoricalFeatureNames"]',function() {
-	$("#parallelSets").html("Loading chart...");
-	drawParallelSets();
-});
-$(document).on('change','input[class="numericalFeatureNames"], select[id="categoricalFeature"]',function() {
-    $("#trellisChart").html("Loading chart...");
-    drawTrellisChart();
-});
-$(document).on('change','select[class="numericalFeatureIndependent"], select[class="numericalFeatureDependent"], select[class="noOfClusters"]',function() {
-    $("#clusterDiagram").html("Loading chart...");
-    drawClusterDiagram();
+$(document).on('change','select[id="dataset-features"]',function() {
+    drawPredictedVsActualChart(featuresWithPredictedVsActualSample);
 });
 
 /*for threshold slider*/
@@ -260,7 +263,7 @@ $( document ).ready(function() {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
         },*/
         success: function(res){
-            if (res.algorithm == 'LOGISTIC_REGRESSION') {                
+            if (res.algorithm == 'LOGISTIC_REGRESSION' || res.algorithm == 'SVM') {                
                 // format data and draw ROC graph
                 var rocData  = JSON.parse(res.roc);
                 var auc  = parseFloat(res.auc).toFixed(3);
@@ -272,27 +275,28 @@ $( document ).ready(function() {
                 predictedVsActuals = res.predictedVsActuals;
         		var threshold = $("#slider").slider("value");
         		drawConfusionMatrix(predictedVsActuals, threshold, "#confusion-matrix");
-            }
-        	else if (res.algorithm == 'SVM' ) {                
-                // remove not applicable charts/tables
-                $("#confusion-matrix").closest("div.col-md-6").remove();
-                // format data and draw ROC graph
-                var rocData  = JSON.parse(res.roc);
-                var auc  = parseFloat(res.auc).toFixed(3);
-                drawRocGraph(rocData, auc, "#roc-graph");
-                // create data object and draw weights chart
-                var featureImportanceData = [ {'key':'featureImportanceData', 'values': res.featureImportance}];
-                drawWeightsChart(featureImportanceData);
+                // draw predicted vs. actual chart
+                featuresWithPredictedVsActualSample = res.featuresWithPredictedVsActualSample;
+                features = res.features;
+                $('#dataset-features').empty();
+                $.each(features,function(index, feature){
+                    $('#dataset-features').append($('<option>', { 
+                        value: index,
+                        text : feature
+                    }));
+                });
+                drawPredictedVsActualChart(featuresWithPredictedVsActualSample);
             }
             else if (res.algorithm == 'LINEAR_REGRESSION' || res.algorithm == 'RIDGE_REGRESSION' || res.algorithm == 'LASSO_REGRESSION' || res.algorithm == 'DECISION_TREE' || res.algorithm == 'NAIVE_BAYES') {                
                 // remove not applicable charts/tables
-                $("#roc-graph, #confusion-matrix").closest("div.col-md-6").remove();
+                $("#roc-graph, #confusion-matrix, #predicted-vs-actual-chart").closest("div.col-md-6").remove();
                 // create data object and draw weights chart
                 var featureImportanceData = [ {'key':'featureImportanceData', 'values': res['featureImportance']}];
                 drawWeightsChart(featureImportanceData);
             }
             else {
                 // TODO: add cluster diagram
+                $("#roc-graph, #weights-chart, #confusion-matrix, #predicted-vs-actual-chart").closest("div.col-md-6").remove();
                 console.log("K-means");
             }
 
@@ -352,6 +356,46 @@ function drawWeightsChart (data) {
         return chart;
     });
 }
+
+// function to draw predicted vs. actual chart
+function drawPredictedVsActualChart(featuresWithPredictedVsActualSample) {
+
+    var featureIndex = $("#dataset-features").val();
+    var featureName = $("#dataset-features option:selected").text();    
+
+    var predictedData = [];
+    var actualData = [];
+    for (var i = 0; i < featuresWithPredictedVsActualSample.length; i++) {                
+        
+        var predictedRow = [];
+        predictedRow[0] = parseFloat(featuresWithPredictedVsActualSample[i]['rowFeatures'][featureIndex.toString()]);
+        predictedRow[1] = parseFloat(featuresWithPredictedVsActualSample[i].predictedVsActual.predicted);
+        predictedRow[2] = 'Predicted';
+        predictedData.push(predictedRow);
+
+        var actualRow = [];
+        actualRow[0] = parseFloat(featuresWithPredictedVsActualSample[i]['rowFeatures'][featureIndex.toString()]);
+        actualRow[1] = parseFloat(featuresWithPredictedVsActualSample[i].predictedVsActual.actual);
+        actualRow[2] = 'Actual';
+        actualData.push(actualRow);
+    }
+
+    var predictedVsActualData = predictedData.concat(actualData);
+    drawScatterPlot(predictedVsActualData, '#predicted-vs-actual-chart', featureName, 'Predicted/Actual');
+}
+
+// drawing a simple scatter graph
+function drawScatterPlot(data, cssClass, xLabel, yLabel) {
+    $(cssClass).empty();
+    var scatter = new ScatterPlot(data);
+
+    scatter.setPlotingAreaWidth(800);
+    scatter.setPlotingAreaHeight(500);
+    scatter.setMarkerSize("2");
+    scatter.setXAxisText(xLabel);
+    scatter.setYAxisText(yLabel);
+    scatter.plot(d3.select(cssClass));
+};
 
 // function to shorten the label
 function shortenLabel (label) {
