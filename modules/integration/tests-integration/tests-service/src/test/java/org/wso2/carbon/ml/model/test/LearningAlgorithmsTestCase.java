@@ -92,6 +92,7 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         //Create an analysis
         mlHttpclient.createAnalysis(analysisName, projectID);
         analysisId = mlHttpclient.getAnalysisId(analysisName);
+        mlHttpclient.setFeartureDefaults(analysisId);
 
         //Set Model Configurations
         Map<String, String> configurations = new HashMap<String, String>();
@@ -163,20 +164,20 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         }
 
     // Test disabled temporarily due to model build failure
-//    @Test(description = "Build a Decision Tree model")
-//    public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-//        setConfiguration("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION,
-//                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-//                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES),
-//                MLIntegrationTestConstants.DATASET_ID_DIABETES);
-//        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
-//        Thread.sleep(5000);
-//        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-//                .getStatusCode());
-//        response.close();
-//        // Checks whether model building completed successfully is true
-//        assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
-//    }
+    @Test(description = "Build a Decision Tree model")
+    public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        setConfiguration("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES),
+                MLIntegrationTestConstants.DATASET_ID_DIABETES);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        Thread.sleep(5000);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+        // Checks whether model building completed successfully is true
+        assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+    }
 
     @Test(description = "Build a Naive Bayes model")
     public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
@@ -391,9 +392,9 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
      *      Gamma telescope dataset (1.5MB) - for numerical prediction
      */
 
-    @Test(description = "Build a Naive bayes model for larger dataset")
-    public void testBuildNaiveBayesModelLargeDataset() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        setConfiguration("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION,
+    @Test(description = "Build a Decision tree model for larger dataset")
+    public void testBuildDecisionTreeModelLargeDataset() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        setConfiguration("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE),
                 MLIntegrationTestConstants.DATASET_ID_GAMMA_TELESCOPE);
