@@ -51,4 +51,14 @@
 			<class name="org.wso2.carbon.ml.integration.ui.test.mlui.MLUILoginLogoutTestCase"/>
 		</classes>
 	</test>
+    <test name="Import-Dataset" preserve-order="true" parallel="false" verbose="2">
+        <classes>
+            <class name="org.wso2.carbon.ml.integration.ui.test.mlui.ImportDataTestCase"/>
+        </classes>
+    </test>
+    <test name="Create-Project" preserve-order="true" parallel="false" verbose="2">
+        <classes>
+            <class name="org.wso2.carbon.ml.integration.ui.test.mlui.CreateProjectTestCase"/>
+        </classes>
+    </test>
 </suite>

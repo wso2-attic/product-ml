@@ -29,17 +29,17 @@ import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationUiBaseTest;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationException;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.MLProjectsPage;
 import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUIHomePage;
 import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUILoginPage;
-import org.wso2.carbon.ml.integration.ui.test.exceptions.MLUILoginLogoutTestException;
+import org.wso2.carbon.ml.integration.ui.test.exceptions.ImportDataTestException;
 
-/**
- * Test case for login and logout of ml UI.
- */
-public class MLUILoginLogoutTestCase extends MLIntegrationUiBaseTest {
+public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
 
-    private static final Log logger = LogFactory.getLog(MLUILoginLogoutTestCase.class);
-    MLUIHomePage mlUIHomePage;
+    private static final Log logger = LogFactory.getLog(CreateProjectTestCase.class);
+
+    private MLUIHomePage mlUiHomePage;
+    private MLProjectsPage mlProjectsPage;
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
@@ -48,45 +48,43 @@ public class MLUILoginLogoutTestCase extends MLIntegrationUiBaseTest {
         driver.get(getMLUiUrl());
     }
 
-    //TODO: No need to catch exceptions. just throw
     /**
      * Test login to the ml UI using user credentials
-     * 
-     * @throws MLUILoginLogoutTestException
+     *
+     * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.ImportDataTestException
      */
     @Test(groups = "wso2.ml.ui", description = "verify login to ML UI")
-    public void testLoginToMLUI() throws MLUILoginLogoutTestException {
+    public void testLoginToMLUI() throws ImportDataTestException {
         try {
             MLUILoginPage mlUiLoginPage = new MLUILoginPage(driver);
             // Check whether its the correct page
             Assert.assertTrue(mlUiLoginPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("login.title"))),
                     "This is not the login page.");
-            mlUIHomePage = mlUiLoginPage.loginAs(userInfo.getUserName(),userInfo.getPassword());
-            //Checks whether it redirects to the home page.
-            Assert.assertTrue(mlUIHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("home.page.projects"))),
+            mlUiHomePage = mlUiLoginPage.loginAs(userInfo.getUserName(),userInfo.getPassword());
+            // Check whether it redirects to the home page
+            Assert.assertTrue(mlUiHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("home.page.projects"))),
                     "Did not redirect to home page.");
-            //TODO: checks whether the correct user is logged
         } catch (InvalidPageException e) {
-            throw new MLUILoginLogoutTestException("Login to ML UI failed: " + e.getMessage(), e);
+            throw new ImportDataTestException("Login to ML UI failed: ", e);
         } catch (MLUIPageCreationException e) {
-            throw new MLUILoginLogoutTestException("Failed to create a login page: " + e.getMessage(), e);
+            throw new ImportDataTestException("Failed to create a login page: ", e);
         }
     }
 
     /**
-     * Test the logout of the ml UI.
-     * 
-     * @throws MLUILoginLogoutTestException
+     * Test the Projects button in homepage
+     *
+     * @throws ImportDataTestException
      */
-    @Test(groups = "wso2.ml.ui", description = "verify logut from ML UI", dependsOnMethods = "testLoginToMLUI")
-    public void testLogoutFromMLUI() throws MLUILoginLogoutTestException {
+    @Test(groups = "wso2.ml.ui", description = "redirect to projects page", dependsOnMethods = "testLoginToMLUI")
+    public void testRedirectToProjectsPage() throws ImportDataTestException {
         try {
-            MLUILoginPage mlUiLoginPage = mlUIHomePage.logout();
-            //Checks whether it redirects to the login page after logout.
-            Assert.assertTrue(mlUiLoginPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("login.title"))),
-                    "Not redirected to login page after logout.");
-        } catch (InvalidPageException e) {
-            throw new MLUILoginLogoutTestException("Logout from ML UI failed: " + e.getMessage(), e);
+            mlProjectsPage = mlUiHomePage.createProject();
+            // Check whether its the correct page
+            Assert.assertTrue(mlProjectsPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.project"))),
+                    "Did not redirect to projects page.");
+        }  catch (InvalidPageException e) {
+            throw new ImportDataTestException("Failed to create project: ", e);
         }
     }
 

@@ -29,11 +29,11 @@ import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationUiBaseTest;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationException;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.DataImportPage;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.DatasetSummaryPage;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUIHomePage;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUILoginPage;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.*;
+import org.wso2.carbon.ml.integration.ui.test.dto.MLProject;
 import org.wso2.carbon.ml.integration.ui.test.exceptions.ImportDataTestException;
+
+import java.io.File;
 
 /**
  * Test case for login and logout of ml UI.
@@ -50,8 +50,7 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
     public void setUp() throws Exception {
         super.init();
         driver = BrowserManager.getWebDriver();
-        //TODO: Read "mlUI" from a constant
-        driver.get(getMLUiUrl()+"/ml/");
+        driver.get(getMLUiUrl());
     }
 
     /**
@@ -64,11 +63,11 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
         try {
             MLUILoginPage mlUiLoginPage = new MLUILoginPage(driver);
             // Check whether its the correct page
-            Assert.assertTrue(mlUiLoginPage.isElementPresent(By.id(mlUIElementMapper.getElement("login.title"))),
+            Assert.assertTrue(mlUiLoginPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("login.title"))),
                     "This is not the login page.");
             mlUiHomePage = mlUiLoginPage.loginAs(userInfo.getUserName(),userInfo.getPassword());
             // Check whether it redirects to the home page
-            Assert.assertTrue(mlUiHomePage.isElementPresent(By.id(mlUIElementMapper.getElement("create.new.project"))),
+            Assert.assertTrue(mlUiHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("home.page.projects"))),
                     "Did not redirect to home page.");
         } catch (InvalidPageException e) {
             throw new ImportDataTestException("Login to ML UI failed: ", e);
@@ -78,36 +77,36 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
     }
 
     /**
-     * Test the create project button.
-     * 
+     * Test the Datasets button in homepage
+     *
      * @throws ImportDataTestException
      */
-    @Test(groups = "wso2.ml.ui", description = "create a project", dependsOnMethods = "testLoginToMLUI")
-    public void testCreateProject() throws ImportDataTestException {
-        /*try {
-            dataImportPage = mlUiHomePage.createProject();
+    @Test(groups = "wso2.ml.ui", description = "redirect to datasets page", dependsOnMethods = "testLoginToMLUI")
+    public void testRedirectToDatasetsPage() throws ImportDataTestException {
+        try {
+            dataImportPage = mlUiHomePage.createDataset();
             // Check whether its the correct page
-            Assert.assertTrue(dataImportPage.isElementPresent(By.id(mlUIElementMapper.getElement("data.import.div"))),
-                    "Did not redirect to import data page.");
+            Assert.assertTrue(dataImportPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.dataset"))),
+                    "Did not redirect to datasets page.");
         }  catch (InvalidPageException e) {
-            throw new ImportDataTestException("Failed to create project: ", e);
-        }*/
+            throw new ImportDataTestException("Failed to create dataset: ", e);
+        }
     }
-    
+
     /**
      * Test importing a data-set without the project name.
      * 
      * @throws ImportDataTestException 
      */
    @Test(groups = "wso2.ml.ui", description = "verify importing a data-set without the project name",
-            dependsOnMethods = "testCreateProject")
+            dependsOnMethods = "testRedirectToDatasetsPage")
     public void testImportDataWithoutProjectName() throws ImportDataTestException {
         /*try {
             File dataFile = new File(ImportDataTestCase.class.getResource(MLProject.getDatasetUrl()).toString());
-            datasetSummaryPage = dataImportPage.importData(dataFile, MLProject.getProjectName(), 
+            datasetSummaryPage = dataImportPage.importData(dataFile, MLProject.getProjectName(),
                     MLProject.getProjectDescription(), MLProject.getWorkflowName());
             // Check whether its the correct page
-            Assert.assertTrue(datasetSummaryPage.isElementPresent(By.id(mlUIElementMapper
+            Assert.assertTrue(datasetSummaryPage.isElementPresent(By.xpath(mlUIElementMapper
                     .getElement("data.import.div"))), "Did not remain in the import data page.");
             //TODO : Check whether the error message is printed
         } catch (InvalidPageException e) {
@@ -125,7 +124,7 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
     public void testImportData() throws ImportDataTestException {
         /*try {
             File dataFile = new File(ImportDataTestCase.class.getResource(MLProject.getDatasetUrl()).toString());
-            datasetSummaryPage = dataImportPage.importData(dataFile, MLProject.getProjectName(), 
+            datasetSummaryPage = dataImportPage.importData(dataFile, MLProject.getProjectName(),
                     MLProject.getProjectDescription(), MLProject.getWorkflowName());
             // Check whether its the page.
             Assert.assertTrue(datasetSummaryPage.isElementPresent(By.id(mlUIElementMapper
