@@ -67,10 +67,6 @@ public class DataImportPage extends MLUIPage {
             WebElement columnHeaderElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.column.header")));
             WebElement destinationTypeElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.destination.type")));
 
-//            datasetNameElement.clear();
-//            datasetVerionElement.clear();
-//            descriptionElement.clear();
-
             datasetNameElement.sendKeys(datasetName);
             datasetVerionElement.sendKeys(version);
             descriptionElement.sendKeys(description);
