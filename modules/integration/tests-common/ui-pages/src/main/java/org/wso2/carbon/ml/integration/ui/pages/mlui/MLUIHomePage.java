@@ -75,10 +75,10 @@ public class MLUIHomePage extends MLUIPage {
      * @return
      * @throws InvalidPageException
      */
-    public DataImportPage createDataset() throws InvalidPageException {
+    public MLDatasetsPage createDataset() throws InvalidPageException {
         try {
             driver.findElement(By.xpath(mlUIElementMapper.getElement("home.page.datasets"))).click();
-            return new DataImportPage(driver);
+            return new MLDatasetsPage(driver);
         } catch (MLUIPageCreationException e) {
             throw new InvalidPageException("Failed to create Datasets Page: ", e);
         }

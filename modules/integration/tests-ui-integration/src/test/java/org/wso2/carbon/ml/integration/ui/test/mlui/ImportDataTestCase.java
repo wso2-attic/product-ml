@@ -29,22 +29,25 @@ import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationUiBaseTest;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationException;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.*;
-import org.wso2.carbon.ml.integration.ui.test.dto.MLProject;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.DataImportPage;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.MLDatasetsPage;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUIHomePage;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUILoginPage;
+import org.wso2.carbon.ml.integration.ui.test.dto.MLDataset;
 import org.wso2.carbon.ml.integration.ui.test.exceptions.ImportDataTestException;
 
 import java.io.File;
 
 /**
- * Test case for login and logout of ml UI.
+ * Test case for uploading datasets in ML UI.
  */
 public class ImportDataTestCase extends MLIntegrationUiBaseTest {
 
     private static final Log logger = LogFactory.getLog(ImportDataTestCase.class);
     
     private MLUIHomePage mlUiHomePage;
+    private MLDatasetsPage mlDatasetsPage;
     private DataImportPage dataImportPage;
-    private DatasetSummaryPage datasetSummaryPage;
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
@@ -84,9 +87,9 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
     @Test(groups = "wso2.ml.ui", description = "redirect to datasets page", dependsOnMethods = "testLoginToMLUI")
     public void testRedirectToDatasetsPage() throws ImportDataTestException {
         try {
-            dataImportPage = mlUiHomePage.createDataset();
+            mlDatasetsPage = mlUiHomePage.createDataset();
             // Check whether its the correct page
-            Assert.assertTrue(dataImportPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.dataset"))),
+            Assert.assertTrue(mlDatasetsPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.dataset"))),
                     "Did not redirect to datasets page.");
         }  catch (InvalidPageException e) {
             throw new ImportDataTestException("Failed to create dataset: ", e);
@@ -94,51 +97,49 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
     }
 
     /**
-     * Test importing a data-set without the project name.
-     * 
-     * @throws ImportDataTestException 
+     * Test the Create Dataset button in Datasets Page
+     *
+     * @throws ImportDataTestException
      */
-   @Test(groups = "wso2.ml.ui", description = "verify importing a data-set without the project name",
-            dependsOnMethods = "testRedirectToDatasetsPage")
-    public void testImportDataWithoutProjectName() throws ImportDataTestException {
-        /*try {
-            File dataFile = new File(ImportDataTestCase.class.getResource(MLProject.getDatasetUrl()).toString());
-            datasetSummaryPage = dataImportPage.importData(dataFile, MLProject.getProjectName(),
-                    MLProject.getProjectDescription(), MLProject.getWorkflowName());
+    @Test(groups = "wso2.ml.ui", description = "redirect to create dataset page", dependsOnMethods = "testRedirectToDatasetsPage")
+    public void testRedirectToCreateDataset() throws ImportDataTestException {
+        try {
+            dataImportPage = mlDatasetsPage.createDataset();
             // Check whether its the correct page
-            Assert.assertTrue(datasetSummaryPage.isElementPresent(By.xpath(mlUIElementMapper
-                    .getElement("data.import.div"))), "Did not remain in the import data page.");
-            //TODO : Check whether the error message is printed
-        } catch (InvalidPageException e) {
-            throw new ImportDataTestException("Failed to import data without project name: ", e);
-        }*/
+            Assert.assertTrue(dataImportPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("import.dataset.button"))),
+                    "Did not redirect to Create Dataset page.");
+        }  catch (InvalidPageException e) {
+            throw new ImportDataTestException("Failed to create dataset: ", e);
+        }
     }
-    
+
     /**
      * Test importing a data-set with all fields filled.
-     * 
+     *
      * @throws ImportDataTestException
      */
     @Test(groups = "wso2.ml.ui", description = "verify importing a data-set with all fields filled",
-            dependsOnMethods = "testImportDataWithoutProjectName")
+            dependsOnMethods = "testRedirectToCreateDataset")
     public void testImportData() throws ImportDataTestException {
-        /*try {
-            File dataFile = new File(ImportDataTestCase.class.getResource(MLProject.getDatasetUrl()).toString());
-            datasetSummaryPage = dataImportPage.importData(dataFile, MLProject.getProjectName(),
-                    MLProject.getProjectDescription(), MLProject.getWorkflowName());
-            // Check whether its the page.
-            Assert.assertTrue(datasetSummaryPage.isElementPresent(By.id(mlUIElementMapper
-                    .getElement("dataset.summary.table"))), "Did not redirect to Data summary page");
-            //Check whether the table is populated
-            Assert.assertTrue(datasetSummaryPage.getElementCount(By.className(mlUIElementMapper
-                    .getElement("feature.rows"))) > 0, "Data view table is not populated");
+        try {
+            File dataFile = new File(ImportDataTestCase.class.getResource(MLDataset.getDatasetUrl()).toString());
+            mlDatasetsPage = dataImportPage.importData(dataFile, MLDataset.getDatasetName(), MLDataset.getVersion(),
+                    MLDataset.getDescription(), MLDataset.getSourceType(), MLDataset.getDataFormat(),
+                    MLDataset.getColumnHeader(), MLDataset.getDestinationType());
+            // Check whether redirects to the datasets page
+            Assert.assertTrue(mlDatasetsPage.isElementPresent(By.xpath(mlUIElementMapper
+                    .getElement("create.new.dataset"))), "Did not redirect to Datasets page");
+            //Check whether the page is populated with the added dataset
+            Assert.assertTrue(mlDatasetsPage.getElementCount((By.xpath(mlUIElementMapper
+                    .getElement("datasets.table")))) > 0, "Dataset view table is not populated");
         } catch (InvalidPageException e) {
             throw new ImportDataTestException("Failed to import data: ", e);
-        }*/
+        }
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() {
         driver.quit();
     }
+
 }
