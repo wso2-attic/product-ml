@@ -214,29 +214,24 @@ $( document ).ready(function() {
     $('#display-name').text(algorithmName);
 
     var inputString = '';
+    var hyperParameterInputValues = [];
     // set values for algorithm to build HTML inputs 
-    var hyperParameterInputValues;
-    if (algorithmName == 'LINEAR_REGRESSION') {
-    	hyperParameterInputValues = [['Iterations','iterations',100],['Learning rate','learning-rate',0.001],['SGD data fraction','sgd-data-fraction',1]];
-    }
-    else if (algorithmName == 'RIDGE_REGRESSION' || algorithmName == 'LASSO_REGRESSION') {
-    	hyperParameterInputValues = [['Iterations','iterations',100],['Learning rate','learning-rate',0.001],['Regularization parameter','reg-parameter',0.001],['SGD data fraction','sgd-data-fraction',1]];
-    }
-    else if (algorithmName == 'LOGISTIC_REGRESSION') {
-    	hyperParameterInputValues = [['Iterations','iterations',100],['Learning rate','learning-rate',0.001],['Regularization type','reg-type','L2'],['Regularization parameter','reg-parameter',0.001],['SGD data fraction','sgd-data-fraction',1]];
-    }
-    else if (algorithmName == 'SVM') {
-    	hyperParameterInputValues = [['Iterations','iterations',100],['Learning rate','learning-rate',0.001],['Regularization type','reg-type','L1'],['Regularization parameter','reg-parameter',0.001],['SGD data fraction','sgd-data-fraction',1]];
-    }
-    else if (algorithmName == 'DECISION_TREE') {
-    	hyperParameterInputValues = [['Number of classes','num-classes',2],['Max depth','max-depth',5],['Max bins','max-bins',100],['Impurity','impurity','gini']];
-    }    
-    else if (algorithmName == 'NAIVE_BAYES') {
-    	hyperParameterInputValues = [['Lambda','lambda',1]];
-    }
-    else if (algorithmName == 'K_MEANS') {
-    	hyperParameterInputValues = [['Iterations','iterations',20],['Number of clusters','num-clusters',3]];    	
-    }
+    $.ajax({
+        type: "GET",
+        url: serverUrl+"/api/configs/algorithms/"+algorithmName+"/hyperParams",
+        async : false,
+        dataType: 'json',
+        success: function(res) {
+		for (index = 0; index < res.length; index++) {
+			var param = res[index];
+    			hyperParameterInputValues[index] = new Array(param.description,param.key,param.value);
+		} 
+		console.log(hyperParameterInputValues);
+        },
+        error: function(res) { //TODO: display error
+            console.log("Error");
+        }
+    });
 
     // build input HTML for hyper-parameters
 	for (var i = 0; i < hyperParameterInputValues.length; i++) {
@@ -269,58 +264,28 @@ $( document ).ready(function() {
     	var algorithmName = getParameterByName('algorithmName');    	
         var fromAnalysis = getParameterByName('fromAnalysis')
 
-    	var jsonData;
+    	var jsonData= '';
     	var hyperParameters = [];
 
-	    if (algorithmName == 'LINEAR_REGRESSION') {
-	    	
-	    	hyperParameters[0] = $('#iterations').val();
-	    	hyperParameters[1] = $('#learning-rate').val();
-	    	hyperParameters[2] = $('#sgd-data-fraction').val();
-
-	    	jsonData = '[{ "key":"Iterations","value":"'+hyperParameters[0]+'"},{"key":"Learning_Rate","value":"'+hyperParameters[1]+'"},{"key":"SGD_Data_Fraction","value":"'+hyperParameters[2]+'"}]';
-	    }
-	    else if (algorithmName == 'RIDGE_REGRESSION' || algorithmName == 'LASSO_REGRESSION') {
-	    	
-	    	hyperParameters[0] = $('#iterations').val();
-	    	hyperParameters[1] = $('#learning-rate').val();
-	    	hyperParameters[2] = $('#reg-parameter').val();
-	    	hyperParameters[3] = $('#sgd-data-fraction').val();
-
-	    	jsonData = '[{ "key":"Iterations","value":"'+hyperParameters[0]+'"},{"key":"Learning_Rate","value":"'+hyperParameters[1]+'"},{"key":"Reg_Parameter","value":"'+hyperParameters[2]+'"},{"key":"SGD_Data_Fraction","value":"'+hyperParameters[3]+'"}]';
-	    }
-	    else if (algorithmName == 'LOGISTIC_REGRESSION' || algorithmName == 'SVM') {
-	    	
-	    	hyperParameters[0] = $('#iterations').val();
-	    	hyperParameters[1] = $('#learning-rate').val();
-	    	hyperParameters[2] = $('#reg-type').val();
-	    	hyperParameters[3] = $('#reg-parameter').val();
-	    	hyperParameters[4] = $('#sgd-data-fraction').val();
-
-	    	jsonData = '[{ "key":"Iterations","value":"'+hyperParameters[0]+'"},{"key":"Learning_Rate","value":"'+hyperParameters[1]+'"},{"key":"Reg_Type","value":"'+hyperParameters[2]+'"},{"key":"Reg_Parameter","value":"'+hyperParameters[3]+'"},{"key":"SGD_Data_Fraction","value":"'+hyperParameters[4]+'"}]';
-	    }
-	    else if (algorithmName == 'DECISION_TREE') {
-	    	
-	    	hyperParameters[0] = $('#num-classes').val();
-	    	hyperParameters[1] = $('#max-depth').val();
-	    	hyperParameters[2] = $('#max-bins').val();
-	    	hyperParameters[3] = $('#impurity').val();
-
-	    	jsonData = '[{ "key":"Num_Classes","value":"'+hyperParameters[0]+'"},{"key":"Max_Depth","value":"'+hyperParameters[1]+'"},{"key":"Max_Bins","value":"'+hyperParameters[2]+'"},{"key":"Impurity","value":"'+hyperParameters[3]+'"}]';
-	    }    
-	    else if (algorithmName == 'NAIVE_BAYES') {
-	    	
-	    	hyperParameters[0] = $('#lambda').val();
-
-	    	jsonData = '[{ "key":"Lambda","value":"'+hyperParameters[0]+'"}]';
-	    }
-	    else if (algorithmName == 'K_MEANS') {
-	    	
-	    	hyperParameters[0] = $('#iterations').val();
-	    	hyperParameters[1] = $('#num-clusters').val();
-
-	    	jsonData = '[{ "key":"Iterations","value":"'+hyperParameters[0]+'"},{"key":"Num_Clusters","value":"'+hyperParameters[1]+'"}]';
-	    }
+	$.ajax({
+        type: "GET",
+        url: serverUrl+"/api/configs/algorithms/"+algorithmName+"/hyperParams",
+        async : false,
+        dataType: 'json',
+        success: function(res) {
+                for (index = 0; index < res.length; index++) {
+                        var param = res[index];
+			var key = param.key;
+                        var val = $('#'+key).val();
+			jsonData = jsonData.concat("{ \"key\":\"",key,"\",\"value\":\"",val,"\"},");
+                }
+                jsonData = jsonData.substr(0,jsonData.length-1);
+		jsonData = "[".concat(jsonData,"]");
+        },
+        error: function(res) { //TODO: display error
+            console.log(res);
+        }
+    	});
 
 	    $.ajax({
             type: 'POST',
