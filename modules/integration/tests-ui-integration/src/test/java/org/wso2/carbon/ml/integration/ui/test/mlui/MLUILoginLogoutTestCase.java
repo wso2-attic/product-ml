@@ -63,7 +63,7 @@ public class MLUILoginLogoutTestCase extends MLIntegrationUiBaseTest {
                     "This is not the login page.");
             mlUIHomePage = mlUiLoginPage.loginAs(userInfo.getUserName(),userInfo.getPassword());
             //Checks whether it redirects to the home page.
-            Assert.assertTrue(mlUIHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.project"))),
+            Assert.assertTrue(mlUIHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("home.page.projects"))),
                     "Did not redirect to home page.");
             //TODO: checks whether the correct user is logged
         } catch (InvalidPageException e) {

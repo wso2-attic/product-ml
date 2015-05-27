@@ -27,5 +27,13 @@ Citatoins
 	Modeling wine preferences by data mining from physicochemical properties. In Decision Support Systems, Elsevier, 47(4):547-553, 2009.
 
 9. Yacht Hydrodynamics Data Set
-	Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science. 
+	Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
 
+10. Microsoft Azure Stream Analytics Data set - entry (MIT Liscence)
+	Available[Online]: https://github.com/Azure/azure-stream-analytics/tree/master/Sample%20Data
+
+11. Automobile Data Set
+    Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+
+12. Titanic: Machine Learning from Disaster Dataset - training
+	Titanic: Machine Learning from Disaster, www.kaggle.com, Available[Online]:https://www.kaggle.com/c/titanic/data

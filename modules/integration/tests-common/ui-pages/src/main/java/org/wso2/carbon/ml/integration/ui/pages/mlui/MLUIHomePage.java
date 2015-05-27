@@ -42,15 +42,15 @@ public class MLUIHomePage extends MLUIPage {
     /**
      * Create a new Project
      * 
-     * @return  Data import page
+     * @return  MLProjectsPage
      * @throws  InvalidPageException
      */
-    public DataImportPage createProject() throws InvalidPageException {
+    public MLProjectsPage createProject() throws InvalidPageException {
         try {
-            driver.findElement(By.xpath(mlUIElementMapper.getElement("create.new.project"))).click();
-            return new DataImportPage(driver);
+            driver.findElement(By.xpath(mlUIElementMapper.getElement("home.page.projects"))).click();
+            return new MLProjectsPage(driver);
         } catch (MLUIPageCreationException e) {
-            throw new InvalidPageException("Failed to create a Data Import Page: ", e);
+            throw new InvalidPageException("Failed to create Projects Page: ", e);
         }
     }
 
@@ -67,6 +67,20 @@ public class MLUIHomePage extends MLUIPage {
             return new MLUILoginPage(driver);
         } catch (MLUIPageCreationException e) {
             throw new InvalidPageException("Failed to create a Login Page: ", e);
+        }
+    }
+
+    /**
+     * Create a new Dataset
+     * @return
+     * @throws InvalidPageException
+     */
+    public MLDatasetsPage createDataset() throws InvalidPageException {
+        try {
+            driver.findElement(By.xpath(mlUIElementMapper.getElement("home.page.datasets"))).click();
+            return new MLDatasetsPage(driver);
+        } catch (MLUIPageCreationException e) {
+            throw new InvalidPageException("Failed to create Datasets Page: ", e);
         }
     }
 }

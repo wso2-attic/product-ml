@@ -19,25 +19,21 @@
 package org.wso2.carbon.ml.integration.ui.test.dto;
 
 /**
- * Java bean class to hold details of ML Projects
+ * Java bean class to hold details of ML Analysis
  */
-public class MLProject {
+public class MLAnalysis {
 
-    private static final String PROJECT_NAME="test-project-name";
-    private static final String PROJECT_DESCRIPTION="test-project-description";
-    private static final String DATASET_NAME ="test-dataset";
-    
-    private MLProject() {
+    private static final String ANALYSIS_NAME ="test-analysis";
+    private static final String ALGORITHM_NAME ="LOGISTIC REGRESSION";
+    private static final String RESPONSE_VARIABLE ="Class";
+
+    public static String getAnalysisName() {
+        return ANALYSIS_NAME;
     }
-    
-    public static String getProjectName() {
-        return PROJECT_NAME;
+    public static String getAlgorithmName() {
+        return ALGORITHM_NAME;
     }
-    public static String getProjectDescription() {
-        return PROJECT_DESCRIPTION;
+    public static String getResponseVariable() {
+        return RESPONSE_VARIABLE;
     }
-    public static String getDatasetName() {
-        return DATASET_NAME;
-    }
-    
 }
