@@ -109,12 +109,31 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
     }
 
     /**
+     * Test create new project with empty fields
+     *
+     * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.CreateProjectTestException
+     */
+    @Test(groups = "wso2.ml.ui", description = "verify input validation for empty fields",
+            dependsOnMethods = "testRedirectToCreateProject")
+    public void testCreateProjectWithEmptyName() throws CreateProjectTestException {
+        try {
+            newProjectPage.createNewProject("", "", MLProject.getDatasetName());
+            Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper
+                    .getElement("project.name.error"))), "No validation for project name field");
+            Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper
+                    .getElement("project.description.error"))), "No validation for project description field");
+        } catch (InvalidPageException e) {
+            throw new CreateProjectTestException("Failed to validate input fields: ", e);
+        }
+    }
+
+    /**
      * Test create new project with all fields filled
      *
      * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.CreateProjectTestException
      */
     @Test(groups = "wso2.ml.ui", description = "verify create new project with all fields filled",
-            dependsOnMethods = "testRedirectToCreateProject")
+            dependsOnMethods = "testCreateProjectWithEmptyName")
     public void testCreateProject() throws CreateProjectTestException {
         try {
             mlProjectsPage = newProjectPage.createNewProject(MLProject.getProjectName(),
