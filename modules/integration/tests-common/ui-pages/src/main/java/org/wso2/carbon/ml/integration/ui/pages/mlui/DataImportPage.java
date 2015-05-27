@@ -42,34 +42,44 @@ public class DataImportPage extends MLUIPage {
     }
 
     /**
-     * Import data.
-     * 
-     * @param datasetUrl    Url of the dataset
-     * @param project       Name of the project
-     * @param desciption    Description of the project
-     * @param workflow      Name of the workflow
-     * @return Dataset      Summary Page
-     * @throws              InvalidPageException 
+     * Import dataset
+     * @param dataFile
+     * @param datasetName
+     * @param version
+     * @param description
+     * @param sourceType
+     * @param dataFormat
+     * @param columnHeader
+     * @param destinationType
+     * @return
+     * @throws InvalidPageException
      */
-    public DatasetSummaryPage importData(File dataFile, String project, String desciption,
-            String workflow) throws InvalidPageException {
+    public MLDatasetsPage importData(File dataFile, String datasetName, String version,
+            String description, String sourceType, String dataFormat, String columnHeader, String destinationType) throws InvalidPageException {
         try {
-            WebElement projectName = driver.findElement(By.id(mlUIElementMapper.getElement("project.name")));
-            WebElement projectDescription = driver.findElement(By.id(mlUIElementMapper
-                    .getElement("project.description")));
-            WebElement workflowName = driver.findElement(By.id(mlUIElementMapper.getElement("workflow.name")));
-            WebElement fileElement = driver.findElement(By.id(mlUIElementMapper.getElement("file.element")));
-            projectName.clear();
-            projectDescription.clear();
-            workflowName.clear();
-            projectName.sendKeys(project);
-            projectDescription.sendKeys(desciption);
-            workflowName.sendKeys(workflow);
-            fileElement.sendKeys(dataFile.getPath());
-            driver.findElement(By.xpath(mlUIElementMapper.getElement("import.button"))).click();
-            return new DatasetSummaryPage(driver);
+
+            WebElement datasetNameElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.name")));
+            WebElement datasetVerionElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.version")));
+            WebElement descriptionElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.description")));
+            WebElement sourceTypeElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.source.type")));
+            WebElement pathElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.path")));
+            WebElement dataFormatElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.data.format")));
+            WebElement columnHeaderElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.column.header")));
+            WebElement destinationTypeElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.destination.type")));
+
+            datasetNameElement.sendKeys(datasetName);
+            datasetVerionElement.sendKeys(version);
+            descriptionElement.sendKeys(description);
+            sourceTypeElement.sendKeys(sourceType);
+            pathElement.sendKeys(dataFile.getPath());
+            dataFormatElement.sendKeys(dataFormat);
+            columnHeaderElement.sendKeys(columnHeader);
+            destinationTypeElement.sendKeys(destinationType);
+
+            driver.findElement(By.xpath(mlUIElementMapper.getElement("import.dataset.button"))).click();
+            return new MLDatasetsPage(driver);
         } catch (MLUIPageCreationException e) {
-            throw new InvalidPageException("Error occure while creating the data summary page: ", e);
+            throw new InvalidPageException("Error occurred while importing dataset: ", e);
         }
     }
 }
