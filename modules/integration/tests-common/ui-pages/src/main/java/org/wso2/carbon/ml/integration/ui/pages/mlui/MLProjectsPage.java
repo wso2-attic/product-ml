@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationException;
 
@@ -49,6 +50,23 @@ public class MLProjectsPage extends MLUIPage {
             return new NewProjectPage(driver);
         } catch (MLUIPageCreationException e) {
             throw new InvalidPageException("Failed to create NewProject Page: ", e);
+        }
+    }
+
+    /**
+     * Create a new analysis and return the Preprocess page
+     * @param analysisName name of the analysis
+     * @return
+     * @throws InvalidPageException
+     */
+    public PreprocessPage createAnalysis(String analysisName) throws InvalidPageException {
+        try {
+            WebElement datasetNameElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("analysis.name")));
+            datasetNameElement.sendKeys(analysisName);
+            driver.findElement(By.xpath(mlUIElementMapper.getElement("create.new.analysis"))).click();
+            return new PreprocessPage(driver);
+        } catch (MLUIPageCreationException e) {
+            throw new InvalidPageException("Failed to create Preprocess Page: ", e);
         }
     }
 }

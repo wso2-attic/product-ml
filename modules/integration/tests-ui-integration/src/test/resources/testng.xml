@@ -61,4 +61,9 @@
             <class name="org.wso2.carbon.ml.integration.ui.test.mlui.CreateProjectTestCase"/>
         </classes>
     </test>
+    <test name="Create-Analysis" preserve-order="true" parallel="false" verbose="2">
+        <classes>
+            <class name="org.wso2.carbon.ml.integration.ui.test.mlui.CreateAnalysisTestCase"/>
+        </classes>
+    </test>
 </suite>
