@@ -64,10 +64,6 @@ public class MLIntegrationTestConstants {
     public static final String TITANIC_DATASET_SAMPLE = "data/titanic.csv";
     public static final String AUTOMOBILE_DATASET_SAMPLE = "data/automobile.csv";
 
-    // External datasets
-    // Download the dataset indicated in readme and store in the relavent location.
-    public static final String DIGIT_RECOGNITION_DATASET_SAMPLE = "data/digitRecognition.csv";
-
 	public static final String DATASET_NAME_DIABETES = "Diabetes";
 	public static final int DATASET_ID_DIABETES = 1;
 
@@ -95,7 +91,7 @@ public class MLIntegrationTestConstants {
 	public static final String RESPONSE_ATTRIBUTE_BREAST_CANCER = "Class";
 	public static final String RESPONSE_ATTRIBUTE_FOREST_FIRES = "area";
     public static final String RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE = "class";
-    public static final String RESPONSE_ATTRIBUTE_TITANIC = "Embarked";
+    public static final String RESPONSE_ATTRIBUTE_TITANIC = "Survived";
 
     // Projects
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";

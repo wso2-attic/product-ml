@@ -37,7 +37,7 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
  */
 
 @Test(groups="createAdditionalDatasets", dependsOnGroups = "createDatasets")
-public class CreateAdditionalDataSetsTestCase extends MLBaseTest{
+public class CreateAdditionalDatasetsTestCase extends MLBaseTest{
 
     private MLHttpClient mlHttpclient;
 
