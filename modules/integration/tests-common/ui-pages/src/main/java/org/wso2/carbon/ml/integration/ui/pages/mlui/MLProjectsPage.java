@@ -25,6 +25,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationException;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.analysis.PreprocessPage;
 
 public class MLProjectsPage extends MLUIPage {
     private static final Log logger = LogFactory.getLog(MLProjectsPage.class);

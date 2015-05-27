@@ -23,7 +23,7 @@ package org.wso2.carbon.ml.integration.ui.test.dto;
  */
 public class MLDataset {
 
-    private static final String DATASET_URL = "/data/fcSample.csv";;
+    private static final String DATASET_URL = "/data/pIndiansDiabetes.csv";;
     private static final String DATASET_NAME = "test-dataset";
     private static final String VERSION = "1.0.0";
     private static final String DESCRIPTION = "test-dataset-description";
