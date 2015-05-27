@@ -22,25 +22,22 @@ package org.wso2.carbon.ml.integration.ui.test.dto;
  * Java bean class to hold details of ML Projects
  */
 public class MLProject {
-    private static final String DATASET_URL="/data/fcSample.csv";
-    private static final String PROJECT_NAME="testProjectName";
-    private static final String PROJECT_DESCRIPTION="testProjectDescription";
-    private static final String WORKFLOW_NAME="testWorkflowName";
+
+    private static final String PROJECT_NAME="test-project-name";
+    private static final String PROJECT_DESCRIPTION="test-project-description";
+    private static final String DATASET_NAME ="test-dataset";
     
     private MLProject() {
     }
     
-    public static String getDatasetUrl() {
-        return DATASET_URL;
-    }
     public static String getProjectName() {
         return PROJECT_NAME;
     }
     public static String getProjectDescription() {
         return PROJECT_DESCRIPTION;
     }
-    public static String getWorkflowName() {
-        return WORKFLOW_NAME;
+    public static String getDatasetName() {
+        return DATASET_NAME;
     }
     
 }

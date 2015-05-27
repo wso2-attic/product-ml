@@ -32,6 +32,9 @@ import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationExcept
 import org.wso2.carbon.ml.integration.ui.pages.mlui.MLProjectsPage;
 import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUIHomePage;
 import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUILoginPage;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.NewProjectPage;
+import org.wso2.carbon.ml.integration.ui.test.dto.MLProject;
+import org.wso2.carbon.ml.integration.ui.test.exceptions.CreateProjectTestException;
 import org.wso2.carbon.ml.integration.ui.test.exceptions.ImportDataTestException;
 
 public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
@@ -40,6 +43,7 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
 
     private MLUIHomePage mlUiHomePage;
     private MLProjectsPage mlProjectsPage;
+    private NewProjectPage newProjectPage;
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
@@ -51,10 +55,10 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
     /**
      * Test login to the ml UI using user credentials
      *
-     * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.ImportDataTestException
+     * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.CreateProjectTestException
      */
     @Test(groups = "wso2.ml.ui", description = "verify login to ML UI")
-    public void testLoginToMLUI() throws ImportDataTestException {
+    public void testLoginToMLUI() throws CreateProjectTestException {
         try {
             MLUILoginPage mlUiLoginPage = new MLUILoginPage(driver);
             // Check whether its the correct page
@@ -65,9 +69,9 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
             Assert.assertTrue(mlUiHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("home.page.projects"))),
                     "Did not redirect to home page.");
         } catch (InvalidPageException e) {
-            throw new ImportDataTestException("Login to ML UI failed: ", e);
+            throw new CreateProjectTestException("Login to ML UI failed: ", e);
         } catch (MLUIPageCreationException e) {
-            throw new ImportDataTestException("Failed to create a login page: ", e);
+            throw new CreateProjectTestException("Failed to create a login page: ", e);
         }
     }
 
@@ -77,14 +81,52 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
      * @throws ImportDataTestException
      */
     @Test(groups = "wso2.ml.ui", description = "redirect to projects page", dependsOnMethods = "testLoginToMLUI")
-    public void testRedirectToProjectsPage() throws ImportDataTestException {
+    public void testRedirectToProjectsPage() throws CreateProjectTestException {
         try {
             mlProjectsPage = mlUiHomePage.createProject();
             // Check whether its the correct page
             Assert.assertTrue(mlProjectsPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.project"))),
                     "Did not redirect to projects page.");
         }  catch (InvalidPageException e) {
-            throw new ImportDataTestException("Failed to create project: ", e);
+            throw new CreateProjectTestException("Failed to create project: ", e);
+        }
+    }
+
+    /**
+     * Test the Create Project button in Projects Page
+     *
+     * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.CreateProjectTestException
+     */
+    @Test(groups = "wso2.ml.ui", description = "redirect to create project page", dependsOnMethods = "testRedirectToProjectsPage")
+    public void testRedirectToCreateProject() throws CreateProjectTestException {
+        try {
+            newProjectPage = mlProjectsPage.createProject();
+            Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("save.project.button"))),
+                    "Did not redirect to Create Project page.");
+        }  catch (InvalidPageException e) {
+            throw new CreateProjectTestException("Failed to create project: ", e);
+        }
+    }
+
+    /**
+     * Test create new project with all fields filled
+     *
+     * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.CreateProjectTestException
+     */
+    @Test(groups = "wso2.ml.ui", description = "verify create new project with all fields filled",
+            dependsOnMethods = "testRedirectToCreateProject")
+    public void testCreateProject() throws CreateProjectTestException {
+        try {
+            mlProjectsPage = newProjectPage.createNewProject(MLProject.getProjectName(),
+                    MLProject.getProjectDescription(), MLProject.getDatasetName());
+            // Check whether redirects to the projects page
+            Assert.assertTrue(mlProjectsPage.isElementPresent(By.xpath(mlUIElementMapper
+                    .getElement("create.new.project"))), "Did not redirect to Projects page");
+            //Check whether the page is populated with the added project
+            Assert.assertTrue(mlProjectsPage.getElementCount((By.xpath(mlUIElementMapper
+                    .getElement("projects.table")))) > 0, "Project view table is not populated");
+        } catch (InvalidPageException e) {
+            throw new CreateProjectTestException("Failed to create project: ", e);
         }
     }
 
