@@ -92,7 +92,7 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         //Create an analysis
         mlHttpclient.createAnalysis(analysisName, projectID);
         analysisId = mlHttpclient.getAnalysisId(analysisName);
-        mlHttpclient.setFeartureDefaults(analysisId);
+        mlHttpclient.setFeatureDefaults(analysisId);
 
         //Set Model Configurations
         Map<String, String> configurations = new HashMap<String, String>();

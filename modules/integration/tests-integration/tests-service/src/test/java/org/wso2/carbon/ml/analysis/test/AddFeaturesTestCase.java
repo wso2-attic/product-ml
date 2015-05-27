@@ -60,7 +60,7 @@ public class AddFeaturesTestCase extends MLBaseTest {
      */
     @Test(description = "Add default values to customized features")
     public void testAddDefaultsToCustomizedFeatures() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.setFeartureDefaults(MLIntegrationTestConstants.ANALYSIS_ID);
+        CloseableHttpResponse response = mlHttpclient.setFeatureDefaults(MLIntegrationTestConstants.ANALYSIS_ID);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
