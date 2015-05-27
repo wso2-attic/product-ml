@@ -129,15 +129,29 @@
             </div>
 
             <div class="col-md-6">
-                <h4 class="title">Predicted vs. Actual</h4>
-                <div id="predicted-vs-actual-chart"></div>
-                <br>
-                <div class="filter-md">
-                    <label class="input-label-sm">Feature<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
-                    <div class="input-control text">
-                        <select class="form-control" id="dataset-features"></select>
+                <div id="predicted-vs-actual">
+                    <h4 id="predicted-actual-residual-title" class="title"></h4>
+                    <div id="predicted-vs-actual-chart"></div>
+                    <br>
+                    <div class="filter-md">
+                        <label class="input-label-sm">Feature<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                        <div class="input-control text">
+                            <select class="form-control" id="predicted-actual-features"></select>
+                        </div>
                     </div>
-                </div>                 
+                </div>
+
+                <div id="residual">
+                    <h4 id="predicted-actual-residual-title" class="title"></h4>
+                    <div id="residual-plot"></div>
+                    <br>
+                    <div class="filter-md">
+                        <label class="input-label-sm">Feature<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                        <div class="input-control text">
+                            <select class="form-control" id="residual-features"></select>
+                        </div>
+                    </div>
+                </div>                
             </div>
 
 		</div>
@@ -186,12 +200,17 @@ var analysisId;
 var tenantId;
 var userName;
 var predictedVsActuals;
+var numericalFeatureNames;
+var responseVariable;
 
-var featuresWithPredictedVsActualSample;
+var testResultDataPointsSample;
 var features;
 // redraw charts upon changes in selections
-$(document).on('change','select[id="dataset-features"]',function() {
-    drawPredictedVsActualChart(featuresWithPredictedVsActualSample);
+$(document).on('change','select[id="predicted-actual-features"]',function() {
+    drawPredictedVsActualChart(testResultDataPointsSample);
+});
+$(document).on('change','select[id="residual-features"]',function() {
+    drawResidualPlot(testResultDataPointsSample);
 });
 
 /*for threshold slider*/
@@ -249,6 +268,47 @@ $( document ).ready(function() {
         }
     });
 
+    // get numerical feature names
+    $.ajax({
+        type: "GET",
+        url: serverUrl+"/api/analyses/"+analysisId+"/filteredFeatures?featureType=NUMERICAL",
+        async: false,
+        /*beforeSend : function(xhr) {
+            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
+        },*/
+        success : function(res){
+            numericalFeatureNames = res;
+        },
+        error : function(res){
+            //$('#workflow-name-error').text("* "+res.responseJSON.message);
+
+            if (crtValArea.prev("ctrl-validation-panel").length == 0){
+                crtValArea.before(buildNortifications(res.responseJSON.status));
+            }
+        }
+    });
+
+    // get response variable
+    $.ajax({
+        type: "GET",
+        url: serverUrl+"/api/analyses/"+analysisId+"/responseVariables",
+        async: false,
+        dataType: "text",
+        /*beforeSend : function(xhr) {
+            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
+        },*/
+        success : function(res){
+            responseVariable = res;
+        },
+        error : function(res){
+            //$('#workflow-name-error').text("* "+res.responseJSON.message);
+
+            if (crtValArea.prev("ctrl-validation-panel").length == 0){
+                crtValArea.before(buildNortifications(res.responseJSON.status));
+            }
+        }
+    });
+
     // put path in application navigator
     $('#nav-project').text(projectName);
     $('#nav-analysis').text(" \\ "+analysisName);
@@ -263,7 +323,9 @@ $( document ).ready(function() {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
         },*/
         success: function(res){
-            if (res.algorithm == 'LOGISTIC_REGRESSION' || res.algorithm == 'SVM') {                
+            
+            if (res.algorithm == 'LOGISTIC_REGRESSION' || res.algorithm == 'SVM') {
+                $("#residual").remove();
                 // format data and draw ROC graph
                 var rocData  = JSON.parse(res.roc);
                 var auc  = parseFloat(res.auc).toFixed(3);
@@ -275,31 +337,65 @@ $( document ).ready(function() {
                 predictedVsActuals = res.predictedVsActuals;
         		var threshold = $("#slider").slider("value");
         		drawConfusionMatrix(predictedVsActuals, threshold, "#confusion-matrix");
-                // draw predicted vs. actual chart
-                featuresWithPredictedVsActualSample = res.featuresWithPredictedVsActualSample;
+                // draw feature select
+                testResultDataPointsSample = res.testResultDataPointsSample;
                 features = res.features;
-                $('#dataset-features').empty();
-                $.each(features,function(index, feature){
-                    $('#dataset-features').append($('<option>', { 
-                        value: index,
-                        text : feature
+                var displayFeatures = getDisplayFeatures(features, numericalFeatureNames);
+                $('#predicted-actual-features').empty();
+                $.each(displayFeatures,function(index, feature){
+                    $('#predicted-actual-features').append($('<option>', { 
+                        value: feature.value,
+                        text : feature.text
                     }));
-                });
-                drawPredictedVsActualChart(featuresWithPredictedVsActualSample);
+                });                    
+                // draw predicted vs. actual chart
+                drawPredictedVsActualChart(testResultDataPointsSample);
             }
-            else if (res.algorithm == 'LINEAR_REGRESSION' || res.algorithm == 'RIDGE_REGRESSION' || res.algorithm == 'LASSO_REGRESSION' || res.algorithm == 'DECISION_TREE' || res.algorithm == 'NAIVE_BAYES') {                
+            else if (res.algorithm == 'DECISION_TREE' || res.algorithm == 'NAIVE_BAYES') {
                 // remove not applicable charts/tables
-                $("#roc-graph, #confusion-matrix, #predicted-vs-actual-chart").closest("div.col-md-6").remove();
+                $("#roc-graph, #weights-chart, #confusion-matrix").closest("div.col-md-6").remove();
+                $("#residual").remove();
+                // draw feature select
+                testResultDataPointsSample = res.testResultDataPointsSample;
+                features = res.features;
+                var displayFeatures = getDisplayFeatures(features, numericalFeatureNames);
+                $('#predicted-actual-features').empty();
+                $.each(displayFeatures,function(index, feature){
+                    $('#predicted-actual-features').append($('<option>', { 
+                        value: feature.value,
+                        text : feature.text
+                    }));
+                });                    
+                // draw predicted vs. actual chart
+                drawPredictedVsActualChart(testResultDataPointsSample);                    
+            }            
+            else if (res.algorithm == 'LINEAR_REGRESSION' || res.algorithm == 'RIDGE_REGRESSION' || res.algorithm == 'LASSO_REGRESSION') {                
+                // remove not applicable charts/tables
+                $("#roc-graph, #confusion-matrix").closest("div.col-md-6").remove();
+                $("#predicted-vs-actual").remove();
                 // create data object and draw weights chart
-                var featureImportanceData = [ {'key':'featureImportanceData', 'values': res['featureImportance']}];
+                var featureImportanceData = [ {'key':'featureImportanceData', 'values': res.featureImportance}];
                 drawWeightsChart(featureImportanceData);
+                // draw feature select
+                testResultDataPointsSample = res.testResultDataPointsSample;
+                features = res.features;
+                var displayFeatures = getDisplayFeatures(features, numericalFeatureNames);
+
+                $('#residual-features').empty();
+                $.each(displayFeatures,function(index, feature){
+                    $('#residual-features').append($('<option>', { 
+                        value: feature.value,
+                        text : feature.text
+                    }));
+                });                    
+                // draw residual plot
+                drawResidualPlot(testResultDataPointsSample);                    
             }
-            else {
+            else if (res.algorithm == 'K_MEANS') {
                 // TODO: add cluster diagram
                 $("#roc-graph, #weights-chart, #confusion-matrix, #predicted-vs-actual-chart").closest("div.col-md-6").remove();
                 console.log("K-means");
             }
-
         },
         error: function(res){
             var crtValArea = btnArea.prev(".ctrl-validation-panel");
@@ -358,30 +454,51 @@ function drawWeightsChart (data) {
 }
 
 // function to draw predicted vs. actual chart
-function drawPredictedVsActualChart(featuresWithPredictedVsActualSample) {
+function drawPredictedVsActualChart(testResultDataPointsSample) {
 
-    var featureIndex = $("#dataset-features").val();
-    var featureName = $("#dataset-features option:selected").text();    
+    var featureIndex = $("#predicted-actual-features").val();
+    var featureName = $("#predicted-actual-features option:selected").text();
+    $('#predicted-actual-residual-title').html('Predicted vs. Actual');
 
     var predictedData = [];
     var actualData = [];
-    for (var i = 0; i < featuresWithPredictedVsActualSample.length; i++) {                
+    for (var i = 0; i < testResultDataPointsSample.length; i++) {                
         
         var predictedRow = [];
-        predictedRow[0] = parseFloat(featuresWithPredictedVsActualSample[i]['rowFeatures'][featureIndex.toString()]);
-        predictedRow[1] = parseFloat(featuresWithPredictedVsActualSample[i].predictedVsActual.predicted);
+        predictedRow[0] = parseFloat(testResultDataPointsSample[i]['featureValues'][featureIndex.toString()]);
+        predictedRow[1] = parseFloat(testResultDataPointsSample[i].predictedVsActual.predicted);
         predictedRow[2] = 'Predicted';
         predictedData.push(predictedRow);
 
         var actualRow = [];
-        actualRow[0] = parseFloat(featuresWithPredictedVsActualSample[i]['rowFeatures'][featureIndex.toString()]);
-        actualRow[1] = parseFloat(featuresWithPredictedVsActualSample[i].predictedVsActual.actual);
+        actualRow[0] = parseFloat(testResultDataPointsSample[i]['featureValues'][featureIndex.toString()]);
+        actualRow[1] = parseFloat(testResultDataPointsSample[i].predictedVsActual.actual);
         actualRow[2] = 'Actual';
         actualData.push(actualRow);
     }
 
     var predictedVsActualData = predictedData.concat(actualData);
     drawScatterPlot(predictedVsActualData, '#predicted-vs-actual-chart', featureName, 'Predicted/Actual');
+}
+
+// function to draw residual plot
+function drawResidualPlot(testResultDataPointsSample) {
+
+    var featureIndex = $("#residual-features").val();
+    var featureName = $("#residual-features option:selected").text();
+    $('#predicted-actual-residual-title').html('Residual Plot');
+
+    var residualData = [];
+    for (var i = 0; i < testResultDataPointsSample.length; i++) {                
+        
+        var residualRow = [];
+        residualRow[0] = parseFloat(testResultDataPointsSample[i]['featureValues'][featureIndex.toString()]);
+        residualRow[1] = parseFloat(testResultDataPointsSample[i].predictedVsActual.actual - testResultDataPointsSample[i].predictedVsActual.predicted);
+        residualRow[2] = 'Residual';
+        residualData.push(residualRow);
+    }
+
+    drawScatterPlot(residualData, '#residual-plot', featureName, 'Residual');
 }
 
 // drawing a simple scatter graph
@@ -396,6 +513,25 @@ function drawScatterPlot(data, cssClass, xLabel, yLabel) {
     scatter.setYAxisText(yLabel);
     scatter.plot(d3.select(cssClass));
 };
+// function that returns JSON containing feature names (numerical except reponse variable)
+// with mapped index of summery object feature names
+function getDisplayFeatures(features, numericalFeatureNames) {
+    // remove response variable from numerical feature names 
+    var responseVariableIndex = $.inArray(responseVariable, numericalFeatureNames);
+    numericalFeatureNames.splice(responseVariableIndex, 1);
+    // get corresponding index of summery object feature names for each feature name 
+    var featureIndices = numericalFeatureNames.map(function(elem){
+        var index = features.indexOf(elem);
+        return index;
+    });
+    // create object array with feature name and mapped index
+    var displayFeatures = [];
+    for(var i = 0; i < featureIndices.length; i++) {
+        var displayFeature = {'value': featureIndices[i], 'text': numericalFeatureNames[i]};
+        displayFeatures.push(displayFeature);                    
+    }
+    return displayFeatures;
+}
 
 // function to shorten the label
 function shortenLabel (label) {
