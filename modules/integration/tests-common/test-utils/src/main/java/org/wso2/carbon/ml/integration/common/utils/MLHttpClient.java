@@ -283,7 +283,7 @@ public class MLHttpClient {
      * @return              Response from the back-end
      * @throws              MLHttpClientException 
      */
-    public CloseableHttpResponse setFeartureDefaults(int analysisId) throws MLHttpClientException {
+    public CloseableHttpResponse setFeatureDefaults(int analysisId) throws MLHttpClientException {
         String payload ="{\"include\" : true,\"imputeOption\": \"DISCARD\"}";
         try {
             return doHttpPost("/api/analyses/" + analysisId + "/features/defaults", payload);
