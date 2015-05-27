@@ -176,6 +176,11 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        String payload = "[[6,148,72,35,0,33.6,0.627,50],[8,99,84,0,0,35.4,0.388,50]]";
+        response = mlHttpclient.doHttpPost("/api/models/"+modelId+"/predict", payload);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
         }
 
     // Test disabled temporarily due to model build failure
