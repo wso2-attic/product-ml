@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.testng.SkipException;
@@ -176,7 +177,22 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
-        }
+        
+        // predict using built model
+        testPredictDiabetes();
+    }
+
+    private void testPredictDiabetes() throws MLHttpClientException, JSONException {
+        String payload = "[[6,148,72,35,0,33.6,0.627,50],[8,99,84,0,0,35.4,0.388,50]]";
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        String reply = mlHttpclient.getResponseAsString(response);
+        JSONArray predictions = new JSONArray(reply);
+        assertEquals(2, predictions.length());
+        assertEquals(true, predictions.getString(0).equals("0") || predictions.getString(0).equals("1"));
+        assertEquals(true, predictions.getString(0).equals("0") || predictions.getString(0).equals("1"));
+    }
 
     // Test disabled temporarily due to model build failure
     @Test(description = "Build a Decision Tree model")
@@ -192,6 +208,9 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        
+        // predict using built model
+        testPredictDiabetes();
     }
 
     @Test(description = "Build a Naive Bayes model")
@@ -207,6 +226,9 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        
+        // predict using built model
+        testPredictDiabetes();
     }
 
     @Test(description = "Build a Logistic Regression model")
@@ -222,8 +244,21 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        
+        // predict using built model
+        testPredictDiabetes();
     }
 
+    private void testPredictYacht() throws MLHttpClientException, JSONException {
+        String payload = "[[-2.3,0.568,4.78,3.99,3.17,0.125],[-2.3,0.568,4.78,3.99,3.17,0.300]]";
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        String reply = mlHttpclient.getResponseAsString(response);
+        JSONArray predictions = new JSONArray(reply);
+        assertEquals(2, predictions.length());
+    }
+    
     // Tests for Numerical Prediction algorithms (negative value attributes included)
 
     @Test(description = "Build a Linear Regression model")
@@ -239,6 +274,9 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        
+        // predict using built model
+        testPredictYacht();
     }
 
     @Test(description = "Build a Ridge Regression model")
@@ -254,6 +292,9 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        
+        // predict using built model
+        testPredictYacht();
     }
 
     @Test(description = "Build a Lasso Regression model")
@@ -269,6 +310,9 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        
+        // predict using built model
+        testPredictYacht();
     }
 
     // Tests for clustering algorithms
@@ -286,6 +330,7 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         response.close();
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        
     }
 
     /**

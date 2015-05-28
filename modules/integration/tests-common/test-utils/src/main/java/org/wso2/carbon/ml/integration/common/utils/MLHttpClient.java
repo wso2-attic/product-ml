@@ -40,6 +40,7 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.automation.engine.configurations.UrlGenerationUtil;
 import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
@@ -395,6 +396,54 @@ public class MLHttpClient {
         } catch (MLHttpClientException e) {
             throw new MLHttpClientException("Failed to create a model in analysis: " + analysisId + "using versionset: "
                     + versionSetId, e);
+        }
+    }
+    
+    /**
+     * @param response {@link CloseableHttpResponse}
+     * @return null if response is invalid. Json as string, if it is a valid response.
+     * @throws MLHttpClientException
+     */
+    public String getResponseAsString(CloseableHttpResponse response) throws MLHttpClientException {
+        if (response == null || response.getEntity() == null) {
+            return null;
+        }
+        String reply = null;
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String line = bufferedReader.readLine();
+            try {
+                JSONObject responseJson = new JSONObject(line);
+                reply = responseJson.toString();
+            } catch (JSONException e) {
+                JSONArray responseArray = new JSONArray(line);
+                reply = responseArray.toString();
+            }
+            bufferedReader.close();
+            response.close();
+            return reply;
+        } catch (Exception e) {
+            throw new MLHttpClientException("Failed to extract the response body.", e);
+        }
+    }
+    
+    /**
+     * @param response {@link CloseableHttpResponse}
+     * @return null if response is invalid. Json as JSONObject, if it is a valid response.
+     * @throws MLHttpClientException
+     */
+    public JSONObject getResponseAsJSONObject(CloseableHttpResponse response) throws MLHttpClientException {
+        if (response == null || response.getEntity() == null) {
+            return null;
+        }
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            JSONObject responseJson = new JSONObject(bufferedReader.readLine());
+            bufferedReader.close();
+            response.close();
+            return responseJson;
+        } catch (Exception e) {
+            throw new MLHttpClientException("Failed to extract the response body.", e);
         }
     }
     
