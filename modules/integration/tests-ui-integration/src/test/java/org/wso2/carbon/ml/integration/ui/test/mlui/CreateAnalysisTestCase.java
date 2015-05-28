@@ -34,6 +34,7 @@ import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUIHomePage;
 import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUILoginPage;
 import org.wso2.carbon.ml.integration.ui.pages.mlui.analysis.*;
 import org.wso2.carbon.ml.integration.ui.test.dto.MLAnalysis;
+import org.wso2.carbon.ml.integration.ui.test.dto.MLDataset;
 import org.wso2.carbon.ml.integration.ui.test.exceptions.CreateAnalysisTestException;
 
 public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
@@ -181,11 +182,48 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     @Test(groups = "wso2.ml.ui", description = "navigate to analysis page from model page", dependsOnMethods = "testParameters")
     public void testModelPage() throws CreateAnalysisTestException {
         try {
-            analysisPage = modelPage.next();
+            analysisPage = modelPage.next(MLDataset.getDatasetName() + "-" + MLDataset.getVersion());
             Assert.assertTrue(analysisPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.model"))),
                     "Did not redirect to Analysis page");
         }  catch (InvalidPageException e) {
             throw new CreateAnalysisTestException("Failed to navigate to Analysis Page: ", e);
+        }
+    }
+
+    /**
+     * Test create model from an existing analysis
+     *
+     * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.CreateAnalysisTestException
+     */
+    @Test(groups = "wso2.ml.ui", description = "create model from an existing analysis", dependsOnMethods = "testModelPage")
+    public void testCreateModelFromExistingAnalysis() throws CreateAnalysisTestException {
+        try {
+            modelPage = analysisPage.createModel();
+            Assert.assertTrue(modelPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("model.page.title"))),
+                    "Did not redirect to Model page");
+        }  catch (InvalidPageException e) {
+            throw new CreateAnalysisTestException("Failed to navigate to Model Page: ", e);
+        }
+    }
+
+    /**
+     * Test for disable input fields when a model is created from an existing analysis
+     *
+     * @throws org.wso2.carbon.ml.integration.ui.test.exceptions.CreateAnalysisTestException
+     */
+    @Test(groups = "wso2.ml.ui", description = "disable input fields when a model is created from an existing analysis",
+            dependsOnMethods = "testCreateModelFromExistingAnalysis")
+    public void testForDisabledInputFields() throws CreateAnalysisTestException {
+        try {
+            parametersPage = modelPage.previous();
+            Assert.assertFalse(parametersPage.isEnabled(By.xpath(mlUIElementMapper.getElement("parameters.iterations"))),
+                    "Parameters-Iterations input field is not disabled");
+            Assert.assertFalse(parametersPage.isEnabled(By.xpath(mlUIElementMapper.getElement("parameters.learning.rate"))),
+                    "Parameters-Learning-rate input field is not disabled");
+            Assert.assertFalse(parametersPage.isEnabled(By.xpath(mlUIElementMapper.getElement("parameters.data.fraction"))),
+                    "Parameters-Data-fraction field is not disabled");
+        }  catch (InvalidPageException e) {
+            throw new CreateAnalysisTestException("Failed to navigate to Parameters Page: ", e);
         }
     }
 

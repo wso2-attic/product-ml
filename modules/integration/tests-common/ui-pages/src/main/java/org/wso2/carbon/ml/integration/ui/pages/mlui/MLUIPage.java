@@ -80,4 +80,13 @@ public abstract class MLUIPage {
     public int getElementCount(By by) {
         return this.driver.findElements(by).size();
     }
+
+    /**
+     * This method checks whether the element is enabled
+     * @param by By element to be checked
+     * @return true if enabled
+     */
+    public boolean isEnabled(By by) {
+        return this.driver.findElement(by).isEnabled();
+    }
 }
