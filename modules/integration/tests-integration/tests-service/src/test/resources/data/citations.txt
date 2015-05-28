@@ -37,3 +37,6 @@ Citatoins
 
 12. Titanic: Machine Learning from Disaster Dataset - training
 	Titanic: Machine Learning from Disaster, www.kaggle.com, Available[Online]:https://www.kaggle.com/c/titanic/data
+
+13. Digit recognition dataset - training
+	Digit Recognizer, www.kaggle.com, Available[Online]: https://www.kaggle.com/c/digit-recognizer

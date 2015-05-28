@@ -20,8 +20,6 @@ package org.wso2.carbon.ml.dataset.test;
 
 import java.io.IOException;
 
-import javax.ws.rs.core.Response;
-
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
@@ -40,6 +38,7 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 public class CreateExternalDatasetsTestCase extends MLBaseTest{
 
     private MLHttpClient mlHttpclient;
+    private CloseableHttpResponse response;
 
     @BeforeClass(alwaysRun = true)
     public void initTest() throws Exception {
@@ -53,11 +52,12 @@ public class CreateExternalDatasetsTestCase extends MLBaseTest{
      * @throws IOException
      */
     @Test(description = "Create a dataset of Digit recognition data from a CSV file")
-    public void testCreateDatasetDigits() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_DIGITS,
-                "1.0", MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
-        // Skip test if dataset is not available in the given location
-        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+    public void testCreateDatasetDigits() throws IOException {
+        try {
+            response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_DIGITS,
+                    "1.0", MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
+        } catch ( MLHttpClientException e) {
+            // Skip test if dataset is not available in the given location
             throw new SkipException("Skipping tests because dataset with name: " + MLIntegrationTestConstants.DATASET_NAME_DIGITS
                     + " is not available at the location" + MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
         }

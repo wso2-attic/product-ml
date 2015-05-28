@@ -523,7 +523,8 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
     // External datasets
 
     @Test(description = "Build a Decision tree model for digit recognition dataset")
-    public void testBuildKMeansModelDigitRecognition() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+    public void testBuildDecisionTreeModelDigitRecognition() throws MLIntegrationBaseTestException, MLHttpClientException, IOException,
+            JSONException, InterruptedException {
         response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
                 .PROJECT_NAME_DIGITS);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
