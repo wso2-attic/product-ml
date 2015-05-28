@@ -227,14 +227,15 @@
                     for (var i = 0; i < tenantProjects.length; i++) {                  
                         
                         var workflowString = '';
-                        if (tenantProjects[i]['analyses'].length == 0) {
+                        var noOfAnalyses = tenantProjects[i]['analyses'].length;
+                        if (noOfAnalyses == 0) {
                             workflowString = '<img src="../../images/icons/ico-alert.png" class="ico-align" />No Analysis Available';
                         }
-                        else if (tenantProjects[i]['analyses'].length == 1) {
+                        else if (noOfAnalyses == 1) {
                             workflowString = '<strong>1</strong> Analysis available';
                         }
                         else {
-                            workflowString = '<strong>'+tenantProjects[i]['analyses'].length+'</strong> Analyses available';
+                            workflowString = '<strong>'+noOfAnalyses+'</strong> Analyses available';
                         }
                         
                         //var projectIDString = "'"+tenantProjects[i]['id']+"'";
@@ -260,7 +261,7 @@
                                                 '</td>' +
                                                 '<td class="c-right">' +
                                                     '<div>' +
-                                                        '<a href="#" data-projid="'+projid+'" data-projectname="'+projna+'" id="compare-models" class="cu-reg-btn btn-compare" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Compare models</span></a>' +
+                                                        '<a href="#" data-projid="'+projid+'" data-projectname="'+projna+'" data-dataseid="'+datasetId+'" id="compare-models" class="cu-reg-btn btn-compare '+appendClass(noOfAnalyses)+'" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Compare models</span></a>' +
                                                         '<a href="#" data-projna="'+projna+'" id="delete-project" class="cu-reg-btn btn-delete">Delete Project</a>' +
                                                     '</div>' +
                                                 '</td>' +
@@ -279,7 +280,7 @@
                                 }
                                     accordionPanel += '' +
                                     '<div class="panel-body">';
-                                if (tenantProjects[i]['analyses'].length == 0) {
+                                if (noOfAnalyses == 0) {
                                     accordionPanel += buildEmptyProjectDisplay(description, projid, projna, datasetId);
                                 }
                                 else {
@@ -294,7 +295,7 @@
                                                 }
                                     accordionPanel += '' +
                                                     '<table class="tbl-project-desc" id="table'+i+'">';
-                                    for (var j = 0; j < tenantProjects[i]['analyses'].length; j++) {                                            
+                                    for (var j = 0; j < noOfAnalyses; j++) {                                            
                                         var workflowId = tenantProjects[i]['analyses'][j]['id'];
                                         var analysisName = tenantProjects[i]['analyses'][j]['name'];
                                         var wfid = tenantProjects[i]['analyses'][j]['id'];
@@ -333,6 +334,15 @@
         bindEvents();            
     }
 
+    // function to append button disabled CSS class when there are no analyses in a project
+    function appendClass(noOfAnalyses) {
+        var classAppend = '';
+        if(noOfAnalyses == 0) {
+            classAppend = 'btn-disabled';  
+        }
+        return classAppend;
+    }     
+
     function bindEvents() {
 
         $('.btn-configure-dark').on('click', function(e) {
@@ -349,8 +359,9 @@
             e.preventDefault();
             var projectId = $(this).data('projid');
             var projectName = $(this).data('projectname');
+            var dataseId = $(this).data('dataseid');            
 
-            window.location.href = 'compare.jag?projectId='+projectId+'&projectName='+projectName;
+            window.location.href = 'compare.jag?projectId='+projectId+'&projectName='+projectName+'&dataseId='+dataseId;
         });
 
         // function that deletes a project

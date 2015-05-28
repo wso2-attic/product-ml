@@ -154,8 +154,6 @@
 
     var projectName = getParameterByName('projectName');
     var projectId = getParameterByName('projectId');
-    var analysisName = getParameterByName('analysisName');
-    var analysisId = getParameterByName('analysisId');
     var datasetId = getParameterByName('datasetId');
 
     $(document).ready(function() {
@@ -241,8 +239,8 @@
                                     '</td>' +
                                     '<td class="c-right">' +
                                         '<div>' +
-                                            '<a href="#" id="view-model" class="cu-reg-btn btn-compare" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-toggle="tooltip" data-original-title="Compare models in this project"><span>View</span></a>' +
-                                            '<a href="#" id="predict" class="cu-reg-btn btn-predict" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Predict</span></a>' +
+                                            '<a href="#" id="view-model" class="cu-reg-btn btn-view" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-analysisid="' + models[i].analysisId + '"><span>View</span></a>' +
+                                            '<a href="#" id="predict" class="cu-reg-btn btn-predict" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-analysisid="' + models[i].analysisId + '"><span>Predict</span></a>' +
                                         '</div>' +
                                     '</td>' +
                                 '</tr>' +
@@ -320,6 +318,8 @@
             
             var modelId = $(this).data('modelid');
             var modelName = $(this).data('modelname');
+            var analysisId = $(this).data('analysisid');
+            var analysisName = modelName.split(".")[0];
             window.location.href = '../predict/predict.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName;
         });
 
@@ -328,7 +328,9 @@
             
             var modelId = $(this).data('modelid');
             var modelName = $(this).data('modelname');
-            window.location.href = 'view-model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName;
+            var analysisId = $(this).data('analysisid');
+            var analysisName = modelName.split(".")[0];
+            window.location.href = '../analysis/view-model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName;
         });
     }        
 

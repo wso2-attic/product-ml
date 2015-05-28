@@ -114,14 +114,15 @@
 
                 <div class="spcr-2"></div>
 
-                <label class="input-label">Response variable<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
-		<span class="fld-required">*</span>
-                <div class="input-control text">
-                    <select id="response-variable" class="form-control">
-                    </select>
-                </div>
-
-                <div class="spcr-2"></div>                
+                <div id="response-variable-field">
+                    <label class="input-label">Response variable<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+    		<span class="fld-required">*</span>
+                    <div class="input-control text">
+                        <select id="response-variable" class="form-control">
+                        </select>
+                    </div>
+                    <div class="spcr-2"></div>                
+                </div>                
 
                 <label class="input-label">Train data fraction<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
                 <div class="input-control text">
@@ -237,6 +238,15 @@ $( document ).ready(function() {
         $('#response-variable').attr("disabled","disabled");
         $('#data-fraction').attr("disabled","disabled");
 	}
+    // hides response variable field for K-Means algorithm
+    $(document).on('change','#algorithm-name',function() {
+        if($('#algorithm-name').val() == 'K_MEANS') {
+            $('#response-variable-field').hide();
+        }
+        else {
+            $('#response-variable-field').show();
+        }
+    });    
 	
     $('#prev-btn').on('click', function(e){
         e.preventDefault();
