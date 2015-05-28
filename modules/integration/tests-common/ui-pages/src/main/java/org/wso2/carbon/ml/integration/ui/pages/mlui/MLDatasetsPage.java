@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationException;
 
@@ -49,6 +50,30 @@ public class MLDatasetsPage extends MLUIPage {
             return new DataImportPage(driver);
         } catch (MLUIPageCreationException e) {
             throw new InvalidPageException("Failed to create Datasets Page: ", e);
+        }
+    }
+
+    /**
+     * Expand the versions of the dataset
+     * @return
+     */
+    public void expandDatasetVersions() {
+        driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.row"))).click();
+    }
+
+    /**
+     * Create a new DatasetVersionPage
+     * @return
+     * @throws org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException
+     */
+    public DatasetVersionPage createDatasetVersion(String datasetVersion) throws InvalidPageException {
+        try {
+            WebElement datasetVersionElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.version.input")));
+            datasetVersionElement.sendKeys(datasetVersion);
+            driver.findElement(By.xpath(mlUIElementMapper.getElement("create.dataset.version"))).click();
+            return new DatasetVersionPage(driver);
+        } catch (MLUIPageCreationException e) {
+            throw new InvalidPageException("Failed to create Dataset Version Page: ", e);
         }
     }
 }

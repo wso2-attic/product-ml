@@ -29,10 +29,7 @@ import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationUiBaseTest;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException;
 import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationException;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.DataImportPage;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.MLDatasetsPage;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUIHomePage;
-import org.wso2.carbon.ml.integration.ui.pages.mlui.MLUILoginPage;
+import org.wso2.carbon.ml.integration.ui.pages.mlui.*;
 import org.wso2.carbon.ml.integration.ui.test.dto.MLDataset;
 import org.wso2.carbon.ml.integration.ui.test.exceptions.ImportDataTestException;
 
@@ -48,6 +45,7 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
     private MLUIHomePage mlUiHomePage;
     private MLDatasetsPage mlDatasetsPage;
     private DataImportPage dataImportPage;
+    private DatasetVersionPage datasetVersionPage;
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
@@ -134,6 +132,30 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
                     .getElement("datasets.table")))) > 0, "Dataset view table is not populated");
         } catch (InvalidPageException e) {
             throw new ImportDataTestException("Failed to import data: ", e);
+        }
+    }
+
+    /**
+     * Test uploading a data-set version
+     *
+     * @throws ImportDataTestException
+     */
+    @Test(groups = "wso2.ml.ui", description = "verify uploading a data-set version",
+            dependsOnMethods = "testImportData")
+    public void testCreateDatasetVersion() throws ImportDataTestException {
+        try {
+            mlDatasetsPage.expandDatasetVersions();
+            datasetVersionPage = mlDatasetsPage.createDatasetVersion(MLDataset.getVersion2());
+            File dataFile = new File(ImportDataTestCase.class.getResource(MLDataset.getDatasetUrl()).toString());
+            mlDatasetsPage = datasetVersionPage.uploadDatasetVersion(dataFile, MLDataset.getSourceType(), MLDataset.getDataFormat(),
+                    MLDataset.getColumnHeader(), MLDataset.getDestinationType());
+            Assert.assertTrue(mlDatasetsPage.isElementPresent(By.xpath(mlUIElementMapper
+                    .getElement("create.new.dataset"))), "Did not redirect to Datasets page");
+            mlDatasetsPage.expandDatasetVersions();
+            Assert.assertTrue(mlDatasetsPage.getElementCount((By.xpath(mlUIElementMapper
+                    .getElement("dataset.version.table.row")))) == 2, "Dataset version table is not populated");
+        } catch (InvalidPageException e) {
+            throw new ImportDataTestException("Failed to create Dataset Version Page: ", e);
         }
     }
 
