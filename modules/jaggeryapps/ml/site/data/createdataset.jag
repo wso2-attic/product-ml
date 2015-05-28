@@ -209,7 +209,7 @@ function displayDataSource() {
 	if (dataSourceType == 'HDFS') {
 		$('#source-file').hide();
 		$('#size-limit').hide();
-		$('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. file:///home/datasets/iris.csv" id="src-path" name="sourcePath" />');
+		$('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. hdfs://localhost:9000/home/datasets/iris.csv" id="src-path" name="sourcePath" />');
 		$('#source-hdfs-bam').show();
 		$('#not-related-to-bam').show();
 	} else if (dataSourceType == 'BAM') {
