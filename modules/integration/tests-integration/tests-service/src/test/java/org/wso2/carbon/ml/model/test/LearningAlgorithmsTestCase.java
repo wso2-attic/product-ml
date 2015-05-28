@@ -520,6 +520,29 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
         assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
     }
 
+    // External datasets
+
+    @Test(description = "Build a Decision tree model for digit recognition dataset")
+    public void testBuildKMeansModelDigitRecognition() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_DIGITS);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
+        setConfiguration("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION, MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIGITS,
+                MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIGITS),
+                MLIntegrationTestConstants.DATASET_ID_DIGITS);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        Thread.sleep(100000);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+        // Checks whether model building completed successfully is true
+        assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+    }
+
+
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException {
         // Waiting for building models to end

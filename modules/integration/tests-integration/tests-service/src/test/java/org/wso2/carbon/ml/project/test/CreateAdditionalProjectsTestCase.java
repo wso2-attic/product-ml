@@ -189,4 +189,27 @@ public class CreateAdditionalProjectsTestCase extends MLBaseTest {
                 .getStatusCode());
         response.close();
     }
+
+    // Projects for external datasets
+
+    /**
+     * Creates a test case for creating a project for Digit recognition dataset data set
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(description = "Create a project for digit recognition dataset")
+    public void testCreateProjectDigitRecognition() throws MLHttpClientException, IOException {
+        //Check whether the dataset is available
+        response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                .DATASET_NAME_DIGITS);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because dataset with ID: " + MLIntegrationTestConstants.DATASET_ID_DIGITS
+                    + " is not available");
+        }
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_DIGITS,
+                MLIntegrationTestConstants.DATASET_NAME_DIGITS);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
 }
