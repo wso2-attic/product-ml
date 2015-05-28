@@ -65,10 +65,12 @@
 		</div>
 	</div>
 
-	<div class="col-md-3">
+	<div class="col-md-3 wr-wiz-nav">
 		<div class="wr-secondary-links pull-right">
-			<a href="#" id="next-btn" class="cu-btn-reverse btn-next">Next</a>
-		</div>
+            <div class="ctrl-wiz-nav">
+    			<a href="#" id="next-btn" class="cu-btn-reverse btn-next">Next</a>
+    		</div>
+        </div>
 	</div>
 </div>
 <!-- secondary header - app bar -->
