@@ -215,7 +215,7 @@ ScatterPlot.prototype.plot = function(selection) {
     this.attachXAxis(xAxis);
     this.attachYAxis(yAxis);
 
-    var color = d3.scale.category20();
+    var color = d3.scale.category10();
 
     //drawing dots, each dot represents a single data point
     this.svg.selectAll("circle")

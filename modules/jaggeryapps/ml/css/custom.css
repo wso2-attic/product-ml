@@ -346,6 +346,14 @@ a.cu-btn:hover, a.cu-btn-reverse:hover {
 	background:url('../images/icons/ico-add-new.png') 0.8em 1em no-repeat;
 }
 
+.btn-view {
+	background:url('../images/icons/ico-view.png') 0.8em 1em no-repeat;
+}
+
+.btn-publish {
+	background:url('../images/icons/ico-publish.png') 0.8em 1em no-repeat;
+}
+
 .btn-save {
 	background:url('../images/icons/ico-save.png') 0.8em 1em no-repeat;
 }
@@ -393,6 +401,27 @@ a.cu-btn:hover, a.cu-btn-reverse:hover {
 .btn-configure-dark {
 	background:url('../images/icons/ico-configure-dark.png') 0.8em 1em no-repeat;
 }
+
+.btn-predict {
+	background:url('../images/icons/ico-predict.png') 0.8em 1em no-repeat;
+}
+
+.btn-run {
+	background:url('../images/icons/ico-run.png') 0.8em 1em no-repeat;
+}
+
+.btn-refresh {
+	background:url('../images/icons/ico-refresh.png') 0.8em 1em no-repeat;
+}
+
+.btn-explore {
+	background:url('../images/icons/ico-explore.png') 0.8em 1em no-repeat;
+}
+
+.btn-download {
+	background:url('../images/icons/ico-download.png') 0.8em 1em no-repeat;
+}
+
 
 .ico-align {
 	vertical-align: middle;
@@ -763,14 +792,6 @@ h4.h-option-head span {
 	border-bottom:1px solid #ffe8e8;
 	background:#fff4f4;
 	text-align: center;
-}
-
-.ctrl-validation-panel-left {
-	padding:5px 10px;
-	border-top:1px solid #ffe8e8;
-	border-bottom:1px solid #ffe8e8;
-	background:#fff4f4;
-	text-align: left;
 }
 
 

@@ -143,7 +143,7 @@ function buildAccordingHeader(collapseSection, datasetName, numVersions, dataset
 						    '<td class="c-right">' +			        
 						        '<div>' +
 						        	'<a href="#" id="create-project" class="cu-reg-btn btn-edit" data-dsname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Create project with this Dataset"><span>Create project</span></a>' +
-						        	'<a href="#" id="explore-dataset" class="cu-reg-btn btn-edit" data-dsid="'+ datasetId +'" data-dsname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Explore this Dataset"><span>Explore</span></a>' +
+						        	'<a href="#" id="explore-dataset" class="cu-reg-btn btn-explore" data-dsid="'+ datasetId +'" data-dsname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Explore this Dataset"><span>Explore</span></a>' +
 									'<a href="#" id="delete-dataset" class="cu-reg-btn btn-delete" data-dsid="'+ datasetId +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete Dataset</span></a>' +
 								'</div>' +
 							'</td>'+

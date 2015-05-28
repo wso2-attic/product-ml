@@ -52,11 +52,13 @@
 		</div>
 	</div>
 
-	<div class="col-md-3">
+	<div class="col-md-3 wr-wiz-nav">
 		<div class="wr-secondary-links pull-right">
-			<a href="#" id="prev-btn" class="cu-btn btn-prev">Previous</a>
-			<a href="#" id="btn-next" class="cu-btn-reverse btn-next">Next</a>
-		</div>
+            <div class="ctrl-wiz-nav">
+    			<a href="#" id="prev-btn" class="cu-btn btn-prev">Previous</a>
+    			<a href="#" id="btn-next" class="cu-btn-reverse btn-next">Next</a>
+    		</div>
+        </div>
 	</div>
 </div>
 <!-- secondary header - app bar -->
@@ -141,6 +143,10 @@ $( document ).ready(function() {
 	        top: $('header').height()
 	      }
 	});
+    // for tooltip
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })    
 
 	var projectName = getParameterByName('projectName');
     var analysisName = getParameterByName('analysisName');	
@@ -210,8 +216,8 @@ $( document ).ready(function() {
     $('#nav-project').text(projectName);
     $('#nav-analysis').text(" \\ "+analysisName);    
 
-    $('#algo-cat').text(algorithmType);
-    $('#display-name').text(algorithmName);
+    $('#algo-cat').text(algorithmType.replace(/_/g, " "));
+    $('#display-name').text(algorithmName.replace(/_/g, " "));
 
     var inputString = '';
     var hyperParameterInputValues = [];
@@ -222,11 +228,12 @@ $( document ).ready(function() {
         async : false,
         dataType: 'json',
         success: function(res) {
-		for (index = 0; index < res.length; index++) {
-			var param = res[index];
-    			hyperParameterInputValues[index] = new Array(param.description,param.key,param.value);
-		} 
-		console.log(hyperParameterInputValues);
+            for (var index = 0; index < res.length; index++) {
+    			var param = res[index];
+                // create display name from key value - replacing all '_' with ' '
+                var displayName = param.key.replace(/_/g, " ");
+        		hyperParameterInputValues[index] = new Array(displayName, param.key, param.value, param.description);
+    		}
         },
         error: function(res) { //TODO: display error
             console.log("Error");
@@ -236,10 +243,10 @@ $( document ).ready(function() {
     // build input HTML for hyper-parameters
 	for (var i = 0; i < hyperParameterInputValues.length; i++) {
 		if (fromNext) {
-	    	inputString += buildInput(hyperParameterInputValues[i][0],hyperParameterInputValues[i][1],hyperParametersArray[i]);	
+	    	inputString += buildInput(hyperParameterInputValues[i][0],hyperParameterInputValues[i][1],hyperParametersArray[i],hyperParameterInputValues[i][3]);	
     	}
     	else {
-	    	inputString += buildInput(hyperParameterInputValues[i][0],hyperParameterInputValues[i][1],hyperParameterInputValues[i][2]);	
+	    	inputString += buildInput(hyperParameterInputValues[i][0],hyperParameterInputValues[i][1],hyperParameterInputValues[i][2],hyperParameterInputValues[i][3]);	
     	}
 	}
 
@@ -349,9 +356,9 @@ $( document ).ready(function() {
 	});
 });
 
-function buildInput(displayName, id, value) {
+function buildInput(displayName, id, value, description) {
 
-	inputString = 	'<label class="input-label">'+displayName+'<span class="help-tip glyphicon glyphicon-question-sign"></span></label>' +
+	inputString = 	'<label class="input-label">'+displayName+'<span class="help-tip glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="'+description+'"></span></label>' +
 					'<div class="input-control text">' +
 					    '<input type="text" id="'+id+'" value="'+value+'" placeholder="input text"/>' +
 					'</div>';
