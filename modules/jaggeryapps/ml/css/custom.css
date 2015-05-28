@@ -1090,4 +1090,11 @@ a.btn-opr-cancel {
 }
 
 
+.btn-disabled {
+	pointer-events: none;
+    cursor: default;
+    color:#cecece !Important;
+	-webkit-filter: opacity(50%)    
+}
+
 
