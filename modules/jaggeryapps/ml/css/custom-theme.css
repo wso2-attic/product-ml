@@ -419,3 +419,43 @@ a.ctrl-filter-category:hover {
   width: 150px;
   height: 150px;
 }
+
+/* alerts */
+.alert {
+	border-radius: 0px;
+	border-left:0px solid transparent;
+	border-right:0px solid transparent;
+	font-weight: 100;
+	font-size: 14px;
+	padding:10px;
+}
+
+.alert-info {
+	color: #333;
+	background-color: #fffee7;
+	border-color: #fffcac;
+}
+
+.alert-warning {
+	color: #333;
+	background-color: #fff6f6;
+	border-color: #ffe3e3;
+}
+
+.alert-success {
+	color: #333;
+	background-color: #f2ffee;
+	border-color: #c5ffb1;
+}
+
+.alert img.indi {
+	vertical-align: middle;
+	margin-right:7px
+}
+
+.alert .close {
+	right:0;
+}
+
+
+

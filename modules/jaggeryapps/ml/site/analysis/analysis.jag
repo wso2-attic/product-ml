@@ -157,14 +157,48 @@
     
     function buildNotifications(message){
         if(message == null) {
-		return '';
-	}
+	   	   return '';
+    	}
         var builtErrors = 
         '<div class="ctrl-validation-panel-left col-md-12 col-centered">' +
         '<p>' + message + '</p>'
         '</div>';
         return builtErrors;
-    }     
+    }
+    // function to build notifications
+    function buildNotification(message, notificationType) {
+        var builtNotification;
+        if(notificationType == 'warning') {
+            builtNotification = 
+            '<div class="alert alert-warning alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '<img src="../../images/icons/ico-error.png" class="indi" />' +
+                message +
+            '</div>';            
+        }
+        else if(notificationType == 'info') {
+            builtNotification = 
+            '<div class="alert alert-info alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '<img src="../../images/icons/ico-alert.png" class="indi" />' +
+                message +
+            '</div>';            
+        }
+        else if(notificationType == 'success') {
+            builtNotification = 
+            '<div class="alert alert-success alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                message +
+            '</div>';            
+        }
+        return builtNotification;
+    }    
+    // function to handle notifications
+    function handleNotification(notificationText, checkElement, closeElement, notificationType) {
+        if(!$(checkElement).length) {
+            $(closeElement).before(buildNotification(notificationText, notificationType));             
+        }
+    }    
 
     function loadModels() {
         
@@ -273,7 +307,8 @@
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
                 },
                 success : function(res){
-                    console.log("Model published to registry.");
+                    var successText = 'Model successfully published to registry.';
+                    handleNotification(successText, '.alert', '.ctrl-info-panel', 'success');
                 },
                 error : function(res){
                     if (crtValArea.prev("ctrl-validation-panel").length == 0){
