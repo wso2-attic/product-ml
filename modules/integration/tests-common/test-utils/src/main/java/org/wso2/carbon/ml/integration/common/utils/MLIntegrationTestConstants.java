@@ -123,4 +123,16 @@ public class MLIntegrationTestConstants {
 
     // Storage file location
 	public static final String FILE_STORAGE_LOCATION = "Models/file-storage";
+
+	// External datasets
+	// You need to download these datasets explicitly
+
+    // Digit recognition dataset.
+    public static final String DIGIT_RECOGNITION_DATASET_SAMPLE = "data/digitRecognition.csv";
+    public static final String DATASET_NAME_DIGITS = "Digit_Recognition";
+    public static final int DATASET_ID_DIGITS = 9;
+    public static final String PROJECT_NAME_DIGITS = "Diabetes_Project";
+    public static final int PROJECT_ID_DIGITS = 9;
+	public static final String RESPONSE_ATTRIBUTE_DIGITS = "label";
+
 }
