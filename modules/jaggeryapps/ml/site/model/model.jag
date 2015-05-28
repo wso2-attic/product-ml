@@ -51,11 +51,13 @@
 		</div>
 	</div>
 
-	<div class="col-md-3">
+	<div class="col-md-3 wr-wiz-nav">
 		<div class="wr-secondary-links pull-right">
-			<a href="#" id="prev-btn" class="cu-btn btn-prev">Previous</a>
-			<a href="#" id="btn-next" class="cu-btn-reverse btn-next">Run</a>
-		</div>
+            <div class="ctrl-wiz-nav">
+    			<a href="#" id="prev-btn" class="cu-btn btn-prev">Previous</a>
+    			<a href="#" id="btn-next" class="cu-btn-reverse btn-run">Run</a>
+    		</div>
+        </div>
 	</div>
 </div>
 <!-- secondary header - app bar -->
