@@ -19,6 +19,7 @@
 package org.wso2.carbon.ml.dataset.test;
 
 import static org.testng.AssertJUnit.assertEquals;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -67,6 +68,43 @@ public class GetDatasetsTestCase extends MLBaseTest {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         JSONObject responseJson = new JSONObject(bufferedReader.readLine());
         assertEquals("Incorrect dataset retrieved", MLIntegrationTestConstants.DATASET_ID_DIABETES, responseJson.getInt("id"));
+        bufferedReader.close();
+        response.close();
+    }
+    
+    @Test(description = "scatter plot points for a dataset")
+    public void testGetScatterPlotPointsOfLatestVersion() throws MLHttpClientException, IOException, JSONException {
+        String payload = "{\"xAxisFeature\": \"Age\", \"yAxisFeature\": \"NumPregnancies\", \"groupByFeature\": \"Class\"}";
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/datasets/" + MLIntegrationTestConstants
+                    .DATASET_ID_DIABETES+"/scatter", payload);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        assertEquals("Response is not a JSON Array", true, bufferedReader.readLine().startsWith("["));
+        bufferedReader.close();
+        response.close();
+    }
+    
+    @Test(description = "chart sample points for a dataset")
+    public void testGetChartSamplePointsOfLatestVersion() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                    .DATASET_ID_DIABETES+"/charts?features=Age,NumPregnancies");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        assertEquals("Response is not a JSON Array", true, bufferedReader.readLine().startsWith("["));
+        bufferedReader.close();
+        response.close();
+    }
+    
+    @Test(description = "cluster points for a dataset")
+    public void testGetClusterPoints() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                    .DATASET_ID_DIABETES+"/cluster?features=Age,NumPregnancies&noOfClusters=2");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        assertEquals("Response is not a JSON Array", true, bufferedReader.readLine().startsWith("["));
         bufferedReader.close();
         response.close();
     }
@@ -130,6 +168,31 @@ public class GetDatasetsTestCase extends MLBaseTest {
                 .VERSIONSET_ID);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
+        response.close();
+    }
+    
+    @Test(description = "scatter plot points for a versionset")
+    public void testGetScatterPlotPoints() throws MLHttpClientException, IOException, JSONException {
+        String payload = "{\"xAxisFeature\": \"Age\", \"yAxisFeature\": \"NumPregnancies\", \"groupByFeature\": \"Class\"}";
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/datasets/versions/" + MLIntegrationTestConstants
+                .VERSIONSET_ID+"/scatter", payload);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        assertEquals("Response is not a JSON Array", true, bufferedReader.readLine().startsWith("["));
+        bufferedReader.close();
+        response.close();
+    }
+    
+    @Test(description = "chart sample points for a versionset")
+    public void testGetChartSamplePoints() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/versions/" + MLIntegrationTestConstants
+                .VERSIONSET_ID+"/charts?features=Age,NumPregnancies");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        assertEquals("Response is not a JSON Array", true, bufferedReader.readLine().startsWith("["));
+        bufferedReader.close();
         response.close();
     }
     
