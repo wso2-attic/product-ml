@@ -128,6 +128,8 @@
 					    <input type="text" value="" placeholder="e.g. file:///home/datasets/iris.csv" id="src-path" name="sourcePath" />
 					</div>
 
+					<div id="not-related-to-bam">
+
 					<label class="input-label">Data Format<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
 					<div class="input-control text">
 						<select class="form-control" id="data-format" name="dataFormat">
@@ -150,6 +152,7 @@
 		              			  <option value="file">File</option>
 						  <option value="hdfs">HDFS</option>					  
 						</select>				
+					</div>				
 					</div>				
 
 				<!--label class="input-label">Data Source<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
@@ -224,17 +227,26 @@ console.log(builtErrors);
     }     
 
 function displayDataSource() {
-	var dataSourceType = $('#src-type option:selected').text();
-	if (dataSourceType == 'HDFS' || dataSourceType == 'BAM') {
-		$('#size-limit').hide();
-		$('#source-file').hide();
-		$('#source-hdfs-bam').show();
-	}
-	else {
-		$('#size-limit').show();
-		$('#source-hdfs-bam').hide();
-		$('#source-file').show();	
-	}
+        var dataSourceType = $('#src-type option:selected').text();
+        if (dataSourceType == 'HDFS') {
+                $('#source-file').hide();
+                $('#size-limit').hide();
+                $('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. hdfs://localhost:9000/home/datasets/iris.csv" id="src-path" name="sourcePath" />');
+                $('#source-hdfs-bam').show();
+                $('#not-related-to-bam').show();
+        } else if (dataSourceType == 'BAM') {
+                $('#source-file').hide();
+                $('#size-limit').hide();
+                $('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. <table_name>:<col_1_name>,<col_1_type>;<col_2_name>,<col_2_type>" id="src-path" name="sourcePath" />');
+                $('#source-hdfs-bam').show();
+                $('#not-related-to-bam').hide();
+        }
+        else {
+                $('#source-hdfs-bam').hide();
+                $('#size-limit').show();
+                $('#not-related-to-bam').show();
+                $('#source-file').show();
+        }
 }
 
 $( document ).ready(function() {
