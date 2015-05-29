@@ -245,10 +245,11 @@
             });
             
             jsonData = JSON.stringify(inputArray);
-            
+            jsonData = "[".concat(jsonData, "]");
+
             $.ajax({
                 type: "POST",
-                url: serverUrl+"/api//models/"+modelId+"/predict",
+                url: serverUrl+"/api/models/"+modelId+"/predict",
                 contentType: "application/json",
                 data: jsonData,
                 /*beforeSend : function(xhr) {
