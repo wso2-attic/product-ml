@@ -19,15 +19,15 @@
 /*This css class defines few properties which are
 commond to all type of graphs.*/ 
 
-.basegraph
+/*.basegraph
 {
-	font: 8px sans-serif;
+	font: 14px sans-serif;
 }
 
 .axis .text
 {
-	font: 9px sans-serif;
-}
+	font: 14px sans-serif;
+}*/
 
 .axis path,.axis line
 {
