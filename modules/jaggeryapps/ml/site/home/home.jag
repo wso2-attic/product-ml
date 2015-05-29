@@ -117,7 +117,7 @@
         <p>&copy; 2014 WSO2 Inc. All Rights Reserved</p>
 </footer-->
 
-<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="../../js/jquery-1.11.1.min.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
