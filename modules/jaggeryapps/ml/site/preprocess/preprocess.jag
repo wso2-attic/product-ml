@@ -260,13 +260,13 @@ $( document ).ready(function() {
             }
         }
     });
+    // draw histograms or pie charts (according to feature type) for summary stats
+    drawSummaryStatistics();
 
 	// draw table with DataTables
 	$('#datasetTable').dataTable( {
 	    "drawCallback": function( settings ) {
-	        drawSummeryStatistics();
-
-            // disable fields if the model is built from an existing analysis
+	        // disable fields if the model is built from an existing analysis
             if(fromAnalysis == 'true') {
                 var datasetTable = $('#datasetTable').dataTable();
                 datasetTable.$(".fieldType", {"page": "all"}).attr("disabled","disabled");
@@ -288,11 +288,8 @@ $( document ).ready(function() {
         oSettings.oApi._fnDraw(oSettings);
     };
 
-    $('#datasetTable').on('draw.dt', function() {
-        
-		drawSummeryStatistics();
-        
-        // TODO: AJAX call per change in the data-table is an overhead
+    $('#datasetTable').on('draw.dt', function() {        
+		// TODO: AJAX call per change in the data-table is an overhead
         // use the AJAX methods given by the datatable and improve this section
         $('.fieldType').on('change', function(e) {
             var closestTr = $(this).closest('tr');
@@ -364,7 +361,7 @@ $( document ).ready(function() {
     });
 });
 
-// generate check boxinputs for summery statistics table
+// generate check boxinputs for summary statistics table
 function checkboxRenderer(value) {
     var checkboxControl = '<input type="checkbox"' + 'class="includeFeature" value="includeFeature"';
     if (value) {      
@@ -375,7 +372,7 @@ function checkboxRenderer(value) {
     return checkboxControl;
 }; 
 
-// generate dropdown inputs for summery statistics table
+// generate dropdown inputs for summary statistics table
 function listSelectionRenderer(list, selectedOption, cssClass) {
     var selection = "<select class=" + cssClass + ">";
     for (var item in list){
@@ -389,7 +386,7 @@ function listSelectionRenderer(list, selectedOption, cssClass) {
     return selection;
 }
 
-function drawSummeryStatistics() {
+function drawSummaryStatistics() {
 
     $('.summaryStatistics').each(function() {
         var jsonText = $(this).text();
