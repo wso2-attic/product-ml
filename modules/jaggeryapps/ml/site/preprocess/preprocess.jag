@@ -261,7 +261,7 @@ $( document ).ready(function() {
         }
     });
     // draw histograms or pie charts (according to feature type) for summary stats
-    drawSummeryStatistics();
+    drawSummaryStatistics();
 
 	// draw table with DataTables
 	$('#datasetTable').dataTable( {
@@ -361,7 +361,7 @@ $( document ).ready(function() {
     });
 });
 
-// generate check boxinputs for summery statistics table
+// generate check boxinputs for summary statistics table
 function checkboxRenderer(value) {
     var checkboxControl = '<input type="checkbox"' + 'class="includeFeature" value="includeFeature"';
     if (value) {      
@@ -372,7 +372,7 @@ function checkboxRenderer(value) {
     return checkboxControl;
 }; 
 
-// generate dropdown inputs for summery statistics table
+// generate dropdown inputs for summary statistics table
 function listSelectionRenderer(list, selectedOption, cssClass) {
     var selection = "<select class=" + cssClass + ">";
     for (var item in list){
@@ -386,7 +386,7 @@ function listSelectionRenderer(list, selectedOption, cssClass) {
     return selection;
 }
 
-function drawSummeryStatistics() {
+function drawSummaryStatistics() {
 
     $('.summaryStatistics').each(function() {
         var jsonText = $(this).text();
