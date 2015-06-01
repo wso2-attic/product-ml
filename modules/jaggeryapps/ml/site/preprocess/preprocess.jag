@@ -297,7 +297,7 @@ $( document ).ready(function() {
             var selectedFeatureType = this.options[e.target.selectedIndex].text;
             var workflowId = getParameterByName('wfid');
 
-            $.ajax({
+            /*$.ajax({
                 type: "POST",
                 url: "./ajax/UpdateFeatureType.jag",
                 data: {
@@ -308,7 +308,7 @@ $( document ).ready(function() {
                 error: function(res){
                     
                 }
-            });
+            });*/
 
             // refresh datatable, preserving the current page
             $('#datasetTable').dataTable().fnStandingRedraw();
@@ -325,7 +325,7 @@ $( document ).ready(function() {
 
             var workflowId = getParameterByName('wfid');
             
-            $.ajax({
+            /*$.ajax({
                 type: "POST",
                 url: "./ajax/UpdateInputSelection.jag",
                 data: {
@@ -335,7 +335,7 @@ $( document ).ready(function() {
                 },
                 error : function(res){                    
                 }
-            });
+            });*/
         });
 
         $('.imputeMethod').on('change', function(e) {
@@ -344,7 +344,7 @@ $( document ).ready(function() {
             var imputedMethod = this.options[e.target.selectedIndex].text;
             var workflowId = getParameterByName('wfid');
 
-            $.ajax({
+            /*$.ajax({
                 type: "POST",
                 url: "./ajax/UpdateImputeMethod.jag",
                 data: {
@@ -355,7 +355,7 @@ $( document ).ready(function() {
                 error: function(res){
 
                 }
-            });
+            });*/
         });
 
     });

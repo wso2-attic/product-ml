@@ -405,7 +405,7 @@
                         var description = tenantProjects[i]['description'];
                         var datasetId = tenantProjects[i]['datasetId'];
 
-                        var compareModels = '../workflow/create_workflow.jag?projid='+projid+'&projna='+projna;
+                        //var compareModels = '../workflow/create_workflow.jag?projid='+projid+'&projna='+projna;
 
                         accordionPanel = '' + 
                             '<div class="panel panel-default">' +
@@ -460,7 +460,7 @@
                                         var workflowId = tenantProjects[i]['analyses'][j]['id'];
                                         var analysisName = tenantProjects[i]['analyses'][j]['name'];
                                         var wfid = tenantProjects[i]['analyses'][j]['id'];
-                                        var compareModels = '../workflow/create_workflow.jag?projid='+projid+'&projna='+projna+'&analysisName='+analysisName+'&wfid='+wfid;
+                                        //var compareModels = '../workflow/create_workflow.jag?projid='+projid+'&projna='+projna+'&analysisName='+analysisName+'&wfid='+wfid;
 
                                         accordionPanel +=   '<tr>' +
                                                                 '<td class="c-padd"><a href="#" class="t-proj-workflow"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;'+analysisName+'</a>' +

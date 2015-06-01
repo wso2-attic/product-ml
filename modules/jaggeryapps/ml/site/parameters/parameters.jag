@@ -429,7 +429,7 @@ function buildDropdown(parameter){
 	return label+controller;
 }
 
-function buildResponseSelector(workflowId, algoCategory) {
+/*function buildResponseSelector(workflowId, algoCategory) {
 	var controller = '<div class="input-control text"> <select>';
     var label = buildLabel('Response Variable');
 	$.ajax({
@@ -449,7 +449,7 @@ function buildResponseSelector(workflowId, algoCategory) {
 	});
 
 	return label + controller;
-}
+}*/
 
 </script>
 
