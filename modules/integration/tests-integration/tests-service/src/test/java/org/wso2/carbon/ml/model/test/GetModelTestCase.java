@@ -29,7 +29,6 @@ import javax.ws.rs.core.Response;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
