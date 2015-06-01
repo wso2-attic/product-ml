@@ -520,14 +520,18 @@ if (numericalFeatureNames.length >1 & categoricalFeatureNames.length >0) {
 
 function drawPlotsAjax() {
 
-	//TODO: put regex as golbal var
+	//TODO: put regex as global var
 	var numFeatureIndependent = $("#scatter-x").val().replace(/^\s+|\s+$/g, '');
     var numFeatureDependent = $("#scatter-y").val().replace(/^\s+|\s+$/g, '');
     var catFeature = $("#scatter-group").val().replace(/^\s+|\s+$/g, '');
 
+    var numFeatureIndependentEscaped = $("#scatter-x").val().replace(/^\s+|\s+$/g, '').replace(/"/g,"\\\"");
+    var numFeatureDependentEscaped = $("#scatter-y").val().replace(/^\s+|\s+$/g, '').replace(/"/g,"\\\"");
+    var catFeatureEscaped = $("#scatter-group").val().replace(/^\s+|\s+$/g, '').replace(/"/g,"\\\"");
+
     //TODO: remove versionsetId
     // get scatter plot data
-    var jsonData = '{"tenantId" : "'+tenantId+'","user" : "'+userName+'","versionsetId" : 1,"xAxisFeature" : "'+numFeatureIndependent+'","yAxisFeature" : "'+numFeatureDependent+'","groupByFeature" : "'+catFeature+'"}';
+    var jsonData = '{"tenantId" : "'+tenantId+'","user" : "'+userName+'","versionsetId" : 1,"xAxisFeature" : "'+numFeatureIndependentEscaped+'","yAxisFeature" : "'+numFeatureDependentEscaped+'","groupByFeature" : "'+catFeatureEscaped+'"}';
     $.ajax({
         type: "POST",
         headers: {
