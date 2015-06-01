@@ -74,12 +74,11 @@ public class CreateProjectsTestCase extends MLBaseTest {
      * @throws MLHttpClientException 
      * @throws IOException 
      */
-    //FIXME: This should fail!!
     @Test(description = "Create a project with duplicate Name", dependsOnMethods = "testCreateProject")
     public void testCreateProjectWithDuplicateName() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createProject("TestProjectForCreatProjectTestCase", 
+        CloseableHttpResponse response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES, 
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }

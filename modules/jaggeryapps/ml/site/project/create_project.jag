@@ -240,8 +240,7 @@ $( document ).ready(function() {
                     window.location.href = './projects.jag';    
 	            },
 	            error : function(res){
-	                //TODO: chat with Dhanuka and select a place 
-	                // to display error messages	                
+			handleNotification(res.responseText, '.alert', '.wr-form', 'warning');
 	            }
 			});
 		}
@@ -280,6 +279,43 @@ $( document ).ready(function() {
 	    }
 	    return true;
 	}
+
+	// function to build notifications
+    function buildNotification(message, notificationType) {
+        var builtNotification;
+        if(notificationType == 'warning') {
+            builtNotification =
+            '<div class="alert alert-warning alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '<img src="../../images/icons/ico-error.png" class="indi" />' +
+                message +
+            '</div>';
+        }
+        else if(notificationType == 'info') {
+            builtNotification =
+            '<div class="alert alert-info alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '<img src="../../images/icons/ico-alert.png" class="indi" />' +
+                message +
+            '</div>';
+        }
+        else if(notificationType == 'success') {
+            builtNotification =
+            '<div class="alert alert-success alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                message +
+            '</div>';
+        }
+        return builtNotification;
+    }
+
+    // function to handle notifications
+    function handleNotification(notificationText, checkElement, closeElement, notificationType) {
+        if(!$(checkElement).length) {
+            $(closeElement).before(buildNotification(notificationText, notificationType));
+        }
+    }
+
 
 	function isValidDescription(text){
 		if(text && text.length > 0){

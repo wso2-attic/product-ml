@@ -148,7 +148,7 @@
 
 					    </div>
 
-					    <div class="col-md-10 wr-graph-content">
+					    <div class="col-md-6 wr-graph-content">
 
 					        <div id='scatterPlotTitle' class='graphtitle'></div>
 					        <div id='scatter'></div>
@@ -564,7 +564,7 @@ function drawPlotsAjax() {
             }
 
         	drawScatterPlot(scatterData, "#scatter", numFeatureIndependent, numFeatureDependent);
-		   	$("#scatterPlotTitle").html(numFeatureIndependent + " vs. " + numFeatureDependent);            
+		   	$("#scatterPlotTitle").html("<h4>" + numFeatureIndependent + " vs. " + numFeatureDependent + "</h4>");            
         },
         error : function(res){
             //$('#workflow-name-error').text("* "+res.responseJSON.message);
@@ -590,7 +590,7 @@ function drawPlotsAjax() {
         success : function(res){
         	var jsonObj = res;
 		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp;  Median: " + jsonObj[0].median + "&emsp;&emsp;&emsp; Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
-		   	$("#histogramIndependentTitle").html(numFeatureIndependent);
+		   	$("#histogramIndependentTitle").html("<h4>" + numFeatureIndependent + "</h4>");
 		   	$("#numFeatureIndependentSummary").html(summary);
 		   	// transform dataset
 		   	drawHistogram(jsonObj, "#histogramIndependent");
@@ -619,7 +619,7 @@ function drawPlotsAjax() {
         success : function(res){
         	var jsonObj = res;
 		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp; Median: " + jsonObj[0].median + "&emsp;&emsp;&emsp; Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
-		   	$("#histogramDependentTitle").html(numFeatureDependent);
+		   	$("#histogramDependentTitle").html("<h4>" + numFeatureDependent + "</h4>");
 		   	$("#numFeatureDependentSummary").html(summary);
 		   	// transform dataset
 		   	drawHistogram(jsonObj, "#histogramDependent");
