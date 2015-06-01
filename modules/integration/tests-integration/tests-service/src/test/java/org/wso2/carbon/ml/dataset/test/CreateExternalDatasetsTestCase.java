@@ -29,6 +29,10 @@ import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
 
+import javax.ws.rs.core.Response;
+
+import static org.testng.AssertJUnit.assertEquals;
+
 /**
  * Contains test cases related to creating external datasets
  * Needs to download and store the data files explicitly in "resources/data/"
@@ -56,6 +60,8 @@ public class CreateExternalDatasetsTestCase extends MLBaseTest{
         try {
             response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_DIGITS,
                     "1.0", MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
+            assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
         } catch ( MLHttpClientException e) {
             // Skip test if dataset is not available in the given location
             throw new SkipException("Skipping tests because dataset with name: " + MLIntegrationTestConstants.DATASET_NAME_DIGITS
