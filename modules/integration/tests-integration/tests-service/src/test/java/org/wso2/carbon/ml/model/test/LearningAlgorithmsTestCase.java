@@ -36,6 +36,7 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.carbon.ml.commons.constants.MLConstants;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
@@ -234,6 +235,24 @@ public class LearningAlgorithmsTestCase extends MLBaseTest {
     @Test(description = "Build a Logistic Regression model")
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         setConfiguration("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES),
+                MLIntegrationTestConstants.DATASET_ID_DIABETES);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        Thread.sleep(5000);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+        // Checks whether model building completed successfully is true
+        assertEquals("Model building did not complete successfully", true, checkModelStatus(modelName));
+        
+        // predict using built model
+        testPredictDiabetes();
+    }
+    
+    @Test(description = "Build a Logistic Regression model with LBFGS")
+    public void testBuildLogisticRegressionLBFGSModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        setConfiguration(MLConstants.SUPERVISED_ALGORITHM.LOGISTIC_REGRESSION_LBFGS.toString(), MLIntegrationTestConstants.CLASSIFICATION,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES),
                 MLIntegrationTestConstants.DATASET_ID_DIABETES);
