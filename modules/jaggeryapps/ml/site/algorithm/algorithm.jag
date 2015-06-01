@@ -259,7 +259,7 @@ $( document ).ready(function() {
     	e.preventDefault();
         
         var algorithmName = $('#algorithm-name').val();
-        var responseVariable = $('#response-variable').val();
+        var responseVariable = $('#response-variable').val().replace(/"/g,"\\\"");
 
         var trainDataFraction = $('#data-fraction').val();
         var algorithmType;
