@@ -157,7 +157,7 @@ function version(versionNumbers){
 	var versionHtml = "";
     for(var i = 0; i < versionNumbers.length; i++){
     	versionHtml += '<tr>' +
-				 				'<td class="c-padd"><a href="#" class="t-proj-workflow"><span class="glyphicon glyphicon-book"></span> ' + versionNumbers[i].version+'</a></td>' +
+				 				'<td class="c-padd"><span class="glyphicon glyphicon-book"></span> ' + versionNumbers[i].version+'</td>' +
 				 				'<td><a href="#" id="delete-dataset-version" class="cu-level2-btn btn-delete-dark" data-versionid="'+ versionNumbers[i].id +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete</span></a></td>' +
 				 			'</tr>';
     }
