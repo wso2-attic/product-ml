@@ -99,10 +99,12 @@
 	                        <option value="LASSO_REGRESSION">LASSO REGRESSION</option>
                         </optgroup>                        
 	                    <optgroup label="Binary Classification">
-	                        <option value="LOGISTIC_REGRESSION">LOGISTIC REGRESSION</option>
+	                        <option value="LOGISTIC_REGRESSION">LOGISTIC REGRESSION SGD</option>
+	                        <option value="LOGISTIC_REGRESSION_LBFGS">LOGISTIC REGRESSION L-BFGS</option>
 	                        <option value="SVM">SVM</option>
                         </optgroup>
                         <optgroup label="Multiclass Classification">
+	                    <option value="LOGISTIC_REGRESSION_LBFGS">LOGISTIC REGRESSION L-BFGS</option>
                             <option value="DECISION_TREE">DECISION TREE</option>
                             <option value="NAIVE_BAYES">NAIVE BAYES</option>
                         </optgroup>                        
@@ -265,7 +267,7 @@ $( document ).ready(function() {
         if (algorithmName == 'LINEAR_REGRESSION' || algorithmName == 'RIDGE_REGRESSION' || algorithmName == 'LASSO_REGRESSION') {
             algorithmType = 'Numerical_Prediction';
         }
-        else if (algorithmName == 'LOGISTIC_REGRESSION' || algorithmName == 'SVM' || algorithmName == 'DECISION_TREE' || algorithmName == 'NAIVE_BAYES') {
+        else if (algorithmName == 'LOGISTIC_REGRESSION' || algorithmName == 'LOGISTIC_REGRESSION_LBFGS' || algorithmName == 'SVM' || algorithmName == 'DECISION_TREE' || algorithmName == 'NAIVE_BAYES') {
             algorithmType = 'Classification';
         }
         else if (algorithmName == 'K_MEANS') {
