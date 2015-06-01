@@ -192,6 +192,9 @@ $( document ).ready(function() {
                     hyperParametersArray[3] = hyperParametersResponse[2].value;
                     hyperParametersArray[4] = hyperParametersResponse[4].value;
                 }
+		else if (algorithmName == 'LOGISTIC_REGRESSION_LBFGS') {
+                    hyperParametersArray[0] = hyperParametersResponse[0].value;
+                }
                 else if (algorithmName == 'DECISION_TREE') {
                     hyperParametersArray[0] = hyperParametersResponse[3].value;
                     hyperParametersArray[1] = hyperParametersResponse[2].value;

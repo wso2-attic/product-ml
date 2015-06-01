@@ -299,7 +299,7 @@ $( document ).ready(function() {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
         },*/
         success: function(res){
-            if (res.algorithm == 'LOGISTIC_REGRESSION' || res.algorithm == 'SVM') {
+            if (res.algorithm == 'LOGISTIC_REGRESSION' || res.algorithm == 'LOGISTIC_REGRESSION_LBFGS' || res.algorithm == 'SVM') {
                 $("#residual").remove();
                 // format data and draw ROC graph
                 var rocData  = JSON.parse(res.roc);
