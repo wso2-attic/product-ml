@@ -196,10 +196,9 @@ $( document ).ready(function() {
                     hyperParametersArray[0] = hyperParametersResponse[0].value;
                 }
                 else if (algorithmName == 'DECISION_TREE') {
-                    hyperParametersArray[0] = hyperParametersResponse[3].value;
-                    hyperParametersArray[1] = hyperParametersResponse[2].value;
-                    hyperParametersArray[2] = hyperParametersResponse[1].value;
-                    hyperParametersArray[3] = hyperParametersResponse[0].value;
+                    hyperParametersArray[0] = hyperParametersResponse[2].value;
+                    hyperParametersArray[1] = hyperParametersResponse[1].value;
+                    hyperParametersArray[2] = hyperParametersResponse[0].value;
                 }    
                 else if (algorithmName == 'NAIVE_BAYES') {
                     hyperParametersArray[0] = hyperParametersResponse[0].value;
@@ -429,7 +428,7 @@ function buildDropdown(parameter){
 	return label+controller;
 }
 
-function buildResponseSelector(workflowId, algoCategory) {
+/*function buildResponseSelector(workflowId, algoCategory) {
 	var controller = '<div class="input-control text"> <select>';
     var label = buildLabel('Response Variable');
 	$.ajax({
@@ -449,7 +448,7 @@ function buildResponseSelector(workflowId, algoCategory) {
 	});
 
 	return label + controller;
-}
+}*/
 
 </script>
 

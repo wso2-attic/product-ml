@@ -94,7 +94,7 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
-			<h1 class="title">Model Summery</h1>
+			<h1 class="title">Model Summary</h1>
 			
 			<div class="col-md-6">
                 <h4 class="title">ROC Graph</h4>
@@ -290,7 +290,7 @@ $( document ).ready(function() {
     $('#nav-analysis').text(" \\ "+analysisName);
     $('#nav-model').text(" \\ "+modelName);
 
-    // get model summery and draw plots    
+    // get model summary and draw plots    
     $.ajax({
         type: 'GET',
         url: serverUrl+"/api/models/"+modelId+"/summary",
@@ -510,14 +510,14 @@ function drawScatterPlot(data, cssClass, xLabel, yLabel) {
 };
 
 // function that returns JSON containing feature names (numerical except reponse variable)
-// with mapped index of summery object feature names
+// with mapped index of summary object feature names
 function getDisplayFeatures(features, numericalFeatureNames) {
 	// remove response variable from numerical feature names if response variable is within numerical features
     var responseVariableIndex = $.inArray(responseVariable, numericalFeatureNames);
     if(responseVariableIndex > -1) {
     	numericalFeatureNames.splice(responseVariableIndex, 1);	
     }    
-    // get corresponding index of summery object feature names for each feature name 
+    // get corresponding index of summary object feature names for each feature name 
     var featureIndices = numericalFeatureNames.map(function(elem){
         var index = features.indexOf(elem);
         return index;
