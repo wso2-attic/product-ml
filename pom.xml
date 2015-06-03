@@ -832,6 +832,7 @@
 		<carbon.commons.version>4.4.3</carbon.commons.version>
 		<carbon.data.version>4.3.1-SNAPSHOT</carbon.data.version>
 		<carbon.analytics.version>1.0.3-SNAPSHOT</carbon.analytics.version>
+		<carbon.metrics.version>1.1.0-SNAPSHOT</carbon.metrics.version>
         	<carbon.analytics.common.version>1.0.1-SNAPSHOT</carbon.analytics.common.version>
         	<carbon.kernel.version>4.4.0</carbon.kernel.version>
 		<carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>

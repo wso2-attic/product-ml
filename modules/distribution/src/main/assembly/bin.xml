@@ -156,6 +156,15 @@
                 <include>**/**</include>
             </includes>
         </fileSet>
+	<fileSet>
+            <directory>
+            	../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/metrics/
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/metrics</outputDirectory>
+            <includes>
+            	<include>**/*.sql</include>
+            </includes>
+    	</fileSet>
     </fileSets>
 	
     <files>
@@ -277,5 +286,25 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
+	<file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/metrics.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
+            <filtered>false</filtered>
+        </file>
+    	<file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/metrics.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
+            <filtered>false</filtered>
+       	</file>
+    	<file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/datasources/metrics-datasources.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/datasources/</outputDirectory>
+            <fileMode>644</fileMode>
+    	</file>
+    	<file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2METRICS_DB.h2.db</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/database/</outputDirectory>
+            <fileMode>644</fileMode>
+    	</file>
     </files>
 </assembly>
