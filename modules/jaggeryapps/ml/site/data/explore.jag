@@ -454,13 +454,17 @@ function drawScatterPlotBase() {
 
 function drawPlotsAjax() {
 
-	//TODO: put regex as golbal var
+	//TODO: put regex as global var
 	var numFeatureIndependent = $("#scatter-x").val().replace(/^\s+|\s+$/g, '');
     var numFeatureDependent = $("#scatter-y").val().replace(/^\s+|\s+$/g, '');
     var catFeature = $("#scatter-group").val().replace(/^\s+|\s+$/g, '');
 
+    var numFeatureIndependentEscaped = $("#scatter-x").val().replace(/^\s+|\s+$/g, '').replace(/"/g,"\\\"");
+    var numFeatureDependentEscaped = $("#scatter-y").val().replace(/^\s+|\s+$/g, '').replace(/"/g,"\\\"");
+    var catFeatureEscaped = $("#scatter-group").val().replace(/^\s+|\s+$/g, '').replace(/"/g,"\\\"");
+
     // get scatter plot data
-    var jsonData = '{"xAxisFeature" : "'+numFeatureIndependent+'","yAxisFeature" : "'+numFeatureDependent+'","groupByFeature" : "'+catFeature+'"}';
+    var jsonData = '{"xAxisFeature" : "'+numFeatureIndependentEscaped+'","yAxisFeature" : "'+numFeatureDependentEscaped+'","groupByFeature" : "'+catFeatureEscaped+'"}';
     $.ajax({
         type: "POST",
         headers: {
@@ -602,10 +606,10 @@ function drawParallelSetsBase() {
     $('#parallel-sets-features').empty();
     $.each(categoricalFeatureNames,function(index, feature){
         if (index <5){
-            $('#parallel-sets-features').append('<label class="checkbox"><input type="checkbox" class="categoricalFeatureNames" id="inlineCheckbox1" value="'+categoricalFeatureNames[index]+'" checked>'+categoricalFeatureNames[index]+'</label>');
+            $('#parallel-sets-features').append("<label class='checkbox'><input type='checkbox' class='categoricalFeatureNames' id='inlineCheckbox1' value='"+categoricalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>"+categoricalFeatureNames[index]+"</label>");
         }
         else {
-            $('#parallel-sets-features').append('<label class="checkbox"><input type="checkbox" class="categoricalFeatureNames" id="inlineCheckbox1" value="'+categoricalFeatureNames[index]+'">'+categoricalFeatureNames[index]+'</label>');
+            $('#parallel-sets-features').append("<label class='checkbox'><input type='checkbox' class='categoricalFeatureNames' id='inlineCheckbox1' value='"+categoricalFeatureNames[index].trim().replace(/"/g,"\\\"")+"'>"+categoricalFeatureNames[index]+"</label>");
         }        
     });
 
@@ -617,7 +621,7 @@ function drawParallelSets() {
     // get categorical feature list from checkbox selection
     var catFeaturesDropdownValues = [];
     $('.categoricalFeatureNames:checked').each(function() {
-        catFeaturesDropdownValues.push($(this).val().replace(/^\s+|\s+$/g, ''));
+        catFeaturesDropdownValues.push($(this).val().replace(/^\s+|\s+$/g, '').replace(/\\"/g,'"'));
     });
 
     var noOfCategoricalFeatures = catFeaturesDropdownValues.length;
@@ -659,7 +663,7 @@ function drawTrellisChartBase() {
     $('#trellis-cat-features').empty();
     $.each(categoricalFeatureNames,function(index, feature){
         $('#trellis-cat-features').append($('<option>', { 
-            value: feature,
+            value: feature.trim().replace(/"/g,"\\\""),
             text : feature
         }));
     });
@@ -668,10 +672,10 @@ function drawTrellisChartBase() {
     $.each(numericalFeatureNames,function(index, feature){
     	// first 4 categorical features are plotted by default
         if (index < 4){
-            $('#trellis-num-features').append('<label class="checkbox"><input type="checkbox" class="numericalFeatureNames" value="'+numericalFeatureNames[index]+'" checked>'+numericalFeatureNames[index]+'</label>');
+            $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>"+numericalFeatureNames[index]+"</label>");
         }
         else {
-            $('#trellis-num-features').append('<label class="checkbox"><input type="checkbox" class="numericalFeatureNames" value="'+numericalFeatureNames[index]+'">'+numericalFeatureNames[index]+'</label>');
+            $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"'>"+numericalFeatureNames[index]+"</label>");
         }        
     });    
 
@@ -683,10 +687,10 @@ function drawTrellisChart() {
     var featureNames = [];
     // get selected categorical feature
     var categoricalHeader = $("#trellis-cat-features").val().replace(/^\s+|\s+$/g, '');
-    featureNames[0] = categoricalHeader;
+    featureNames[0] = categoricalHeader.replace(/\\"/g,'"');
     // get numerical feature list from checkbox selection
     $('.numericalFeatureNames:checked').each(function() {
-        featureNames.push($(this).val().replace(/^\s+|\s+$/g, ''));
+        featureNames.push($(this).val().replace(/^\s+|\s+$/g, '').replace(/\\"/g,'"'));
     });
 
     $.ajax({
