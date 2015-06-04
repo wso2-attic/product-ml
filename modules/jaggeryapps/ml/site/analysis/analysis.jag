@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -91,6 +91,7 @@
                 <!-- content -->
                 <div class="container col-md-12 col-centered wr-content">
 
+                    <div id="notification-area"></div>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
 
                 </div>
@@ -155,55 +156,9 @@
         loadModels();
     });
     
-    function buildNotifications(message){
-        if(message == null) {
-	   	   return '';
-    	}
-        var builtErrors = 
-        '<div class="ctrl-validation-panel-left col-md-12 col-centered">' +
-        '<p>' + message + '</p>'
-        '</div>';
-        return builtErrors;
-    }
-    // function to build notifications
-    function buildNotification(message, notificationType) {
-        var builtNotification;
-        if(notificationType == 'warning') {
-            builtNotification = 
-            '<div class="alert alert-warning alert-dismissible" role="alert">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                '<img src="../../images/icons/ico-error.png" class="indi" />' +
-                message +
-            '</div>';            
-        }
-        else if(notificationType == 'info') {
-            builtNotification = 
-            '<div class="alert alert-info alert-dismissible" role="alert">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                '<img src="../../images/icons/ico-alert.png" class="indi" />' +
-                message +
-            '</div>';            
-        }
-        else if(notificationType == 'success') {
-            builtNotification = 
-            '<div class="alert alert-success alert-dismissible" role="alert">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                message +
-            '</div>';            
-        }
-        return builtNotification;
-    }    
-    // function to handle notifications
-    function handleNotification(notificationText, checkElement, closeElement, notificationType) {
-        if(!$(checkElement).length) {
-            $(closeElement).before(buildNotification(notificationText, notificationType));             
-        }
-    }    
-
     function loadModels() {
         
         $('#accordion').empty();
-
         $.ajax({
             type: "GET",
             url: serverUrl+"/api/analyses/"+analysisId+"/models",
@@ -233,6 +188,11 @@
                     for (var i = 0; i < analysisModels.length; i++) {
 
                         var modelStatus = analysisModels[i]['status'];
+                        // set error message if available
+                        var modelError = '';
+                        if(analysisModels[i]['error'] != null) {
+                            modelError = buildNotification(analysisModels[i]['error'], 'warning');
+                        }
 
                         accordionPanel = '' + 
                             '<div class="panel panel-default">' +
@@ -262,17 +222,16 @@
                                     '</h4>' +
                                 '</div>' +
                                 '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">' +
-                                    '<div class="panel-body">' +
-					buildNotifications(analysisModels[i]['error']);
-                                    '</div>' +
+                                    '<div class="panel-body">' + modelError + '</div>' +
                                 '</div>' +
                             '</div>';
                             $("#accordion").append(accordionPanel);
                     };
                 }                
             },
-            error: function() {
-                var message = "An error occurred while retrieving tenant projects.";
+            error: function(res) {
+                var errorText = 'Error occurred while retrieving analysis models. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
 
@@ -291,7 +250,7 @@
 
         $(document).on('click', '#btn-refresh', function(e){
             e.preventDefault();
-            // reload from the server
+            // true: reload from the server
             location.reload(true);
         });
 
@@ -316,12 +275,11 @@
                 },
                 success : function(res){
                     var successText = 'Model successfully published to registry.';
-                    handleNotification(successText, '.alert', '.ctrl-info-panel', 'success');
+                    handleNotification(successText, '#notification-area', 'success');
                 },
                 error : function(res){
-                    if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                        crtValArea.before(buildNotifications(res.responseText));
-                    }
+                    var errorText = 'Error occurred while publishing model to registry. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, '#notification-area', 'warning');
                 }
             });            
         });        
@@ -351,9 +309,8 @@
                     algorithmName = res;
                 },
                 error : function(res){
-                    if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                        crtValArea.before(buildNotifications(res.responseText));
-                    }
+                    var errorText = 'Error occurred while retrieving analysis name. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
 
@@ -369,9 +326,8 @@
                     algorithmType = res;
                 },
                 error : function(res){
-                    if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                        crtValArea.before(buildNotifications(res.responseText));
-                    }
+                    var errorText = 'Error occurred while retrieving algorithm type. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
 
@@ -394,10 +350,8 @@
                     loadModels();
                 },
                 error : function(res){
-                    //$('#workflow-name-error').text("* "+res.responseJSON.message);
-                    if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                        crtValArea.before(buildNotifications(res.responseJSON.status));
-                    }
+                    var errorText = 'Error occurred while deleting model. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
         });
