@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -86,6 +86,7 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
+            <div id="notification-area"></div>
 			<div class="wr-form col-lg-5 col-centered">
 
 				<h1 class="title">Model</h1>
@@ -156,7 +157,7 @@ $( document ).ready(function() {
 
     	jsonData = '{"analysisId":"'+analysisId+'","versionSetId":"'+datasetVersion+'"}';
 
-        //Create model
+        // create model
 	    $.ajax({
             type: 'POST',
             url: serverUrl+"/api/models",
@@ -170,16 +171,14 @@ $( document ).ready(function() {
                 modelName = res['name'];
             },
             error: function(res){
-                var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                if (crtValArea.length == 0) {
-                    btnArea.before(buildNortifications(res.responseJSON.status));
-                }
+                var errorText = 'Error occurred while creating model. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
 
         var modelId;
 
-        //Get model ID        
+        // get model ID        
         $.ajax({
             type: 'GET',
             url: serverUrl+"/api/models/"+modelName,
@@ -191,14 +190,12 @@ $( document ).ready(function() {
                 modelId = res['id'];
             },
             error: function(res){
-                var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                if (crtValArea.length == 0) {
-                    btnArea.before(buildNortifications(res.responseJSON.status));
-                }
+                var errorText = 'Error occurred while retrieving model info. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
 
-        //Build model
+        // submit model build job
         $.ajax({
             type: 'POST',
             url: serverUrl+"/api/models/"+modelId,
@@ -206,14 +203,12 @@ $( document ).ready(function() {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
             },*/
             success: function(res){
-                console.log("Build success.");
+                console.log("Model build job successfully submitted.");
                 window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&analysisName='+analysisName+'&projectName='+projectName+'&datasetId='+datasetId;
             },
             error: function(res){
-                var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                if (crtValArea.length == 0) {
-                    btnArea.before(buildNortifications(res.responseJSON.status));
-                }
+                var errorText = 'Error occurred while submitting model build job. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
 
@@ -237,10 +232,8 @@ $( document ).ready(function() {
                     window.location.href = '../project/projects.jag';
                 },
                 error: function(res){
-                    var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                    if (crtValArea.length == 0) {
-                        btnArea.before(buildNortifications(res.responseJSON.status));
-                    }
+                    var errorText = 'Error occurred while cancelling analysis. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
         }
@@ -264,7 +257,8 @@ function loadDatasetVersions() {
             });
         },
         error: function(res) { //TODO: display error
-            var message = "An error occurred while retrieving tenant projects.";
+            var errorText = 'Error occurred while retrieving dataset versions. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, '#notification-area', 'warning');            
         }
     });
 }

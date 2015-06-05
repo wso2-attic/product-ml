@@ -85,7 +85,8 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
-			<div class="wr-form col-lg-5 col-centered">
+			<div id="notification-area"></div>
+            <div class="wr-form col-lg-5 col-centered">
 
                 <h1 class="title">Algorithm</h1>
 
@@ -162,6 +163,7 @@ var analysisName = getParameterByName('analysisName');
 var analysisId = getParameterByName('analysisId');
 var datasetId = getParameterByName('datasetId');
 var fromAnalysis = getParameterByName('fromAnalysis')
+var notificationArea = $('#notification-area');
 
 $( document ).ready(function() {
 
@@ -185,8 +187,9 @@ $( document ).ready(function() {
         success: function(res) {
             setResponseVariable = res;
         },
-        error: function(res) { //TODO: display error
-            console.log("Error");
+        error: function(res) {
+            var errorText = 'Error occurred while retrieving previously set response variable. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, notificationArea, 'warning');
         }
     });
     // get previously set algorithm name
@@ -204,8 +207,9 @@ $( document ).ready(function() {
                 $('#algorithm-name option[value='+setAlgorithmName+']').attr('selected','selected');
             }
         },
-        error: function(res) { //TODO: display error
-            console.log("Error");
+        error: function(res) {
+            var errorText = 'Error occurred while retrieving previously set algorithm name. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, notificationArea, 'warning');
         }
     });
     // get previously set train data fraction
@@ -223,8 +227,9 @@ $( document ).ready(function() {
                 $('#data-fraction').val(setTrainDataFraction);
             }
         },
-        error: function(res) { //TODO: display error
-            console.log("Error");
+        error: function(res) {
+            var errorText = 'Error occurred while retrieving previously set train data fraction. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, notificationArea, 'warning');
         }
     });
 
@@ -288,10 +293,8 @@ $( document ).ready(function() {
                 window.location.href = '../parameters/parameters.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
             },
             error: function(res){
-                var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                if (crtValArea.length == 0) {
-                    btnArea.before(buildNortifications(res.responseJSON.status));
-                }
+                var errorText = 'Error occurred while setting model configurations. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, notificationArea, 'warning');
             }
         });
     });
@@ -309,10 +312,8 @@ $( document ).ready(function() {
                 window.location.href = '../project/projects.jag';
             },
             error: function(res){
-                var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                if (crtValArea.length == 0) {
-                    btnArea.before(buildNortifications(res.responseJSON.status));
-                }
+                var errorText = 'Error occurred while cancelling analysis. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, notificationArea, 'warning');
             }
         });
     });
@@ -338,8 +339,9 @@ function loadDatasetFeatures(setResponseVariable) {
                 $('#response-variable option[value='+setResponseVariable+']').attr('selected','selected');
             }
         },
-        error: function(res) { //TODO: display error
-            var message = "An error occurred while retrieving tenant projects.";
+        error: function(res) {
+            var errorText = 'Error occurred while retrieving dataset features. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, notificationArea, 'warning');
         }
     });
 }
