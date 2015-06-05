@@ -99,7 +99,7 @@
 		<div class="container col-md-12 col-centered wr-content">
 
             <!-- <h1 class="title">Explore Data</h1> -->
-
+            <div id="notification-area"></div>
             <div role="tabpanel" class="wr-tabbed-container">
 
 				<!-- Nav tabs/graphs -->
@@ -365,10 +365,8 @@ $( document ).ready(function() {
             projectId = res['id'];
         },
         error: function(res){
-            var crtValArea = btnArea.prev(".ctrl-validation-panel");
-            if (crtValArea.length == 0) {
-                btnArea.before(buildNortifications(res.responseJSON.status));
-            }
+        	var errorText = 'Error occurred while retrieving project info. '+res.status+' '+res.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -387,10 +385,8 @@ $( document ).ready(function() {
             userName = res['userName'];            
         },
         error: function(res){
-            var crtValArea = btnArea.prev(".ctrl-validation-panel");
-            if (crtValArea.length == 0) {
-                btnArea.before(buildNortifications(res.responseJSON.status));
-            }
+        	var errorText = 'Error occurred while retrieving analysis info. '+res.status+' '+res.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -406,11 +402,8 @@ $( document ).ready(function() {
             categoricalFeatureNames = res;
         },
         error : function(res){
-            //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-            if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                crtValArea.before(buildNortifications(res.responseJSON.status));
-            }
+        	var errorText = 'Error occurred while retrieving categorical feature names. '+res.status+' '+res.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });    
     // get numerical feature names
@@ -425,11 +418,8 @@ $( document ).ready(function() {
             numericalFeatureNames = res;
         },
         error : function(res){
-            //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-            if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                crtValArea.before(buildNortifications(res.responseJSON.status));
-            }
+        	var errorText = 'Error occurred while retrieving numerical feature names. '+res.status+' '+res.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -483,39 +473,38 @@ $( document ).ready(function() {
                 window.location.href = '../project/projects.jag';
             },
             error: function(res){
-                var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                if (crtValArea.length == 0) {
-                    btnArea.before(buildNortifications(res.responseJSON.status));
-                }
+	        	var errorText = 'Error occurred while cancelling analysis. '+res.status+' '+res.statusText;
+	        	handleNotification(errorText, '#notification-area', 'warning');
             }
         });
     });
 });
 
-function drawScatterPlotBase() { 
+function drawScatterPlotBase() {
 
-if (numericalFeatureNames.length >1 & categoricalFeatureNames.length >0) {
- 
-    $('#scatter-x, #scatter-y, #scatter-group').empty();
-    $.each(numericalFeatureNames,function(index, feature){
-        $('#scatter-x, #scatter-y').append($('<option>', { 
-            value: feature,
-            text : feature
-        }));
-    });
-    $('#scatter-y option')[1].selected = true;
-    $.each(categoricalFeatureNames,function(index, feature){
-        $('#scatter-group').append($('<option>', { 
-            value: feature,
-            text : feature
-        }));
-    });
+	if (numericalFeatureNames.length >1 & categoricalFeatureNames.length >0) {
+	 
+	    $('#scatter-x, #scatter-y, #scatter-group').empty();
+	    $.each(numericalFeatureNames,function(index, feature){
+	        $('#scatter-x, #scatter-y').append($('<option>', { 
+	            value: feature,
+	            text : feature
+	        }));
+	    });
+	    $('#scatter-y option')[1].selected = true;
+	    $.each(categoricalFeatureNames,function(index, feature){
+	        $('#scatter-group').append($('<option>', { 
+	            value: feature,
+	            text : feature
+	        }));
+	    });
 
-    drawPlotsAjax();
+	    drawPlotsAjax();
 
-} else {
-        $("#scatter").html("Minimum of two numerical features and one categorical feature required to draw a Scatter plot.");
-}
+	} else {
+	    var infoText = "Minimum of two numerical features and one categorical feature required to draw a scatter plot.";
+        $("#scatter").html(buildNotification(infoText, 'info'));        	    
+	}
 }
 
 function drawPlotsAjax() {
@@ -567,11 +556,8 @@ function drawPlotsAjax() {
 		   	$("#scatterPlotTitle").html("<h4>" + numFeatureIndependent + " vs. " + numFeatureDependent + "</h4>");            
         },
         error : function(res){
-            //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-            if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                crtValArea.before(buildNortifications(res.responseJSON.status));
-            }
+        	var errorText = 'Error occurred while retrieving scatter plot data. '+res.status+' '+res.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -596,11 +582,8 @@ function drawPlotsAjax() {
 		   	drawHistogram(jsonObj, "#histogramIndependent");
         },
         error : function(res){
-            //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-            if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                crtValArea.before(buildNortifications(res.responseJSON.status));
-            }
+        	var errorText = 'Error occurred while retrieving summary data for independent variable. '+res.status+' '+res.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -625,11 +608,8 @@ function drawPlotsAjax() {
 		   	drawHistogram(jsonObj, "#histogramDependent");
         },
         error : function(res){
-            //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-            if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                crtValArea.before(buildNortifications(res.responseJSON.status));
-            }
+        	var errorText = 'Error occurred while retrieving summary data for dependent variable. '+res.status+' '+res.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 }
@@ -725,15 +705,13 @@ function drawParallelSets() {
                 vis.datum(res).call(chart);
             },
             error : function(res){
-                //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-                if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                    crtValArea.before(buildNortifications(res.responseJSON.status));
-                }
+	        	var errorText = 'Error occurred while retrieving data for parallel sets. '+res.status+' '+res.statusText;
+	        	handleNotification(errorText, '#notification-area', 'warning');
             }
         });
     } else {
-        $("#parallelSets").html("Minimum of two categorical features required for Parallel Sets.");
+        var infoText = "Minimum of two categorical features required for parallel sets.";
+        $("#parallelSets").html(buildNotification(infoText, 'info'));        
     }
 }
 
@@ -922,11 +900,8 @@ function drawTrellisChart() {
             // array for parsets dimensions with categorical feature names
         },
         error : function(res){
-            //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-            if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                crtValArea.before(buildNortifications(res.responseJSON.status));
-            }
+        	var errorText = 'Error occurred while retrieving data for trellis chart. '+res.status+' '+res.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 }
@@ -975,8 +950,8 @@ function drawClusterDiagram() {
             drawScatterPlot(clusterData, "#clusterDiagram", numericalFeatureIndependent, numericalFeatureDependent);
         },
         error: function(response) {
-            var message = "An error occured while fetching sample points from dataset.";
-            console.log(message);
+        	var errorText = 'Error occurred while retrieving data for cluster diagram. '+response.status+' '+response.statusText;
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 }

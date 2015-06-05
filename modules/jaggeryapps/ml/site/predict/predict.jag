@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="wr-auth pull-right">
-                        <a href="#" data-toggle="dropdown" class="cu-ico-right-button cu-ico-button-user">Administrator</a>
+                        <a href="#" data-toggle="dropdown" class="cu-ico-right-button cu-ico-button-user"><% print(session.get("logged.user")); %></a>
                         <div class="dropdown-menu">
                             <div class="cu-arrow"></div>
                             <div class="dropdown-menu-content">
@@ -91,6 +91,7 @@
                 <!-- content -->
                 <div class="container col-md-12 col-centered wr-content">
 
+                    <div id="notification-area"></div>
                     <div class="wr-form col-lg-5 col-centered">
 
                         <h1 class="title">Features</h1>
@@ -173,14 +174,6 @@
         loadFeatures();
     });
    
-    function buildNortifications(message){
-        var builtErrors = 
-        '<div class="ctrl-validation-panel col-md-12 col-centered">' +
-        '<p>' + message + '</p>'
-        '</div>';
-        return builtErrors;
-    }     
-
     function loadFeatures() {
         var responseVariable;
 
@@ -196,8 +189,9 @@
             success: function(data) {
             	responseVariable = data;
             },
-            error: function() {
-            	var message = "An error occurred while retrieving tenant projects.";
+            error: function(res) {
+                var errorText = 'Error occurred while retrieving response variable. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
         // get feature names of this model
@@ -224,8 +218,9 @@
                     $("#parameter-inputs").append(inputString);
                 };
             },
-            error: function() {
-                var message = "An error occurred while retrieving tenant projects.";
+            error: function(res) {
+                var errorText = 'Error occurred while retrieving feature names. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
 
@@ -233,7 +228,6 @@
     }
 
     function bindEvents() {
-
         // function that predict
         $(document).on('click', '#predict', function(e){
             e.preventDefault();
@@ -259,18 +253,14 @@
                     $("#prediction").html("Prediction: "+res);
                 },
                 error : function(res){
-                    //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-                    if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                        crtValArea.before(buildNortifications(res.responseJSON.status));
-                    }
+                    var errorText = 'Error occurred while predicting response variable. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
         });
 
         $('#cancel-predict').on('click', function(e){
             e.preventDefault();
-
             window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
         });
     }        

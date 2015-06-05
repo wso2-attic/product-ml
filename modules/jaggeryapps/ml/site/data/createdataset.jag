@@ -27,7 +27,7 @@
 		</div>
 		<div class="col-sm-4">
 			<div class="wr-auth pull-right">
-				<a href="#" data-toggle="dropdown" class="cu-ico-right-button cu-ico-button-user">Administrator</a>
+				<a href="#" data-toggle="dropdown" class="cu-ico-right-button cu-ico-button-user"><% print(session.get("logged.user")); %></a>
 				<div class="dropdown-menu">
 					<div class="cu-arrow"></div>
 					<div class="dropdown-menu-content">
@@ -94,6 +94,7 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
+			<div id="notification-area"></div>
 			<div class="wr-form col-lg-5 col-centered">
 
 				<h1 class="title">Create Dataset</h1>
@@ -195,15 +196,6 @@
 
 <script type="text/javascript">
 
-function buildNotifications(message){
-        var builtErrors = 
-        '<div class="ctrl-validation-panel col-md-12 col-centered">' +
-        '<p>' + message + '</p>'
-        '</div>';
-console.log(builtErrors);
-        return builtErrors;
-    }     
-
 function displayDataSource() {
 	var dataSourceType = $('#src-type option:selected').text();
 	if (dataSourceType == 'HDFS') {
@@ -250,25 +242,21 @@ $( document ).ready(function() {
     // hide HDFS/BAM data source input for default case
     //$('#source-hdfs-bam').hide();
 
-	var baseUrl = getBaseUrl(window.location.href);
+	var baseUrl = getBaseUrl(window.location.href);	
 
-	var crtValArea = $(this).closest(".wr-form");
-        var notificationArea = crtValArea.prev(".ctrl-validation-panel");
-
-        $('#create-dataset-form').ajaxForm({
+    $('#create-dataset-form').ajaxForm({
 	    url: baseUrl + '/api/datasets',
 	    /*beforeSend: function(xhr) {
 	        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
 	    },*/
-            success : function(res){
-        	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
-            },
-            error :  function(res){
-        	    notificationArea.remove();
-                    crtValArea.before(buildNotifications(res.responseText));
-            }                               
-        });
-
+        success : function(res){
+    	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
+        },
+        error :  function(res){
+            var errorText = 'Error occurred while creating dataset. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, '#notification-area', 'warning');
+        }                               
+    });
 
 	$('#cancel-dataset').on('click', function(e){
 		window.location.href = './datasets.jag';

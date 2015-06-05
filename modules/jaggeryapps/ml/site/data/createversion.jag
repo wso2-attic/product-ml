@@ -93,6 +93,7 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
+			<div id="notification-area"></div>
 			<div class="wr-form col-lg-5 col-centered">
 
 			<h1 class="title">Create Version</h1>
@@ -217,40 +218,30 @@
 
 <script type="text/javascript">
 
-function buildNotifications(message){
-        var builtErrors = 
-        '<div class="ctrl-validation-panel col-md-12 col-centered">' +
-        '<p>' + message + '</p>'
-        '</div>';
-console.log(builtErrors);
-        return builtErrors;
-    }     
-
 function displayDataSource() {
         var dataSourceType = $('#src-type option:selected').text();
         if (dataSourceType == 'HDFS') {
-                $('#source-file').hide();
-                $('#size-limit').hide();
-                $('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. hdfs://localhost:9000/home/datasets/iris.csv" id="src-path" name="sourcePath" />');
-                $('#source-hdfs-bam').show();
-                $('#not-related-to-bam').show();
+	        $('#source-file').hide();
+	        $('#size-limit').hide();
+	        $('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. hdfs://localhost:9000/home/datasets/iris.csv" id="src-path" name="sourcePath" />');
+	        $('#source-hdfs-bam').show();
+	        $('#not-related-to-bam').show();
         } else if (dataSourceType == 'BAM') {
-                $('#source-file').hide();
-                $('#size-limit').hide();
-                $('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. <table_name>:<col_1_name>,<col_1_type>;<col_2_name>,<col_2_type>" id="src-path" name="sourcePath" />');
-                $('#source-hdfs-bam').show();
-                $('#not-related-to-bam').hide();
+            $('#source-file').hide();
+            $('#size-limit').hide();
+            $('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. <table_name>:<col_1_name>,<col_1_type>;<col_2_name>,<col_2_type>" id="src-path" name="sourcePath" />');
+            $('#source-hdfs-bam').show();
+            $('#not-related-to-bam').hide();
         }
         else {
-                $('#source-hdfs-bam').hide();
-                $('#size-limit').show();
-                $('#not-related-to-bam').show();
-                $('#source-file').show();
+            $('#source-hdfs-bam').hide();
+            $('#size-limit').show();
+            $('#not-related-to-bam').show();
+            $('#source-file').show();
         }
 }
 
 $( document ).ready(function() {
-
 	// Display only the correct dataSource input 
 	displayDataSource();
 
@@ -271,19 +262,9 @@ $( document ).ready(function() {
         	}
     	});
 
-    	// initially, progress bar is hidden
-	$('.progress').hide();
-
-	// initially, file info and delete button is hidden
-	$('.info-file-name-and-delete-option').hide();
-
 	// put dataset name to application navigator
 	var name = getParameterByName('dsnam');
-	$('#nav-dataset').text(name);
-
-
-	var crtValArea = $(this).closest(".wr-form");
-        var notificationArea = crtValArea.prev(".ctrl-validation-panel");
+	$('#nav-dataset').text(name);	
 
 	$('#datasetVersionCreateForm').ajaxForm({
 	    data: { 'datasetName': name,
@@ -293,15 +274,14 @@ $( document ).ready(function() {
 	    /*beforeSend: function(xhr) {
 	        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
 	    },*/
-            success : function(res){
-        	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
-            },
-            error :  function(res){
-        	    notificationArea.remove();
-                    crtValArea.before(buildNotifications(res.responseText));
-            }                               
-        });
-
+        success : function(res){
+    	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
+        },
+        error :  function(res){
+            var errorText = 'Error occurred while creating dataset version. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, '#notification-area', 'warning');
+        }                               
+	});
 
 	$('#cancel-version').on('click', function(e){
 		window.location.href = './datasets.jag';
