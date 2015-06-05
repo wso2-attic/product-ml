@@ -153,11 +153,10 @@ $( document ).ready(function() {
     // put path in application navigator
     var projectName = getParameterByName('projectName');
     $('#nav-project').text(projectName);
-    $('#nav-analysis').text(" \\ "+analysisName);    
+    $('#nav-analysis').text(" \\ "+analysisName);
 
     $('#next-btn').on('click', function(e) {
-        e.preventDefault();
-	    
+        e.preventDefault();	    
         // set customized features
 	    var customizedFeatures = [];
 	    
@@ -220,8 +219,10 @@ $( document ).ready(function() {
         });
     });
 
-    var featuresString = "";
-    var json = {};
+    // redraw summary stats charts when feature type is changed
+    $(document).on('change', '.fieldType', function(e){ 
+        drawSummaryStatistics();
+    });    
 
     $.ajax({
         type: "GET",
@@ -232,7 +233,6 @@ $( document ).ready(function() {
         },*/
         success : function(res){
         	var features = res;
-
             var tableData = "";
             for (var i=0; i<features.length; i++) {
                 
@@ -240,7 +240,8 @@ $( document ).ready(function() {
                 				'<td><span class="feature">' + features[i]['fieldName'] + '</span></td>' +
                 				'<td>'+checkboxRenderer(features[i]['input'])+'</td>' +
                 				'<td>'+listSelectionRenderer({"categorical" : "CATEGORICAL","numerical" : "NUMERICAL"}, features[i]['type'].toString(),"fieldType")+'</td>' +
-                				'<td><div class="summaryStatistics">' + features[i]['summaryStats'] + '</div></td>' +
+                				// quote type change to avoid conflict with summaryStats object quotes
+                                "<td><div class='summaryStatistics' data-summarystatistics='" + features[i]["summaryStats"] + "'>" + features[i]["summaryStats"] + "</div></td>" +
                 				'<td>'+listSelectionRenderer({"discard":"DISCARD","regressionImputation":"REGRESSION_IMPUTATION","replaceWithMean":"REPLACE_WTH_MEAN"}, features[i]['imputeOperation'].toString(),"imputeMethod")+'</td>' +
                 			 '</tr>';
             }
@@ -278,78 +279,6 @@ $( document ).ready(function() {
         //draw the 'current' page
         oSettings.oApi._fnDraw(oSettings);
     };
-
-    $('#datasetTable').on('draw.dt', function() {        
-		// TODO: AJAX call per change in the data-table is an overhead
-        // use the AJAX methods given by the datatable and improve this section
-        $('.fieldType').on('change', function(e) {
-            var closestTr = $(this).closest('tr');
-            var selectedFeature = closestTr.find('.feature').text();            
-            var selectedFeatureType = this.options[e.target.selectedIndex].text;
-            var workflowId = getParameterByName('wfid');
-
-            /*$.ajax({
-                type: "POST",
-                url: "./ajax/UpdateFeatureType.jag",
-                data: {
-                    'FEATURE_TYPE': selectedFeatureType,
-                    'FEATURE_NAME': selectedFeature,
-                    'wfid': workflowId
-                },
-                error: function(res){
-                    
-                }
-            });*/
-
-            // refresh datatable, preserving the current page
-            $('#datasetTable').dataTable().fnStandingRedraw();
-        });
-
-        $('.includeFeature').on('change', function(e) {
-            var closestTr = $(this).closest('tr');
-            var selectedFeature = closestTr.find('.feature').text();
-            var selectionFlag = 'false';
-
-            if (this.checked) {
-                selectionFlag = 'true';
-            }
-
-            var workflowId = getParameterByName('wfid');
-            
-            /*$.ajax({
-                type: "POST",
-                url: "./ajax/UpdateInputSelection.jag",
-                data: {
-                    'IS_FEATURE_SELECTED': selectionFlag,
-                    'FEATURE_NAME': selectedFeature,
-                    'wfid': workflowId
-                },
-                error : function(res){                    
-                }
-            });*/
-        });
-
-        $('.imputeMethod').on('change', function(e) {
-            var closestTr = $(this).closest('tr');
-            var selectedFeature = closestTr.find('.feature').text();
-            var imputedMethod = this.options[e.target.selectedIndex].text;
-            var workflowId = getParameterByName('wfid');
-
-            /*$.ajax({
-                type: "POST",
-                url: "./ajax/UpdateImputeMethod.jag",
-                data: {
-                    'IMPUTE_OPTION': imputedMethod,
-                    'FEATURE_NAME': selectedFeature,
-                    'wfid': workflowId
-                },
-                error: function(res){
-
-                }
-            });*/
-        });
-
-    });
 });
 
 // generate check boxinputs for summary statistics table
@@ -380,9 +309,7 @@ function listSelectionRenderer(list, selectedOption, cssClass) {
 function drawSummaryStatistics() {
 
     $('.summaryStatistics').each(function() {
-        var jsonText = $(this).text();
-        // TODO: handle JSON parsing errors
-        var jsonObj  = JSON.parse(jsonText); 
+        var jsonObj = $(this).data('summarystatistics');
         // clear text in this cell and draw graphs
         $(this).text("");
 
