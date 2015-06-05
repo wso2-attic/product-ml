@@ -91,7 +91,7 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
-
+			<div id="notification-area"></div>
 			<div class="ctrl-info-panel col-md-12 col-centered">
 				<p><a href="createdataset.jag" id="create-dataset" class="cu-level2-btn btn-add-new-dark" data-toggle="tooltip" data-original-title="Create Dataset"><span>Create Dataset</span></a></p>
 			</div>
@@ -156,10 +156,10 @@ function buildAccordingHeader(collapseSection, datasetName, numVersions, dataset
 function version(versionNumbers){
 	var versionHtml = "";
     for(var i = 0; i < versionNumbers.length; i++){
-    	versionHtml += '<tr>' +
-				 				'<td class="c-padd"><span class="glyphicon glyphicon-book"></span> ' + versionNumbers[i].version+'</td>' +
-				 				'<td><a href="#" id="delete-dataset-version" class="cu-level2-btn btn-delete-dark" data-versionid="'+ versionNumbers[i].id +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete</span></a></td>' +
-				 			'</tr>';
+    	versionHtml +=  '<tr>' +
+			 				'<td class="c-padd"><span class="glyphicon glyphicon-book"></span> ' + versionNumbers[i].version+'</td>' +
+			 				'<td><a href="#" id="delete-dataset-version" class="cu-level2-btn btn-delete-dark" data-versionid="'+ versionNumbers[i].id +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete</span></a></td>' +
+			 			'</tr>';
     }
     return versionHtml;
 }
@@ -283,11 +283,8 @@ function bindEvents() {
                 loadDatasets();
             },
             error : function(res){
-                //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-                if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                    crtValArea.before(buildNortifications(res.responseJSON.status));
-                }
+	            var errorText = 'Error occurred while deleting dataset. ' + res.status + ' ' + res.statusText;
+	            handleNotification(errorText, '#notification-area', 'warning');
             }
         });
     });
@@ -308,11 +305,8 @@ function bindEvents() {
                 loadDatasets();
             },
             error : function(res){
-                //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-                if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                    crtValArea.before(buildNortifications(res.responseJSON.status));
-                }
+	            var errorText = 'Error occurred while deleting dataset version. ' + res.status + ' ' + res.statusText;
+	            handleNotification(errorText, '#notification-area', 'warning');
             }
         });
     });   
@@ -336,7 +330,8 @@ function loadDatasets() {
         	}
         },
         error :  function(res){
-        	//TODO: display a suitable error message
+	        var errorText = 'Error occurred while retrieving datasets. ' + res.status + ' ' + res.statusText;
+	        handleNotification(errorText, '#notification-area', 'warning');
         }
 	});	
 }

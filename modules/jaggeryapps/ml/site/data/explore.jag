@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/jquery.dataTables.min.css" rel="stylesheet">
@@ -36,7 +36,8 @@
 <!-- header -->
 <header>
 <div class="row wr-global-header">
-	<div class="col-sm-8 app-logo"><img src="../../images/logo.png" /><h2 class="app-title">Machine Learner</h2>
+	<div class="col-sm-8 app-logo">
+	    <a href="../home/home.jag"><img src="../../images/logo.png" /><h2 class="app-title">Machine Learner</h2></a>
 	</div>
 	<div class="col-sm-4">
 		<div class="wr-auth pull-right">
@@ -86,7 +87,7 @@
 		<div class="container col-md-12 col-centered wr-content">
 
 			<!-- <h1 class="title">Explore dataset</h1> -->
-
+			<div id="notification-area"></div>
             <div role="tabpanel" class="wr-tabbed-container">
 
 				<!-- Nav tabs/graphs -->
@@ -364,7 +365,7 @@ $( document ).ready(function() {
         },
         error : function(res) {
         	var errorText = 'Error occurred while retrieving categorical feature names. '+res.status+' '+res.statusText;
-        	handleError(errorText, '.ctrl-validation-panel', '.wr-tabbed-container');
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });    
     // get numerical feature names
@@ -380,7 +381,7 @@ $( document ).ready(function() {
         },
         error : function(res) {
         	var errorText = 'Error occurred while retrieving numerical feature names. '+res.status+' '+res.statusText;
-        	handleError(errorText, '.ctrl-validation-panel', '.wr-tabbed-container');
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -409,23 +410,6 @@ $( document ).ready(function() {
     drawScatterPlotBase();    
 });
 
-// function to build error notification
-function buildNortifications(message) {
-    var builtErrors = 
-    '<div class="ctrl-validation-panel col-md-12 col-centered">' +
-    	'<p>' + message + '</p>' +
-    '</div>' +
-    '<br>';
-    return builtErrors;
-}
-// function to handle errors
-function handleError(errorText, checkElement, closeElement) {
-	if(!$(checkElement).length) {
-    	$(closeElement).before(buildNortifications(errorText));	        	
-	}
-	throw new Error(errorText);
-}
-
 function drawScatterPlotBase() { 
 
 	if (numericalFeatureNames.length >1 & categoricalFeatureNames.length >0) {
@@ -448,7 +432,8 @@ function drawScatterPlotBase() {
 	    drawPlotsAjax();
 
 	} else {
-	    $("#scatter").html("Minimum of two numerical features and one categorical feature required to draw a Scatter plot.");
+	    var infoText = "Minimum of two numerical features and one categorical feature required to draw a scatter plot.";
+        $("#scatter").html(buildNotification(infoText, 'info'));        	    
 	}
 }
 
@@ -501,7 +486,7 @@ function drawPlotsAjax() {
         },
         error : function(res){
         	var errorText = 'Error occurred while retrieving scatter plot data. '+res.status+' '+res.statusText;
-        	handleError(errorText, '.ctrl-validation-panel', '.wr-tabbed-container');
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -527,7 +512,7 @@ function drawPlotsAjax() {
         },
         error : function(res){
         	var errorText = 'Error occurred while retrieving summary data for independent variable. '+res.status+' '+res.statusText;
-        	handleError(errorText, '.ctrl-validation-panel', '.wr-tabbed-container');
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -553,7 +538,7 @@ function drawPlotsAjax() {
         },
         error : function(res){
         	var errorText = 'Error occurred while retrieving summary data for dependent variable. '+res.status+' '+res.statusText;
-        	handleError(errorText, '.ctrl-validation-panel', '.wr-tabbed-container');
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 }
@@ -650,11 +635,12 @@ function drawParallelSets() {
             },
             error : function(res){
 	        	var errorText = 'Error occurred while retrieving data for parallel sets. '+res.status+' '+res.statusText;
-	        	handleError(errorText, '.ctrl-validation-panel', '.wr-tabbed-container');
+	        	handleNotification(errorText, '#notification-area', 'warning');
             }
         });
     } else {
-        $("#parallelSets").html("Minimum of two categorical features required for Parallel Sets.");
+        var infoText = "Minimum of two categorical features required for parallel sets.";
+        $("#parallelSets").html(buildNotification(infoText, 'info'));        
     }
 }
 
@@ -844,7 +830,7 @@ function drawTrellisChart() {
         },
         error : function(res){
         	var errorText = 'Error occurred while retrieving data for trellis chart. '+res.status+' '+res.statusText;
-        	handleError(errorText, '.ctrl-validation-panel', '.wr-tabbed-container');
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 }
@@ -894,7 +880,7 @@ function drawClusterDiagram() {
         },
         error: function(response) {
         	var errorText = 'Error occurred while retrieving data for cluster diagram. '+response.status+' '+response.statusText;
-        	handleError(errorText, '.ctrl-validation-panel', '.wr-tabbed-container');
+        	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 }

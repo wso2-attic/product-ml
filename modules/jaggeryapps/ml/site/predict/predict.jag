@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="wr-auth pull-right">
-                        <a href="#" data-toggle="dropdown" class="cu-ico-right-button cu-ico-button-user">Administrator</a>
+                        <a href="#" data-toggle="dropdown" class="cu-ico-right-button cu-ico-button-user"><% print(session.get("logged.user")); %></a>
                         <div class="dropdown-menu">
                             <div class="cu-arrow"></div>
                             <div class="dropdown-menu-content">
@@ -91,6 +91,7 @@
                 <!-- content -->
                 <div class="container col-md-12 col-centered wr-content">
 
+                    <div id="notification-area"></div>
                     <div class="wr-form col-lg-5 col-centered">
 
                         <h1 class="title">Features</h1>
@@ -173,23 +174,6 @@
         loadFeatures();
     });
    
-    function buildNortifications(message){
-        var builtErrors = 
-        '<div class="ctrl-validation-panel col-md-12 col-centered">' +
-        '<p>' + message + '</p>'
-        '</div>';
-        return builtErrors;
-    }
-
-    // input validation for feature values
-    function isFeatureValueEmpty(text, index){
-		if(!text || text.length == 0){
-            $('#feature-' + index + '-error').text("* Feature value required.");
-            return true;
-		}
-	    return false;
-	}
-
     function loadFeatures() {
         var responseVariable;
 
@@ -205,8 +189,9 @@
             success: function(data) {
             	responseVariable = data;
             },
-            error: function() {
-            	var message = "An error occurred while retrieving tenant projects.";
+            error: function(res) {
+                var errorText = 'Error occurred while retrieving response variable. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
         // get feature names of this model
@@ -227,25 +212,15 @@
                                 '<label class="input-label">'+modelFeatures[i]+'<span class="help-tip glyphicon glyphicon-question-sign"></span></label>' +
 				'<span class="fld-required">*</span>'+
                                 '<div class="input-control text">' +
-                                    '<input type="text" id="sgd-data-fraction-'+ i +'" value="" placeholder=""/>' +
-                                    '<span class="form-val-error" id="feature-'+ i +'-error"></span>' +
+                                    '<input type="text" id="sgd-data-fraction" value="" placeholder=""/>' +
                                 '</div>';
 
                     $("#parameter-inputs").append(inputString);
-
-                    $(document).on('click', '#sgd-data-fraction-'+ i, function(){
-                        $(this).next('span').empty();
-                    });
-
-                    $(document).on('keydown', '#sgd-data-fraction-'+ i, function(e){
-                        if(e.which == 9){ // tab key
-                            $(this).next('span').empty();
-                        }
-                    });
                 };
             },
-            error: function() {
-                var message = "An error occurred while retrieving tenant projects.";
+            error: function(res) {
+                var errorText = 'Error occurred while retrieving feature names. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
 
@@ -253,50 +228,39 @@
     }
 
     function bindEvents() {
-
         // function that predict
         $(document).on('click', '#predict', function(e){
             e.preventDefault();
-            var emptyFeatureValues = false;
 
             var inputArray = [];
             $('input').each(function(index, item){
                 var val = $(item).val();
-                if(isFeatureValueEmpty(val, index)) {
-                    emptyFeatureValues = true;
-                }
                 inputArray[index] = val;
             });
             
-            if(!emptyFeatureValues) {
-                jsonData = JSON.stringify(inputArray);
-                jsonData = "[".concat(jsonData, "]");
+            jsonData = JSON.stringify(inputArray);
+            jsonData = "[".concat(jsonData, "]");
 
-                $.ajax({
-                    type: "POST",
-                    url: serverUrl+"/api/models/"+modelId+"/predict",
-                    contentType: "application/json",
-                    data: jsonData,
-                    /*beforeSend : function(xhr) {
-                        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                    },*/
-                    success : function(res){
-                        $("#prediction").html("Prediction: "+res);
-                    },
-                    error : function(res){
-                        //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-                        if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                            crtValArea.before(buildNortifications(res.responseJSON.status));
-                        }
-                    }
-                });
-            }
+            $.ajax({
+                type: "POST",
+                url: serverUrl+"/api/models/"+modelId+"/predict",
+                contentType: "application/json",
+                data: jsonData,
+                /*beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
+                },*/
+                success : function(res){
+                    $("#prediction").html("Prediction: "+res);
+                },
+                error : function(res){
+                    var errorText = 'Error occurred while predicting response variable. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, '#notification-area', 'warning');
+                }
+            });
         });
 
         $('#cancel-predict').on('click', function(e){
             e.preventDefault();
-
             window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
         });
     }        
