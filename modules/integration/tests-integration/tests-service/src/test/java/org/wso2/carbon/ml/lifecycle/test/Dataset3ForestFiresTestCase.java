@@ -80,7 +80,8 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(description = "Create a project for forest fires dataset", groups="createProjectForestFires", dependsOnGroups="createDatasetForestFires")
+    @Test(description = "Create a project for forest fires dataset",
+            groups="createProjectForestFires", dependsOnGroups="createDatasetForestFires")
     public void testCreateProjectForestFires() throws MLHttpClientException, IOException {
         response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES,
                 MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES);
@@ -137,7 +138,8 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a linear regression model and predict for forest fires dataset", groups="createLinearRegressionModelForestFires", dependsOnGroups="createProjectForestFires")
+    @Test(description = "Build a linear regression model and predict for forest fires dataset",
+            groups="createLinearRegressionModelForestFires", dependsOnGroups="createProjectForestFires")
     public void testBuildLinearRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         // Check whether the project is created otherwise skipped
         response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
@@ -157,7 +159,8 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a ridge regression model and predict for forest fires dataset", groups="createRidgeRegressionModelForestFires", dependsOnGroups="createLinearRegressionModelForestFires")
+    @Test(description = "Build a ridge regression model and predict for forest fires dataset",
+            groups="createRidgeRegressionModelForestFires", dependsOnGroups="createLinearRegressionModelForestFires")
     public void testBuildRidgeRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Ridge Regression model
@@ -171,7 +174,8 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Lasso regression model and predict for forest fires dataset", groups="createLassoRegressionModelForestFires", dependsOnGroups="createRidgeRegressionModelForestFires")
+    @Test(description = "Build a Lasso regression model and predict for forest fires dataset",
+            groups="createLassoRegressionModelForestFires", dependsOnGroups="createRidgeRegressionModelForestFires")
     public void testBuildLassoRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Lasso Regression model

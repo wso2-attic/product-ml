@@ -80,7 +80,8 @@ public class Dataset1YachtHydrodynamicsTestCase extends MLBaseTest {
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(description = "Create a project for yacht hydrodynamics dataset", groups="createProjectYacht", dependsOnGroups="createDatasetYacht")
+    @Test(description = "Create a project for yacht hydrodynamics dataset", groups="createProjectYacht",
+            dependsOnGroups="createDatasetYacht")
     public void testCreateProjectYachtHydrodynamics() throws MLHttpClientException, IOException {
         response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_YACHT,
                 MLIntegrationTestConstants.DATASET_NAME_YACHT);
@@ -137,7 +138,8 @@ public class Dataset1YachtHydrodynamicsTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a linear regression model and predict for yacht dataset", groups="createLinearRegressionModelYacht", dependsOnGroups="createProjectYacht")
+    @Test(description = "Build a linear regression model and predict for yacht dataset",
+            groups="createLinearRegressionModelYacht", dependsOnGroups="createProjectYacht")
     public void testBuildLinearRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         // Check whether the project is created otherwise skipped
         response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
@@ -157,7 +159,8 @@ public class Dataset1YachtHydrodynamicsTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a ridge regression model and predict for yacht dataset", groups="createRidgeRegressionModelYacht", dependsOnGroups="createLinearRegressionModelYacht")
+    @Test(description = "Build a ridge regression model and predict for yacht dataset",
+            groups="createRidgeRegressionModelYacht", dependsOnGroups="createLinearRegressionModelYacht")
     public void testBuildRidgeRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Ridge Regression model
@@ -171,7 +174,8 @@ public class Dataset1YachtHydrodynamicsTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Lasso regression model and predict for yacht dataset", groups="createLassoRegressionModelYacht", dependsOnGroups="createRidgeRegressionModelYacht")
+    @Test(description = "Build a Lasso regression model and predict for yacht dataset",
+            groups="createLassoRegressionModelYacht", dependsOnGroups="createRidgeRegressionModelYacht")
     public void testBuildLassoRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
          buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Lasso Regression model
