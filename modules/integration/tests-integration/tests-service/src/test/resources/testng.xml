@@ -59,4 +59,9 @@
             <package name="org.wso2.carbon.ml.configs.test"/>
         </packages>
     </test>
+    <test name="ML Life-cycle-Tests" preserve-order="true" verbose="2"  parallel="false">
+        <packages>
+            <package name="org.wso2.carbon.ml.lifecycle.test"/>
+        </packages>
+    </test>
 </suite>

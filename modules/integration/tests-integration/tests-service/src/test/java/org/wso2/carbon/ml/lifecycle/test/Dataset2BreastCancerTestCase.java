@@ -192,6 +192,20 @@ public class Dataset2BreastCancerTestCase extends MLBaseTest {
         testPredictBreastCancer();
     }
 
+    /**
+     * Creates a test case for creating an analysis, building a K-Means clustering model and predicting using the built model
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a K-means model and predict for breast cancer dataset", groups="createKMeansBreastCancer", dependsOnGroups="createLogisticRegressionBreastCancer")
+    public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
+        // Predict using built Linear Regression model
+        testPredictBreastCancer();
+    }
+
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
         mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER);

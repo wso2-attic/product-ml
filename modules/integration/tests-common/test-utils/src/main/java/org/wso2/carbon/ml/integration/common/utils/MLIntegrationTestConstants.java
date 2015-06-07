@@ -72,19 +72,19 @@ public class MLIntegrationTestConstants {
 
 	// Number the datasets in lexicographical order starting from number 2 (number 1 reserved for Diabetes dataset)
 	public static final String DATASET_NAME_YACHT = "Yacht_Hydrodynamics";
-	public static int DATASET_ID_YACHT = 1;
+	public static int DATASET_ID_YACHT = 2;
 	public static final String DATASET_NAME_BREAST_CANCER = "Breast_Cancer";
-	public static int DATASET_ID_BREAST_CANCER = 2;
+	public static int DATASET_ID_BREAST_CANCER = 3;
 	public static final String DATASET_NAME_FOREST_FIRES = "Forest_Fires";
-	public static int DATASET_ID_FOREST_FIRES = 3;
+	public static int DATASET_ID_FOREST_FIRES = 4;
     public static final String DATASET_NAME_GAMMA_TELESCOPE = "Gamma_Telescope";
-    public static int DATASET_ID_GAMMA_TELESCOPE = 4;
+    public static int DATASET_ID_GAMMA_TELESCOPE = 5;
     public static final String DATASET_NAME_AZURE_STREAMING = "Azure_Streaming";
-    public static int DATASET_ID_AZURE_STREAMING = 5;
+    public static int DATASET_ID_AZURE_STREAMING = 6;
     public static final String DATASET_NAME_TITANIC = "Titanic";
-    public static int DATASET_ID_TITANIC = 6;
+    public static int DATASET_ID_TITANIC = 7;
     public static final String DATASET_NAME_AUTOMOBILE = "Automobile";
-    public static int DATASET_ID_AUTOMOBILE = 7;
+    public static int DATASET_ID_AUTOMOBILE = 8;
 
 	public static final int VERSIONSET_ID = 1;
 

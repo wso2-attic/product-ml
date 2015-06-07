@@ -38,7 +38,7 @@ import static org.testng.AssertJUnit.assertEquals;
  * Needs to download and store the data files explicitly in "resources/data/"
  */
 
-@Test(groups="createExternalDatasets", dependsOnGroups = "createAdditionalDatasets")
+@Test(groups="createExternalDatasets")
 public class CreateExternalDatasetsTestCase extends MLBaseTest{
 
     private MLHttpClient mlHttpclient;
@@ -50,23 +50,23 @@ public class CreateExternalDatasetsTestCase extends MLBaseTest{
         mlHttpclient = new MLHttpClient(instance, userInfo);
     }
 
-    /**
-     * Creates external dataset - Digit recognition
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a dataset of Digit recognition data from a CSV file")
-    public void testCreateDatasetDigits() throws IOException {
-        try {
-            response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_DIGITS,
-                    "1.0", MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
-            assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                    .getStatusCode());
-        } catch ( MLHttpClientException e) {
-            // Skip test if dataset is not available in the given location
-            throw new SkipException("Skipping tests because dataset with name: " + MLIntegrationTestConstants.DATASET_NAME_DIGITS
-                    + " is not available at the location" + MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
-        }
-    }
+//    /**
+//     * Creates external dataset - Digit recognition
+//     * @throws MLHttpClientException
+//     * @throws IOException
+//     */
+//    @Test(description = "Create a dataset of Digit recognition data from a CSV file")
+//    public void testCreateDatasetDigits() throws IOException {
+//        try {
+//            response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_DIGITS,
+//                    "1.0", MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
+//            assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+//                    .getStatusCode());
+//        } catch ( MLHttpClientException e) {
+//            // Skip test if dataset is not available in the given location
+//            throw new SkipException("Skipping tests because dataset with name: " + MLIntegrationTestConstants.DATASET_NAME_DIGITS
+//                    + " is not available at the location" + MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
+//        }
+//    }
 
 }
