@@ -94,6 +94,7 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
+            <div id="notification-area"></div>
 			<h1 class="title">Model Summary</h1>
 			
 			<div class="col-md-6">
@@ -256,11 +257,8 @@ $( document ).ready(function() {
         	numericalFeatureNames = res;
         },
         error : function(res){
-            //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-            if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                crtValArea.before(buildNortifications(res.responseJSON.status));
-            }
+            var errorText = 'Error occurred while retrieving numerical feature names. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -277,11 +275,8 @@ $( document ).ready(function() {
         	responseVariable = res;
         },
         error : function(res){
-            //$('#workflow-name-error').text("* "+res.responseJSON.message);
-
-            if (crtValArea.prev("ctrl-validation-panel").length == 0){
-                crtValArea.before(buildNortifications(res.responseJSON.status));
-            }
+            var errorText = 'Error occurred while retrieving response variable. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -315,7 +310,7 @@ $( document ).ready(function() {
                 // draw feature select
                 testResultDataPointsSample = res.testResultDataPointsSample;
                 features = res.features;
-                var displayFeatures = getDisplayFeatures(features, numericalFeatureNames);
+                var displayFeatures = getDisplayFeatures(features, numericalFeatureNames);                
                 // draw predicted vs. actual chart if at least one numerical feature exists (except response variable)
                 if(displayFeatures.length > 0) {
 	                $('#predicted-actual-features').empty();
@@ -393,10 +388,8 @@ $( document ).ready(function() {
             }
         },
         error: function(res){
-            var crtValArea = btnArea.prev(".ctrl-validation-panel");
-            if (crtValArea.length == 0) {
-                btnArea.before(buildNortifications(res.responseJSON.status));
-            }
+            var errorText = 'Error occurred while retrieving model summary. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -532,11 +525,8 @@ function getDisplayFeatures(features, numericalFeatureNames) {
 }
 
 function getInfo(chartType) {
-    var minNumFeaturesInfo = 
-                    '<div class="alert alert-info alert-dismissible" role="alert">' +
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                        '<img src="../../images/icons/ico-alert.png" class="indi" />Minimum of one numerical feature required for '+chartType+'.' +
-                    '</div>';
+    var minNumFeaturesInfoText = 'Minimum of one numerical feature required for '+chartType+'.';
+    var minNumFeaturesInfo = buildNotification(minNumFeaturesInfoText, 'info');
     return minNumFeaturesInfo;
 }
 

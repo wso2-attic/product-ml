@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -89,7 +89,8 @@
 		<!-- content -->
 		<div class="container col-md-12 col-centered wr-content">
 
-			<div class="wr-form col-lg-5 col-centered">
+			<div id="notification-area"></div>
+            <div class="wr-form col-lg-5 col-centered">
 
 				<h1 class="title">Parameters</h1>
 
@@ -209,8 +210,9 @@ $( document ).ready(function() {
                 }                
             }
         },
-        error: function(res) { //TODO: display error
-            console.log("Error");
+        error: function(res) {
+            var errorText = 'Error occurred while retrieving previously set hyper-parameters. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -237,8 +239,9 @@ $( document ).ready(function() {
         		hyperParameterInputValues[index] = new Array(displayName, param.key, param.value, param.description);
     		}
         },
-        error: function(res) { //TODO: display error
-            console.log("Error");
+        error: function(res) {
+            var errorText = 'Error occurred while retrieving hyper-parameters. ' + res.status + ' ' + res.statusText;
+            handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
@@ -276,24 +279,25 @@ $( document ).ready(function() {
     	var jsonData= '';
     	var hyperParameters = [];
 
-	$.ajax({
-        type: "GET",
-        url: serverUrl+"/api/configs/algorithms/"+algorithmName+"/hyperParams",
-        async : false,
-        dataType: 'json',
-        success: function(res) {
+    	$.ajax({
+            type: "GET",
+            url: serverUrl+"/api/configs/algorithms/"+algorithmName+"/hyperParams",
+            async : false,
+            dataType: 'json',
+            success: function(res) {
                 for (index = 0; index < res.length; index++) {
-                        var param = res[index];
-			var key = param.key;
-                        var val = $('#'+key).val();
-			jsonData = jsonData.concat("{ \"key\":\"",key,"\",\"value\":\"",val,"\"},");
+                    var param = res[index];
+                    var key = param.key;
+                    var val = $('#'+key).val();
+                    jsonData = jsonData.concat("{ \"key\":\"",key,"\",\"value\":\"",val,"\"},");
                 }
                 jsonData = jsonData.substr(0,jsonData.length-1);
-		jsonData = "[".concat(jsonData,"]");
-        },
-        error: function(res) { //TODO: display error
-            console.log(res);
-        }
+                jsonData = "[".concat(jsonData,"]");
+            },
+            error: function(res) {
+                var errorText = 'Error occurred while retrieving hyper-parameters. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
+            }
     	});
 
 	    $.ajax({
@@ -308,10 +312,8 @@ $( document ).ready(function() {
                 window.location.href = '../model/model.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&datasetId='+datasetId+'&algorithmName='+algorithmName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&fromAnalysis='+fromAnalysis;
             },
             error: function(res){
-                var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                if (crtValArea.length == 0) {
-                    btnArea.before(buildNortifications(res.responseJSON.status));
-                }
+                var errorText = 'Error occurred while retrieving previously set hyper-parameters. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });        
 
@@ -330,10 +332,8 @@ $( document ).ready(function() {
                 window.location.href = '../project/projects.jag';
             },
             error: function(res){
-                var crtValArea = btnArea.prev(".ctrl-validation-panel");
-                if (crtValArea.length == 0) {
-                    btnArea.before(buildNortifications(res.responseJSON.status));
-                }
+                var errorText = 'Error occurred while cancelling analysis. ' + res.status + ' ' + res.statusText;
+                handleNotification(errorText, '#notification-area', 'warning');
             }
         });
     });
