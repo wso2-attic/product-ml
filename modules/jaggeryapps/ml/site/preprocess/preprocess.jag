@@ -226,7 +226,7 @@ $( document ).ready(function() {
 
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/features?limit=0&offset=0",        
+        url: serverUrl+"/api/analyses/"+analysisId+"/summarizedFeatures?limit=0&offset=0",        
         async: false,
         /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);

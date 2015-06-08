@@ -322,7 +322,7 @@ $( document ).ready(function() {
 function loadDatasetFeatures(setResponseVariable) {
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/allFeatures",
+        url: serverUrl+"/api/analyses/"+analysisId+"/features",
         /*beforeSend : function(xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
         },*/
