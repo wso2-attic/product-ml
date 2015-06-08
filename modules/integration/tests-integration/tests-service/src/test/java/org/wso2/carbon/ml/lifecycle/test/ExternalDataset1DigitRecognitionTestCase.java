@@ -39,13 +39,14 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * This class contains the entire ML life-cycle for Digit Recognition dataset
  */
-@Test(groups="DigitRecognitionDataset", dependsOnGroups="AzureStreamingDataset")
+@Test(groups="DigitRecognitionDataset")
 public class ExternalDataset1DigitRecognitionTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
     private static int modelId;
     private CloseableHttpResponse response;
+    private int datasetId;
 
     @BeforeClass(alwaysRun = true)
     public void initTest() throws MLIntegrationBaseTestException {
@@ -59,12 +60,14 @@ public class ExternalDataset1DigitRecognitionTestCase extends MLBaseTest {
      * @throws IOException
      */
     @Test(description = "Create a dataset of DigitRecognition data from a CSV file", groups="createDatasetDigitRecognition")
-    public void testCreateDatasetDigitRecognition() throws MLHttpClientException, IOException {
+    public void testCreateDatasetDigitRecognition() throws MLHttpClientException, IOException, JSONException {
         try {
             response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_DIGITS,
                     "1.0", MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
             assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                     .getStatusCode());
+            datasetId = MLTestUtils.getId(response);
+            response.close();
         } catch ( MLHttpClientException e) {
             // Skip test if dataset is not available in the given location
             throw new SkipException("Skipping tests because dataset with name: " + MLIntegrationTestConstants.DATASET_NAME_DIGITS
@@ -79,7 +82,7 @@ public class ExternalDataset1DigitRecognitionTestCase extends MLBaseTest {
      */
     @Test(description = "Create a project for DigitRecognition dataset",
             groups="createProjectDigitRecognition", dependsOnGroups="createDatasetDigitRecognition")
-    public void testCreateProjectDigitRecognition() throws MLHttpClientException, IOException {
+    public void testCreateProjectDigitRecognition() throws MLHttpClientException, IOException, JSONException {
         response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_DIGITS,
                 MLIntegrationTestConstants.DATASET_NAME_DIGITS);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
@@ -101,7 +104,7 @@ public class ExternalDataset1DigitRecognitionTestCase extends MLBaseTest {
         modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIGITS, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIGITS),
-                MLIntegrationTestConstants.DATASET_ID_DIGITS, mlHttpclient);
+                datasetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
@@ -135,6 +138,6 @@ public class ExternalDataset1DigitRecognitionTestCase extends MLBaseTest {
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
         mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_DIGITS);
-        mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_DIGITS);
+        mlHttpclient.doHttpDelete("/api/datasets/" + datasetId);
     }
 }

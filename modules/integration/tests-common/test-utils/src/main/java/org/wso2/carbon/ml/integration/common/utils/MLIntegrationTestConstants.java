@@ -71,19 +71,12 @@ public class MLIntegrationTestConstants {
 	public static final String DATASET_NAME_DIABETES = "Diabetes";
 	public static final int DATASET_ID_DIABETES = 1;
 
-	// Number the datasets starting from number 2 (number 1 reserved for Diabetes dataset)
 	public static final String DATASET_NAME_YACHT = "Yacht_Hydrodynamics";
-	public static int DATASET_ID_YACHT = 2;
 	public static final String DATASET_NAME_BREAST_CANCER = "Breast_Cancer";
-	public static int DATASET_ID_BREAST_CANCER = 3;
 	public static final String DATASET_NAME_FOREST_FIRES = "Forest_Fires";
-	public static int DATASET_ID_FOREST_FIRES = 4;
     public static final String DATASET_NAME_GAMMA_TELESCOPE = "Gamma_Telescope";
-    public static int DATASET_ID_GAMMA_TELESCOPE = 5;
     public static final String DATASET_NAME_AUTOMOBILE = "Automobile";
-    public static int DATASET_ID_AUTOMOBILE = 6;
     public static final String DATASET_NAME_AZURE_STREAMING = "Azure_Streaming";
-    public static int DATASET_ID_AZURE_STREAMING = 7;
 
 	public static final int VERSIONSET_ID = 1;
 
@@ -125,7 +118,6 @@ public class MLIntegrationTestConstants {
     // Rename the dataset to "digitRecognition.csv"
     public static final String DIGIT_RECOGNITION_DATASET_SAMPLE = "data/digitRecognition.csv";
     public static final String DATASET_NAME_DIGITS = "Digit_Recognition";
-    public static final int DATASET_ID_DIGITS = 8;
     public static final String PROJECT_NAME_DIGITS = "Digit_recognition_Project";
 	public static final String RESPONSE_ATTRIBUTE_DIGITS = "label";
 

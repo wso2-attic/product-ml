@@ -39,13 +39,14 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * This class contains the entire ML life-cycle for Automobile dataset
  */
-@Test(groups="AutomobileDataset", dependsOnGroups="gammaTelescopeDataset")
+@Test(groups="AutomobileDataset")
 public class Dataset6AutomobileTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
     private static int modelId;
     private CloseableHttpResponse response;
+    private int datasetId;
 
     @BeforeClass(alwaysRun = true)
     public void initTest() throws MLIntegrationBaseTestException {
@@ -59,11 +60,12 @@ public class Dataset6AutomobileTestCase extends MLBaseTest {
      * @throws IOException
      */
     @Test(description = "Create a dataset of automobile data from a CSV file", groups="createDatasetAutomobile")
-    public void testCreateDatasetAutomobile() throws MLHttpClientException, IOException {
+    public void testCreateDatasetAutomobile() throws MLHttpClientException, IOException, JSONException {
         response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE,
                 "1.0", MLIntegrationTestConstants.AUTOMOBILE_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
+        datasetId = MLTestUtils.getId(response);
         response.close();
     }
 
@@ -96,7 +98,7 @@ public class Dataset6AutomobileTestCase extends MLBaseTest {
         modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_AUTOMOBILE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE),
-                MLIntegrationTestConstants.DATASET_ID_AUTOMOBILE, mlHttpclient);
+                datasetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
@@ -130,6 +132,6 @@ public class Dataset6AutomobileTestCase extends MLBaseTest {
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
         mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE);
-        mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_AUTOMOBILE);
+        mlHttpclient.doHttpDelete("/api/datasets/" + datasetId);
     }
 }

@@ -40,13 +40,14 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * This class contains the entire ML life-cycle for Breast Cancer dataset
  */
-@Test(groups="breastCancerDataset", dependsOnGroups="yatchDataset")
+@Test(groups="breastCancerDataset")
 public class Dataset3BreastCancerTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
     private static int modelId;
     private CloseableHttpResponse response;
+    private int datasetId;
 
     @BeforeClass(alwaysRun = true)
     public void initTest() throws MLIntegrationBaseTestException {
@@ -60,11 +61,12 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
      * @throws IOException
      */
     @Test(description = "Create a dataset of breast cancer data from a CSV file", groups="createDatasetBreastCancer")
-    public void testCreateDatasetBreastCancer() throws MLHttpClientException, IOException {
+    public void testCreateDatasetBreastCancer() throws MLHttpClientException, IOException, JSONException {
         response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER,
                 "1.0", MLIntegrationTestConstants.BREAST_CANCER_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
+        datasetId = MLTestUtils.getId(response);
         response.close();
     }
 
@@ -111,7 +113,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
         modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_BREAST_CANCER, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER),
-                MLIntegrationTestConstants.DATASET_ID_BREAST_CANCER, mlHttpclient);
+                datasetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
@@ -205,6 +207,6 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
         mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER);
-        mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_BREAST_CANCER);
+        mlHttpclient.doHttpDelete("/api/datasets/" + datasetId);
     }
 }

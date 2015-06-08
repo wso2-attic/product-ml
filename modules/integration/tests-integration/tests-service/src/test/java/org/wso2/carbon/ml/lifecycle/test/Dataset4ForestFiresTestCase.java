@@ -40,13 +40,14 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * This class contains the entire ML life-cycle for Forest Fires dataset
  */
-@Test(groups="ForestFiresDataset", dependsOnGroups="breastCancerDataset")
+@Test(groups="ForestFiresDataset")
 public class Dataset4ForestFiresTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
     private static int modelId;
     private CloseableHttpResponse response;
+    private int datasetId;
 
     @BeforeClass(alwaysRun = true)
     public void initTest() throws MLIntegrationBaseTestException {
@@ -60,11 +61,12 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
      * @throws IOException
      */
     @Test(description = "Create a dataset of forest fires data from a CSV file", groups="createDatasetForestFires")
-    public void testCreateDatasetForestFires() throws MLHttpClientException, IOException {
+    public void testCreateDatasetForestFires() throws MLHttpClientException, IOException, JSONException {
         response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES,
                 "1.0", MLIntegrationTestConstants.FOREST_FIRES_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
+        datasetId = MLTestUtils.getId(response);
         response.close();
     }
 
@@ -112,7 +114,7 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
         modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_FOREST_FIRES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES),
-                MLIntegrationTestConstants.DATASET_ID_FOREST_FIRES, mlHttpclient);
+                datasetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
@@ -191,6 +193,6 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
         mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES);
-        mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_FOREST_FIRES);
+        mlHttpclient.doHttpDelete("/api/datasets/" + datasetId);
     }
 }

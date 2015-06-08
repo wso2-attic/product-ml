@@ -43,6 +43,24 @@ public class MLTestUtils extends MLBaseTest {
     private static int modelId;
 
     /**
+     * Extracts the value of key: "id" from a response
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static int getId(CloseableHttpResponse response) throws IOException, JSONException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        JSONObject responseJson = new JSONObject(bufferedReader.readLine());
+        bufferedReader.close();
+        response.close();
+
+        // Gets the ID of the dataset.
+        int id = responseJson.getInt("id");
+        return id;
+    }
+
+    /**
      *
      * @param modelName         Name of the built model
      * @return status           Whether status of the model is complete or not.

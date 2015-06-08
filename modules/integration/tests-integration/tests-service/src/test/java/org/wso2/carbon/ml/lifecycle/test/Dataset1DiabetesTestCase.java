@@ -49,9 +49,16 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     private CloseableHttpResponse response;
 
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLIntegrationBaseTestException {
+    public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
+
+        // Check whether the project is created otherwise skip
+        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+                .PROJECT_NAME_DIABETES);
+        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+            throw new SkipException("Skipping tests because a project is not available");
+        }
     }
 
     // Dataset and project have been already created, therefore no need to create them here.
@@ -107,12 +114,6 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     @Test(description = "Build a Naive Bayes model and predict for Diabetes dataset",
             groups="createNaiveBayesModelDiabetes")
     public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        // Check whether the project is created otherwise skip
-        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_DIABETES);
-        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because a project is not available");
-        }
         buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictDiabetes();
