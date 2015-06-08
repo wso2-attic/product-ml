@@ -38,14 +38,10 @@ import java.io.IOException;
 import static org.testng.AssertJUnit.assertEquals;
 
 /**
- * This class contains the entire ML life-cycle for Breast Cancer dataset
+ * This class contains the entire ML life-cycle for Yacht hydrodynamics dataset
  */
-@Test(groups="ForestFiresDataset", dependsOnGroups="breastCancerDataset")
-public class Dataset3ForestFiresTestCase extends MLBaseTest {
-
-    // When running only this test case, the dataset ID has to be 1
-    // Set to true if you are running only this test class
-    private boolean datasetIdOverride = false;
+@Test(groups="yatchDataset", dependsOnGroups = "diabetesDataset")
+public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
@@ -56,35 +52,32 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
     public void initTest() throws MLIntegrationBaseTestException {
         super.init();
         mlHttpclient = new MLHttpClient(instance, userInfo);
-
-        if (datasetIdOverride)
-            MLIntegrationTestConstants.DATASET_ID_FOREST_FIRES = 1;
     }
 
     /**
-     * Creates dataset for Numerical Prediction - Forest fires
+     * Creates dataset for numerical prediction tests - Yacht hydrodynamics
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(description = "Create a dataset of forest fires data from a CSV file", groups="createDatasetForestFires")
-    public void testCreateDatasetForestFires() throws MLHttpClientException, IOException {
-        response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES,
-                "1.0", MLIntegrationTestConstants.FOREST_FIRES_DATASET_SAMPLE);
+    @Test(description = "Create a dataset of yacht hydrodynamics data from a CSV file", groups="createDatasetYacht")
+    public void testCreateDatasetYachtHydrodynamics() throws MLHttpClientException, IOException {
+        response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_YACHT,
+                "1.0", MLIntegrationTestConstants.YACHT_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
 
     /**
-     * Creates a test case for creating a project for Forest fires data set
+     * Creates a test case for creating a project for Yacht hydrodynamics data set
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(description = "Create a project for forest fires dataset",
-            groups="createProjectForestFires", dependsOnGroups="createDatasetForestFires")
-    public void testCreateProjectForestFires() throws MLHttpClientException, IOException {
-        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES,
-                MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES);
+    @Test(description = "Create a project for yacht hydrodynamics dataset", groups="createProjectYacht",
+            dependsOnGroups="createDatasetYacht")
+    public void testCreateProjectYachtHydrodynamics() throws MLHttpClientException, IOException {
+        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_YACHT,
+                MLIntegrationTestConstants.DATASET_NAME_YACHT);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
@@ -95,8 +88,8 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
      * @throws MLHttpClientException
      * @throws JSONException
      */
-    private void testPredictForestFires() throws MLHttpClientException, JSONException {
-        String payload = "[[8,6,2,5,91.7,33.3,77.5,9,8.3,97,4,0.2],[7,5,8,6,92.5,88,698.6,7.1,22.8,40,4,0]]";
+    private void testPredictYacht() throws MLHttpClientException, JSONException {
+        String payload = "[[-2.3,0.568,4.78,3.99,3.17,0.125],[-2.3,0.568,4.78,3.99,3.17,0.300]]";
         response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
@@ -117,16 +110,16 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
     private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType) throws MLHttpClientException,
             IOException, JSONException, InterruptedException {
         modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
-                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_FOREST_FIRES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES),
-                MLIntegrationTestConstants.DATASET_ID_FOREST_FIRES, mlHttpclient);
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_YACHT, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_YACHT),
+                MLIntegrationTestConstants.DATASET_ID_YACHT, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
         // Waiting for model building to end
-        Thread.sleep(MLIntegrationTestConstants.THREAD_SLEEP_TIME);
+        Thread.sleep(MLIntegrationTestConstants.THREAD_SLEEP_TIME_MEDIUM);
         // Checks whether model building completed successfully is true
         assertEquals("Model building did not complete successfully", true, MLTestUtils.checkModelStatus(modelName, mlHttpclient));
     }
@@ -138,18 +131,18 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a linear regression model and predict for forest fires dataset",
-            groups="createLinearRegressionModelForestFires", dependsOnGroups="createProjectForestFires")
+    @Test(description = "Build a linear regression model and predict for yacht dataset",
+            groups="createLinearRegressionModelYacht", dependsOnGroups="createProjectYacht")
     public void testBuildLinearRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         // Check whether the project is created otherwise skipped
         response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_FOREST_FIRES);
+                .PROJECT_NAME_YACHT);
         if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
             throw new SkipException("Skipping tests because a project is not available");
         }
         buildModelWithLearningAlgorithm("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Linear Regression model
-        testPredictForestFires();
+        testPredictYacht();
     }
 
     /**
@@ -159,12 +152,12 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a ridge regression model and predict for forest fires dataset",
-            groups="createRidgeRegressionModelForestFires", dependsOnGroups="createLinearRegressionModelForestFires")
+    @Test(description = "Build a ridge regression model and predict for yacht dataset",
+            groups="createRidgeRegressionModelYacht", dependsOnGroups="createLinearRegressionModelYacht")
     public void testBuildRidgeRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Ridge Regression model
-        testPredictForestFires();
+        testPredictYacht();
     }
 
     /**
@@ -174,17 +167,17 @@ public class Dataset3ForestFiresTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Lasso regression model and predict for forest fires dataset",
-            groups="createLassoRegressionModelForestFires", dependsOnGroups="createRidgeRegressionModelForestFires")
+    @Test(description = "Build a Lasso regression model and predict for yacht dataset",
+            groups="createLassoRegressionModelYacht", dependsOnGroups="createRidgeRegressionModelYacht")
     public void testBuildLassoRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
+         buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Lasso Regression model
-        testPredictForestFires();
+        testPredictYacht();
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
-        mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES);
-        mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_FOREST_FIRES);
+        mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_YACHT);
+        mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_YACHT);
     }
 }

@@ -47,7 +47,9 @@ public class MLIntegrationTestConstants {
 	public static final String ALGORITHM_TYPE = "algorithmType";
 
 	// The time constant
-    public static final long THREAD_SLEEP_TIME = 7500;
+    public static final long THREAD_SLEEP_TIME_SMALL = 4000;
+    public static final long THREAD_SLEEP_TIME_MEDIUM = 7500;
+    public static final long THREAD_SLEEP_TIME_LARGE = 15000;
 
 	// Constants for Test cases
 	public static final String CLASSIFICATION = "Classification";
@@ -63,14 +65,13 @@ public class MLIntegrationTestConstants {
     public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = "data/gammaTelescope.csv";
 
     // Datasets with missing values and categorical features
-	public static final String AZURE_STREAMING_DATASET_SAMPLE = "data/azure-stream-analytics_entry.csv";
-    public static final String TITANIC_DATASET_SAMPLE = "data/titanic.csv";
     public static final String AUTOMOBILE_DATASET_SAMPLE = "data/automobile.csv";
+	public static final String AZURE_STREAMING_DATASET_SAMPLE = "data/azure-stream-analytics_entry.csv";
 
 	public static final String DATASET_NAME_DIABETES = "Diabetes";
 	public static final int DATASET_ID_DIABETES = 1;
 
-	// Number the datasets in lexicographical order starting from number 2 (number 1 reserved for Diabetes dataset)
+	// Number the datasets starting from number 2 (number 1 reserved for Diabetes dataset)
 	public static final String DATASET_NAME_YACHT = "Yacht_Hydrodynamics";
 	public static int DATASET_ID_YACHT = 2;
 	public static final String DATASET_NAME_BREAST_CANCER = "Breast_Cancer";
@@ -79,12 +80,10 @@ public class MLIntegrationTestConstants {
 	public static int DATASET_ID_FOREST_FIRES = 4;
     public static final String DATASET_NAME_GAMMA_TELESCOPE = "Gamma_Telescope";
     public static int DATASET_ID_GAMMA_TELESCOPE = 5;
-    public static final String DATASET_NAME_AZURE_STREAMING = "Azure_Streaming";
-    public static int DATASET_ID_AZURE_STREAMING = 6;
-    public static final String DATASET_NAME_TITANIC = "Titanic";
-    public static int DATASET_ID_TITANIC = 7;
     public static final String DATASET_NAME_AUTOMOBILE = "Automobile";
-    public static int DATASET_ID_AUTOMOBILE = 8;
+    public static int DATASET_ID_AUTOMOBILE = 6;
+    public static final String DATASET_NAME_AZURE_STREAMING = "Azure_Streaming";
+    public static int DATASET_ID_AZURE_STREAMING = 7;
 
 	public static final int VERSIONSET_ID = 1;
 
@@ -94,7 +93,8 @@ public class MLIntegrationTestConstants {
 	public static final String RESPONSE_ATTRIBUTE_BREAST_CANCER = "Class";
 	public static final String RESPONSE_ATTRIBUTE_FOREST_FIRES = "area";
     public static final String RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE = "class";
-    public static final String RESPONSE_ATTRIBUTE_TITANIC = "Survived";
+	public static final String RESPONSE_ATTRIBUTE_AUTOMOBILE = "price";
+    public static final String RESPONSE_ATTRIBUTE_AZURE_STREAMING = "price";
 
     // Projects
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
@@ -104,9 +104,8 @@ public class MLIntegrationTestConstants {
 	public static final String PROJECT_NAME_BREAST_CANCER = "Breast_Cancer_Project";
 	public static final String PROJECT_NAME_FOREST_FIRES = "Forest_Fires_Project";
     public static final String PROJECT_NAME_GAMMA_TELESCOPE = "Gamma_Telescope_Project";
-    public static final String PROJECT_NAME_AZURE_STREAMING = "Azure_Streaming_Project";
-    public static final String PROJECT_NAME_TITANIC = "Titanic_Project";
     public static final String PROJECT_NAME_AUTOMOBILE = "Automobile_Project";
+    public static final String PROJECT_NAME_AZURE_STREAMING = "Azure_Streaming_Project";
 
     // Default analysis
 	public static final String ANALYSIS_NAME = "Dummy_Analysis";
@@ -126,9 +125,8 @@ public class MLIntegrationTestConstants {
     // Rename the dataset to "digitRecognition.csv"
     public static final String DIGIT_RECOGNITION_DATASET_SAMPLE = "data/digitRecognition.csv";
     public static final String DATASET_NAME_DIGITS = "Digit_Recognition";
-    public static final int DATASET_ID_DIGITS = 9;
+    public static final int DATASET_ID_DIGITS = 8;
     public static final String PROJECT_NAME_DIGITS = "Digit_recognition_Project";
-    public static final int PROJECT_ID_DIGITS = 9;
 	public static final String RESPONSE_ATTRIBUTE_DIGITS = "label";
 
 }
