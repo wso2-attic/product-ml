@@ -151,7 +151,7 @@ public abstract class MLBaseTest {
      * 
      * @return  Absolute path of the model storage directory
      */
-    protected String getModelStorageDirectory() {
+    protected static String getModelStorageDirectory() {
         File modelFileStorage = new File(MLIntegrationTestConstants.FILE_STORAGE_LOCATION);
         if (!modelFileStorage.exists() || !modelFileStorage.isDirectory() ) {
             modelFileStorage.mkdirs();

@@ -97,7 +97,7 @@ public class CreateProjectsTestCase extends MLBaseTest {
     }
     
     /**
-     * Test creating a project without the project name.
+     * Test creating a project without the dataset name.
      * @throws MLHttpClientException 
      * @throws IOException
      */
