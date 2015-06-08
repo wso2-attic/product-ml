@@ -78,7 +78,6 @@
         <li><div class="nav-wedge"></div><a href="#" data-toggle="tab"><span class="nav-wedge-step">Step 4</span>Parameters</a><div class="nav-arrow"></div></li>
     </ul-->
 
-
             </div>
         </div>
         <div class="row">
@@ -89,6 +88,26 @@
 
                     <div id="notification-area"></div>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
+
+                    <!-- delete project popup -->
+                    <div class="popup-content" data-operation="delete-project">
+                        <div class="content">Are you sure you want to delete this project?</div>
+                        <div class="buttons">
+                            <a id="delete-project-yes" href="#" class="btn-opr-default">Yes</a>
+                            <a id="delete-project-no" href="#" class="btn-opr-cancel">No</a>
+                        </div>
+                    </div>
+                    <!-- /delete project popup -->
+
+                    <!-- delete analysis popup -->
+                    <div class="popup-content" data-operation="delete-analysis">
+                        <div class="content">Are you sure you want to delete this analysis?</div>
+                        <div class="buttons">
+                            <a id="delete-analysis-yes" href="#" class="btn-opr-default">Yes</a>
+                            <a id="delete-analysis-no" href="#" class="btn-opr-cancel">No</a>
+                        </div>
+                    </div>
+                    <!-- /delete analysis popup -->                                
 
                 </div>
                 <!-- /content -->
@@ -115,13 +134,24 @@
     </div>
 </div>  
 
+<!-- modal popup template -->
+<div class="wr-modalpopup">
+    <div class="modalpopup-content"><!-- dynamic content --></div>
+    <div class="modalpopup-bg"></div>
+</div>
+<!-- /modal popup template -->
+
 <script src="../../js/jquery-1.11.1.min.js"></script>
 <script src="../../js/wso2.ml.util.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/operationsmenu.js"></script>
 
 <script type="text/javascript">
 
     var serverUrl = window.location.origin;
+    var deleteProjectName;
+    var deleteAnalysisId;
+    var deleteNotificationArea;
 
     $(document).ready(function() {
 
@@ -144,6 +174,52 @@
         loadProjects();
 
         /********** event binding **********/
+
+        // events to delete a project
+        $(document).on('click', '#delete-project', function(e){ 
+            e.preventDefault();
+            
+            deleteProjectName = $(this).data('projna');
+            operationSelect('delete-project');
+        });
+        $(document).on('click', '#delete-project-yes', function(e){ 
+            e.preventDefault();
+
+            deleteProject(deleteProjectName);
+            deleteProjectName = null;
+            hidePopup();
+        });
+        $(document).on('click', '#delete-project-no', function(e){ 
+            e.preventDefault();
+
+            deleteProjectName = null;
+            hidePopup();
+        });
+
+        // events to delete an analysis
+        $(document).on('click', '#delete-analysis', function(e){ 
+            e.preventDefault();
+            
+            deleteAnalysisId = $(this).data('workflowid');
+            // get inline notification area element
+            deleteNotificationArea = $(this).parents().find('#inline-list-notification-area');
+            operationSelect('delete-analysis');
+        });
+        $(document).on('click', '#delete-analysis-yes', function(e){ 
+            e.preventDefault();
+
+            deleteAnalysis(deleteAnalysisId, deleteNotificationArea);
+            deleteAnalysisId = null;
+            deleteNotificationArea = null;
+            hidePopup();
+        });
+        $(document).on('click', '#delete-analysis-no', function(e){ 
+            e.preventDefault();
+
+            deleteAnalysisId = null;
+            deleteNotificationArea = null;
+            hidePopup();
+        });      
 
         // creates an analysis
         $(document).on('click', '#create-analysis', function(e){
@@ -239,30 +315,6 @@
             window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&analysisName='+analysisName+'&projectName='+projectName+'&datasetId='+datasetId;
         });        
 
-        // deletes an analysis
-        $(document).on('click', '#delete-analysis', function(e){ 
-            e.preventDefault();
-            var workflowId = $(this).data('workflowid');
-            // get inline notification area element
-            var notificationArea = $(this).parents().find('#inline-list-notification-area');            
-            
-            $.ajax({
-                type: 'DELETE',
-                url: serverUrl+"/api/analyses/"+workflowId,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
-                success: function(res){
-                    $('#accordion').empty();
-                    loadProjects();
-                },
-                error: function(res){
-                    var errorText = 'Error occurred while deleting analysis. ' + res.status + ' ' + res.statusText;
-                    handleNotification(errorText, notificationArea, 'warning');
-                }
-            });
-        });
-
         // compares models
         $(document).on('click', '#compare-models', function(e){ 
             e.preventDefault();
@@ -271,28 +323,6 @@
             var dataseId = $(this).data('dataseid');            
 
             window.location.href = 'compare.jag?projectId='+projectId+'&projectName='+projectName+'&dataseId='+dataseId;
-        });
-
-        // deletes a project
-        $(document).on('click', '#delete-project', function(e){ 
-            e.preventDefault();
-            var projectName = $(this).data('projna');
-            
-            $.ajax({
-                type: "DELETE",
-                url: serverUrl+"/api/projects/"+projectName,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
-                success : function(res){
-                    $('#accordion').empty();
-                    loadProjects();
-                },
-                error : function(res){
-                    var errorText = 'Error occurred while deleting project. ' + res.status + ' ' + res.statusText;
-                    handleNotification(errorText, '#notification-area', 'warning');
-                }
-            });
         });
 
         /********** event binding **********/
@@ -311,7 +341,6 @@
             '<tr>' +
                 '<td class="c-padd project-description" valign="top">' + description + '</td>' +
                 '<td>' +
-                //buildNortifications() +
                 buildNewAnalysisUx(projectId, projectName, datasetId) +
                 '</td>' +
             '</tr>' +
@@ -319,14 +348,6 @@
         return display;
     }
     
-    function buildNortifications(message){
-        var builtErrors = 
-        '<div class="ctrl-validation-panel col-md-12 col-centered">' +
-        '<p>' + message + '</p>'
-        '</div>';
-        return builtErrors;
-    }     
-
     function buildNewAnalysisUx(projectId, projectName, datasetId) {
         var analysis = 
             '<div class="wr-analysis">' +
@@ -495,6 +516,48 @@
         }
         return classAppend;
     }
+
+    // deletes a project
+    function deleteProject(projectName) {
+        if(projectName) {
+            $.ajax({
+                type: "DELETE",
+                url: serverUrl+"/api/projects/"+projectName,
+                /*beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
+                },*/
+                success : function(res){
+                    $('#accordion').empty();
+                    loadProjects();
+                },
+                error : function(res){
+                    var errorText = 'Error occurred while deleting project. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, '#notification-area', 'warning');
+                }
+            });
+        }
+    }
+
+    // deletes an analysis
+    function deleteAnalysis(analysisId, notificationArea) {
+        if(analysisId) {
+            $.ajax({
+                type: 'DELETE',
+                url: serverUrl+"/api/analyses/"+analysisId,
+                /*beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
+                },*/
+                success: function(res){
+                    $('#accordion').empty();
+                    loadProjects();
+                },
+                error: function(res){
+                    var errorText = 'Error occurred while deleting analysis. ' + res.status + ' ' + res.statusText;
+                    handleNotification(errorText, notificationArea, 'warning');
+                }
+            });
+        }    
+    }    
 
 </script>
 
