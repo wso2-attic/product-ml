@@ -58,7 +58,7 @@
 
             <div class="wr-action-btn-bar">
                 <a href="../project/projects.jag" class="cu-btn btn-prev">Back</a>
-                <a href="#" id="btn-refresh" class="cu-btn btn-refresh">Refresh Page</a>
+                <a href="#" id="btn-refresh" class="cu-btn btn-refresh">Refresh</a>
             </div>            
         </div>
 
@@ -93,6 +93,20 @@
 
                     <div id="notification-area"></div>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
+                    
+                    <div class="col-md-12 text-center">
+                        <ul id="pagination-list" class="pagination"></ul>
+                    </div>
+
+                    <!-- delete model popup -->
+                    <div class="popup-content" data-operation="delete-model">
+                        <div class="content">Are you sure you want to delete this model?</div>
+                        <div class="buttons">
+                            <a id="delete-model-yes" href="#" class="btn-opr-default">Yes</a>
+                            <a id="delete-model-no" href="#" class="btn-opr-cancel">No</a>
+                        </div>
+                    </div>
+                    <!-- /delete model popup -->                    
 
                 </div>
                 <!-- /content -->
@@ -103,10 +117,6 @@
         <!-- /content/body -->
 
     </div>
-
-
-
-
 
     <!--footer class="footer">
     <p>&copy; 2014 WSO2 Inc. All Rights Reserved</p>
@@ -119,9 +129,17 @@
     </div>
 </div> 
 
+<!-- modal popup template -->
+<div class="wr-modalpopup">
+    <div class="modalpopup-content"><!-- dynamic content --></div>
+    <div class="modalpopup-bg"></div>
+</div>
+<!-- /modal popup template -->
+
 <script src="../../js/jquery-1.11.1.min.js"></script>
 <script src="../../js/wso2.ml.util.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/operationsmenu.js"></script>
 
 <script type="text/javascript">
 
@@ -131,6 +149,7 @@
     var analysisName = getParameterByName('analysisName');
     var analysisId = getParameterByName('analysisId');
     var datasetId = getParameterByName('datasetId');
+    var deleteModelId;
 
     $(document).ready(function() {
 
@@ -154,6 +173,29 @@
         $('#nav-analysis').text(" \\ "+analysisName);
 
         loadModels();
+        // add pagination
+        $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});
+        
+        // events to delete a project
+        $(document).on('click', '#delete-model', function(e){ 
+            e.preventDefault();
+            
+            deleteModelId = $(this).data('modelid');            
+            operationSelect('delete-model');
+        });
+        $(document).on('click', '#delete-model-yes', function(e){ 
+            e.preventDefault();
+
+            deleteModel(deleteModelId);
+            deleteModelId = null;
+            hidePopup();
+        });
+        $(document).on('click', '#delete-model-no', function(e){ 
+            e.preventDefault();
+
+            deleteModelId = null;
+            hidePopup();
+        });
     });
     
     function loadModels() {
@@ -162,6 +204,7 @@
         $.ajax({
             type: "GET",
             url: serverUrl+"/api/analyses/"+analysisId+"/models",
+            async : false,
             /*beforeSend : function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
             },*/
@@ -227,7 +270,7 @@
                             '</div>';
                             $("#accordion").append(accordionPanel);
                     };
-                }                
+                }
             },
             error: function(res) {
                 var errorText = 'Error occurred while retrieving analysis models. ' + res.status + ' ' + res.statusText;
@@ -235,7 +278,7 @@
             }
         });
 
-        bindEvents();            
+        bindEvents();
     }
     // function to append button disabled CSS class when model building is not complete
     function appendClass(modelStatus) {
@@ -334,11 +377,10 @@
             window.location.href = '../model/model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName+"&fromAnalysis=true"
                                     +'&algorithmName='+algorithmName+'&algorithmType='+algorithmType;
         });
+    }
 
-        $(document).on('click', '#delete-model', function(e){ 
-            e.preventDefault();
-            var modelId = $(this).data('modelid');
-            
+    function deleteModel(modelId) {
+        if(modelId) {
             $.ajax({
                 type: "DELETE",
                 url: serverUrl+"/api/models/"+modelId,
@@ -348,15 +390,133 @@
                 success : function(res){
                     $('#accordion').empty();
                     loadModels();
+                    // add pagination
+                    $('#pagination-list').empty();
+                    $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});                
                 },
                 error : function(res){
                     var errorText = 'Error occurred while deleting model. ' + res.status + ' ' + res.statusText;
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
-            });
+            });        
+        }      
+    }
+
+    /* pagination plugin */
+    $.fn.pageMe = function(opts){
+        var $this = this,
+            defaults = {
+                perPage: 7,
+                showPrevNext: false,
+                numbersPerPage: 1,
+                hidePageNumbers: false
+            },
+            settings = $.extend(defaults, opts);
+        
+        var listElement = $this;
+        var perPage = settings.perPage; 
+        var children = listElement.children();
+        var pager = $('.pagination');
+        
+        if (typeof settings.childSelector!="undefined") {
+            children = listElement.find(settings.childSelector);
+        }
+        
+        if (typeof settings.pagerSelector!="undefined") {
+            pager = $(settings.pagerSelector);
+        }
+        
+        var numItems = children.size();
+        var numPages = Math.ceil(numItems/perPage);
+
+        var curr = 0;
+        pager.data("curr",curr);
+        
+        if (settings.showPrevNext){
+            $('<li><a href="#" class="prev_link">«</a></li>').appendTo(pager);
+        }
+        
+        while(numPages > curr && (settings.hidePageNumbers==false)){
+            $('<li><a href="#" class="page_link">'+(curr+1)+'</a></li>').appendTo(pager);
+            curr++;
+        }
+      
+        if (settings.numbersPerPage>1) {
+           $('.page_link').hide();
+           $('.page_link').slice(pager.data("curr"), settings.numbersPerPage).show();
+        }
+        
+        if (settings.showPrevNext){
+            $('<li><a href="#" class="next_link">»</a></li>').appendTo(pager);
+        }
+        
+        pager.find('.page_link:first').addClass('active');
+        pager.find('.prev_link').hide();
+        if (numPages<=1) {
+            pager.find('.next_link').hide();
+        }
+        pager.children().eq(0).addClass("active");
+        
+        children.hide();
+        children.slice(0, perPage).show();
+        
+        pager.find('li .page_link').click(function(){
+            var clickedPage = $(this).html().valueOf()-1;
+            goTo(clickedPage,perPage);
+            return false;
+        });
+        pager.find('li .prev_link').click(function(){
+            previous();
+            return false;
+        });
+        pager.find('li .next_link').click(function(){
+            next();
+            return false;
         });
 
-    }        
+        function previous(){
+            var goToPage = parseInt(pager.data("curr")) - 1;
+            goTo(goToPage);
+        }
+         
+        function next(){
+            goToPage = parseInt(pager.data("curr")) + 1;
+            goTo(goToPage);
+        }
+        
+        function goTo(page){
+            var startAt = page * perPage,
+                endOn = startAt + perPage;
+            
+            children.css('display','none').slice(startAt, endOn).show();
+            
+            if (page>=1) {
+                pager.find('.prev_link').show();
+            }
+            else {
+                pager.find('.prev_link').hide();
+            }
+            
+            if (page<(numPages-1)) {
+                pager.find('.next_link').show();
+            }
+            else {
+                pager.find('.next_link').hide();
+            }
+            
+            pager.data("curr",page);
+           
+            if (settings.numbersPerPage>1) {
+                $('.page_link').hide();
+                $('.page_link').slice(page, settings.numbersPerPage+page).show();
+            }
+          
+            pager.children().removeClass("active");
+            pager.children().eq(page+1).addClass("active");
+        
+        }
+    };
+    /* end plugin */    
 
 </script>
 
