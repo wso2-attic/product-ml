@@ -20,7 +20,6 @@ package org.wso2.carbon.ml.lifecycle.test;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONException;
-import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -32,6 +31,7 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
 
 import javax.ws.rs.core.Response;
+
 import java.io.IOException;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -39,99 +39,70 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * This class contains the entire ML life-cycle for Automobile dataset
  */
-@Test(groups="AutomobileDataset")
+@Test(groups = "AutomobileDataset")
 public class Dataset6AutomobileTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
     private static int modelId;
     private CloseableHttpResponse response;
-    private int datasetId;
+    private int versionSetId;
+    private int projectId;
 
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLIntegrationBaseTestException {
+    public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException, IOException, JSONException {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
-    }
-
-    /**
-     * Creates dataset for Numerical Prediction - Automobile
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a dataset of automobile data from a CSV file", groups="createDatasetAutomobile")
-    public void testCreateDatasetAutomobile() throws MLHttpClientException, IOException, JSONException {
-        response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE,
-                "1.0", MLIntegrationTestConstants.AUTOMOBILE_DATASET_SAMPLE);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        datasetId = MLTestUtils.getId(response);
-        response.close();
-    }
-
-    /**
-     * Creates a test case for creating a project for Automobile data set
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a project for automobile dataset",
-            groups="createProjectAutomobile", dependsOnGroups="createDatasetAutomobile")
-    public void testCreateProjectAutomobile() throws MLHttpClientException, IOException {
-        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE,
+        mlHttpclient = getMLHttpClient();
+        String version = "1.0";
+        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE, version,
+                MLIntegrationTestConstants.AUTOMOBILE_DATASET_SAMPLE);
+        versionSetId = getVersionSetId(datasetId, version);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE,
                 MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
     }
 
     /**
      * A test case for building a model with the given learning algorithm
-     * @param algorithmName             Name of the learning algorithm
-     * @param algorithmType             Type of the learning algorithm
+     * 
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType) throws MLHttpClientException,
-            IOException, JSONException, InterruptedException {
-        modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
-                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_AUTOMOBILE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE),
-                datasetId, mlHttpclient);
+    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_AUTOMOBILE,
+                MLIntegrationTestConstants.TRAIN_DATA_FRACTION, projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
         // Waiting for model building to end
-        Thread.sleep(MLIntegrationTestConstants.THREAD_SLEEP_TIME_MEDIUM);
-        // Checks whether model building completed successfully is true
-        assertEquals("Model building did not complete successfully", true, MLTestUtils.checkModelStatus(modelName, mlHttpclient));
+        boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
+                MLIntegrationTestConstants.THREAD_SLEEP_TIME_MEDIUM, 1000);
+        // Checks whether model building completed successfully
+        assertEquals("Model building did not complete successfully", true, status);
     }
 
-     /**
+    /**
      * Creates a test case for creating an analysis, building a K-Means clustering model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a K-means model",
-            groups="createKMeansAutomobile", dependsOnGroups="createProjectAutomobile")
+    @Test(description = "Build a K-means model", groups = "createKMeansAutomobile")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        // Check whether the project is created otherwise skip
-        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_AUTOMOBILE);
-        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because a project is not available");
-        }
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
-        mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE);
-        mlHttpclient.doHttpDelete("/api/datasets/" + datasetId);
+        super.destroy();
     }
 }

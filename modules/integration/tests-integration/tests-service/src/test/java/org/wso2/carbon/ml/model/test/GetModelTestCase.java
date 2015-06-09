@@ -29,6 +29,7 @@ import javax.ws.rs.core.Response;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
@@ -44,11 +45,25 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTe
 public class GetModelTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
+    private int projectId;
+    private int analysisId;
+    private int versionSetId;
+    private int modelId;
+    private String modelName;
     
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLHttpClientException, MLIntegrationBaseTestException {
+    public void initTest() throws Exception {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
+        mlHttpclient = getMLHttpClient();
+        String version = "1.0";
+        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, version,
+                MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
+        versionSetId = getVersionSetId(datasetId, version);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
+                MLIntegrationTestConstants.DATASET_NAME_DIABETES);
+        analysisId = createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME, projectId);
+        modelName = createModel(analysisId, versionSetId);
+        modelId = getModelId(modelName);
     }
 
     /**
@@ -58,7 +73,7 @@ public class GetModelTestCase extends MLBaseTest {
      */
     @Test(description = "retrieve a model")
     public void testGetModel() throws MLHttpClientException, IOException, JSONException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + MLIntegrationTestConstants.MODEL_NAME);
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
@@ -66,6 +81,11 @@ public class GetModelTestCase extends MLBaseTest {
         bufferedReader.close();
         response.close();
         //Check whether the correct model is retrieved
-        assertEquals("Incorrect model retrieved.", MLIntegrationTestConstants.MODEL_ID,responseJson.getInt("id"));
+        assertEquals("Incorrect model retrieved.", modelId,responseJson.getInt("id"));
+    }
+    
+    @AfterClass(alwaysRun = true)
+    public void tearDown() throws MLHttpClientException {
+        super.destroy();
     }
 }

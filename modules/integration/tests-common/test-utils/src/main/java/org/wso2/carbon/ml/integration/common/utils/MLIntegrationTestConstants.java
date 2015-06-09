@@ -102,7 +102,7 @@ public class MLIntegrationTestConstants {
 
     // Default analysis
 	public static final String ANALYSIS_NAME = "Dummy_Analysis";
-	public static final int ANALYSIS_ID = 1;
+	public static final String ANALYSIS_NAME_2 = "Dummy_Analysis_2";
 
     // Default model
 	public static String MODEL_NAME;

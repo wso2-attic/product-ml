@@ -59,6 +59,39 @@ public class MLTestUtils extends MLBaseTest {
         int id = responseJson.getInt("id");
         return id;
     }
+    
+    /**
+     * 
+     * @param modelName
+     * @param mlHttpclient
+     * @param timeout - max time to check the status
+     * @param frequency - time interval
+     * @return
+     * @throws MLHttpClientException
+     * @throws JSONException
+     * @throws IOException
+     */
+    public static boolean checkModelStatus(String modelName, MLHttpClient mlHttpclient, long timeout, int frequency)
+            throws MLHttpClientException, JSONException, IOException {
+        boolean status = false;
+        int totalTime = 0;
+        while (!status && timeout >= totalTime) {
+            CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            JSONObject responseJson = new JSONObject(bufferedReader.readLine());
+            bufferedReader.close();
+            response.close();
+
+            // Checks whether status is equal to Complete.
+            status = responseJson.getString("status").equals("Complete");
+            try {
+                Thread.sleep(frequency);
+            } catch (InterruptedException ignore) {}
+            
+            totalTime += frequency;
+        }
+        return status;
+    }
 
     /**
      *
@@ -88,16 +121,16 @@ public class MLTestUtils extends MLBaseTest {
      * @param response          Response attribute
      * @param trainDataFraction Fraction of data from the dataset to be trained with
      * @param projectID         ID of the project
-     * @param datasetID     Additional information about the name
+     * @param versionSetId     Additional information about the name
      * @throws MLHttpClientException
      */
     public static String setConfiguration(String algorithmName, String algorithmType, String response,
-                                  String trainDataFraction, int projectID, int datasetID, MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
-        analysisName = algorithmName + datasetID;
+                                  String trainDataFraction, int projectID, int versionSetId, MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
+        analysisName = algorithmName + versionSetId;
 
         //Create an analysis
         mlHttpclient.createAnalysis(analysisName, projectID);
-        analysisId = mlHttpclient.getAnalysisId(analysisName);
+        analysisId = mlHttpclient.getAnalysisId(projectID, analysisName);
         mlHttpclient.setFeatureDefaults(analysisId);
 
         //Set Model Configurations
@@ -112,7 +145,7 @@ public class MLTestUtils extends MLBaseTest {
         mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
 
         // Create a model
-        CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, mlHttpclient.getAVersionSetIdOfDataset(datasetID));
+        CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, versionSetId);
         modelName = mlHttpclient.getModelName(httpResponse);
         modelId = mlHttpclient.getModelId(modelName);
 

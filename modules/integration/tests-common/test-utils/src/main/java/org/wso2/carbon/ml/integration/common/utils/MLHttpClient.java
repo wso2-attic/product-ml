@@ -343,10 +343,10 @@ public class MLHttpClient {
      * @return              ID of the analysis
      * @throws              MLHttpClientException 
      */
-    public int getAnalysisId(String analysisName) throws MLHttpClientException {
+    public int getAnalysisId(int projectId, String analysisName) throws MLHttpClientException {
         CloseableHttpResponse response;
         try {
-            response = doHttpGet("/api/analyses/" + analysisName);
+            response = doHttpGet("/api/projects/"+projectId+"/analyses/" + analysisName);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
@@ -374,6 +374,29 @@ public class MLHttpClient {
             JSONArray responseJson = new JSONArray(bufferedReader.readLine());
             JSONObject datsetVersionJson = (JSONObject) responseJson.get(0);
             return datsetVersionJson.getInt("id");
+        } catch (Exception e) {
+            throw new MLHttpClientException("Failed to get a version set ID of dataset: " + datasetId, e);
+        }
+    }
+    
+    /**
+     * Get the ID of the version set with the given version and of a given dataset
+     * 
+     * @param datasetId ID of the dataset
+     * @return          ID of the first versionset of the dataset
+     * @throws          ClientProtocolException
+     * @throws          MLHttpClientException 
+     */
+    public int getVersionSetIdOfDataset(int datasetId, String version) throws MLHttpClientException {
+        CloseableHttpResponse response;
+        try {
+            response = doHttpGet("/api/datasets/" + datasetId + "/versions/"+version);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String line = bufferedReader.readLine();
+            JSONObject responseJson = new JSONObject(line);
+            bufferedReader.close();
+            response.close();
+            return responseJson.getInt("id");
         } catch (Exception e) {
             throw new MLHttpClientException("Failed to get a version set ID of dataset: " + datasetId, e);
         }

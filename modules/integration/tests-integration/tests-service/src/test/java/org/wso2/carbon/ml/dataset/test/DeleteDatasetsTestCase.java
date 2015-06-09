@@ -16,66 +16,65 @@
  * under the License.
  */
 
-package org.wso2.carbon.ml.project.test;
+package org.wso2.carbon.ml.dataset.test;
 
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.IOException;
-
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.json.JSONException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
-import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
 
 /**
- * Contains test cases related to deleting projects
+ * Contains test cases related to deletion of datasets
  */
-@Test(groups="deleteProjects", dependsOnGroups="createProjects")
-public class DeleteProjectsTestCase extends MLBaseTest {
-    
-    private MLHttpClient mlHttpclient;
-    private static final String projectName = "TestProjectForDeleteProjectTestcase";
+@Test(groups="deleteDatasets", dependsOnGroups="getDatasets")
+public class DeleteDatasetsTestCase extends MLBaseTest {
 
+    private MLHttpClient mlHttpclient;
+    
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLHttpClientException, MLIntegrationBaseTestException {
+    public void initTest() throws Exception {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
-        //Check whether the dataset exists.
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_DIABETES);
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusLine().getStatusCode());
-        // Create a project to delete
-        mlHttpclient.createProject(projectName, MLIntegrationTestConstants.DATASET_NAME_DIABETES);
+        mlHttpclient = getMLHttpClient();
     }
     
     /**
-     * Test deleting a project.
      * @throws MLHttpClientException 
      * @throws IOException 
      */
-    @Test(description = "Delete an exsisting project")
-    public void testDeleteProject() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/projects/" + projectName);
+    @Test(description = "Delete a dataset with a known ID")
+    public void testDeleteVersionSet() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/datasets/versions/" + MLIntegrationTestConstants
+                    .VERSIONSET_ID);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+                    .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Delete a dataset with a known ID")
+    public void testDeleteDataset() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants
+                    .DATASET_ID_DIABETES);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
         response.close();
     }
     
-    /**
-     * Test deleting a non-existing project.
-     * @throws MLHttpClientException 
-     * @throws IOException 
-     */
-    @Test(description = "Delete an exsisting project")
-    public void testDeleteNonExistingProject() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/projects/" + "NonExistingProjectName");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
+    @AfterClass(alwaysRun = true)
+    public void tearDown() throws MLHttpClientException {
+        super.destroy();
     }
 }

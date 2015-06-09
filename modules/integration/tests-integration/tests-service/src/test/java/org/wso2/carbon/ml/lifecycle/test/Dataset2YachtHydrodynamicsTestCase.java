@@ -40,53 +40,31 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * This class contains the entire ML life-cycle for Yacht hydrodynamics dataset
  */
-@Test(groups="yatchDataset")
+@Test(groups = "yatchDataset")
 public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
     private static int modelId;
     private CloseableHttpResponse response;
-    private int datasetId;
+    private int versionSetId;
+    private int projectId;
 
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLIntegrationBaseTestException {
+    public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException, IOException, JSONException {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
-    }
-
-    /**
-     * Creates dataset for numerical prediction tests - Yacht hydrodynamics
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a dataset of yacht hydrodynamics data from a CSV file", groups="createDatasetYacht")
-    public void testCreateDatasetYachtHydrodynamics() throws MLHttpClientException, IOException, JSONException {
-        response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_YACHT,
-                "1.0", MLIntegrationTestConstants.YACHT_DATASET_SAMPLE);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        datasetId = MLTestUtils.getId(response);
-        response.close();
-    }
-
-    /**
-     * Creates a test case for creating a project for Yacht hydrodynamics data set
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a project for yacht hydrodynamics dataset", groups="createProjectYacht",
-            dependsOnGroups="createDatasetYacht")
-    public void testCreateProjectYachtHydrodynamics() throws MLHttpClientException, IOException {
-        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_YACHT,
+        mlHttpclient = getMLHttpClient();
+        String version = "1.0";
+        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_YACHT, version,
+                MLIntegrationTestConstants.YACHT_DATASET_SAMPLE);
+        versionSetId = getVersionSetId(datasetId, version);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_YACHT,
                 MLIntegrationTestConstants.DATASET_NAME_YACHT);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
     }
 
     /**
      * A test case for predicting for a given set of data points
+     * 
      * @throws MLHttpClientException
      * @throws JSONException
      */
@@ -102,84 +80,84 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
 
     /**
      * A test case for building a model with the given learning algorithm
-     * @param algorithmName             Name of the learning algorithm
-     * @param algorithmType             Type of the learning algorithm
+     * 
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType) throws MLHttpClientException,
-            IOException, JSONException, InterruptedException {
-        modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
+    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_YACHT, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_YACHT),
-                datasetId, mlHttpclient);
+                projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
         // Waiting for model building to end
-        Thread.sleep(MLIntegrationTestConstants.THREAD_SLEEP_TIME_MEDIUM);
-        // Checks whether model building completed successfully is true
-        assertEquals("Model building did not complete successfully", true, MLTestUtils.checkModelStatus(modelName, mlHttpclient));
+        boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
+                MLIntegrationTestConstants.THREAD_SLEEP_TIME_MEDIUM, 1000);
+        // Checks whether model building completed successfully
+        assertEquals("Model building did not complete successfully", true, status);
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Linear Regression model and predicting using the built model
+     * Creates a test case for creating an analysis, building a Linear Regression model and predicting using the built
+     * model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a linear regression model and predict for yacht dataset",
-            groups="createLinearRegressionModelYacht", dependsOnGroups="createProjectYacht")
-    public void testBuildLinearRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        // Check whether the project is created otherwise skipped
-        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_YACHT);
-        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because a project is not available");
-        }
+    @Test(description = "Build a linear regression model and predict for yacht dataset", groups = "createLinearRegressionModelYacht")
+    public void testBuildLinearRegressionModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
         buildModelWithLearningAlgorithm("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Linear Regression model
         testPredictYacht();
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Ridge Regression model and predicting using the built model
+     * Creates a test case for creating an analysis, building a Ridge Regression model and predicting using the built
+     * model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a ridge regression model and predict for yacht dataset",
-            groups="createRidgeRegressionModelYacht", dependsOnGroups="createLinearRegressionModelYacht")
-    public void testBuildRidgeRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+    @Test(description = "Build a ridge regression model and predict for yacht dataset", groups = "createRidgeRegressionModelYacht")
+    public void testBuildRidgeRegressionModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
         buildModelWithLearningAlgorithm("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Ridge Regression model
         testPredictYacht();
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Lasso Regression model and predicting using the built model
+     * Creates a test case for creating an analysis, building a Lasso Regression model and predicting using the built
+     * model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Lasso regression model and predict for yacht dataset",
-            groups="createLassoRegressionModelYacht", dependsOnGroups="createRidgeRegressionModelYacht")
-    public void testBuildLassoRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-         buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
+    @Test(description = "Build a Lasso regression model and predict for yacht dataset", groups = "createLassoRegressionModelYacht")
+    public void testBuildLassoRegressionModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
+        buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Lasso Regression model
         testPredictYacht();
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
-        mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_YACHT);
-        mlHttpclient.doHttpDelete("/api/datasets/" + datasetId);
+        super.destroy();
     }
 }

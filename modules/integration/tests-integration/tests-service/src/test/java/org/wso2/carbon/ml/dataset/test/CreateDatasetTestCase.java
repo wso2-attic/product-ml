@@ -25,6 +25,7 @@ import java.io.IOException;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
@@ -44,7 +45,7 @@ public class CreateDatasetTestCase extends MLBaseTest {
     @BeforeClass(alwaysRun = true)
     public void initTest() throws MLIntegrationBaseTestException {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
+        mlHttpclient = getMLHttpClient();
     }
     
     /**
@@ -144,5 +145,10 @@ public class CreateDatasetTestCase extends MLBaseTest {
         assertEquals("Unexpected response received",Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response
                 .getStatusLine().getStatusCode());
         response.close();
+    }
+    
+    @AfterClass(alwaysRun = true)
+    public void tearDown() throws MLHttpClientException {
+        super.destroy();
     }
 }

@@ -50,7 +50,7 @@ public class GetDatasetsTestCase extends MLBaseTest {
     @BeforeClass(alwaysRun = true)
     public void initTest() throws Exception {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
+        mlHttpclient = getMLHttpClient();
     }
 
     /**
@@ -209,8 +209,8 @@ public class GetDatasetsTestCase extends MLBaseTest {
         response.close();
     }
     
-    
     @AfterClass(alwaysRun = true)
-    public void tearDown() throws IOException {
+    public void tearDown() throws MLHttpClientException {
+        super.destroy();
     }
 }

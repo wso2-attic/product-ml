@@ -19,12 +19,14 @@
 package org.wso2.carbon.ml.analysis.test;
 
 import static org.testng.AssertJUnit.assertEquals;
+
 import java.io.IOException;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.testng.SkipException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
@@ -35,27 +37,22 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 /**
  * Class contains test cases related to deleting analyses 
  */
-@Test(groups="getAnalyses", dependsOnGroups="createAnalyses")
+@Test(groups="deleteAnalyses")
 public class DeleteAnalysesTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
-    private static final String analysisName = "TestAnalysisForDeleteAnalysesTestcase";
-    private long analysisId;
-
+    private int projectId;
+    private int analysisId;
+    
     @BeforeClass(alwaysRun = true)
     public void initTest() throws Exception {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
-        // Check whether a project exists.
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_DIABETES);
-        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because a project is not available");
-        }
-        //Create an analysis in the project, for deletion
-        mlHttpclient.createAnalysis(analysisName, MLIntegrationTestConstants.PROJECT_ID_DIABETES);
-        
-        analysisId = mlHttpclient.getAnalysisId(analysisName);
+        mlHttpclient = getMLHttpClient();
+        createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, "1.0",
+                MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
+                MLIntegrationTestConstants.DATASET_NAME_DIABETES);
+        analysisId = createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME, projectId);
     }
 
     /**
@@ -64,7 +61,7 @@ public class DeleteAnalysesTestCase extends MLBaseTest {
      * @throws MLHttpClientException 
      * @throws IOException
      */
-    @Test(description = "Delete an analysis by name")
+    @Test(description = "Delete an analysis")
     public void testDeleteAnalysis() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/analyses/" + analysisId);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
@@ -84,5 +81,10 @@ public class DeleteAnalysesTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
+    }
+    
+    @AfterClass(alwaysRun = true)
+    public void tearDown() throws MLHttpClientException {
+        super.destroy();
     }
 }

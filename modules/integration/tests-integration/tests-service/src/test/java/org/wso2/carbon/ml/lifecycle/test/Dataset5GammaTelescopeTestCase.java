@@ -21,7 +21,6 @@ package org.wso2.carbon.ml.lifecycle.test;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -33,6 +32,7 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
 
 import javax.ws.rs.core.Response;
+
 import java.io.IOException;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -40,58 +40,37 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * This class contains the entire ML life-cycle for Gamma Telescope dataset
  */
-@Test(groups="gammaTelescopeDataset")
+@Test(groups = "gammaTelescopeDataset")
 public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
     private static int modelId;
     private CloseableHttpResponse response;
-    private int datasetId;
+    private int versionSetId;
+    private int projectId;
 
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLIntegrationBaseTestException {
+    public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException, IOException, JSONException {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
-    }
-
-    /**
-     * Creates dataset for classification and clustering - Gamma Telescope
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a dataset of gamma telescope data from a CSV file", groups="createDatasetGammaTelescope")
-    public void testCreateDatasetGammaTelescope() throws MLHttpClientException, IOException, JSONException {
-        response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_GAMMA_TELESCOPE,
-                "1.0", MLIntegrationTestConstants.GAMMA_TELESCOPE_DATASET_SAMPLE);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        datasetId = MLTestUtils.getId(response);
-        response.close();
-    }
-
-    /**
-     * Creates a test case for creating a project for Gamma Telescope data set
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a project for gamma telescope dataset", groups="createProjectGammaTelescope", dependsOnGroups="createDatasetGammaTelescope")
-    public void testCreateProjectGammaTelescope() throws MLHttpClientException, IOException {
-        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE,
+        mlHttpclient = getMLHttpClient();
+        String version = "1.0";
+        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_GAMMA_TELESCOPE, version,
+                MLIntegrationTestConstants.GAMMA_TELESCOPE_DATASET_SAMPLE);
+        versionSetId = getVersionSetId(datasetId, version);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE,
                 MLIntegrationTestConstants.DATASET_NAME_GAMMA_TELESCOPE);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
     }
 
     /**
      * A test case for predicting for a given set of data points
+     * 
      * @throws MLHttpClientException
      * @throws JSONException
      */
     private void testPredictGammaTelescope() throws MLHttpClientException, JSONException {
-        String payload = "[[18.8562,16.46,2.4385,0.5282,0.2933,25.1269,-6.5401,-16.9327,11.461,162.848]," +
-                "[191.8036,49.7183,3.0006,0.2093,0.1225,146.2148,143.6098,31.6216,44.3492,245.4199]]";
+        String payload = "[[18.8562,16.46,2.4385,0.5282,0.2933,25.1269,-6.5401,-16.9327,11.461,162.848],"
+                + "[191.8036,49.7183,3.0006,0.2093,0.1225,146.2148,143.6098,31.6216,44.3492,245.4199]]";
         response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
@@ -102,68 +81,64 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * A test case for building a model with the given learning algorithm
-     * @param algorithmName             Name of the learning algorithm
-     * @param algorithmType             Type of the learning algorithm
+     * 
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType) throws MLHttpClientException,
-            IOException, JSONException, InterruptedException {
-        modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
-                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE),
-                datasetId, mlHttpclient);
+    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE,
+                MLIntegrationTestConstants.TRAIN_DATA_FRACTION, projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
         // Waiting for model building to end
-        Thread.sleep(MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE);
-        // Checks whether model building completed successfully is true
-        assertEquals("Model building did not complete successfully", true, MLTestUtils.checkModelStatus(modelName, mlHttpclient));
+        boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
+                MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
+        // Checks whether model building completed successfully
+        assertEquals("Model building did not complete successfully", true, status);
     }
 
     // Test disabled because Naive bayes does not support negative feature values
-//    /**
-//     * Creates a test case for creating an analysis, building a Naive Bayes model and predicting using the built model
-//     * @throws MLHttpClientException
-//     * @throws IOException
-//     * @throws JSONException
-//     * @throws InterruptedException
-//     */
-//    @Test(description = "Build a Naive Bayes model and predict for gamma telescope dataset",
-//            groups="createNaiveBayesModelGammaTelescope", dependsOnGroups="createProjectGammaTelescope")
-//    public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-//        // Check whether the project is created otherwise skip
-//        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-//                .PROJECT_NAME_GAMMA_TELESCOPE);
-//        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-//            throw new SkipException("Skipping tests because a project is not available");
-//        }
-//        buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
-//        // Predict using built Linear Regression model
-//        testPredictGammaTelescope();
-//    }
+    // /**
+    // * Creates a test case for creating an analysis, building a Naive Bayes model and predicting using the built model
+    // * @throws MLHttpClientException
+    // * @throws IOException
+    // * @throws JSONException
+    // * @throws InterruptedException
+    // */
+    // @Test(description = "Build a Naive Bayes model and predict for gamma telescope dataset",
+    // groups="createNaiveBayesModelGammaTelescope", dependsOnGroups="createProjectGammaTelescope")
+    // public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException,
+    // InterruptedException {
+    // // Check whether the project is created otherwise skip
+    // response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
+    // .PROJECT_NAME_GAMMA_TELESCOPE);
+    // if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
+    // throw new SkipException("Skipping tests because a project is not available");
+    // }
+    // buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
+    // // Predict using built Linear Regression model
+    // testPredictGammaTelescope();
+    // }
 
     /**
      * Creates a test case for creating an analysis, building a SVM model and predicting using the built model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a SVM model and predict for gamma telescope dataset",
-            groups="createSVMModelGammaTelescope", dependsOnGroups="createProjectGammaTelescope")
+    @Test(description = "Build a SVM model and predict for gamma telescope dataset", groups = "createSVMModelGammaTelescope")
     public void testBuildSVMModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        // Check whether the project is created otherwise skip
-        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_GAMMA_TELESCOPE);
-        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because a project is not available");
-        }
         buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictGammaTelescope();
@@ -171,29 +146,32 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Decision Tree model and predict for gamma telescope dataset",
-            groups="createDecisionTreeModelGammaTelescope", dependsOnGroups="createSVMModelGammaTelescope")
-    public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+    @Test(description = "Build a Decision Tree model and predict for gamma telescope dataset", groups = "createDecisionTreeModelGammaTelescope", dependsOnGroups = "createSVMModelGammaTelescope")
+    public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
         buildModelWithLearningAlgorithm("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictGammaTelescope();
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built model
+     * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built
+     * model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Logistic Regression model and predict for gamma telescope dataset",
-            groups="createLogisticRegressionGammaTelescope", dependsOnGroups="createDecisionTreeModelGammaTelescope")
-    public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+    @Test(description = "Build a Logistic Regression model and predict for gamma telescope dataset", groups = "createLogisticRegressionGammaTelescope", dependsOnGroups = "createDecisionTreeModelGammaTelescope")
+    public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictGammaTelescope();
@@ -201,20 +179,19 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a K-Means clustering model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a K-means model",
-            groups="createKMeansGammaTelescope", dependsOnGroups="createLogisticRegressionGammaTelescope")
+    @Test(description = "Build a K-means model", groups = "createKMeansGammaTelescope", dependsOnGroups = "createLogisticRegressionGammaTelescope")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
-        mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_GAMMA_TELESCOPE);
-        mlHttpclient.doHttpDelete("/api/datasets/" + datasetId);
+        super.destroy();
     }
 }
