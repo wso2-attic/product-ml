@@ -135,11 +135,17 @@
                     <div id="predicted-vs-actual-chart"></div>
                     <br>
                     <div class="filter-md">
-                        <label class="input-label-sm">Feature<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                        <label class="input-label-sm">X-Axis<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
                         <div class="input-control text">
-                            <select class="form-control" id="predicted-actual-features"></select>
+                            <select class="form-control" id="predicted-actual-x-features"></select>
                         </div>
                     </div>
+                    <div class="filter-md">
+                        <label class="input-label-sm">Y-Axis<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                        <div class="input-control text">
+                            <select class="form-control" id="predicted-actual-y-features"></select>
+                        </div>
+                    </div>                    
                 </div>
 
                 <div id="residual">
@@ -205,7 +211,7 @@ var responseVariable;
 var testResultDataPointsSample;
 var features;
 // redraw charts upon changes in selections
-$(document).on('change','select[id="predicted-actual-features"]',function() {
+$(document).on('change','select[id="predicted-actual-x-features"], select[id="predicted-actual-y-features"]',function() {
     drawPredictedVsActualChart(testResultDataPointsSample);
 });
 $(document).on('change','select[id="residual-features"]',function() {
@@ -310,16 +316,16 @@ $( document ).ready(function() {
                 // draw feature select
                 testResultDataPointsSample = res.testResultDataPointsSample;
                 features = res.features;
-                var displayFeatures = getDisplayFeatures(features, numericalFeatureNames);                
                 // draw predicted vs. actual chart if at least one numerical feature exists (except response variable)
-                if(displayFeatures.length > 0) {
-	                $('#predicted-actual-features').empty();
-	                $.each(displayFeatures,function(index, feature){
-	                    $('#predicted-actual-features').append($('<option>', { 
-	                        value: feature.value,
-	                        text : feature.text
+                if(features.length > 0) {
+	                $('#predicted-actual-x-features, #predicted-actual-y-features').empty();
+	                $.each(features,function(index, feature){
+	                    $('#predicted-actual-x-features, #predicted-actual-y-features').append($('<option>', { 
+	                        value: index,
+	                        text : feature
 	                    }));
 	                });                    
+                    $('#predicted-actual-y-features option')[1].selected = true;
 	                // draw predicted vs. actual chart
 	                drawPredictedVsActualChart(testResultDataPointsSample);
                 }
@@ -335,16 +341,16 @@ $( document ).ready(function() {
                 // draw feature select
                 testResultDataPointsSample = res.testResultDataPointsSample;
                 features = res.features;
-                var displayFeatures = getDisplayFeatures(features, numericalFeatureNames);
                 // draw predicted vs. actual chart if at least one numerical feature exists (except response variable)
-                if(displayFeatures.length > 0) {
-	                $('#predicted-actual-features').empty();
-	                $.each(displayFeatures,function(index, feature){
-	                    $('#predicted-actual-features').append($('<option>', { 
-	                        value: feature.value,
-	                        text : feature.text
-	                    }));
-	                });                    
+                if(features.length > 0) {
+                    $('#predicted-actual-x-features, #predicted-actual-y-features').empty();
+                    $.each(features,function(index, feature){
+                        $('#predicted-actual-x-features, #predicted-actual-y-features').append($('<option>', { 
+                            value: index,
+                            text : feature
+                        }));
+                    });                    
+                    $('#predicted-actual-y-features option')[1].selected = true;
 	                // draw predicted vs. actual chart
 	                drawPredictedVsActualChart(testResultDataPointsSample);
                 }
@@ -366,15 +372,15 @@ $( document ).ready(function() {
                 var displayFeatures = getDisplayFeatures(features, numericalFeatureNames);
                 // draw residual plot if at least one numerical feature exists (except response variable)
                 if(displayFeatures.length > 0) {
-                	$('#residual-features').empty();
-	                $.each(displayFeatures,function(index, feature){
-	                    $('#residual-features').append($('<option>', { 
-	                        value: feature.value,
-	                        text : feature.text
-	                    }));
-	                });                    
-	                // draw residual plot
-	                drawResidualPlot(testResultDataPointsSample);                	
+                    $('#residual-features').empty();
+                    $.each(displayFeatures,function(index, feature){
+                        $('#residual-features').append($('<option>', { 
+                            value: feature.value,
+                            text : feature.text
+                        }));
+                    });                    
+                    // draw residual plot
+                    drawResidualPlot(testResultDataPointsSample);                   
                 }
                 else {
                     var chartType = 'residual plot';
@@ -444,29 +450,32 @@ function drawWeightsChart (data) {
 // function to draw predicted vs. actual chart
 function drawPredictedVsActualChart(testResultDataPointsSample) {
 
-    var featureIndex = $("#predicted-actual-features").val();
-    var featureName = $("#predicted-actual-features option:selected").text();
+    var xAxisFeatureIndex = $("#predicted-actual-x-features").val();
+    var yAxisFeatureIndex = $("#predicted-actual-y-features").val();
+    var xAxisFeatureName = $("#predicted-actual-x-features option:selected").text();
+    var yAxisFeatureName = $("#predicted-actual-y-features option:selected").text();
     $('#predicted-actual-residual-title').html('Predicted vs. Actual');
 
-    var predictedData = [];
-    var actualData = [];
+    var predictedVsActual = [];
     for (var i = 0; i < testResultDataPointsSample.length; i++) {                
         
-        var predictedRow = [];
-        predictedRow[0] = parseFloat(testResultDataPointsSample[i]['featureValues'][featureIndex.toString()]);
-        predictedRow[1] = parseFloat(testResultDataPointsSample[i].predictedVsActual.predicted);
-        predictedRow[2] = 'Predicted';
-        predictedData.push(predictedRow);
+        var predictedVsActualPoint = [];
+        predictedVsActualPoint[0] = parseFloat(testResultDataPointsSample[i]['featureValues'][xAxisFeatureIndex.toString()]);
+        predictedVsActualPoint[1] = parseFloat(testResultDataPointsSample[i]['featureValues'][yAxisFeatureIndex.toString()]);
 
-        var actualRow = [];
-        actualRow[0] = parseFloat(testResultDataPointsSample[i]['featureValues'][featureIndex.toString()]);
-        actualRow[1] = parseFloat(testResultDataPointsSample[i].predictedVsActual.actual);
-        actualRow[2] = 'Actual';
-        actualData.push(actualRow);
+        var actual = testResultDataPointsSample[i].predictedVsActual.actual;
+        var predicted = testResultDataPointsSample[i].predictedVsActual.predicted;
+        var labeledPredicted = labelPredicted(predicted, 0.5);
+
+        if(actual == labeledPredicted) {
+            predictedVsActualPoint[2] = 'Correct';
+        }
+        else {
+            predictedVsActualPoint[2] = 'Incorrect';
+        }
+        predictedVsActual.push(predictedVsActualPoint);
     }
-
-    var predictedVsActualData = predictedData.concat(actualData);
-    drawScatterPlot(predictedVsActualData, '#predicted-vs-actual-chart', featureName, 'Predicted/Actual');
+    drawScatterPlot(predictedVsActual, '#predicted-vs-actual-chart', xAxisFeatureName, yAxisFeatureName);
 }
 
 // function to draw residual plot
@@ -505,10 +514,10 @@ function drawScatterPlot(data, cssClass, xLabel, yLabel) {
 // function that returns JSON containing feature names (numerical except reponse variable)
 // with mapped index of summary object feature names
 function getDisplayFeatures(features, numericalFeatureNames) {
-	// remove response variable from numerical feature names if response variable is within numerical features
+    // remove response variable from numerical feature names if response variable is within numerical features
     var responseVariableIndex = $.inArray(responseVariable, numericalFeatureNames);
     if(responseVariableIndex > -1) {
-    	numericalFeatureNames.splice(responseVariableIndex, 1);	
+        numericalFeatureNames.splice(responseVariableIndex, 1); 
     }    
     // get corresponding index of summary object feature names for each feature name 
     var featureIndices = numericalFeatureNames.map(function(elem){
@@ -572,7 +581,7 @@ function drawConfusionMatrix (predictedVsActuals, threshold, cssSelector) {
 }
 
 // function to calculate confusion matrix
-function calculateConfusionMatrix (predictedVsActuals, threshold) {
+function calculateConfusionMatrix(predictedVsActuals, threshold) {
 	var truePositives = 0;
 	var falsePositives = 0;
 	var trueNegatives = 0;
@@ -582,7 +591,7 @@ function calculateConfusionMatrix (predictedVsActuals, threshold) {
 	for (var i = 0; i < predictedVsActuals.length; i++) {
 
 		var actual = predictedVsActuals[i]['actual'];
-		var predicted = calculatePredicted(predictedVsActuals[i]['predicted'], threshold);
+		var predicted = labelPredicted(predictedVsActuals[i]['predicted'], threshold);
 
 		if (predicted == 1 && actual == 1) {
 			truePositives++;
@@ -612,7 +621,7 @@ function calculateConfusionMatrix (predictedVsActuals, threshold) {
 }
 
 // function to get the binary value of a predicted value for given threshold
-function calculatePredicted (actualValue, threshold) {
+function labelPredicted(actualValue, threshold) {
 	var actual = 0;
 	if (actualValue >= threshold) {
 		actual = 1;
