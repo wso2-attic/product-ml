@@ -407,7 +407,7 @@ $( document ).ready(function() {
     });
 
     // draw scatter plot on page load
-    drawScatterPlotBase();    
+    drawScatterPlotBase();
 });
 
 function drawScatterPlotBase() { 
