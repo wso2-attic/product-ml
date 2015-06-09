@@ -149,7 +149,7 @@
 <script type="text/javascript">
 
     var serverUrl = window.location.origin;
-    var deleteProjectName;
+    var deleteProjectId;
     var deleteAnalysisId;
     var deleteNotificationArea;
 
@@ -179,20 +179,20 @@
         $(document).on('click', '#delete-project', function(e){ 
             e.preventDefault();
             
-            deleteProjectName = $(this).data('projna');
+            deleteProjectId = $(this).data('projid');
             operationSelect('delete-project');
         });
         $(document).on('click', '#delete-project-yes', function(e){ 
             e.preventDefault();
 
-            deleteProject(deleteProjectName);
-            deleteProjectName = null;
+            deleteProject(deleteProjectId);
+            deleteProjectId = null;
             hidePopup();
         });
         $(document).on('click', '#delete-project-no', function(e){ 
             e.preventDefault();
 
-            deleteProjectName = null;
+            deleteProjectId = null;
             hidePopup();
         });
 
@@ -518,11 +518,11 @@
     }
 
     // deletes a project
-    function deleteProject(projectName) {
-        if(projectName) {
+    function deleteProject(projectId) {
+        if(projectId) {
             $.ajax({
                 type: "DELETE",
-                url: serverUrl+"/api/projects/"+projectName,
+                url: serverUrl+"/api/projects/"+projectId,
                 /*beforeSend : function(xhr) {
                     xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
                 },*/
