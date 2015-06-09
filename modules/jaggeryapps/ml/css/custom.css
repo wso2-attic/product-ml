@@ -798,7 +798,7 @@ h4.h-option-head span {
 /* left nav */
 .wr-left-nav {
 	padding-left:0 !important;
-	background:#fafafa;
+	background:#fff;
 	padding:0px;
 }
 
@@ -996,7 +996,7 @@ br.c-both {
 
 /* filter */
 .wr-filters {
-	padding: 15px;
+	padding: 0px;
 }
 
 .wr-filters > div.filter-sm {
@@ -1096,5 +1096,60 @@ a.btn-opr-cancel {
     color:#cecece !Important;
 	-webkit-filter: opacity(50%)    
 }
+
+/* graphs */
+.wr-graph-content {
+	padding:10px 10px;
+	background:#f9f9f9;
+}
+
+.wr-graph-element {
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-left:10px;
+	margin-right:10px;
+	float:left;
+	background:#ffffff;
+	padding:15px;
+}
+
+.wr-graph-img {
+	text-align:center;
+	margin-top:20px;
+}
+
+.wr-graph-element h5 {
+	font-size:18px;
+	font-weight:100;
+	margin-bottom:25px;
+	padding-bottom:10px;
+	border-bottom:1px solid #e4e4e4;
+}
+/* scatter plot */
+.gr01 {
+	width:900px;
+	height:700px;
+}
+/* histograms */
+.gr02 {
+	width:440px;
+	height:340px;
+}
+
+.gr03 {
+	width:600px;
+	height:520px;
+}
+/* parallel sets */
+.gr04 {
+	width:900px;
+	height:700px;
+}
+
+.gr05 {
+	min-width:700px;
+	min-height:700px;
+}
+
 
 

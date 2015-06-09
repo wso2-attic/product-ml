@@ -136,24 +136,31 @@
 
 					    </div>
 
-					    <div class="col-md-6 wr-graph-content">
+						<div class="col-md-10 wr-graph-content">
+							<div class="wr-graph-element gr01">
+								<h5 id='scatterPlotTitle'></h5>
+								<div class="wr-graph-img">
+									<div id='scatter'></div>
+								</div>
+							</div>
+				    	
+							<div id='histogramIndependent' class="wr-graph-element gr02">
+								<h5 id='histogramIndependentTitle'></h5>
+								<div class="wr-graph-img">
+									<svg></svg>
+								</div>
+								<div id='numFeatureIndependentSummary' class='graphSummary'></div>
+							</div>
+							
+							<div id='histogramDependent' class="wr-graph-element gr02">
+								<h5 id='histogramDependentTitle'></h5>
+								<div class="wr-graph-img">
+									<svg></svg>									
+								</div>
+								<div id='numFeatureDependentSummary' class='graphSummary'></div>
+							</div>						
+				    	</div>
 
-					        <div id='scatterPlotTitle' class='graphtitle'></div>
-					        <div id='scatter'></div>
-
-					        <div id='histogramIndependent' class='graph'>
-					            <div id='histogramIndependentTitle' class='graphtitle'></div>
-					            <svg></svg>
-					            <div id='numFeatureIndependentSummary' class='graphSummary'></div>
-					        </div>
-
-					        <div id='histogramDependent' class='graph'>
-					            <div id='histogramDependentTitle' class='graphtitle'></div>
-					            <svg></svg>
-					            <div id='numFeatureDependentSummary' class='graphSummary'></div>
-					        </div>
-
-					    </div>
 					</div>
 
 
@@ -177,7 +184,11 @@
 
 					    <div class="col-md-10 wr-graph-content">
 
-					        <div id='parallelSets'>Loading chart...</div>
+					        <div class="wr-graph-element gr04">
+								<div class="wr-graph-img">
+									<div id='parallelSets'>Loading chart...</div>
+								</div>
+							</div>					      
 
 					    </div>
 					</div>
@@ -212,7 +223,11 @@
 
 					    <div class="col-md-10 wr-graph-content">
 
-					        <div id='trellisChart'>Loading chart...</div>
+					        <div class="wr-graph-element gr05">
+								<div class="wr-graph-img">
+									<div id='trellisChart'>Loading chart...</div>
+								</div>
+							</div>					      					        
 
 					    </div>
 
@@ -272,7 +287,11 @@
 
 					    <div class="col-md-10 wr-graph-content">
 
-					        <div id='clusterDiagram'>Loading chart...</div>
+					        <div class="wr-graph-element gr04">
+								<div class="wr-graph-img">
+									<div id='clusterDiagram'>Loading chart...</div>
+								</div>
+							</div>					      					        
 
 					    </div>
 
@@ -482,7 +501,7 @@ function drawPlotsAjax() {
             }
 
         	drawScatterPlot(scatterData, "#scatter", numFeatureIndependent, numFeatureDependent);
-		   	$("#scatterPlotTitle").html("<h4>" + numFeatureIndependent + " vs. " + numFeatureDependent + "</h4>");            
+		   	$("#scatterPlotTitle").html(numFeatureIndependent + " vs. " + numFeatureDependent);            
         },
         error : function(res){
         	var errorText = 'Error occurred while retrieving scatter plot data. '+res.status+' '+res.statusText;
@@ -504,8 +523,8 @@ function drawPlotsAjax() {
         },*/
         success : function(res){
         	var jsonObj = res;
-		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp;  Median: " + jsonObj[0].median + "&emsp;&emsp;&emsp; Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
-		   	$("#histogramIndependentTitle").html("<h4>" + numFeatureIndependent + "</h4>");
+		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp;  Median: " + jsonObj[0].median + "<br><br>Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
+		   	$("#histogramIndependentTitle").html(numFeatureIndependent);
 		   	$("#numFeatureIndependentSummary").html(summary);
 		   	// transform dataset
 		   	drawHistogram(jsonObj, "#histogramIndependent");
@@ -530,8 +549,8 @@ function drawPlotsAjax() {
         },*/
         success : function(res){
         	var jsonObj = res;
-		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp; Median: " + jsonObj[0].median + "&emsp;&emsp;&emsp; Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
-		   	$("#histogramDependentTitle").html("<h4>" + numFeatureDependent + "</h4>");
+		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp; Median: " + jsonObj[0].median + "<br><br>Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
+		   	$("#histogramDependentTitle").html(numFeatureDependent);
 		   	$("#numFeatureDependentSummary").html(summary);
 		   	// transform dataset
 		   	drawHistogram(jsonObj, "#histogramDependent");
@@ -628,7 +647,7 @@ function drawParallelSets() {
                 }
                 // clear the div contains parallel sets chart
                 $("#parallelSets").html("");
-                var chart = d3.parsets().dimensions(categoricalFeatureArray).tension(1.0).width(800).height(600);
+                var chart = d3.parsets().dimensions(categoricalFeatureArray).tension(1.0).width(800).height(630);
                 var vis = d3.select("#parallelSets").append("svg").attr("width", chart.width()).attr("height", chart.height()).style("font-size", "12px");
 
                 vis.datum(res).call(chart);
@@ -772,7 +791,7 @@ function drawTrellisChart() {
                         return x(d[p.x]);
                     }).attr("cy", function(d) {
                         return y(d[p.y]);
-                    }).attr("r", 0.7).style("fill", function(d) {
+                    }).attr("r", 1.5).style("fill", function(d) {
                         // replace current header of categorical feature header with common header
                         // can be accessed by color
                         var dString = JSON.stringify(d);
@@ -890,9 +909,9 @@ function drawScatterPlot(data, cssClass, xLabel, yLabel) {
     $(cssClass).empty();
     var scatter = new ScatterPlot(data);
 
-    scatter.setPlotingAreaWidth(800);
-    scatter.setPlotingAreaHeight(500);
-    scatter.setMarkerSize("2");
+    scatter.setPlotingAreaWidth(720);
+    scatter.setPlotingAreaHeight(560);
+    scatter.setMarkerSize(2);
     scatter.setXAxisText(xLabel);
     scatter.setYAxisText(yLabel);
     scatter.plot(d3.select(cssClass));
