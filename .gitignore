@@ -27,4 +27,4 @@ sonar-pom.xml
 *.mar
 *~
 *.em
-*.log
+*.log*
