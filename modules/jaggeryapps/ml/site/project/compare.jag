@@ -259,7 +259,7 @@
                                                 accordionPanels += '<span class="cu-acc-head-created">[ Accuracy: <b>' + parseFloat(models[i].modelSummary.modelAccuracy).toFixed(4)*100 + '%</b> ]</span>';
                                             }
                                             else if(modelType == 'numerical-prediction') {
-                                                accordionPanels += '<span class="cu-acc-head-created">[ Mean squared error: <b>' + models[i].modelSummary.meanSquaredError + '</b> ]</span>';
+                                                accordionPanels += '<span class="cu-acc-head-created">[ Mean squared error: <b>' + parseFloat(models[i].modelSummary.meanSquaredError).toExponential(2) + '</b> ]</span>';
                                             }
                                             else if(modelType == 'clustering') {
                                                 accordionPanels += '<span class="cu-acc-head-created">[ Comparison not supported ]</span>';
