@@ -436,7 +436,7 @@
                                                 '<td class="c-right">' +
                                                     '<div>' +
                                                         '<a href="#" data-projid="'+projid+'" data-projectname="'+projna+'" data-dataseid="'+datasetId+'" id="compare-models" class="cu-reg-btn btn-compare '+appendClass(noOfAnalyses)+'" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Compare models</span></a>' +
-                                                        '<a href="#" data-projna="'+projna+'" id="delete-project" class="cu-reg-btn btn-delete">Delete Project</a>' +
+                                                        '<a href="#" data-projid="'+projid+'" id="delete-project" class="cu-reg-btn btn-delete">Delete Project</a>' +
                                                     '</div>' +
                                                 '</td>' +
                                             '</tr>' +
