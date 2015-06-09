@@ -102,15 +102,21 @@
                         <!-- Nav tabs/graphs -->
                         <div class="wr-tabs-grphs">
                             <ul class="nav nav-pills">
-                                 <li role="presentation" class="active"><a href="#classification-tab" id="classification-link" aria-controls="classification" role="tab" data-toggle="tab">Classification</a></li>
-                                 <li role="presentation"><a href="#numerical-prediction-tab" id="numerical-prediction-link" aria-controls="numerical-prediction" role="tab" data-toggle="tab">Numerical Prediction</a></li>
-                                 <li role="presentation"><a href="#clustering-tab" id="clustering-link" aria-controls="clustering" role="tab" data-toggle="tab">Clustering</a></li>
+                                 <li role="presentation" class="disabled" id="classification-tab-li" data-toggle="tooltip" title="You do not have any classification models created at the moment">
+                                    <a href="#classification-tab" id="classification-link" aria-controls="classification" role="tab" data-toggle="">Classification</a>
+                                 </li>
+                                 <li role="presentation" class="disabled" id="numerical-prediction-tab-li" data-toggle="tooltip" data-placement="bottom" title="You do not have any numerical prediction models created at the moment">
+                                    <a href="#numerical-prediction-tab" id="numerical-prediction-link" aria-controls="numerical-prediction" role="tab" data-toggle="">Numerical Prediction</a>
+                                 </li>
+                                 <li role="presentation" class="disabled" id="clustering-tab-li" data-toggle="tooltip" data-placement="bottom" title="You do not have any clustering models created at the moment">
+                                    <a href="#clustering-tab" id="clustering-link" aria-controls="clustering" role="tab" data-toggle="">Clustering</a>
+                                 </li>
                             </ul>
                         </div>
 
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane fade in active" id="classification-tab">
+                            <div role="tabpanel" class="tab-pane fade in" id="classification-tab">
                                 <div class="panel-group" id="classification-accordion" role="tablist" aria-multiselectable="true">
                                     <div id="no-classification" class="ctrl-info-panel col-md-12 col-centered">
                                         <h4>You do not have any classification models created at the moment.</h4>
@@ -205,6 +211,12 @@
         $('#numerical-prediction-accordion').pageMe({pagerSelector:'#pagination-list-numerical-prediction', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});
         $('#clustering-accordion').pageMe({pagerSelector:'#pagination-list-clustering', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});
 
+        // disabling tabs
+        $("#wr-tabs-grphs > li").click(function(){
+            if($(this).hasClass("disabled")) {
+                return false;
+            }
+        });
     });
     // compare function for classification models
     function sortByAccuracy(a, b) {
@@ -305,6 +317,9 @@
                         var classificationAccordionPanels = createAccordionPanels(classificationModelsSorted, 'classification');
                         $('#no-classification').remove();                              
                         $("#classification-accordion").append(classificationAccordionPanels);
+                        $('#classification-tab-li').removeClass('disabled');
+                        $('#classification-tab-li').attr('title', '');
+                        $('#classification-link').attr('data-toggle', 'tab');
                     }
 
                     if (numPredictionModels.length > 0) {
@@ -312,12 +327,29 @@
                         var numPredictionAccordionPanels = createAccordionPanels(numPredictionModelsSorted, 'numerical-prediction');
                         $('#no-numerical-prediction').remove();
                         $("#numerical-prediction-accordion").append(numPredictionAccordionPanels);
+                        $('#numerical-prediction-tab-li').removeClass('disabled');
+                        $('#numerical-prediction-tab-li').attr('title', '');
+                        $('#numerical-prediction-link').attr('data-toggle', 'tab');
                     }
 
                     if (clusteringModels.length > 0) {
                         var clusteringAccordionPanels = createAccordionPanels(clusteringModels, 'clustering');
                         $('#no-clustering').remove();
                         $("#clustering-accordion").append(clusteringAccordionPanels);
+                        $('#clustering-tab-li').removeClass('disabled');
+                        $('#clustering-tab-li').attr('title', '');
+                        $('#clustering-link').attr('data-toggle', 'tab');
+                    }
+
+                    // set active tab
+                    if(classificationModels.length > 0) {
+                        $('#classification-link').click();
+                    } else if(numPredictionModels.length > 0) {
+                        $('#numerical-prediction-link').click();
+                    } else if (clusteringModels.length > 0) {
+                        $('#clustering-link').click();
+                    } else {
+                        $('#classification-link').click();
                     }
                 }
             },
