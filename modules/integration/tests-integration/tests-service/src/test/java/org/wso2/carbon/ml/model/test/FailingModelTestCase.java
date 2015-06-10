@@ -16,10 +16,19 @@
  * under the License.
  */
 
-package org.wso2.carbon.ml.lifecycle.test;
+package org.wso2.carbon.ml.model.test;
+
+import static org.testng.AssertJUnit.assertEquals;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -28,29 +37,22 @@ import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
-import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
-
-import javax.ws.rs.core.Response;
-
-import java.io.IOException;
-
-import static org.testng.AssertJUnit.assertEquals;
 
 /**
- * This class contains the entire ML life-cycle for Automobile dataset
+ * Contains test cases related to retrieving models
  */
-@Test(groups = "AutomobileDataset")
-public class Dataset6AutomobileTestCase extends MLBaseTest {
+@Test(groups="failing-models")
+public class FailingModelTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
-    private static String modelName;
-    private static int modelId;
-    private CloseableHttpResponse response;
-    private int versionSetId;
     private int projectId;
-
+    private int analysisId;
+    private int versionSetId;
+    private int modelId;
+    private String modelName;
+    
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException, IOException, JSONException {
+    public void initTest() throws Exception {
         super.init();
         mlHttpclient = getMLHttpClient();
         String version = "1.0";
@@ -59,8 +61,29 @@ public class Dataset6AutomobileTestCase extends MLBaseTest {
         versionSetId = getVersionSetId(datasetId, version);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE,
                 MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE);
+        analysisId = createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME, projectId);
+        buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
     }
 
+    /**
+     * Get model from name
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(priority=1, description = "retrieve a failed model")
+    public void testGetFailedModel() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        JSONObject responseJson = new JSONObject(bufferedReader.readLine());
+        bufferedReader.close();
+        response.close();
+        //Check whether the correct model is retrieved
+        assertEquals("Incorrect model retrieved.", modelId, responseJson.getInt("id"));
+        assertEquals("Model error has not been set.", true, responseJson.getString("error") != null);
+    }
+    
     /**
      * A test case for building a model with the given learning algorithm
      * 
@@ -74,10 +97,10 @@ public class Dataset6AutomobileTestCase extends MLBaseTest {
     private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
         modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
-                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_AUTOMOBILE,
-                MLIntegrationTestConstants.TRAIN_DATA_FRACTION, projectId, versionSetId, mlHttpclient);
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                projectId, versionSetId, analysisId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
-        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
@@ -85,24 +108,11 @@ public class Dataset6AutomobileTestCase extends MLBaseTest {
         boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
                 MLIntegrationTestConstants.THREAD_SLEEP_TIME_MEDIUM, 1000);
         // Checks whether model building completed successfully
-        assertEquals("Model building did not complete successfully", true, status);
+        assertEquals("Model building did not fail.", false, status);
     }
-
-    /**
-     * Creates a test case for creating an analysis, building a K-Means clustering model
-     * 
-     * @throws MLHttpClientException
-     * @throws IOException
-     * @throws JSONException
-     * @throws InterruptedException
-     */
-    @Test(description = "Build a K-means model", groups = "createKMeansAutomobile")
-    public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
-    }
-
+    
     @AfterClass(alwaysRun = true)
-    public void tearDown() throws InterruptedException, MLHttpClientException {
+    public void tearDown() throws MLHttpClientException {
         super.destroy();
     }
 }

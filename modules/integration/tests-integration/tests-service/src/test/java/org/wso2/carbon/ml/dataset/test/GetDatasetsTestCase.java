@@ -50,7 +50,7 @@ public class GetDatasetsTestCase extends MLBaseTest {
     @BeforeClass(alwaysRun = true)
     public void initTest() throws Exception {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
+        mlHttpclient = getMLHttpClient();
     }
 
     /**
@@ -136,6 +136,18 @@ public class GetDatasetsTestCase extends MLBaseTest {
     }
     
     /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get all available dataset versions")
+    public void testGetAllDatasetVersions() throws MLHttpClientException, IOException  {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/versions");
+        Assert.assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
      * Test retrieving all the available version-sets of a dataset.
      * @throws MLHttpClientException 
      * @throws IOException 
@@ -166,6 +178,34 @@ public class GetDatasetsTestCase extends MLBaseTest {
     public void testGetVersionSet() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/versions/" + MLIntegrationTestConstants
                 .VERSIONSET_ID);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get version set with a version", dependsOnMethods = 
+            "testGetVersionSetsOfdataset")
+    public void testGetVersionSetWithVersion() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/"+MLIntegrationTestConstants
+                .DATASET_ID_DIABETES+"/versions/1.0");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get chart sample points of a dataset version", dependsOnMethods = 
+            "testGetVersionSetsOfdataset")
+    public void testGetChartSamplePointsOfVersionSet() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/versions/" + MLIntegrationTestConstants
+                .VERSIONSET_ID+"/charts");
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
@@ -209,8 +249,57 @@ public class GetDatasetsTestCase extends MLBaseTest {
         response.close();
     }
     
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get feature names")
+    public void testGetFeatureNamesOfDataset() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                    .DATASET_ID_DIABETES+"/filteredFeatures");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        // Check whether the correct dataset is returned.
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        String line = bufferedReader.readLine();
+        JSONArray responseJson = new JSONArray(line);
+        assertEquals("Filter is expected to return none.", true, responseJson.length() == 0);
+        bufferedReader.close();
+        response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get categorical feature names")
+    public void testGetCategoricalFeatureNamesOfDataset() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                    .DATASET_ID_DIABETES+"/filteredFeatures?featureType=CATEGORICAL");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        // Check whether the correct dataset is returned.
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        JSONArray responseJson = new JSONArray(bufferedReader.readLine());
+        assertEquals("Categorical feature names was not returned.", true, responseJson.length() != 0);
+        bufferedReader.close();
+        response.close();
+    }
+    
+    /**
+     * 
+     * @throws MLHttpClientException 
+     */
+    @Test(description = "Get summary stats - with feature")
+    public void testGetSummaryStatsWithFeature() throws MLHttpClientException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/"+MLIntegrationTestConstants
+                .DATASET_ID_DIABETES+"/stats?feature=Class");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+    }
     
     @AfterClass(alwaysRun = true)
-    public void tearDown() throws IOException {
+    public void tearDown() throws MLHttpClientException {
+        super.destroy();
     }
 }

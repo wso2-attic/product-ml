@@ -32,6 +32,8 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
 
 import javax.ws.rs.core.Response;
+
+import java.io.File;
 import java.io.IOException;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -39,105 +41,75 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * This class contains the entire ML life-cycle for Digit Recognition dataset
  */
-@Test(groups="DigitRecognitionDataset")
+@Test(groups = "DigitRecognitionDataset")
 public class ExternalDataset1DigitRecognitionTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
     private static int modelId;
     private CloseableHttpResponse response;
-    private int datasetId;
+    private int versionSetId;
+    private int projectId;
 
     @BeforeClass(alwaysRun = true)
-    public void initTest() throws MLIntegrationBaseTestException {
+    public void initTest() throws MLIntegrationBaseTestException, MLHttpClientException, IOException, JSONException {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
-    }
-
-    /**
-     * Creates dataset for Classification and clustering - DigitRecognition
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a dataset of DigitRecognition data from a CSV file", groups="createDatasetDigitRecognition")
-    public void testCreateDatasetDigitRecognition() throws MLHttpClientException, IOException, JSONException {
-        try {
-            response = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_DIGITS,
-                    "1.0", MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
-            assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                    .getStatusCode());
-            datasetId = MLTestUtils.getId(response);
-            response.close();
-        } catch ( MLHttpClientException e) {
-            // Skip test if dataset is not available in the given location
-            throw new SkipException("Skipping tests because dataset with name: " + MLIntegrationTestConstants.DATASET_NAME_DIGITS
-                    + " is not available at the location" + MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
+        mlHttpclient = getMLHttpClient();
+        String version = "1.0";
+        File file = new File(mlHttpclient.getResourceAbsolutePath(MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE));
+        if (!file.exists()) {
+            throw new SkipException("Skipping the tests because the dataset file is not available at: "+ file.getAbsolutePath());
         }
-    }
-
-    /**
-     * Creates a test case for creating a project for DigitRecognition data set
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    @Test(description = "Create a project for DigitRecognition dataset",
-            groups="createProjectDigitRecognition", dependsOnGroups="createDatasetDigitRecognition")
-    public void testCreateProjectDigitRecognition() throws MLHttpClientException, IOException, JSONException {
-        response = mlHttpclient.createProject(MLIntegrationTestConstants.PROJECT_NAME_DIGITS,
+        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIGITS, version,
+                MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
+        versionSetId = getVersionSetId(datasetId, version);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIGITS,
                 MLIntegrationTestConstants.DATASET_NAME_DIGITS);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
     }
 
     /**
      * A test case for building a model with the given learning algorithm
-     * @param algorithmName             Name of the learning algorithm
-     * @param algorithmType             Type of the learning algorithm
+     * 
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType) throws MLHttpClientException,
-            IOException, JSONException, InterruptedException {
-        modelName= MLTestUtils.setConfiguration(algorithmName, algorithmType,
+    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIGITS, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIGITS),
-                datasetId, mlHttpclient);
+                projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
         // Waiting for model building to end
-        Thread.sleep(MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE);
-        // Checks whether model building completed successfully is true
-        assertEquals("Model building did not complete successfully", true, MLTestUtils.checkModelStatus(modelName, mlHttpclient));
+        boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
+                MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
+        // Checks whether model building completed successfully
+        assertEquals("Model building did not complete successfully", true, status);
     }
 
     /**
      * Creates a test case for creating an analysis, building a Decision Tree model
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Decision tree model",
-            groups="createDecisionTreeDigitRecognition", dependsOnGroups="createProjectDigitRecognition")
-    public void testBuildDecistionTreeModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        // Check whether the project is created otherwise skip
-        response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_DIGITS);
-        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because a project is not available");
-        }
+    @Test(description = "Build a Decision tree model", groups = "createDecisionTreeDigitRecognition")
+    public void testBuildDecistionTreeModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
         buildModelWithLearningAlgorithm("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION);
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
-        mlHttpclient.doHttpDelete("/api/projects/" + MLIntegrationTestConstants.PROJECT_NAME_DIGITS);
-        mlHttpclient.doHttpDelete("/api/datasets/" + datasetId);
+        super.destroy();
     }
 }

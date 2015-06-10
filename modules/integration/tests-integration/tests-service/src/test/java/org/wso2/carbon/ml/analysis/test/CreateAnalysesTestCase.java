@@ -25,7 +25,7 @@ import java.io.IOException;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.testng.SkipException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
@@ -36,21 +36,19 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 /**
  * Class contains test cases related to creating analyses
  */
-@Test(groups="createAnalyses")
+@Test(groups="ml-analyses")
 public class CreateAnalysesTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     
-    @BeforeClass(alwaysRun = true, groups = "wso2.ml.integration")
+    @BeforeClass(alwaysRun = true)
     public void initTest() throws Exception {
         super.init();
-        mlHttpclient = new MLHttpClient(instance, userInfo);
-        // Check whether the project exists.
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + MLIntegrationTestConstants
-                .PROJECT_NAME_DIABETES);
-        if (Response.Status.OK.getStatusCode() != response.getStatusLine().getStatusCode()) {
-            throw new SkipException("Skipping tests because a project is not available");
-        }
+        mlHttpclient = getMLHttpClient();
+        createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, "1.0",
+                MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
+        createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
+                MLIntegrationTestConstants.DATASET_NAME_DIABETES);
     }
 
     /**
@@ -59,11 +57,26 @@ public class CreateAnalysesTestCase extends MLBaseTest {
      * @throws MLHttpClientException 
      * @throws IOException 
      */
-    @Test(groups = "createAnalysisSuccess", description = "Create an analysis")
+    @Test(priority=1, description = "Create an analysis")
     public void testCreateAnalysis() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * Test creating an existing analysis.
+     * 
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(priority=2, description = "Create an existing analysis")
+    public void testCreateExistingAnalysis() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -74,7 +87,7 @@ public class CreateAnalysesTestCase extends MLBaseTest {
      * @throws MLHttpClientException 
      * @throws IOException 
      */
-    @Test(groups = "wso2.ml.integration", description = "Create an analysis without a name")
+    @Test(description = "Create an analysis without a name")
     public void testCreateAnalysisWithoutName() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.createAnalysis(null, MLIntegrationTestConstants.PROJECT_ID_DIABETES);
         assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode(), response
@@ -94,5 +107,10 @@ public class CreateAnalysesTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode(), response
                 .getStatusLine().getStatusCode());
         response.close();
+    }
+    
+    @AfterClass(alwaysRun = true)
+    public void tearDown() throws MLHttpClientException {
+        super.destroy();
     }
 }
