@@ -575,7 +575,7 @@ function drawHistogram(data, divID) {
                 .y(function (d) {
                        return d[1]
                    })
-                .color(["#C99614"])
+                .color(["#f16c20"])
             ;
 
         chart.xAxis
@@ -609,7 +609,7 @@ function drawParallelSetsBase() {
 
     $('#parallel-sets-features').empty();
     $.each(categoricalFeatureNames,function(index, feature){
-        if (index <5){
+        if (index < 4){
             $('#parallel-sets-features').append("<label class='checkbox'><input type='checkbox' class='categoricalFeatureNames' id='inlineCheckbox1' value='"+categoricalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>"+categoricalFeatureNames[index]+"</label>");
         }
         else {

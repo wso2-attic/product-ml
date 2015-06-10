@@ -1135,17 +1135,17 @@ a.btn-opr-cancel {
 	width:440px;
 	height:340px;
 }
-
+/* model summary */
 .gr03 {
-	width:600px;
-	height:520px;
+	width:700px;
+	min-height:200px;
 }
 /* parallel sets */
 .gr04 {
 	width:900px;
 	height:700px;
 }
-
+/* trellis chart */
 .gr05 {
 	min-width:700px;
 	min-height:700px;

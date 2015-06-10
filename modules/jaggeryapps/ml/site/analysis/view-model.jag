@@ -22,7 +22,7 @@
     <script src="../../js/nv.d3.js"></script>
     <script src="../../js/wso2.ml.graphs.js"></script>
     
-    <script src="../../js/jquery-1.11.1.min.js"></script>    
+    <script src="../../js/jquery-1.11.1.min.js"></script>
 
     <%
         include("../../includes/tenantAware.jag");
@@ -95,72 +95,72 @@
 		<div class="container col-md-12 col-centered wr-content">
 
             <div id="notification-area"></div>
-			<h1 class="title">Model Summary</h1>
-			
-			<div class="col-md-6">
-                <h4 class="title">ROC Graph</h4>
-                <div id="roc-graph"></div>
-            </div>
-            <div class="col-md-6" id="weights-chart">
-                <h4 class="title">Feature Importance</h4>
-                <svg></svg>
-            </div>
+			<h1 id="model-summary-title" class="title">Model Summary</h1>
 
-		</div>
-		<!-- /content -->
-
-
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		
-
-		<!-- content -->
-		<div class="container col-md-12 col-centered wr-content">
-
-			<div class="col-md-6">
-                <h4 class="title">Confusion Matrix</h4>
-                <div id="confusion-matrix"></div>
-                <br>                
-				<label class="input-label" for="amount">Threshold:</label>
-				<input type="text" class="threshold-value" id="amount" readonly>				
-				<div id="slider"></div>
-                <br><br>
-            </div>
-
-            <div class="col-md-6">
-                <div id="predicted-vs-actual">
-                    <h4 id="predicted-actual-residual-title" class="title"></h4>
-                    <div id="predicted-vs-actual-chart"></div>
-                    <br>
-                    <div class="filter-md">
-                        <label class="input-label-sm">X-Axis<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
-                        <div class="input-control text">
-                            <select class="form-control" id="predicted-actual-x-features"></select>
-                        </div>
+            <div class="col-md-12 wr-graph-content">
+            
+                <div class="wr-graph-element gr03">
+                    <h5>ROC Graph</h5>
+                    <div class="wr-graph-img">
+                        <div id="roc-graph"></div>
                     </div>
-                    <div class="filter-md">
-                        <label class="input-label-sm">Y-Axis<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
-                        <div class="input-control text">
-                            <select class="form-control" id="predicted-actual-y-features"></select>
-                        </div>
-                    </div>                    
                 </div>
 
-                <div id="residual">
-                    <h4 id="predicted-actual-residual-title" class="title"></h4>
-                    <div id="residual-plot"></div>
-                    <br>
-                    <div class="filter-md">
-                        <label class="input-label-sm">Feature<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
-                        <div class="input-control text">
-                            <select class="form-control" id="residual-features"></select>
+                <div class="wr-graph-element gr03">
+                    <h5>Feature Importance</h5>
+                    <div class="wr-graph-img">
+                        <div id="weights-chart">
+                            <svg></svg>
                         </div>
                     </div>
-                </div>                
-            </div>
+                </div>  
+                
+                <div class="wr-graph-element gr03">
+                    <h5>Confusion Matrix</h5>
+                    <div class="wr-graph-img">
+                        <div id="confusion-matrix"></div>
+                        <br>                
+                        <label class="input-label" for="amount">Threshold:</label>
+                        <input type="text" class="threshold-value" id="amount" readonly>                
+                        <div id="slider"></div>
+                        <br>
+                    </div>
+                </div>
 
+                <div class="wr-graph-element gr03">
+                    <h5 id="predicted-actual-residual-title"></h5>
+                    <div class="wr-graph-img">
+                        <div id="predicted-vs-actual">
+                            <div id="predicted-vs-actual-chart"></div>
+                            <br>
+                            <div class="filter-md">
+                                <label class="input-label-sm">X-Axis<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                                <div class="input-control text">
+                                    <select class="form-control" id="predicted-actual-x-features"></select>
+                                </div>
+                            </div>
+                            <div class="filter-md">
+                                <label class="input-label-sm">Y-Axis<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                                <div class="input-control text">
+                                    <select class="form-control" id="predicted-actual-y-features"></select>
+                                </div>
+                            </div>                    
+                        </div>
+
+                        <div id="residual">
+                            <div id="residual-plot"></div>
+                            <br>
+                            <div class="filter-md">
+                                <label class="input-label-sm">Feature<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                                <div class="input-control text">
+                                    <select class="form-control" id="residual-features"></select>
+                                </div>
+                            </div>
+                        </div>                
+                    </div>
+                </div>                          
+            
+            </div>
 		</div>
 		<!-- /content -->
 
@@ -169,8 +169,7 @@
 </div>
 <!-- /content/body -->
 
-</div>
-    
+</div>   
 
 
 <!--footer class="footer">
@@ -301,6 +300,9 @@ $( document ).ready(function() {
         },*/
         success: function(res){
             if (res.algorithm == 'LOGISTIC_REGRESSION' || res.algorithm == 'LOGISTIC_REGRESSION_LBFGS' || res.algorithm == 'SVM') {
+                if(res.modelAccuracy) {
+                    $("#model-summary-title").append(" [Accuracy: " + res.modelAccuracy.toFixed(4)*100 + "%]");    
+                }                
                 $("#residual").remove();
                 // format data and draw ROC graph
                 var rocData  = JSON.parse(res.roc);
@@ -335,8 +337,11 @@ $( document ).ready(function() {
                 }
             }
             else if (res.algorithm == 'DECISION_TREE' || res.algorithm == 'NAIVE_BAYES') {
+                if(res.modelAccuracy) {
+                    $("#model-summary-title").append(" [Accuracy: " + res.modelAccuracy.toFixed(4)*100 + "%]");    
+                }                
                 // remove not applicable charts/tables
-                $("#roc-graph, #weights-chart, #confusion-matrix").closest("div.col-md-6").remove();
+                $("#roc-graph, #weights-chart, #confusion-matrix").closest("div.wr-graph-element").remove();
                 $("#residual").remove();
                 // draw feature select
                 testResultDataPointsSample = res.testResultDataPointsSample;
@@ -360,8 +365,11 @@ $( document ).ready(function() {
                 }                    
             }            
             else if (res.algorithm == 'LINEAR_REGRESSION' || res.algorithm == 'RIDGE_REGRESSION' || res.algorithm == 'LASSO_REGRESSION') {                
+                if(res.error) {
+                    $("#model-summary-title").append(" [MSE: " + res.error.toExponential(2) + "]");
+                }                
                 // remove not applicable charts/tables
-                $("#roc-graph, #confusion-matrix").closest("div.col-md-6").remove();
+                $("#roc-graph, #confusion-matrix").closest("div.wr-graph-element").remove();
                 $("#predicted-vs-actual").remove();
                 // create data object and draw weights chart
                 var featureImportanceData = [ {'key':'featureImportanceData', 'values': res.featureImportance}];
@@ -414,8 +422,8 @@ function drawRocGraph (data, auc, cssClass) {
     rocGraph.setLegendName("ROC curve (AUC = "+auc+")");
     rocGraph.setLineWidth(2);
     rocGraph.setPlotingAreaWidth(600);
-    rocGraph.setPlotingAreaHeight(400);
-    rocGraph.setLineColor("#A366A3"); 
+    rocGraph.setPlotingAreaHeight(380);
+    rocGraph.setLineColor("#f16c20"); 
     rocGraph.plot(d3.select(cssClass),function(){
 	   	var xLoc = xScale.invert(d3.mouse(this)[0]);
         var yLoc = yScale.invert(d3.mouse(this)[1]);
@@ -432,9 +440,9 @@ function drawWeightsChart (data) {
                         .staggerLabels(false)
                         .tooltips(false)
                         .showValues(false)
-                        .color(["#D1B2D1", "#A366A3", "#751975"]);
+                        .color(["#1395ba", "#117899", "#0f5b78", "#0d3c55", "#c02e1d", "#d94e1f", "#f16c20", "#ef8b2c", "#ecaa38", "#ebc844", "a2b86c", "5ca793"]);
 
-        chart.yAxis.tickFormat(d3.format(".2e"));
+        chart.yAxis.tickFormat(d3.format(".2e")).showMaxMin(false);
 
         chart.xAxis.axisLabel('Features')
 
@@ -475,7 +483,7 @@ function drawPredictedVsActualChart(testResultDataPointsSample) {
         }
         predictedVsActual.push(predictedVsActualPoint);
     }
-    drawScatterPlot(predictedVsActual, '#predicted-vs-actual-chart', xAxisFeatureName, yAxisFeatureName);
+    drawScatterPlot(predictedVsActual, '#predicted-vs-actual-chart', xAxisFeatureName, yAxisFeatureName, ["#286c4f", "#c02e1d"]);
 }
 
 // function to draw residual plot
@@ -495,17 +503,18 @@ function drawResidualPlot(testResultDataPointsSample) {
         residualData.push(residualRow);
     }
 
-    drawScatterPlot(residualData, '#residual-plot', featureName, 'Residual');
+    drawScatterPlot(residualData, '#residual-plot', featureName, 'Residual', ["#c02e1d"]);
 }
 
 // drawing a simple scatter graph
-function drawScatterPlot(data, cssClass, xLabel, yLabel) {
+function drawScatterPlot(data, cssClass, xLabel, yLabel, colors) {
     $(cssClass).empty();
     var scatter = new ScatterPlot(data);
 
-    scatter.setPlotingAreaWidth(800);
-    scatter.setPlotingAreaHeight(500);
-    scatter.setMarkerSize("2");
+    scatter.setPlotingAreaWidth(600);
+    scatter.setPlotingAreaHeight(400);
+    scatter.setMarkerSize(2);
+    scatter.setColors(colors);
     scatter.setXAxisText(xLabel);
     scatter.setYAxisText(yLabel);
     scatter.plot(d3.select(cssClass));

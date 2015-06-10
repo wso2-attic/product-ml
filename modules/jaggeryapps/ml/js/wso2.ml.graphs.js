@@ -148,7 +148,7 @@ var ScatterPlot = function(data) {
 
     // properties related to ScatterPlot
     this.markerSize = 3;
-
+    this.colors = d3.scale.category10();
     this.legendBoxWidth = 10;
     this.legendBoxHeight = 10; 
     this.legendTextXLoc = 20;
@@ -166,6 +166,17 @@ ScatterPlot.prototype.setMarkerSize = function(markerSize){
         throw new PlottingError("markerSize should be positive");
     }
     this.markerSize = markerSize;    
+};
+
+/** Following method is used to set colors used
+    in the scatter plot*/
+ScatterPlot.prototype.setColors = function(colors){
+
+    if( colors.length < 1){
+        throw new PlottingError("At least one color should be defined");
+    }
+    //this.colors = colors;    
+    this.colors = d3.scale.ordinal().range(colors);
 };
 
 /**Main function of the ScatterPlot class.
@@ -215,7 +226,7 @@ ScatterPlot.prototype.plot = function(selection) {
     this.attachXAxis(xAxis);
     this.attachYAxis(yAxis);
 
-    var color = d3.scale.category10();
+    var color = this.colors;
 
     //drawing dots, each dot represents a single data point
     this.svg.selectAll("circle")

@@ -19,15 +19,15 @@
 /*This css class defines few properties which are
 commond to all type of graphs.*/ 
 
-/*.basegraph
+.basegraph
 {
-	font: 14px sans-serif;
+	font: 12px sans-serif;
 }
 
 .axis .text
 {
-	font: 14px sans-serif;
-}*/
+	font: 12px sans-serif;
+}
 
 .axis path,.axis line
 {
@@ -38,8 +38,8 @@ commond to all type of graphs.*/
 
 /*model summery weights chart styles*/
 #weights-chart svg {
-	height: 500px;
-	width: 600px;
+	height: 420px;
+	width: 650px;
 }
 
 #weights-chart .tick line {
@@ -49,7 +49,7 @@ commond to all type of graphs.*/
 /*confusion matrix table styles*/
 #confusion-matrix table {
 	text-align: center;
-	width: 80%;
+	width: 100%;
 	height:200px;
 }
 #confusion-matrix .header-level-1 {
@@ -59,7 +59,7 @@ commond to all type of graphs.*/
 	font-style: italic;
 }
 .ui-slider-horizontal {
-    width: 80%;
+    width: 100%;
 }
 .threshold-value {
     border: 0;
