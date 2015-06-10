@@ -93,10 +93,10 @@
 				<!-- Nav tabs/graphs -->
 				<div class="wr-tabs-grphs">
 					<ul class="nav nav-pills">
-						 <li role="presentation" class="active"><a href="#scatter-plot" id="scatter-plot-link" aria-controls="scatter-plot" role="tab" data-toggle="tab">Scatter Plot</a></li>
-						 <li role="presentation"><a href="#parallel-sets" id="parallel-sets-link" aria-controls="parallel-sets" role="tab" data-toggle="tab">Parallel Sets</a></li>
-						 <li role="presentation"><a href="#trellis-chart" id="trellis-chart-link" aria-controls="trellis-chart" role="tab" data-toggle="tab">Trellis Chart</a></li>
-						 <li role="presentation"><a href="#cluster-diagram" id="cluster-diagram-link" aria-controls="cluster-diagram" role="tab" data-toggle="tab">Cluster Diagram</a></li>
+						 <li role="presentation" id="scatter-plot-li" data-toggle="tooltip"><a href="#scatter-plot" id="scatter-plot-link" aria-controls="scatter-plot" role="tab" data-toggle="tab">Scatter Plot</a></li>
+						 <li role="presentation" id="parallel-sets-li" data-toggle="tooltip"><a href="#parallel-sets" id="parallel-sets-link" aria-controls="parallel-sets" role="tab" data-toggle="tab">Parallel Sets</a></li>
+						 <li role="presentation" id="trellis-chart-li" data-toggle="tooltip"><a href="#trellis-chart" id="trellis-chart-link" aria-controls="trellis-chart" role="tab" data-toggle="tab">Trellis Chart</a></li>
+						 <li role="presentation" id="cluster-diagram-li" data-toggle="tooltip"><a href="#cluster-diagram" id="cluster-diagram-link" aria-controls="cluster-diagram" role="tab" data-toggle="tab">Cluster Diagram</a></li>
 					</ul>
 				</div>
 
@@ -104,7 +104,7 @@
 				<!-- Tab panes -->
 				<div class="tab-content">
 
-					<div role="tabpanel" class="tab-pane fade in active" id="scatter-plot">
+					<div role="tabpanel" class="tab-pane fade in" id="scatter-plot">
 					    <div class="col-md-2 wr-left-nav">
 
 					        <div class="wr-filters">
@@ -427,6 +427,33 @@ $( document ).ready(function() {
 
     // draw scatter plot on page load
     drawScatterPlotBase();
+
+    // select the active tab
+    if($('#scatter-plot-li').attr('class') == 'disabled') {
+        drawParallelSetsBase();
+        if($('#parallel-sets-li').attr('class') == 'disabled') {
+            drawTrellisChartBase();
+            if($('#trellis-chart-li').attr('class') == 'disabled') {
+                drawClusterDiagramBase();
+                if($('#cluster-diagram-li').attr('class') != 'disabled') {
+                    $('#cluster-diagram-link').click();
+                }
+            } else {
+                $('#trellis-chart-link').click();
+            }
+        } else {
+            $('#parallel-sets-link').click();
+        }
+    } else {
+        $('#scatter-plot-link').click();
+    }
+
+    // disabling tabs
+    $("#wr-tabs-grphs > li").click(function(){
+        if($(this).hasClass("disabled")) {
+            return false;
+        }
+    });
 });
 
 function drawScatterPlotBase() { 
@@ -452,7 +479,11 @@ function drawScatterPlotBase() {
 
 	} else {
 	    var infoText = "Minimum of two numerical features and one categorical feature required to draw a scatter plot.";
-        $("#scatter").html(buildNotification(infoText, 'info'));        	    
+        $("#scatter").html(buildNotification(infoText, 'info'));
+
+        $('#scatter-plot-li').attr('class', 'disabled');
+        $('#scatter-plot-li').attr('title', 'Minimum of two numerical features and one categorical feature required to draw a scatter plot');
+        $('#scatter-plot-link').attr('data-toggle', '');
 	}
 }
 
@@ -659,7 +690,11 @@ function drawParallelSets() {
         });
     } else {
         var infoText = "Minimum of two categorical features required for parallel sets.";
-        $("#parallelSets").html(buildNotification(infoText, 'info'));        
+        $("#parallelSets").html(buildNotification(infoText, 'info'));
+
+        $('#parallel-sets-li').attr('class', 'disabled');
+        $('#parallel-sets-li').attr('title', 'Minimum of two categorical features required for parallel sets');
+        $('#parallel-sets-link').attr('data-toggle', '');
     }
 }
 
