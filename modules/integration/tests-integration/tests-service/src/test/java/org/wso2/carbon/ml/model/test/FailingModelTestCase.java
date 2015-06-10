@@ -32,17 +32,17 @@ import org.json.JSONObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.carbon.ml.MLTestUtils;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
-import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
 
 /**
  * Contains test cases related to retrieving models
  */
-@Test(groups="getModels", dependsOnGroups="createModels")
-public class GetModelTestCase extends MLBaseTest {
+@Test(groups="failing-models")
+public class FailingModelTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private int projectId;
@@ -56,14 +56,13 @@ public class GetModelTestCase extends MLBaseTest {
         super.init();
         mlHttpclient = getMLHttpClient();
         String version = "1.0";
-        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, version,
-                MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
+        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE, version,
+                MLIntegrationTestConstants.AUTOMOBILE_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
-        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
-                MLIntegrationTestConstants.DATASET_NAME_DIABETES);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_AUTOMOBILE,
+                MLIntegrationTestConstants.DATASET_NAME_AUTOMOBILE);
         analysisId = createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME, projectId);
-        modelName = createModel(analysisId, versionSetId);
-        modelId = getModelId(modelName);
+        buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
     }
 
     /**
@@ -71,7 +70,7 @@ public class GetModelTestCase extends MLBaseTest {
      * @throws MLHttpClientException 
      * @throws IOException 
      */
-    @Test(description = "retrieve a model")
+    @Test(priority=1, description = "retrieve a model")
     public void testGetModel() throws MLHttpClientException, IOException, JSONException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
@@ -81,7 +80,35 @@ public class GetModelTestCase extends MLBaseTest {
         bufferedReader.close();
         response.close();
         //Check whether the correct model is retrieved
-        assertEquals("Incorrect model retrieved.", modelId,responseJson.getInt("id"));
+        assertEquals("Incorrect model retrieved.", modelId, responseJson.getInt("id"));
+        assertEquals("Model error has not been set.", true, responseJson.getString("error") != null);
+    }
+    
+    /**
+     * A test case for building a model with the given learning algorithm
+     * 
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                projectId, versionSetId, analysisId, mlHttpclient);
+        modelId = mlHttpclient.getModelId(modelName);
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+        // Waiting for model building to end
+        boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
+                MLIntegrationTestConstants.THREAD_SLEEP_TIME_MEDIUM, 1000);
+        // Checks whether model building completed successfully
+        assertEquals("Model building did not fail.", false, status);
     }
     
     @AfterClass(alwaysRun = true)

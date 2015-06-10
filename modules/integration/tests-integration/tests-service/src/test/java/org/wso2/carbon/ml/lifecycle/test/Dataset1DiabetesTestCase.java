@@ -21,7 +21,6 @@ package org.wso2.carbon.ml.lifecycle.test;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -61,8 +60,6 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES);
     }
-
-    // Dataset and project have been already created, therefore no need to create them here.
 
     /**
      * A test case for predicting for a given set of data points

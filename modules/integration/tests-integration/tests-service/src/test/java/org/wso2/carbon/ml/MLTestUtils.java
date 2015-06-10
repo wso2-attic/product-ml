@@ -116,6 +116,29 @@ public class MLTestUtils extends MLBaseTest {
     /**
      * Sets the configuration of the model to be trained
      *
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param response Response attribute
+     * @param trainDataFraction Fraction of data from the dataset to be trained with
+     * @param projectID ID of the project
+     * @param versionSetId Additional information about the name
+     * @throws MLHttpClientException
+     */
+    public static String setConfiguration(String algorithmName, String algorithmType, String response,
+            String trainDataFraction, int projectID, int versionSetId, MLHttpClient mlHttpclient)
+            throws MLHttpClientException, IOException, JSONException {
+        analysisName = algorithmName + versionSetId;
+
+        // Create an analysis
+        mlHttpclient.createAnalysis(analysisName, projectID);
+        analysisId = mlHttpclient.getAnalysisId(projectID, analysisName);
+        return setConfiguration(algorithmName, algorithmType, response, trainDataFraction, projectID, versionSetId,
+                analysisId, mlHttpclient);
+    }
+    
+    /**
+     * Sets the configuration of the model to be trained
+     *
      * @param algorithmName     Name of the learning algorithm
      * @param algorithmType     Type of the learning algorithm
      * @param response          Response attribute
@@ -125,12 +148,7 @@ public class MLTestUtils extends MLBaseTest {
      * @throws MLHttpClientException
      */
     public static String setConfiguration(String algorithmName, String algorithmType, String response,
-                                  String trainDataFraction, int projectID, int versionSetId, MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
-        analysisName = algorithmName + versionSetId;
-
-        //Create an analysis
-        mlHttpclient.createAnalysis(analysisName, projectID);
-        analysisId = mlHttpclient.getAnalysisId(projectID, analysisName);
+                                  String trainDataFraction, int projectID, int versionSetId, int analysisId, MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
         mlHttpclient.setFeatureDefaults(analysisId);
 
         //Set Model Configurations

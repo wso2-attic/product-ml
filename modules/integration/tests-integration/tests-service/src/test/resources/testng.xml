@@ -26,6 +26,13 @@
 			class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener" />
 	</listeners>
 
+	
+	<test name="ConfigurationAPI-Tests" preserve-order="true" verbose="2"
+		parallel="false">
+		<packages>
+			<package name="org.wso2.carbon.ml.configs.test" />
+		</packages>
+	</test>
 	<test name="Dataset-Tests" preserve-order="true" verbose="2">
 		<packages>
 			<package name="org.wso2.carbon.ml.dataset.test" />
@@ -49,19 +56,14 @@
 			<package name="org.wso2.carbon.ml.model.test" />
 		</packages>
 	</test>
-	<test name="ConfigurationAPI-Tests" preserve-order="true" verbose="2"
-		parallel="false">
-		<packages>
-			<package name="org.wso2.carbon.ml.configs.test" />
-		</packages>
-	</test>
+	
 	<test name="ML Life-cycle-Tests" preserve-order="true" verbose="2"
 		parallel="false">
 		<packages>
 			<package name="org.wso2.carbon.ml.lifecycle.test" />
 		</packages>
-		<!-- classes> <class name="org.wso2.carbon.ml.lifecycle.test.Dataset1DiabetesTestCase"/> 
+		 <!--  classes> <class name="org.wso2.carbon.ml.lifecycle.test.Dataset1DiabetesTestCase"/> 
 			<class name="org.wso2.carbon.ml.lifecycle.test.Dataset2YachtHydrodynamicsTestCase"/> 
-			</classes -->
+			</classes-->
 	</test>
 </suite>

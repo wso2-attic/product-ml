@@ -75,8 +75,8 @@ public class FeatureProcessingTestCase extends MLBaseTest {
      */
     @Test(priority=2, description = "Add customized features")
     public void testAddCustomizedFeatures() throws  MLHttpClientException, IOException {
-        String payload ="[{\"type\" :\"CATEGORICAL\",\"include\" : true,\"imputeOption\":\"DISCARD\",\"name\":\"" +
-                "Cover_Type\"}]";
+        String payload ="[{\"type\" :\"NUMERICAL\",\"include\" : false,\"imputeOption\":\"DISCARD\",\"name\":\"" +
+                "Age\"}]";
         CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/features", payload);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
@@ -112,6 +112,28 @@ public class FeatureProcessingTestCase extends MLBaseTest {
     @Test(priority=3, description = "Get all filtered features")
     public void testGetFilteredFeatures() throws MLHttpClientException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/filteredFeatures?featureType=CATEGORICAL");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+    }
+    
+    /**
+     * 
+     * @throws MLHttpClientException 
+     */
+    @Test(priority=4, description = "Get summary stats - without providing a feature")
+    public void testGetSummaryStatsWithoutFeature() throws MLHttpClientException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/stats");
+        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+    }
+    
+    /**
+     * 
+     * @throws MLHttpClientException 
+     */
+    @Test(priority=4, description = "Get summary stats - with feature")
+    public void testGetSummaryStatsWithFeature() throws MLHttpClientException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/stats?feature=Class");
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
     }

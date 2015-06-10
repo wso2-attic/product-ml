@@ -34,6 +34,7 @@ import org.junit.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.carbon.ml.commons.constants.MLConstants;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
@@ -207,6 +208,55 @@ public class GetDatasetsTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get feature names")
+    public void testGetFeatureNamesOfDataset() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                    .DATASET_ID_DIABETES+"/filteredFeatures");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        // Check whether the correct dataset is returned.
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        String line = bufferedReader.readLine();
+        JSONArray responseJson = new JSONArray(line);
+        assertEquals("Filter is expected to return none.", true, responseJson.length() == 0);
+        bufferedReader.close();
+        response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get categorical feature names")
+    public void testGetCategoricalFeatureNamesOfDataset() throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/" + MLIntegrationTestConstants
+                    .DATASET_ID_DIABETES+"/filteredFeatures?featureType=CATEGORICAL");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+        // Check whether the correct dataset is returned.
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        JSONArray responseJson = new JSONArray(bufferedReader.readLine());
+        assertEquals("Categorical feature names was not returned.", true, responseJson.length() != 0);
+        bufferedReader.close();
+        response.close();
+    }
+    
+    /**
+     * 
+     * @throws MLHttpClientException 
+     */
+    @Test(description = "Get summary stats - with feature")
+    public void testGetSummaryStatsWithFeature() throws MLHttpClientException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/"+MLIntegrationTestConstants
+                .DATASET_ID_DIABETES+"/stats?feature=Class");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
     }
     
     @AfterClass(alwaysRun = true)
