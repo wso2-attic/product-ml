@@ -70,8 +70,8 @@ public class FailingModelTestCase extends MLBaseTest {
      * @throws MLHttpClientException 
      * @throws IOException 
      */
-    @Test(priority=1, description = "retrieve a model")
-    public void testGetModel() throws MLHttpClientException, IOException, JSONException {
+    @Test(priority=1, description = "retrieve a failed model")
+    public void testGetFailedModel() throws MLHttpClientException, IOException, JSONException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());

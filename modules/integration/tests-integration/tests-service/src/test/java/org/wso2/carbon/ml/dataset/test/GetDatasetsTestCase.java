@@ -34,7 +34,6 @@ import org.junit.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.wso2.carbon.ml.commons.constants.MLConstants;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
@@ -137,6 +136,18 @@ public class GetDatasetsTestCase extends MLBaseTest {
     }
     
     /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get all available dataset versions")
+    public void testGetAllDatasetVersions() throws MLHttpClientException, IOException  {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/versions");
+        Assert.assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
      * Test retrieving all the available version-sets of a dataset.
      * @throws MLHttpClientException 
      * @throws IOException 
@@ -167,6 +178,34 @@ public class GetDatasetsTestCase extends MLBaseTest {
     public void testGetVersionSet() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/versions/" + MLIntegrationTestConstants
                 .VERSIONSET_ID);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get version set with a version", dependsOnMethods = 
+            "testGetVersionSetsOfdataset")
+    public void testGetVersionSetWithVersion() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/"+MLIntegrationTestConstants
+                .DATASET_ID_DIABETES+"/versions/1.0");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get chart sample points of a dataset version", dependsOnMethods = 
+            "testGetVersionSetsOfdataset")
+    public void testGetChartSamplePointsOfVersionSet() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/datasets/versions/" + MLIntegrationTestConstants
+                .VERSIONSET_ID+"/charts");
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

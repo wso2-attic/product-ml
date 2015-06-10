@@ -157,6 +157,30 @@ public class PostModelCreationTestCase extends MLBaseTest {
     }
     
     /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(priority=3, description = "Publish a Model")
+    public void testCreateModel() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/"+modelId+"/publish", null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(priority=3, description = "Build a non-existing Model")
+    public void testBuildModelWithInvalidId() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/"+999, null);
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
      * Test deleting a model by name.
      * 
      * @throws MLHttpClientException 
