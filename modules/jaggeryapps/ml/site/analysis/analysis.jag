@@ -302,7 +302,7 @@
             
             var modelId = $(this).data('modelid');
             var modelName = $(this).data('modelname');
-            window.location.href = '../predict/predict.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName;
+            window.location.href = '../predict/predict.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName+'&fromCompare=false';
         });
 
         $(document).on('click', '#publish', function(e){ 
@@ -332,7 +332,7 @@
             
             var modelId = $(this).data('modelid');
             var modelName = $(this).data('modelname');
-            window.location.href = 'view-model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName;
+            window.location.href = 'view-model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName+'&fromCompare=false';
         });        
 
         $(document).on('click', '#create-model', function(e){ 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/jquery.dataTables.min.css" rel="stylesheet">
@@ -198,11 +198,13 @@
 
 var serverUrl = window.location.origin;
 var datasetId = getParameterByName('datasetId');
+var projectId = getParameterByName('projectId');
 var projectName = getParameterByName('projectName');
 var analysisName = getParameterByName('analysisName');
 var analysisId = getParameterByName('analysisId');
 var modelName = getParameterByName('modelName');
 var modelId = getParameterByName('modelId');
+var fromCompare = getParameterByName('fromCompare');
 var predictedVsActuals;
 var numericalFeatureNames;
 var responseVariable;
@@ -409,7 +411,11 @@ $( document ).ready(function() {
 
     $('#back-link').on('click', function(e){
         e.preventDefault();
-        window.location.href = 'analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+        if(fromCompare == 'true') {
+            window.location.href = '../project/compare.jag?projectId='+projectId+'&projectName='+projectName+'&dataseId='+datasetId;
+        } else {
+            window.location.href = 'analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+        }
     });   
 	
 });
