@@ -516,9 +516,12 @@ function selectActiveTab() {
 	} else if (categoricalFeatureNames > 1) {
 	    drawParallelSetsBase();
 	    $('#parallel-sets-link').click();
-	} else {
+	} else if (categoricalFeatureNames.length > 0){
 	    drawTrellisChartBase();
 	    $('#trellis-chart-link').click();
+	} else {
+	    drawClusterDiagramBase();
+	    $('#cluster-diagram-link').click();
 	}
 }
 
@@ -533,6 +536,11 @@ function disableTabs() {
 	    $('#parallel-sets-li').attr('class', 'disabled');
         $('#parallel-sets-li').attr('title', 'Minimum of two categorical features required for parallel sets');
         $('#parallel-sets-link').attr('data-toggle', '');
+	}
+	if(categoricalFeatureNames.length < 1) {
+	    $('#trellis-chart-li').attr('class', 'disabled');
+        $('#trellis-chart-li').attr('title', 'Minimum of one categorical feature required to draw trellis charts');
+        $('#trellis-chart-link').attr('data-toggle', '');
 	}
 }
 
@@ -771,26 +779,28 @@ function drawParallelSets() {
 
 function drawTrellisChartBase() {
 
-    $('#trellis-cat-features').empty();
-    $.each(categoricalFeatureNames,function(index, feature){
-        $('#trellis-cat-features').append($('<option>', { 
-            value: feature.trim().replace(/"/g,"\\\""),
-            text : feature
-        }));
-    });
+    if(categoricalFeatureNames.length > 0) {
+        $('#trellis-cat-features').empty();
+        $.each(categoricalFeatureNames,function(index, feature){
+            $('#trellis-cat-features').append($('<option>', {
+                value: feature.trim().replace(/"/g,"\\\""),
+                text : feature
+            }));
+        });
 
-    $('#trellis-num-features').empty();
-    $.each(numericalFeatureNames,function(index, feature){
-    	// first 4 categorical features are plotted by default
-        if (index < 4){
-            $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>"+numericalFeatureNames[index]+"</label>");
-        }
-        else {
-            $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"'>"+numericalFeatureNames[index]+"</label>");
-        }        
-    });    
+        $('#trellis-num-features').empty();
+        $.each(numericalFeatureNames,function(index, feature){
+            // first 4 categorical features are plotted by default
+            if (index < 4){
+                $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>"+numericalFeatureNames[index]+"</label>");
+            }
+            else {
+                $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"'>"+numericalFeatureNames[index]+"</label>");
+            }
+        });
 
-    drawTrellisChart();
+        drawTrellisChart();
+    }
 }
 
 function drawTrellisChart() {
