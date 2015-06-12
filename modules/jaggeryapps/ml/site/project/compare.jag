@@ -122,9 +122,27 @@
                                         <h4>You do not have any classification models created at the moment.</h4>
                                     </div>
                                 </div>
-                                <div class="col-md-12 text-center">
+                                <!-- pagination -->
+                                <div class="col-md-6 text-left">
+                                    <table>
+                                    <tr>
+                                        <td class="">Show&nbsp;&nbsp;</td>
+                                        <td class="">
+                                            <select class="form-control" id="no-of-panels-classification">
+                                                <option value='10'>10</option>
+                                                <option value='25'>25</option>
+                                                <option value='50'>50</option>
+                                                <option value='100'>100</option>                                
+                                            </select>                           
+                                        </td>
+                                    </tr>
+                                    </table>            
+                                </div>
+                                
+                                <div class="col-md-6 text-right">
                                     <ul id="pagination-list-classification" class="pagination"></ul>
                                 </div>
+                                <!-- /pagination -->
                             </div>
                             <div role="tabpanel" class="tab-pane fade in" id="numerical-prediction-tab">
                                 <div class="panel-group" id="numerical-prediction-accordion" role="tablist" aria-multiselectable="true">
@@ -132,9 +150,27 @@
                                         <h4>You do not have any numerical prediction models created at the moment.</h4>
                                     </div>
                                 </div>
-                                <div class="col-md-12 text-center">
+                                <!-- pagination -->
+                                <div class="col-md-6 text-left">
+                                    <table>
+                                    <tr>
+                                        <td class="">Show&nbsp;&nbsp;</td>
+                                        <td class="">
+                                            <select class="form-control" id="no-of-panels-numerical-prediction">
+                                                <option value='10'>10</option>
+                                                <option value='25'>25</option>
+                                                <option value='50'>50</option>
+                                                <option value='100'>100</option>                                
+                                            </select>                           
+                                        </td>
+                                    </tr>
+                                    </table>            
+                                </div>
+                                
+                                <div class="col-md-6 text-right">
                                     <ul id="pagination-list-numerical-prediction" class="pagination"></ul>
                                 </div>
+                                <!-- /pagination -->                                
                             </div>
                             <div role="tabpanel" class="tab-pane fade in" id="clustering-tab">
                                 <div class="panel-group" id="clustering-accordion" role="tablist" aria-multiselectable="true">
@@ -142,9 +178,27 @@
                                         <h4>You do not have any clustering models created at the moment.</h4>
                                     </div>
                                 </div>
-                                <div class="col-md-12 text-center">
+                                <!-- pagination -->
+                                <div class="col-md-6 text-left">
+                                    <table>
+                                    <tr>
+                                        <td class="">Show&nbsp;&nbsp;</td>
+                                        <td class="">
+                                            <select class="form-control" id="no-of-panels-clustering">
+                                                <option value='10'>10</option>
+                                                <option value='25'>25</option>
+                                                <option value='50'>50</option>
+                                                <option value='100'>100</option>                                
+                                            </select>                           
+                                        </td>
+                                    </tr>
+                                    </table>            
+                                </div>
+                                
+                                <div class="col-md-6 text-right">
                                     <ul id="pagination-list-clustering" class="pagination"></ul>
                                 </div>
+                                <!-- /pagination -->
                             </div>
                         </div>
                     </div>
@@ -183,6 +237,26 @@
     var projectName = getParameterByName('projectName');
     var projectId = getParameterByName('projectId');
     var datasetId = getParameterByName('datasetId');
+    var classificationPanelsPerPage;
+    var numPredictionPanelsPerPage;
+    var clusteringPanelsPerPage;
+
+    // update pagination
+    $(document).on('change','select[id="no-of-panels-classification"]',function() {
+        $('#pagination-list-classification').empty();
+        classificationPanelsPerPage = parseInt($("#no-of-panels-classification").val());        
+        $('#classification-accordion').pageMe({pagerSelector:'#pagination-list-classification', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:classificationPanelsPerPage});
+    });  
+    $(document).on('change','select[id="no-of-panels-numerical-prediction"]',function() {
+        $('#pagination-list-numerical-prediction').empty();
+        numPredictionPanelsPerPage = parseInt($("#no-of-panels-numerical-prediction").val());        
+        $('#numerical-prediction-accordion').pageMe({pagerSelector:'#pagination-list-numerical-prediction', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:numPredictionPanelsPerPage});
+    });
+    $(document).on('change','select[id="no-of-panels-clustering"]',function() {
+        $('#pagination-list-clustering').empty();
+        clusteringPanelsPerPage = parseInt($("#no-of-panels-clustering").val());        
+        $('#clustering-accordion').pageMe({pagerSelector:'#pagination-list-clustering', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:clusteringPanelsPerPage});
+    });              
 
     $(document).ready(function() {
 
@@ -207,9 +281,14 @@
         loadModels();
 
         // add pagination
-        $('#classification-accordion').pageMe({pagerSelector:'#pagination-list-classification', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});
-        $('#numerical-prediction-accordion').pageMe({pagerSelector:'#pagination-list-numerical-prediction', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});
-        $('#clustering-accordion').pageMe({pagerSelector:'#pagination-list-clustering', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});
+        classificationPanelsPerPage = parseInt($("#no-of-panels-classification").val());        
+        $('#classification-accordion').pageMe({pagerSelector:'#pagination-list-classification', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:classificationPanelsPerPage});
+        
+        numPredictionPanelsPerPage = parseInt($("#no-of-panels-numerical-prediction").val());        
+        $('#numerical-prediction-accordion').pageMe({pagerSelector:'#pagination-list-numerical-prediction', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:numPredictionPanelsPerPage});
+        
+        clusteringPanelsPerPage = parseInt($("#no-of-panels-clustering").val());        
+        $('#clustering-accordion').pageMe({pagerSelector:'#pagination-list-clustering', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:clusteringPanelsPerPage});
 
         // disabling tabs
         $("#wr-tabs-grphs > li").click(function(){
@@ -251,7 +330,7 @@
                             '<table class="tbl-projects" projectID="' + models[i].id + '">' +
                                 '<tr>' +
                                     '<td>' +
-                                        '<a data-toggle="collapse" data-parent="#'+modelType+'-accordion" href="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" class="ctrl-exp-col">' +
+                                        '<a data-parent="#'+modelType+'-accordion" href="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" class="ctrl-exp-col reset-hover">' +
                                             '<span class="cu-acc-head-title">' + models[i].name + '</span>' +
                                             '<span class="cu-acc-head-workflow"></span>' +
                                             '<span class="cu-acc-head-created">[ Algorithm: ' + models[i].modelSummary.algorithm.replace("_", " ") + ' ]</span>';
@@ -265,13 +344,21 @@
                                                 accordionPanels += '<span class="cu-acc-head-created">[ Comparison not supported ]</span>';
                                             }                                                                                        
                                     accordionPanels += '</a>' +
-                                    '</td>' +
+                                    '</td>';
+                                    if(modelType != 'clustering') {
+                                        accordionPanels += '' + 
                                     '<td class="c-right">' +
                                         '<div>' +
                                             '<a href="#" id="view-model" class="cu-reg-btn btn-view" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-analysisid="' + models[i].analysisId + '"><span>View</span></a>' +
                                             '<a href="#" id="predict" class="cu-reg-btn btn-predict" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-analysisid="' + models[i].analysisId + '"><span>Predict</span></a>' +
                                         '</div>' +
-                                    '</td>' +
+                                    '</td>';                                        
+                                    }
+                                    else {
+                                        accordionPanels += '' + 
+                                    '<td class="c-right empty-button-panel"></td>';                                         
+                                    }
+                                    accordionPanels += '' + 
                                 '</tr>' +
                             '</table>' +
                         '</h4>' +
