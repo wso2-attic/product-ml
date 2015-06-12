@@ -282,7 +282,7 @@
                                                 '<td class="c-right">' +
                                                     '<div>';
                                                     // remove view and and predict links for k-means
-                                                    if(analysisModels[i].modelSummary.algorithm != 'K_MEANS') {
+                                                    if(modelStatus == 'Complete' && analysisModels[i].modelSummary.algorithm != 'K_MEANS') {
                                                         accordionPanel += '' + 
                                                         '<a href="#" id="view-model" class="cu-reg-btn btn-view '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>View</span></a>' +
                                                         '<a href="#" id="predict" class="cu-reg-btn btn-predict '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>Predict</span></a>';
