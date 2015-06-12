@@ -57,6 +57,7 @@ public class MLIntegrationTestConstants {
 
 	// Constants for locations of datasets - Happy scenario
 	public static final String DIABETES_DATASET_SAMPLE = "data/pIndiansDiabetes.csv";
+	public static final String DIABETES_DATASET_TEST = "data/pIndiansDiabetesTest.csv";
 	public static final String YACHT_DATASET_SAMPLE = "data/yachtHydrodynamics.csv";
 	public static final String BREAST_CANCER_DATASET_SAMPLE = "data/breastCancerWisconsin.csv";
 	public static final String FOREST_FIRES_DATASET_SAMPLE = "data/forestfires.csv";
