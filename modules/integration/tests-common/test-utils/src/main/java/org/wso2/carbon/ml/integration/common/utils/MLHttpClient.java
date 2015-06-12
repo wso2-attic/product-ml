@@ -230,82 +230,27 @@ public class MLHttpClient {
     }
     
     /**
-     * 
-     * @param DatasetName   Name for the dataset
-     * @param version       Version for the dataset
-     * @param resourcePath  Relative path the CSV file in resources
-     * @return              Response from the backend
-     * @throws              MLHttpClientException 
+     * @throws MLHttpClientException
      */
-    public CloseableHttpResponse uploadDatasetFromCSVWithInvalidSourceType(String DatasetName, String version, String resourcePath)
-            throws MLHttpClientException {
-        CloseableHttpClient httpClient =  HttpClients.createDefault();
+    public CloseableHttpResponse predictFromCSV(long modelId, String resourcePath) throws MLHttpClientException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
-            HttpPost httpPost = new HttpPost(getServerUrlHttps() + "/api/datasets/");
+            HttpPost httpPost = new HttpPost(getServerUrlHttps() + "/api/models/predict");
             httpPost.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
-            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-            multipartEntityBuilder.addPart("description", new StringBody("Sample dataset for Testing", ContentType.TEXT_PLAIN));
-            multipartEntityBuilder.addPart("sourceType", new StringBody("invalid", ContentType.TEXT_PLAIN));
-            multipartEntityBuilder.addPart("destination", new StringBody("file", ContentType.TEXT_PLAIN));
-            multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
-            multipartEntityBuilder.addPart("containsHeader", new StringBody("true", ContentType.TEXT_PLAIN));
 
-            if (DatasetName != null) {
-                multipartEntityBuilder.addPart("datasetName", new StringBody(DatasetName, ContentType.TEXT_PLAIN));
-            }
-            if (version != null) {
-                multipartEntityBuilder.addPart("version", new StringBody(version, ContentType.TEXT_PLAIN));
-            }
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            multipartEntityBuilder.addPart("modelId", new StringBody(modelId + "", ContentType.TEXT_PLAIN));
+            multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
+
             if (resourcePath != null) {
                 File file = new File(getResourceAbsolutePath(resourcePath));
-                multipartEntityBuilder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, "IndiansDiabetes.csv");
+                multipartEntityBuilder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM,
+                        "IndiansDiabetesPredict.csv");
             }
             httpPost.setEntity(multipartEntityBuilder.build());
             return httpClient.execute(httpPost);
-        } catch (ClientProtocolException e) {
-            throw new MLHttpClientException("Failed to upload dataset from csv " + resourcePath, e);
-        } catch (IOException e) {
-            throw new MLHttpClientException("Failed to upload dataset from csv " + resourcePath, e);
-        }
-    }
-    
-    /**
-     * 
-     * @param DatasetName   Name for the dataset
-     * @param version       Version for the dataset
-     * @param resourcePath  Relative path the CSV file in resources
-     * @return              Response from the backend
-     * @throws              MLHttpClientException 
-     */
-    public CloseableHttpResponse uploadDatasetFromCSVWithInvalidTargetType(String DatasetName, String version, String resourcePath)
-            throws MLHttpClientException {
-        CloseableHttpClient httpClient =  HttpClients.createDefault();
-        try {
-            HttpPost httpPost = new HttpPost(getServerUrlHttps() + "/api/datasets/");
-            httpPost.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
-            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-            multipartEntityBuilder.addPart("description", new StringBody("Sample dataset for Testing", ContentType.TEXT_PLAIN));
-            multipartEntityBuilder.addPart("sourceType", new StringBody("file", ContentType.TEXT_PLAIN));
-            multipartEntityBuilder.addPart("destination", new StringBody("invalid", ContentType.TEXT_PLAIN));
-            multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
-            multipartEntityBuilder.addPart("containsHeader", new StringBody("true", ContentType.TEXT_PLAIN));
-
-            if (DatasetName != null) {
-                multipartEntityBuilder.addPart("datasetName", new StringBody(DatasetName, ContentType.TEXT_PLAIN));
-            }
-            if (version != null) {
-                multipartEntityBuilder.addPart("version", new StringBody(version, ContentType.TEXT_PLAIN));
-            }
-            if (resourcePath != null) {
-                File file = new File(getResourceAbsolutePath(resourcePath));
-                multipartEntityBuilder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, "IndiansDiabetes.csv");
-            }
-            httpPost.setEntity(multipartEntityBuilder.build());
-            return httpClient.execute(httpPost);
-        } catch (ClientProtocolException e) {
-            throw new MLHttpClientException("Failed to upload dataset from csv " + resourcePath, e);
-        } catch (IOException e) {
-            throw new MLHttpClientException("Failed to upload dataset from csv " + resourcePath, e);
+        } catch (Exception e) {
+            throw new MLHttpClientException("Failed to predict from csv " + resourcePath, e);
         }
     }
     

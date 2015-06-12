@@ -161,9 +161,21 @@ public class PostModelCreationTestCase extends MLBaseTest {
      * @throws IOException 
      */
     @Test(priority=3, description = "Publish a Model")
-    public void testCreateModel() throws MLHttpClientException, IOException {
+    public void testPublishModel() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/"+modelId+"/publish", null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(priority=3, description = "Publish a non-existing Model")
+    public void testPublishNonExistingModel() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/"+999+"/publish", null);
+        assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
@@ -216,7 +228,7 @@ public class PostModelCreationTestCase extends MLBaseTest {
         response.close();
         // Waiting for model building to end
         boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
-                MLIntegrationTestConstants.THREAD_SLEEP_TIME_MEDIUM, 1000);
+                MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         // Checks whether model building completed successfully
         assertEquals("Model building did not complete successfully", true, status);
     }

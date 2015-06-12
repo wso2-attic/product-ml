@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -322,7 +322,7 @@ function bindEvents() {
 	$(document).on('click', '#create-project', function(e){
 		e.preventDefault();
 		var datasetName = $(this).data('dsname');
-		window.location = baseUrl + '/ml/site/project/create_project.jag?datasetName='+datasetName;
+		window.location = baseUrl + '/ml/site/project/create_project.jag?datasetName='+datasetName+'&fromDatasets=true';
 	});
 
 	$(document).on('click', '#explore-dataset', function(e){
