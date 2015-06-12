@@ -1173,5 +1173,21 @@ a.btn-opr-cancel {
 	cursor:default;
 }
 
+.wr-instant-response {
+	border:1px solid #bce8f1;
+	background:#f6fdff;
+	padding:15px 20px;
+}
+
+.wr-instant-response label {
+	font-weight:100;
+	font-size:15px;
+}
+
+.wr-instant-response label > span {
+	font-weight:700;
+	font-size:15px;
+}
+
 
 
