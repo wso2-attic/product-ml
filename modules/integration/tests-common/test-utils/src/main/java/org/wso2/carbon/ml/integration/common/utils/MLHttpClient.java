@@ -230,6 +230,31 @@ public class MLHttpClient {
     }
     
     /**
+     * @throws MLHttpClientException
+     */
+    public CloseableHttpResponse predictFromCSV(long modelId, String resourcePath) throws MLHttpClientException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        try {
+            HttpPost httpPost = new HttpPost(getServerUrlHttps() + "/api/models/predict");
+            httpPost.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
+
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            multipartEntityBuilder.addPart("modelId", new StringBody(modelId + "", ContentType.TEXT_PLAIN));
+            multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
+
+            if (resourcePath != null) {
+                File file = new File(getResourceAbsolutePath(resourcePath));
+                multipartEntityBuilder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM,
+                        "IndiansDiabetesPredict.csv");
+            }
+            httpPost.setEntity(multipartEntityBuilder.build());
+            return httpClient.execute(httpPost);
+        } catch (Exception e) {
+            throw new MLHttpClientException("Failed to predict from csv " + resourcePath, e);
+        }
+    }
+    
+    /**
      * Create a project
      * 
      * @param ProjectName   Name for the project

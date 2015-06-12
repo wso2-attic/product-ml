@@ -76,6 +76,21 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         JSONArray predictions = new JSONArray(reply);
         assertEquals(2, predictions.length());
     }
+    
+    /**
+     * A test case for predicting for a given set of data points from a file.
+     * 
+     * @throws MLHttpClientException
+     * @throws JSONException
+     */
+    private void testPredictDiabetesFromFile() throws MLHttpClientException, JSONException {
+        response = mlHttpclient.predictFromCSV(modelId, MLIntegrationTestConstants.DIABETES_DATASET_TEST);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        String reply = mlHttpclient.getResponseAsString(response);
+        JSONArray predictions = new JSONArray(reply);
+        assertEquals(7, predictions.length());
+    }
 
     /**
      * A test case for building a model with the given learning algorithm
@@ -166,6 +181,7 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictDiabetes();
+        testPredictDiabetesFromFile();
     }
 
     /**
