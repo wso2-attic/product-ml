@@ -93,10 +93,10 @@
 				<!-- Nav tabs/graphs -->
 				<div class="wr-tabs-grphs">
 					<ul class="nav nav-pills">
-						 <li role="presentation" class="active"><a href="#scatter-plot" id="scatter-plot-link" aria-controls="scatter-plot" role="tab" data-toggle="tab">Scatter Plot</a></li>
-						 <li role="presentation"><a href="#parallel-sets" id="parallel-sets-link" aria-controls="parallel-sets" role="tab" data-toggle="tab">Parallel Sets</a></li>
-						 <li role="presentation"><a href="#trellis-chart" id="trellis-chart-link" aria-controls="trellis-chart" role="tab" data-toggle="tab">Trellis Chart</a></li>
-						 <li role="presentation"><a href="#cluster-diagram" id="cluster-diagram-link" aria-controls="cluster-diagram" role="tab" data-toggle="tab">Cluster Diagram</a></li>
+						 <li role="presentation" id="scatter-plot-li" data-toggle="tooltip"><a href="#scatter-plot" id="scatter-plot-link" aria-controls="scatter-plot" role="tab" data-toggle="tab">Scatter Plot</a></li>
+						 <li role="presentation" id="parallel-sets-li" data-toggle="tooltip"><a href="#parallel-sets" id="parallel-sets-link" aria-controls="parallel-sets" role="tab" data-toggle="tab">Parallel Sets</a></li>
+						 <li role="presentation" id="trellis-chart-li" data-toggle="tooltip"><a href="#trellis-chart" id="trellis-chart-link" aria-controls="trellis-chart" role="tab" data-toggle="tab">Trellis Chart</a></li>
+						 <li role="presentation" id="cluster-diagram-li" data-toggle="tooltip"><a href="#cluster-diagram" id="cluster-diagram-link" aria-controls="cluster-diagram" role="tab" data-toggle="tab">Cluster Diagram</a></li>
 					</ul>
 				</div>
 
@@ -104,7 +104,7 @@
 				<!-- Tab panes -->
 				<div class="tab-content">
 
-					<div role="tabpanel" class="tab-pane fade in active" id="scatter-plot">
+					<div role="tabpanel" class="tab-pane fade in" id="scatter-plot">
 					    <div class="col-md-2 wr-left-nav">
 
 					        <div class="wr-filters">
@@ -425,9 +425,55 @@ $( document ).ready(function() {
         drawClusterDiagramBase();
     });
 
-    // draw scatter plot on page load
-    drawScatterPlotBase();
+    // disable tabs based on the features
+    disableTabs();
+
+    // select the active tab on page load
+    selectActiveTab();
+
+    // disabling tabs
+    $("#wr-tabs-grphs > li").click(function(){
+        if($(this).hasClass("disabled")) {
+            return false;
+        }
+    });
 });
+
+// select the active tab based on the feature types
+function selectActiveTab() {
+    if (numericalFeatureNames.length >1 & categoricalFeatureNames.length >0) {
+        drawScatterPlotBase();
+        $('#scatter-plot-link').click();
+	} else if (categoricalFeatureNames > 1) {
+	    drawParallelSetsBase();
+	    $('#parallel-sets-link').click();
+	} else if (categoricalFeatureNames.length > 0){
+	    drawTrellisChartBase();
+	    $('#trellis-chart-link').click();
+	} else {
+	    drawClusterDiagramBase();
+	    $('#cluster-diagram-link').click();
+	}
+}
+
+// disable tabs based on the features and show tooltips
+function disableTabs() {
+    if (!(numericalFeatureNames.length >1 & categoricalFeatureNames.length >0)) {
+        $('#scatter-plot-li').attr('class', 'disabled');
+        $('#scatter-plot-li').attr('title', 'Minimum of two numerical features and one categorical feature required to draw a scatter plot');
+        $('#scatter-plot-link').attr('data-toggle', '');
+	}
+	if(categoricalFeatureNames.length < 2) {
+	    $('#parallel-sets-li').attr('class', 'disabled');
+        $('#parallel-sets-li').attr('title', 'Minimum of two categorical features required for parallel sets');
+        $('#parallel-sets-link').attr('data-toggle', '');
+	}
+	if(categoricalFeatureNames.length < 1) {
+	    $('#trellis-chart-li').attr('class', 'disabled');
+        $('#trellis-chart-li').attr('title', 'Minimum of one categorical feature required to draw trellis charts');
+        $('#trellis-chart-link').attr('data-toggle', '');
+	}
+}
 
 function drawScatterPlotBase() { 
 
@@ -452,7 +498,7 @@ function drawScatterPlotBase() {
 
 	} else {
 	    var infoText = "Minimum of two numerical features and one categorical feature required to draw a scatter plot.";
-        $("#scatter").html(buildNotification(infoText, 'info'));        	    
+        $("#scatter").html(buildNotification(infoText, 'info'));
 	}
 }
 
@@ -659,32 +705,34 @@ function drawParallelSets() {
         });
     } else {
         var infoText = "Minimum of two categorical features required for parallel sets.";
-        $("#parallelSets").html(buildNotification(infoText, 'info'));        
+        $("#parallelSets").html(buildNotification(infoText, 'info'));
     }
 }
 
 function drawTrellisChartBase() {
 
-    $('#trellis-cat-features').empty();
-    $.each(categoricalFeatureNames,function(index, feature){
-        $('#trellis-cat-features').append($('<option>', { 
-            value: feature.trim().replace(/"/g,"\\\""),
-            text : feature
-        }));
-    });
+    if(categoricalFeatureNames.length > 0) {
+        $('#trellis-cat-features').empty();
+        $.each(categoricalFeatureNames,function(index, feature){
+            $('#trellis-cat-features').append($('<option>', {
+                value: feature.trim().replace(/"/g,"\\\""),
+                text : feature
+            }));
+        });
 
-    $('#trellis-num-features').empty();
-    $.each(numericalFeatureNames,function(index, feature){
-    	// first 4 categorical features are plotted by default
-        if (index < 4){
-            $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>"+numericalFeatureNames[index]+"</label>");
-        }
-        else {
-            $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"'>"+numericalFeatureNames[index]+"</label>");
-        }        
-    });    
+        $('#trellis-num-features').empty();
+        $.each(numericalFeatureNames,function(index, feature){
+            // first 4 categorical features are plotted by default
+            if (index < 4){
+                $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>"+numericalFeatureNames[index]+"</label>");
+            }
+            else {
+                $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"'>"+numericalFeatureNames[index]+"</label>");
+            }
+        });
 
-    drawTrellisChart();
+        drawTrellisChart();
+    }
 }
 
 function drawTrellisChart() {

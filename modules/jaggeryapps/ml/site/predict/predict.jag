@@ -145,9 +145,11 @@
     var analysisId = getParameterByName('analysisId');
     var modelId = getParameterByName('modelId');
     var datasetId = getParameterByName('datasetId');
+    var projectId = getParameterByName('projectId');
     var projectName = getParameterByName('projectName');
     var analysisName = getParameterByName('analysisName');
     var modelName = getParameterByName('modelName');
+    var fromCompare = getParameterByName('fromCompare');
 
     $(document).ready(function() {
 
@@ -286,7 +288,11 @@
 
         $('#cancel-predict').on('click', function(e){
             e.preventDefault();
-            window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+            if(fromCompare == 'true') {
+                window.location.href = '../project/compare.jag?projectId='+projectId+'&projectName='+projectName+'&dataseId='+datasetId;
+            } else {
+                window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+            }
         });
     }        
 

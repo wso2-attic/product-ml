@@ -371,7 +371,7 @@
             var modelName = $(this).data('modelname');
             var analysisId = $(this).data('analysisid');
             var analysisName = modelName.split(".")[0];
-            window.location.href = '../predict/predict.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName;
+            window.location.href = '../predict/predict.jag?projectId='+projectId+'&analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName+'&fromCompare=true';
         });
 
         $(document).on('click', '#view-model', function(e){ 
@@ -381,7 +381,7 @@
             var modelName = $(this).data('modelname');
             var analysisId = $(this).data('analysisid');
             var analysisName = modelName.split(".")[0];
-            window.location.href = '../analysis/view-model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName;
+            window.location.href = '../analysis/view-model.jag?projectId='+projectId+'&analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName+'&fromCompare=true';
         });
     }
 
