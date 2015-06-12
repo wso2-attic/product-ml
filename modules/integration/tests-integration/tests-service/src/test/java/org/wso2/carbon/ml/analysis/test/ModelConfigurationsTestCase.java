@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.NamingException;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -45,6 +46,7 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
     private MLHttpClient mlHttpclient;
     private int projectId;
     private int analysisId;
+    private int analysisId2;
     private final String ALGORITHM_NAME = "LOGISTIC_REGRESSION";
     
     @BeforeClass(alwaysRun = true)
@@ -56,6 +58,7 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES);
         analysisId = createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME, projectId);
+        analysisId2 = createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME_2, projectId);
     }
 
     /**
@@ -85,6 +88,17 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
     public void testGetResponseVariable() throws MLHttpClientException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/responseVariables");
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+    }
+    
+    /**
+     * @throws MLHttpClientException 
+     * @throws NamingException 
+     */
+    @Test(priority=2, description = "Get response variable for malformed analysis id")
+    public void testGetResponseVariableForMalformedAnalysisId() throws MLHttpClientException, NamingException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/abc/responseVariables");
+        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
     }
     
@@ -129,6 +143,43 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
         CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * Test setting default values to hyper-parameters of an analysis with an unknown algorithm
+     * 
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(priority = 3, description = "Set default values to hyperparameters for an unknown algorithm")
+    public void testSetDefaultHyperparametersForAnUnknownAlgo() throws MLHttpClientException, IOException {
+        Map<String, String> configurations = new HashMap<String, String>();
+        configurations.put(MLConstants.ALGORITHM_NAME, "ABC");
+        configurations.put(MLConstants.ALGORITHM_TYPE, "Classification");
+        configurations.put(MLConstants.RESPONSE, "Class");
+        configurations.put(MLConstants.TRAIN_DATA_FRACTION, "0.7");
+        CloseableHttpResponse response = mlHttpclient.setModelConfiguration(analysisId2, configurations);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId2 + "/hyperParams/defaults", null);
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response
+                .getStatusLine().getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Test setting default values to hyper-parameters of an analysis without setting model configs.
+     * 
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(priority = 3, description = "Set default values to hyperparameters without setting model configs.")
+    public void testSetDefaultHyperparametersWithoutModelConfigs() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId2
+                + "/hyperParams/defaults", null);
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response
+                .getStatusLine().getStatusCode());
         response.close();
     }
     
