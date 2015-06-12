@@ -652,9 +652,8 @@ function drawPlotsAjax() {
     var numFeatureDependentEscaped = $("#scatter-y").val().replace(/^\s+|\s+$/g, '').replace(/"/g,"\\\"");
     var catFeatureEscaped = $("#scatter-group").val().replace(/^\s+|\s+$/g, '').replace(/"/g,"\\\"");
 
-    //TODO: remove versionsetId
     // get scatter plot data
-    var jsonData = '{"tenantId" : "'+tenantId+'","user" : "'+userName+'","versionsetId" : 1,"xAxisFeature" : "'+numFeatureIndependentEscaped+'","yAxisFeature" : "'+numFeatureDependentEscaped+'","groupByFeature" : "'+catFeatureEscaped+'"}';
+    var jsonData = '{"xAxisFeature" : "'+numFeatureIndependentEscaped+'","yAxisFeature" : "'+numFeatureDependentEscaped+'","groupByFeature" : "'+catFeatureEscaped+'"}';
     $.ajax({
         type: "POST",
         headers: {
@@ -695,7 +694,7 @@ function drawPlotsAjax() {
         }
     });
 
-    // get summery data for independent variable
+    // get summary data for independent variable
 	$.ajax({
         type: "GET",
         headers: {
@@ -720,7 +719,7 @@ function drawPlotsAjax() {
         }
     });
 
-    // get summery data for dependent variable
+    // get summary data for dependent variable
     $.ajax({
         type: "GET",
         headers: {
