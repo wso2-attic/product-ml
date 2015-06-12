@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML - Machine Learner</title>
+    <title>WSO2 Machine Learner</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/jquery.dataTables.min.css" rel="stylesheet">
@@ -146,13 +146,31 @@
 
 					        </div>
 
+							<!-- graph description -->
+							<div class="wr-desc-chart">
+								<h5><span class="glyphicon glyphicon-info-sign"></span> Scatter plot & histograms</h5>
+								<p>Scatter plot visualizes the relationship between the two selected features of the dataset. Moreover, histograms provide the user a graphical representation of the data distribution for the same two features you select. The scatter plot user interface allows you to select two numerical features from the dataset to be visualized through a scatter plot and histograms.</p>
+							</div>
+							<!-- /graph description -->					        
+
 					    </div>
 
 						<div class="col-md-10 wr-graph-content">
 							<div class="wr-graph-element gr01">
 								<h5 id='scatterPlotTitle'></h5>
 								<div class="wr-graph-img">
-									<div id='scatter'></div>
+									<div id='scatter'>Loading chart...</div>
+									
+									<div class="sp-quantity">
+									    <div class="sp-minus"> <a class="scatter-marker-size" data-operator="-" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+									    </div>
+									    <div class="sp-input">
+									        <input type="text" id="scatter-marker-size-input" class="quntity-input" value="2" disabled/>
+									    </div>
+									    <div class="sp-plus"> <a class="scatter-marker-size" data-operator="+" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+									    </div>
+									</div>																		
+
 								</div>
 							</div>
 				    	
@@ -191,6 +209,13 @@
 
 					        </div>
 					        <!-- /filters -->   
+
+							<!-- graph description -->
+							<div class="wr-desc-chart">
+								<h5><span class="glyphicon glyphicon-info-sign"></span> Parallel sets</h5>
+								<p>Parallel sets is a visualization method used for categorical data. It adopts the layout of parallel coordinates, but substitutes the individual data points by a frequency-based representation. This abstract view is combined with a set of interactions. It supports visual data analysis of large and complex data sets. Using the parallel sets user interface, you can specify which categorical features to draw the diagram.</p>
+							</div>
+							<!-- /graph description -->					        					        
 
 					    </div>
 
@@ -231,6 +256,13 @@
 
 					        </div>
 
+							<!-- graph description -->
+							<div class="wr-desc-chart">
+								<h5><span class="glyphicon glyphicon-info-sign"></span> Trellis chart</h5>
+								<p>Trellis chart is a series of graphs or charts based on the same scale and axes, allowing them to be easily compared. It uses multiple views to show different partitions of a dataset, and is useful for finding the structure and patterns in complex data. Trellis chart user interface allows you to select one categorical feature and multiple numerical features (bound to a maximum) to draw the diagram.</p>
+							</div>
+							<!-- /graph description -->					        					        					        
+
 					    </div>
 
 					    <div class="col-md-10 wr-graph-content">
@@ -238,6 +270,17 @@
 					        <div class="wr-graph-element gr05">
 								<div class="wr-graph-img">
 									<div id='trellisChart'>Loading chart...</div>
+
+									<div class="sp-quantity">
+									    <div class="sp-minus"> <a class="trellis-marker-size" data-operator="-" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+									    </div>
+									    <div class="sp-input">
+									        <input type="text" id="trellis-marker-size-input" class="quntity-input" value="2" disabled/>
+									    </div>
+									    <div class="sp-plus"> <a class="trellis-marker-size" data-operator="+" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+									    </div>
+									</div>																											
+
 								</div>
 							</div>					      					        
 
@@ -295,6 +338,13 @@
 
 					        </div>
 
+							<!-- graph description -->
+							<div class="wr-desc-chart">
+								<h5><span class="glyphicon glyphicon-info-sign"></span> Cluster diagram</h5>
+								<p>Cluster diagram is a general type of diagram, which depicts one or more clusters in a dataset. A cluster in general is a group or collection of discrete points that are close to each other. In explore view, a cluster diagram provides a perspective on data clusters for two selected numerical features. A popular clustering algorithm is applied on the data sample to derive data clusters. You can select two numerical features and the number of clusters required through the cluster diagram user interface.</p>
+							</div>
+							<!-- /graph description -->					        					        					        					        
+
 					    </div>
 
 					    <div class="col-md-10 wr-graph-content">
@@ -302,6 +352,17 @@
 					        <div class="wr-graph-element gr04">
 								<div class="wr-graph-img">
 									<div id='clusterDiagram'>Loading chart...</div>
+
+									<div class="sp-quantity">
+									    <div class="sp-minus"> <a class="cluster-marker-size" data-operator="-" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+									    </div>
+									    <div class="sp-input">
+									        <input type="text" id="cluster-marker-size-input" class="quntity-input" value="2" disabled/>
+									    </div>
+									    <div class="sp-plus"> <a class="cluster-marker-size" data-operator="+" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+									    </div>
+									</div>																																											
+
 								</div>
 							</div>					      					        
 
@@ -345,8 +406,13 @@ var userName;
 var categoricalFeatureNames;
 var numericalFeatureNames;
 
+var scatterMarkerSize;
+var trellisMarkerSize;
+var clusterMarkerSize;
+
 // redraw charts upon changes in selections
 $(document).on('change','select[id="scatter-x"], select[id="scatter-y"], select[id="scatter-group"]',function() {
+    $("#scatter").html("Loading chart...");
     drawPlotsAjax();
 });
 $(document).on('change','input[class="categoricalFeatureNames"]',function() {
@@ -369,6 +435,10 @@ $( document ).ready(function() {
 	        top: $('header').height()
 	      }
 	});
+
+	scatterMarkerSize = $('#scatter-marker-size-input').val();
+	trellisMarkerSize = $('#trellis-marker-size-input').val();
+	clusterMarkerSize = $('#cluster-marker-size-input').val();
 
     var projectName = getParameterByName('projectName');
     var projectId;
@@ -570,7 +640,7 @@ function drawPlotsAjax() {
                 scatterData.push(dataRow);
             }
 
-        	drawScatterPlot(scatterData, "#scatter", numFeatureIndependent, numFeatureDependent);
+        	drawScatterPlot(scatterData, "#scatter", numFeatureIndependent, numFeatureDependent, scatterMarkerSize);
 		   	$("#scatterPlotTitle").html(numFeatureIndependent + " vs. " + numFeatureDependent);            
         },
         error : function(res){
@@ -715,7 +785,7 @@ function drawParallelSets() {
                 }
                 // clear the div contains parallel sets chart
                 $("#parallelSets").html("");
-                var chart = d3.parsets().dimensions(categoricalFeatureArray).tension(1.0).width(800).height(630);
+                var chart = d3.parsets().dimensions(categoricalFeatureArray).tension(1.0).width(800).height(670);
                 var vis = d3.select("#parallelSets").append("svg").attr("width", chart.width()).attr("height", chart.height()).style("font-size", "12px");
 
                 vis.datum(res).call(chart);
@@ -776,7 +846,7 @@ function drawTrellisChart() {
         success : function(res){
         	/* D3.js Trellis Chart code */
             var width = 960,
-                size = 150,
+                size = 155,
                 padding = 19.5;
             var x = d3.scale.linear().range([padding / 2, size - padding / 2]);
             var y = d3.scale.linear().range([size - padding / 2, padding / 2]);
@@ -859,7 +929,7 @@ function drawTrellisChart() {
                         return x(d[p.x]);
                     }).attr("cy", function(d) {
                         return y(d[p.y]);
-                    }).attr("r", 1.5).style("fill", function(d) {
+                    }).attr("r", trellisMarkerSize).style("fill", function(d) {
                         // replace current header of categorical feature header with common header
                         // can be accessed by color
                         var dString = JSON.stringify(d);
@@ -937,8 +1007,10 @@ function drawClusterDiagramBase() {
     drawClusterDiagram();
 }
 
-function drawClusterDiagram() {
+// keeps cluster data to redraw chart on marker size change
+var redrawClusterData = [];
 
+function drawClusterDiagram() {
 	// get categorical feature list from checkbox selection
     var numericalFeatureIndependent = $("#cluster-independent").val().replace(/^\s+|\s+$/g, '');
     var numericalFeatureDependent = $("#cluster-dependent").val().replace(/^\s+|\s+$/g, '');
@@ -962,8 +1034,8 @@ function drawClusterDiagram() {
                 dataRow[2] = dataArray[i]['cluster'];
                 clusterData.push(dataRow);
             }
-
-            drawScatterPlot(clusterData, "#clusterDiagram", numericalFeatureIndependent, numericalFeatureDependent);
+            redrawClusterData = clusterData;
+            drawScatterPlot(clusterData, "#clusterDiagram", numericalFeatureIndependent, numericalFeatureDependent, clusterMarkerSize);
         },
         error: function(response) {
         	var errorText = 'Error occurred while retrieving data for cluster diagram. '+response.status+' '+response.statusText;
@@ -972,18 +1044,99 @@ function drawClusterDiagram() {
     });
 }
 
+// redraw cluster diagram with existing cluster data
+function redrawClusterDiagram() {
+	// get categorical feature list from checkbox selection
+    var numericalFeatureIndependent = $("#cluster-independent").val().replace(/^\s+|\s+$/g, '');
+    var numericalFeatureDependent = $("#cluster-dependent").val().replace(/^\s+|\s+$/g, '');
+
+    $("#clusterDiagram").empty();
+    var scatter = new ScatterPlot(redrawClusterData);
+
+    scatter.setPlotingAreaWidth(720);
+    scatter.setPlotingAreaHeight(560);
+    scatter.setMarkerSize(clusterMarkerSize);
+    scatter.setXAxisText(numericalFeatureIndependent);
+    scatter.setYAxisText(numericalFeatureDependent);
+    scatter.plot(d3.select("#clusterDiagram"));
+};
+
 // drawing a simple scatter graph
-function drawScatterPlot(data, cssClass, xLabel, yLabel) {
+function drawScatterPlot(data, cssClass, xLabel, yLabel, markerSize) {
     $(cssClass).empty();
     var scatter = new ScatterPlot(data);
 
     scatter.setPlotingAreaWidth(720);
     scatter.setPlotingAreaHeight(560);
-    scatter.setMarkerSize(2);
+    scatter.setMarkerSize(markerSize);
     scatter.setXAxisText(xLabel);
     scatter.setYAxisText(yLabel);
     scatter.plot(d3.select(cssClass));
 };
+
+// functions for chart marker size changes
+$(".scatter-marker-size").on("click", function () {
+
+    var $button = $(this);
+    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
+
+    if ($button.data('operator') == "+") {
+        var newVal = parseFloat(oldValue) + 1;
+    } else {
+        // Don't allow decrementing below 1
+        if (oldValue > 1) {
+            var newVal = parseFloat(oldValue) - 1;
+        } else {
+            newVal = 1;
+        }
+    }
+    scatterMarkerSize = newVal;
+    $button.closest('.sp-quantity').find("input.quntity-input").val(newVal);
+    $("#scatter").html("Loading chart...");
+    drawPlotsAjax();
+});
+
+$(".trellis-marker-size").on("click", function () {
+
+    var $button = $(this);
+    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
+
+    if ($button.data('operator') == "+") {
+        var newVal = parseFloat(oldValue) + 1;
+    } else {
+        // Don't allow decrementing below 1
+        if (oldValue > 1) {
+            var newVal = parseFloat(oldValue) - 1;
+        } else {
+            newVal = 1;
+        }
+    }
+	trellisMarkerSize = newVal;
+    $button.closest('.sp-quantity').find("input.quntity-input").val(newVal);
+    $("#trellisChart").html("Loading chart...");
+    drawTrellisChart();
+});
+
+$(".cluster-marker-size").on("click", function () {
+
+    var $button = $(this);
+    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
+
+    if ($button.data('operator') == "+") {
+        var newVal = parseFloat(oldValue) + 1;
+    } else {
+        // Don't allow decrementing below 1
+        if (oldValue > 1) {
+            var newVal = parseFloat(oldValue) - 1;
+        } else {
+            newVal = 1;
+        }
+    }
+	clusterMarkerSize = newVal;
+    $button.closest('.sp-quantity').find("input.quntity-input").val(newVal);
+    $("#clusterDiagram").html("Loading chart...");
+    redrawClusterDiagram();
+});
 
 </script>
 

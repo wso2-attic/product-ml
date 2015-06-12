@@ -89,14 +89,33 @@
             <div class="col-md-12">
 
                 <!-- content -->
-                <div class="container col-md-12 col-centered wr-content">
+                <div class="container-fluid col-centered wr-content">
 
                     <div id="notification-area"></div>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
+
+                    <!-- pagination -->
+                    <div class="col-md-6 text-left">
+                        <table>
+                        <tr>
+                            <td class="">Show&nbsp;&nbsp;</td>
+                            <td class="">
+                                <select class="form-control" id="no-of-panels">
+                                    <option value='5'>5</option>                                
+                                    <option value='10'>10</option>
+                                    <option value='25'>25</option>
+                                    <option value='50'>50</option>
+                                    <option value='100'>100</option>                                
+                                </select>                           
+                            </td>
+                        </tr>
+                        </table>            
+                    </div>
                     
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-6 text-right">
                         <ul id="pagination-list" class="pagination"></ul>
                     </div>
+                    <!-- /pagination -->                    
 
                     <!-- delete model popup -->
                     <div class="popup-content" data-operation="delete-model">
@@ -150,6 +169,14 @@
     var analysisId = getParameterByName('analysisId');
     var datasetId = getParameterByName('datasetId');
     var deleteModelId;
+    var panelsPerPage;
+
+    // update pagination
+    $(document).on('change','select[id="no-of-panels"]',function() {
+        $('#pagination-list').empty();
+        panelsPerPage = parseInt($("#no-of-panels").val());
+        $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:panelsPerPage});
+    });    
 
     $(document).ready(function() {
 
@@ -174,7 +201,8 @@
 
         loadModels();
         // add pagination
-        $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});
+        panelsPerPage = parseInt($("#no-of-panels").val());
+        $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:panelsPerPage});
         
         // events to delete a project
         $(document).on('click', '#delete-model', function(e){ 
@@ -390,9 +418,9 @@
                 success : function(res){
                     $('#accordion').empty();
                     loadModels();
-                    // add pagination
+                    // update pagination
                     $('#pagination-list').empty();
-                    $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});                
+                    $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:panelsPerPage});                
                 },
                 error : function(res){
                     var errorText = 'Error occurred while deleting model. ' + res.status + ' ' + res.statusText;
