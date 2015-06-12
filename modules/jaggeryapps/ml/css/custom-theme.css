@@ -460,6 +460,7 @@ a.ctrl-filter-category:hover {
 /* pagination */
 .pagination {
   border-radius: 0px;
+  margin:0;
 }
 
 .pagination > li > a, .pagination > li > span {
