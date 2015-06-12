@@ -1169,5 +1169,9 @@ a.btn-opr-cancel {
 	font-weight:100;
 }
 
+.reset-hover {
+	cursor:default;
+}
+
 
 

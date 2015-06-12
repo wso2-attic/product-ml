@@ -252,6 +252,10 @@ a.ctrl-filter-category:hover {
 	padding-left:35px;	
 }
 
+.empty-button-panel {
+	padding:25px 2px;
+}
+
 
 /* input */
 .form-control {
