@@ -306,7 +306,7 @@
                 }
             },
             error: function(res) {
-                var errorText = 'Error occurred while retrieving analysis models. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }
         });
@@ -390,7 +390,7 @@
                     handleNotification(successText, '#notification-area', 'success');
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while publishing model to registry. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });            
@@ -421,7 +421,7 @@
                     algorithmName = res;
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while retrieving analysis name. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
@@ -438,7 +438,7 @@
                     algorithmType = res;
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while retrieving algorithm type. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
@@ -464,7 +464,7 @@
                     $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:panelsPerPage});                
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while deleting model. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });        

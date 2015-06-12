@@ -188,7 +188,7 @@ $( document ).ready(function() {
             setResponseVariable = res;
         },
         error: function(res) {
-            var errorText = 'Error occurred while retrieving previously set response variable. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, notificationArea, 'warning');
         }
     });
@@ -208,7 +208,7 @@ $( document ).ready(function() {
             }
         },
         error: function(res) {
-            var errorText = 'Error occurred while retrieving previously set algorithm name. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, notificationArea, 'warning');
         }
     });
@@ -228,7 +228,7 @@ $( document ).ready(function() {
             }
         },
         error: function(res) {
-            var errorText = 'Error occurred while retrieving previously set train data fraction. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, notificationArea, 'warning');
         }
     });
@@ -293,7 +293,7 @@ $( document ).ready(function() {
                 window.location.href = '../parameters/parameters.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
             },
             error: function(res){
-                var errorText = 'Error occurred while setting model configurations. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, notificationArea, 'warning');
             }
         });
@@ -312,7 +312,7 @@ $( document ).ready(function() {
                 window.location.href = '../project/projects.jag';
             },
             error: function(res){
-                var errorText = 'Error occurred while cancelling analysis. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, notificationArea, 'warning');
             }
         });
@@ -340,7 +340,7 @@ function loadDatasetFeatures(setResponseVariable) {
             }
         },
         error: function(res) {
-            var errorText = 'Error occurred while retrieving dataset features. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, notificationArea, 'warning');
         }
     });

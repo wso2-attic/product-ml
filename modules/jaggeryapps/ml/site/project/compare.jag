@@ -441,7 +441,7 @@
                 }
             },
             error: function(res) {
-                var errorText = 'Error occurred while retrieving project models. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');                
             }
         });

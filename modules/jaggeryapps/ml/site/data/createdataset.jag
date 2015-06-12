@@ -253,7 +253,7 @@ $( document ).ready(function() {
     	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
         },
         error :  function(res){
-            var errorText = 'Error occurred while creating dataset. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }                               
     });

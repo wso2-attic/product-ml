@@ -247,7 +247,7 @@ $( document ).ready(function() {
                     window.location.href = './projects.jag';    
 	            },
 	            error : function(res){
-	            	var errorText = 'Error occurred while creating project. ' + res.status + ' ' + res.statusText;
+	            	                var errorText = res.responseText;
                     handleNotification(errorText, '#notification-area', 'warning');
 	            }
 			});
@@ -270,7 +270,7 @@ $( document ).ready(function() {
 				});
 			},
 			error: function(res) { //TODO: display error
-            	var errorText = 'Error occurred while retrieving datasets. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
 			}
 		});
