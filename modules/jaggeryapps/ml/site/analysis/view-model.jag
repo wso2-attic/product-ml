@@ -367,7 +367,7 @@ $( document ).ready(function() {
                 }                    
             }            
             else if (res.algorithm == 'LINEAR_REGRESSION' || res.algorithm == 'RIDGE_REGRESSION' || res.algorithm == 'LASSO_REGRESSION') {                
-                if(res.error) {
+                if($.isNumeric(res.error)) {
                     $("#model-summary-title").append(" [MSE: " + res.error.toExponential(2) + "]");
                 }                
                 // remove not applicable charts/tables

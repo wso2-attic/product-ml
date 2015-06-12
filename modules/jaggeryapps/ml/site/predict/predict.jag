@@ -102,7 +102,7 @@
                             <button id="predict" class="btn btn-main" type="submit">Predict</button>
                         </div>
                         <br/>
-                        <p id="prediction"></p>
+                        <div id="prediction"></div>
 
                     </div>
                         
@@ -220,7 +220,7 @@
                     if (modelFeatures[i] == responseVariable) continue;
 
                     inputString = '' +
-                                '<label class="input-label">'+modelFeatures[i]+'<span class="help-tip glyphicon glyphicon-question-sign"></span></label>' +
+                                '<label class="input-label">'+modelFeatures[i]+'</label>' +
 				'<span class="fld-required">*</span>'+
                                 '<div class="input-control text">' +
                                     '<input type="text" id="sgd-data-fraction-'+ i +'" value="" placeholder=""/>' +
@@ -276,7 +276,10 @@
                         xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
                     },*/
                     success : function(res){
-                        $("#prediction").html("Prediction: "+res);
+                        var predictionNotification =   '<div class="wr-instant-response">' +
+                                                            '<label>Predicted Value: <span>' + res + '</span></label>' +
+                                                        '</div>';                        
+                        $("#prediction").html(predictionNotification);
                     },
                     error : function(res){
                         var errorText = 'Error occurred while predicting response variable. ' + res.status + ' ' + res.statusText;
