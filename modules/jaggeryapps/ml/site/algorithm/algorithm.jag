@@ -302,20 +302,26 @@ $( document ).ready(function() {
     // function that cancels an analysis
     $('#cancel-analysis').on('click', function(e){
         e.preventDefault();
-        $.ajax({
-            type: 'DELETE',
-            url: serverUrl+"/api/analyses/"+analysisId,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
-            success: function(res){
-                window.location.href = '../project/projects.jag';
-            },
-            error: function(res){
-                var errorText = res.responseText
-                handleNotification(errorText, notificationArea, 'warning');
-            }
-        });
+        // if navigation is from analysis page do not delete the analysis
+        if (fromAnalysis == 'true') {
+            window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+        }
+        else {
+            $.ajax({
+                type: 'DELETE',
+                url: serverUrl+"/api/analyses/"+analysisId,
+                /*beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
+                },*/
+                success: function(res){
+                    window.location.href = '../project/projects.jag';
+                },
+                error: function(res){
+                    var errorText = res.responseText
+                    handleNotification(errorText, notificationArea, 'warning');
+                }
+            });
+        }        
     });
 }); 
 

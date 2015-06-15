@@ -141,6 +141,7 @@ var datasetId = getParameterByName('datasetId');
 var analysisName = getParameterByName('analysisName');
 var analysisId = getParameterByName('analysisId');
 var fromAnalysis = getParameterByName('fromAnalysis');
+var fromAnalysis = getParameterByName('fromAnalysis');
 
 $( document ).ready(function() {
 
@@ -203,20 +204,26 @@ $( document ).ready(function() {
     // function that cancels an analysis
     $('#cancel-analysis').on('click', function(e){
         e.preventDefault();
-        $.ajax({
-            type: 'DELETE',
-            url: serverUrl+"/api/analyses/"+analysisId,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
-            success: function(res){
-                window.location.href = '../project/projects.jag';
-            },
-            error: function(res){
-                var errorText = res.responseText
-                handleNotification(errorText, '#notification-area', 'warning');
-            }
-        });
+        // if navigation is from analysis page do not delete the analysis
+        if (fromAnalysis == 'true') {
+            window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+        }
+        else {
+            $.ajax({
+                type: 'DELETE',
+                url: serverUrl+"/api/analyses/"+analysisId,
+                /*beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
+                },*/
+                success: function(res){
+                    window.location.href = '../project/projects.jag';
+                },
+                error: function(res){
+                    var errorText = res.responseText
+                    handleNotification(errorText, '#notification-area', 'warning');
+                }
+            });            
+        }
     });
 
     // redraw summary stats charts when feature type is changed
