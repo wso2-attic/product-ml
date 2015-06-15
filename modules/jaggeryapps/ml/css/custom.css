@@ -508,6 +508,10 @@ a.t-proj-workflow {
 	font-size:14px;
 }
 
+.t-proj-workflow  {
+    color:#666;
+}
+
 /* tables */
 .tbl-project-desc td {
 	padding:0px 0px;
@@ -1128,12 +1132,12 @@ a.btn-opr-cancel {
 /* scatter plot */
 .gr01 {
 	width:900px;
-	height:700px;
+	height:750px;
 }
 /* histograms */
 .gr02 {
 	width:440px;
-	height:340px;
+	height:365px;
 }
 /* model summary */
 .gr03 {
@@ -1143,12 +1147,46 @@ a.btn-opr-cancel {
 /* parallel sets */
 .gr04 {
 	width:900px;
-	height:700px;
+	height:750px;
 }
 /* trellis chart */
 .gr05 {
-	min-width:700px;
-	min-height:700px;
+	min-width:750px;
+	min-height:750px;
+}
+
+.wr-desc-chart {
+	border-top:1px solid #f0f0f0;
+	padding-top:10px;
+	font-size:12px;
+	color:#777;
+	font-weight:100;
+	width:90%;
+}
+
+.wr-desc-chart h5 {
+	color:#555;
+	font-weight:100;
+}
+
+.reset-hover {
+	cursor:default;
+}
+
+.wr-instant-response {
+	border:1px solid #bce8f1;
+	background:#f6fdff;
+	padding:15px 20px;
+}
+
+.wr-instant-response label {
+	font-weight:100;
+	font-size:15px;
+}
+
+.wr-instant-response label > span {
+	font-weight:700;
+	font-size:15px;
 }
 
 

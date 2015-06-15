@@ -252,6 +252,10 @@ a.ctrl-filter-category:hover {
 	padding-left:35px;	
 }
 
+.empty-button-panel {
+	padding:25px 2px;
+}
+
 
 /* input */
 .form-control {
@@ -460,6 +464,7 @@ a.ctrl-filter-category:hover {
 /* pagination */
 .pagination {
   border-radius: 0px;
+  margin:0;
 }
 
 .pagination > li > a, .pagination > li > span {

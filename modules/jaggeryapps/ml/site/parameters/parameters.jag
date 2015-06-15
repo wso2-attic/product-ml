@@ -211,7 +211,7 @@ $( document ).ready(function() {
             }
         },
         error: function(res) {
-            var errorText = 'Error occurred while retrieving previously set hyper-parameters. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -240,7 +240,7 @@ $( document ).ready(function() {
     		}
         },
         error: function(res) {
-            var errorText = 'Error occurred while retrieving hyper-parameters. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -295,7 +295,7 @@ $( document ).ready(function() {
                 jsonData = "[".concat(jsonData,"]");
             },
             error: function(res) {
-                var errorText = 'Error occurred while retrieving hyper-parameters. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }
     	});
@@ -312,7 +312,7 @@ $( document ).ready(function() {
                 window.location.href = '../model/model.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&datasetId='+datasetId+'&algorithmName='+algorithmName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&fromAnalysis='+fromAnalysis;
             },
             error: function(res){
-                var errorText = 'Error occurred while retrieving previously set hyper-parameters. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }
         });        
@@ -332,7 +332,7 @@ $( document ).ready(function() {
                 window.location.href = '../project/projects.jag';
             },
             error: function(res){
-                var errorText = 'Error occurred while cancelling analysis. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }
         });

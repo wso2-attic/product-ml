@@ -27,7 +27,7 @@
         </div>
 		<div class="col-sm-4">
 			<div class="wr-auth pull-right">
-				<a href="#" data-toggle="dropdown" class="cu-ico-right-button cu-ico-button-user">Administrator</a>
+				<a href="#" data-toggle="dropdown" class="cu-ico-right-button cu-ico-button-user"><% print(session.get("logged.user")); %></a>
 				<div class="dropdown-menu">
 					<div class="cu-arrow"></div>
 					<div class="dropdown-menu-content">
@@ -182,7 +182,7 @@ function version(versionNumbers){
 	var versionHtml = "";
     for(var i = 0; i < versionNumbers.length; i++){
     	versionHtml +=  '<tr>' +
-			 				'<td class="c-padd"><span class="glyphicon glyphicon-book"></span> ' + versionNumbers[i].version+'</td>' +
+			 				'<td class="c-padd"><span class="t-proj-workflow"><span class="glyphicon glyphicon-book"></span> ' + versionNumbers[i].version+'</span></td>' +
 			 				'<td><a href="#" id="delete-dataset-version" class="cu-level2-btn btn-delete-dark" data-versionid="'+ versionNumbers[i].id +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete</span></a></td>' +
 			 			'</tr>';
     }
@@ -351,7 +351,7 @@ function loadDatasets() {
         	}
         },
         error :  function(res){
-	        var errorText = 'Error occurred while retrieving datasets. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
 	        handleNotification(errorText, '#notification-area', 'warning');
         }
 	});	
@@ -370,7 +370,7 @@ function deleteDataset(datasetId) {
 	            loadDatasets();
 	        },
 	        error : function(res){
-	            var errorText = 'Error occurred while deleting dataset. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
 	            handleNotification(errorText, '#notification-area', 'warning');
 	        }
 	    });		
@@ -390,7 +390,7 @@ function deleteDatasetVersion(versionId) {
 	            loadDatasets();
 	        },
 	        error : function(res){
-	            var errorText = 'Error occurred while deleting dataset version. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
 	            handleNotification(errorText, '#notification-area', 'warning');
 	        }
 	    });

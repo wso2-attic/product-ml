@@ -255,7 +255,7 @@
                     console.log("Analysis created.");                    
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while creating analysis. ' + res.status + ' ' + res.statusText;
+                                    var errorText = res.responseText;
                     handleNotification(errorText, notificationArea, 'warning');
                     isError = true;
                 }
@@ -274,7 +274,7 @@
                         analysisId = res['id'];
                     },
                     error: function(res){
-                        var errorText = 'Error occurred while retrieving analysis ID. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                         handleNotification(errorText, notificationArea, 'warning');
                         isError = true;
                     }
@@ -295,7 +295,7 @@
                         window.location.href = '../preprocess/preprocess.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId;
                     },
                     error: function(res){
-                        var errorText = 'Error occurred while setting default impute options. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                         handleNotification(errorText, notificationArea, 'warning');
                         isError = true;
                     }
@@ -477,7 +477,7 @@
                                         //var compareModels = '../workflow/create_workflow.jag?projid='+projid+'&projna='+projna+'&analysisName='+analysisName+'&wfid='+wfid;
 
                                         accordionPanel +=   '<tr>' +
-                                                                '<td class="c-padd"><a href="#" class="t-proj-workflow"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;'+analysisName+'</a>' +
+                                                                '<td class="c-padd"><span class="t-proj-workflow"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;'+analysisName+'</span>' +
                                                                 '</td>' +
                                                                 '<td>' +
                                                                     '<a href="#" id="view-analysis" class="cu-level2-btn btn-view-dark" data-toggle="tooltip" data-original-title="View this model" data-workflowid="'+workflowId+'" data-projId="'+projid+'" data-projectname="'+projna+'" data-analysisname="'+analysisName+'" data-datasetid="'+datasetId+'"><span>View</span></a>' +
@@ -502,7 +502,7 @@
                 }                
             },
             error: function(res) {
-                var errorText = 'Error occurred while retrieving projects. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');                
             }
         });
@@ -531,7 +531,7 @@
                     loadProjects();
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while deleting project. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
@@ -552,7 +552,7 @@
                     loadProjects();
                 },
                 error: function(res){
-                    var errorText = 'Error occurred while deleting analysis. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, notificationArea, 'warning');
                 }
             });

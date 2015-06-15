@@ -89,14 +89,32 @@
             <div class="col-md-12">
 
                 <!-- content -->
-                <div class="container col-md-12 col-centered wr-content">
+                <div class="container-fluid col-centered wr-content">
 
                     <div id="notification-area"></div>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
+
+                    <!-- pagination -->
+                    <div id="pagination-per-page" class="col-md-6 text-left">
+                        <table>
+                        <tr>
+                            <td class="">Show&nbsp;&nbsp;</td>
+                            <td class="">
+                                <select class="form-control" id="no-of-panels">
+                                    <option value='10'>10</option>
+                                    <option value='25'>25</option>
+                                    <option value='50'>50</option>
+                                    <option value='100'>100</option>                                
+                                </select>                           
+                            </td>
+                        </tr>
+                        </table>            
+                    </div>
                     
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-6 text-right">
                         <ul id="pagination-list" class="pagination"></ul>
                     </div>
+                    <!-- /pagination -->                    
 
                     <!-- delete model popup -->
                     <div class="popup-content" data-operation="delete-model">
@@ -150,6 +168,14 @@
     var analysisId = getParameterByName('analysisId');
     var datasetId = getParameterByName('datasetId');
     var deleteModelId;
+    var panelsPerPage;
+
+    // update pagination
+    $(document).on('change','select[id="no-of-panels"]',function() {
+        $('#pagination-list').empty();
+        panelsPerPage = parseInt($("#no-of-panels").val());
+        $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:panelsPerPage});
+    });    
 
     $(document).ready(function() {
 
@@ -174,7 +200,8 @@
 
         loadModels();
         // add pagination
-        $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});
+        panelsPerPage = parseInt($("#no-of-panels").val());
+        $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:panelsPerPage});
         
         // events to delete a project
         $(document).on('click', '#delete-model', function(e){ 
@@ -218,6 +245,7 @@
                         '<p><a href="create_project.jag" id="create-model" class="cu-level2-btn btn-add-new-dark" data-toggle="tooltip" data-original-title="Create Model"><span>Create Model</span></a></p>'+
                     '</div>';
                     $("#accordion").append(accordionPanelNoModels);    
+                    $("#pagination-per-page").hide()
                 }
                 else {
 
@@ -244,17 +272,22 @@
                                         '<table class="tbl-projects" projectID="' + analysisModels[i]['id'] + '">' +
                                             '<tr>' +
                                                 '<td>' +
-						    '<a data-toggle="collapse" data-parent="#accordion" href="#collapse'+i+'" aria-expanded="true" aria-' + 'controls="collapse1" class="ctrl-exp-col">' +
+						    '<a ' + appendDataToggle(modelStatus) + ' data-parent="#accordion" href="#collapse'+i+'" aria-expanded="true" aria-' + 'controls="collapse1" class="ctrl-exp-col ' + appendLinkDisable(modelStatus) + '">' +
                                                     '<span class="cu-acc-head-title">' + analysisModels[i]['name'] + '</span>' +
                                                     '<span class="cu-acc-head-created">[ Created: ' + analysisModels[i]['createdTime'] + ' ]</span>' +
                                                     '<span class="cu-acc-head-workflow"></span>' +
-                                                    '<span class="cu-acc-head-created">[ Status: ' + analysisModels[i]['status'] + ' ]</span>' +
+                                                    '<span class="cu-acc-head-created">[ Status: ' + analysisModels[i]['status'] + ' <img src="../../images/icons/status-' + appendStatusIcon(modelStatus) + '.png" /> ]</span>' +
                                                     '</a>' +
                                                 '</td>' +
                                                 '<td class="c-right">' +
-                                                    '<div>' +
+                                                    '<div>';
+                                                    // remove view and and predict links for k-means
+                                                    if(modelStatus == 'Complete' && analysisModels[i].modelSummary.algorithm != 'K_MEANS') {
+                                                        accordionPanel += '' + 
                                                         '<a href="#" id="view-model" class="cu-reg-btn btn-view '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>View</span></a>' +
-                                                        '<a href="#" id="predict" class="cu-reg-btn btn-predict '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>Predict</span></a>' +
+                                                        '<a href="#" id="predict" class="cu-reg-btn btn-predict '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>Predict</span></a>';
+                                                    }
+                                                        accordionPanel += '' + 
                                                         '<a href="'+serverUrl+'/api/models/'+analysisModels[i]['name']+'/export" id="download-model" class="cu-reg-btn btn-download '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>Download</span></a>' +
                                                         '<a href="#" id="publish" class="cu-reg-btn btn-publish '+appendClass(modelStatus)+'" data-modelid="'+analysisModels[i]['id']+'"><span>Publish</span></a>' +
                                                         '<a href="#" id="delete-model" class="cu-reg-btn btn-delete" data-modelid="'+analysisModels[i]['id']+'">Delete Model</a>' +
@@ -273,7 +306,7 @@
                 }
             },
             error: function(res) {
-                var errorText = 'Error occurred while retrieving analysis models. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }
         });
@@ -288,6 +321,42 @@
         }
         return classAppend;
     }    
+
+    // function to append data-toggle disabled CSS class when model building is not failed
+    function appendDataToggle(modelStatus) {
+        var dataToggleAppend = '';
+        if(modelStatus == 'Failed') {
+            dataToggleAppend = 'data-toggle="collapse"';  
+        }
+        return dataToggleAppend;
+    }    
+
+    // function to append link disabled CSS class when model building is not failed
+    function appendLinkDisable(modelStatus) {
+        var linkDisableAppend = '';
+        if(modelStatus != 'Failed') {
+            linkDisableAppend = 'reset-hover';  
+        }
+        return linkDisableAppend;
+    }        
+
+    // function to append link disabled CSS class when model building is not failed
+    function appendStatusIcon(modelStatus) {
+        var statusIconAppend = '';
+        if(modelStatus == 'Not Started') {
+            statusIconAppend = 'not-started';  
+        }
+        else if(modelStatus == 'In Progress') {
+            statusIconAppend = 'progressing';  
+        }
+        else if(modelStatus == 'Complete') {
+            statusIconAppend = 'completed';  
+        }
+        else if(modelStatus == 'Failed') {
+            statusIconAppend = 'error';  
+        }
+        return statusIconAppend;
+    }
 
     function bindEvents() {
 
@@ -321,7 +390,7 @@
                     handleNotification(successText, '#notification-area', 'success');
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while publishing model to registry. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });            
@@ -352,7 +421,7 @@
                     algorithmName = res;
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while retrieving analysis name. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
@@ -369,7 +438,7 @@
                     algorithmType = res;
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while retrieving algorithm type. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
@@ -390,12 +459,12 @@
                 success : function(res){
                     $('#accordion').empty();
                     loadModels();
-                    // add pagination
+                    // update pagination
                     $('#pagination-list').empty();
-                    $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:8});                
+                    $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:panelsPerPage});                
                 },
                 error : function(res){
-                    var errorText = 'Error occurred while deleting model. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });        

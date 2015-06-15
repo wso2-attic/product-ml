@@ -171,7 +171,7 @@ $( document ).ready(function() {
                 modelName = res['name'];
             },
             error: function(res){
-                var errorText = 'Error occurred while creating model. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }
         });
@@ -190,7 +190,7 @@ $( document ).ready(function() {
                 modelId = res['id'];
             },
             error: function(res){
-                var errorText = 'Error occurred while retrieving model info. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }
         });
@@ -207,7 +207,7 @@ $( document ).ready(function() {
                 window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&analysisName='+analysisName+'&projectName='+projectName+'&datasetId='+datasetId;
             },
             error: function(res){
-                var errorText = 'Error occurred while submitting model build job. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }
         });
@@ -232,7 +232,7 @@ $( document ).ready(function() {
                     window.location.href = '../project/projects.jag';
                 },
                 error: function(res){
-                    var errorText = 'Error occurred while cancelling analysis. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });
@@ -257,7 +257,7 @@ function loadDatasetVersions() {
             });
         },
         error: function(res) { //TODO: display error
-            var errorText = 'Error occurred while retrieving dataset versions. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');            
         }
     });

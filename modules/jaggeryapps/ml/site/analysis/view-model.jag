@@ -264,7 +264,7 @@ $( document ).ready(function() {
         	numericalFeatureNames = res;
         },
         error : function(res){
-            var errorText = 'Error occurred while retrieving numerical feature names. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -282,7 +282,7 @@ $( document ).ready(function() {
         	responseVariable = res;
         },
         error : function(res){
-            var errorText = 'Error occurred while retrieving response variable. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -367,7 +367,7 @@ $( document ).ready(function() {
                 }                    
             }            
             else if (res.algorithm == 'LINEAR_REGRESSION' || res.algorithm == 'RIDGE_REGRESSION' || res.algorithm == 'LASSO_REGRESSION') {                
-                if(res.error) {
+                if($.isNumeric(res.error)) {
                     $("#model-summary-title").append(" [MSE: " + res.error.toExponential(2) + "]");
                 }                
                 // remove not applicable charts/tables
@@ -404,7 +404,7 @@ $( document ).ready(function() {
             }
         },
         error: function(res){
-            var errorText = 'Error occurred while retrieving model summary. ' + res.status + ' ' + res.statusText;
+                var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }
     });
