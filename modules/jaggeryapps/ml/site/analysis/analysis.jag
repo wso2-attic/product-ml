@@ -232,11 +232,9 @@
             type: "GET",
             url: serverUrl+"/api/analyses/"+analysisId+"/models",
             async : false,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
             success: function(data) {
-                var analysisModels = data;
+            	// order models in reverse chronological order
+                var analysisModels = data.sort(sortByTimestamp);
                 
                 if (analysisModels.length == 0) {
                     var accordionPanelNoModels = 
@@ -358,6 +356,20 @@
         return statusIconAppend;
     }
 
+    // compare function for models
+    function sortByTimestamp(a, b) {
+        var sortStatus = 0;
+		timestamp1 = new Date(a.createdTime);
+		timestamp2 = new Date(b.createdTime);
+     
+        if (timestamp1 > timestamp2) {
+            sortStatus = -1;
+        } else if (timestamp1 < timestamp2) {
+            sortStatus = 1;
+        }
+        return sortStatus;
+    }    
+
     function bindEvents() {
 
         $(document).on('click', '#btn-refresh', function(e){
@@ -414,9 +426,6 @@
                 url: serverUrl+"/api/analyses/"+analysisId+"/algorithmName",
                 async : false,
                 dataType: 'text',
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success : function(res){
                     algorithmName = res;
                 },
@@ -431,9 +440,6 @@
                 url: serverUrl+"/api/analyses/"+analysisId+"/algorithmType",
                 async : false,
                 dataType: 'text',
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success : function(res){
                     algorithmType = res;
                 },
@@ -453,9 +459,6 @@
             $.ajax({
                 type: "DELETE",
                 url: serverUrl+"/api/models/"+modelId,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success : function(res){
                     $('#accordion').empty();
                     loadModels();
