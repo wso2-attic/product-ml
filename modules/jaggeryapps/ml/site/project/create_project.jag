@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -11,7 +12,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>')
     %>
     
 </head>
@@ -130,10 +130,6 @@
 
 		</div>
 		<!-- /content -->
-		<!-- data attributes -->
-        <div id="projid" data-projid=""></div>
-        <div id="datid" data-datid=""></div>
-        <div id="datname" data-datname=""></div>
 
 	</div>
 </div>
@@ -188,7 +184,7 @@ $( document ).ready(function() {
     // set dataset name and disable input when navigating from datasets page
     var datasetName = getParameterByName('datasetName');
     if (datasetName !== "") {
-    	$("#datasets").replaceWith('<select class="form-control" id="datasets"><option  selected>'+datasetName+'</option></select>');
+    	$("#datasets").replaceWith('<select class="form-control" id="datasets"><option  selected>' + datasetName + '</option></select>');
     	$('#datasets').attr("disabled","disabled");
     }
 
@@ -233,21 +229,18 @@ $( document ).ready(function() {
 
         if(projectNameValidation && descriptionValidation){
         	
-        	var jsonData = '{"name":"'+projectName+'","description":"'+projectDes+'","datasetName":"'+datasetName+'"}';
+        	var jsonData = '{"name":"' + projectName + '","description":"' + projectDes + '","datasetName":"' + datasetName + '"}';
 
 			$.ajax({
 	            type: 'POST',
 	            url: serverUrl+"/api/projects",
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 contentType: "application/json",
 	            data : jsonData,
 	            success : function(res){	            	
                     window.location.href = './projects.jag';    
 	            },
 	            error : function(res){
-	            	                var errorText = res.responseText;
+	            	var errorText = res.responseText;
                     handleNotification(errorText, '#notification-area', 'warning');
 	            }
 			});
@@ -258,18 +251,15 @@ $( document ).ready(function() {
 		$.ajax({
 			type: "GET",
 			url: serverUrl+"/api/datasets",
-		    /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
 			success: function(res) {
 				$.each(res, function (i, item) {
 				    $('#datasets').append($('<option>', { 
-				        value: item.id,
-				        text : item.name 
+				        value: sanitize(item.id),
+				        text : sanitize(item.name)
 				    }));
 				});
 			},
-			error: function(res) { //TODO: display error
+			error: function(res) {
                 var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
 			}

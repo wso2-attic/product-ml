@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/jquery.dataTables.min.css" rel="stylesheet">
@@ -24,7 +25,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %> 
 
 </head>
@@ -445,16 +445,13 @@ $( document ).ready(function() {
     var projectId;
     $.ajax({
         type: 'GET',
-        url: serverUrl+"/api/projects/"+projectName,
+        url: serverUrl + "/api/projects/" + projectName,
         async : false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success: function(res){
             projectId = res['id'];
         },
         error: function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
         	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -463,18 +460,15 @@ $( document ).ready(function() {
     var analysisName = getParameterByName('analysisName');
     $.ajax({
         type: 'GET',
-        url: serverUrl+"/api/projects/"+projectId+"/analyses/"+analysisName,        
+        url: serverUrl + "/api/projects/" + projectId + "/analyses/" + analysisName,        
         async : false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success: function(res){
             analysisId = res['id'];
             tenantId = res['tenantId'];
             userName = res['userName'];            
         },
         error: function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
         	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -482,32 +476,26 @@ $( document ).ready(function() {
     // get categorical feature names
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/filteredFeatures?featureType=CATEGORICAL",
+        url: serverUrl + "/api/analyses/" + analysisId + "/filteredFeatures?featureType=CATEGORICAL",
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
             categoricalFeatureNames = res;
         },
         error : function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
         	handleNotification(errorText, '#notification-area', 'warning');
         }
     });    
     // get numerical feature names
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/filteredFeatures?featureType=NUMERICAL",
+        url: serverUrl + "/api/analyses/" + analysisId + "/filteredFeatures?featureType=NUMERICAL",
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
             numericalFeatureNames = res;
         },
         error : function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
         	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -549,12 +537,14 @@ $( document ).ready(function() {
 
     $('#prev-btn').on('click', function(e){
         e.preventDefault();
+
         var fromAnalysis = getParameterByName('fromAnalysis');
         window.location.href = '../preprocess/preprocess.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
     });
 
     $('#next-btn').on('click', function(e){
-        e.preventDefault();
+        e.preventDefault(); 
+
 	    var fromAnalysis = getParameterByName('fromAnalysis');
         window.location.href = '../algorithm/algorithm.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
     });
@@ -569,10 +559,7 @@ $( document ).ready(function() {
         else {
             $.ajax({
 	            type: 'DELETE',
-	            url: serverUrl+"/api/analyses/"+analysisId,
-	            /*beforeSend : function(xhr) {
-	                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	            },*/
+	            url: serverUrl + "/api/analyses/" + analysisId,
 	            success: function(res){
 	                window.location.href = '../project/projects.jag';
 	            },
@@ -628,15 +615,15 @@ function drawScatterPlotBase() {
 	    $('#scatter-x, #scatter-y, #scatter-group').empty();
 	    $.each(numericalFeatureNames,function(index, feature){
 	        $('#scatter-x, #scatter-y').append($('<option>', { 
-	            value: feature,
-	            text : feature
+	            value: sanitize(feature),
+	            text : sanitize(feature)
 	        }));
 	    });
 	    $('#scatter-y option')[1].selected = true;
 	    $.each(categoricalFeatureNames,function(index, feature){
 	        $('#scatter-group').append($('<option>', { 
-	            value: feature,
-	            text : feature
+	            value: sanitize(feature),
+	            text : sanitize(feature)
 	        }));
 	    });
 
@@ -667,12 +654,9 @@ function drawPlotsAjax() {
         		"Accept" : "application/json",         
                 "Content-Type": "application/json"   
   		},
-        url: serverUrl+"/api/datasets/"+datasetId+"/scatter",
+        url: serverUrl + "/api/datasets/" + datasetId + "/scatter",
 		data: jsonData,
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res) {
 
             // transforming response data to array of arrays: [[-5.1, 11.5, 'setosa'],[1.9, 3.0, 'versicolor'],...]
@@ -696,7 +680,7 @@ function drawPlotsAjax() {
 		   	$("#scatterPlotTitle").html(numFeatureIndependent + " vs. " + numFeatureDependent);            
         },
         error : function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
         	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -708,11 +692,8 @@ function drawPlotsAjax() {
         		"Accept" : "application/json",         
                 "Content-Type": "application/json"   
   		},
-        url: serverUrl+"/api/analyses/"+analysisId+"/stats?feature="+numFeatureIndependent,
+        url: serverUrl + "/api/analyses/" + analysisId + "/stats?feature=" + numFeatureIndependent,
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
         	var jsonObj = res;
 		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp;  Median: " + jsonObj[0].median + "<br><br>Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
@@ -721,7 +702,7 @@ function drawPlotsAjax() {
 		   	drawHistogram(jsonObj, "#histogramIndependent");
         },
         error : function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
         	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -733,11 +714,8 @@ function drawPlotsAjax() {
         		"Accept" : "application/json",         
                 "Content-Type": "application/json"   
   		},
-        url: serverUrl+"/api/analyses/"+analysisId+"/stats?feature="+numFeatureDependent,
+        url: serverUrl + "/api/analyses/" + analysisId + "/stats?feature=" + numFeatureDependent,
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
         	var jsonObj = res;
 		   	var summary = "Mean: " + jsonObj[0].mean + "&emsp;&emsp;&emsp; Median: " + jsonObj[0].median + "<br><br>Std: " + jsonObj[0].std + "&emsp;&emsp;&emsp; Skewness: " + jsonObj[0].skewness;
@@ -746,7 +724,7 @@ function drawPlotsAjax() {
 		   	drawHistogram(jsonObj, "#histogramDependent");
         },
         error : function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
         	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -800,10 +778,10 @@ function drawParallelSetsBase() {
     $('#parallel-sets-features').empty();
     $.each(categoricalFeatureNames,function(index, feature){
         if (index < 4){
-            $('#parallel-sets-features').append("<label class='checkbox'><input type='checkbox' class='categoricalFeatureNames' id='inlineCheckbox1' value='"+categoricalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>" +categoricalFeatureNames[index]+"</label>");
+            $('#parallel-sets-features').append("<label class='checkbox'><input type='checkbox' class='categoricalFeatureNames' id='inlineCheckbox1' value='" + categoricalFeatureNames[index].trim().replace(/"/g,"\\\"") + "' checked>" + categoricalFeatureNames[index] + "</label>");
         }
         else {
-            $('#parallel-sets-features').append("<label class='checkbox'><input type='checkbox' class='categoricalFeatureNames' id='inlineCheckbox1' value='"+categoricalFeatureNames[index].trim().replace(/"/g,"\\\"")+"'>"+categoricalFeatureNames[index]+"</label>");
+            $('#parallel-sets-features').append("<label class='checkbox'><input type='checkbox' class='categoricalFeatureNames' id='inlineCheckbox1' value='" + categoricalFeatureNames[index].trim().replace(/"/g,"\\\"") + "'>" + categoricalFeatureNames[index] + "</label>");
         }        
     });
 
@@ -824,11 +802,8 @@ function drawParallelSets() {
 
         $.ajax({
             type: "GET",
-            url: serverUrl+"/api/datasets/"+datasetId+"/charts?features="+catFeaturesDropdownValues.toString(),
+            url: serverUrl + "/api/datasets/" + datasetId + "/charts?features=" + catFeaturesDropdownValues.toString(),
             async: false,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
             success : function(res){
 
             	var categoricalFeatureArray = [catFeaturesDropdownValues.length];
@@ -859,8 +834,8 @@ function drawTrellisChartBase() {
         $('#trellis-cat-features').empty();
         $.each(categoricalFeatureNames,function(index, feature){
             $('#trellis-cat-features').append($('<option>', {
-                value: feature.trim().replace(/"/g,"\\\""),
-                text : feature
+                value: sanitize(feature).trim().replace(/"/g,"\\\""),
+                text : sanitize(feature)
             }));
         });
 
@@ -868,10 +843,10 @@ function drawTrellisChartBase() {
         $.each(numericalFeatureNames,function(index, feature){
             // first 4 categorical features are plotted by default
             if (index < 4){
-                $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"' checked>"+numericalFeatureNames[index]+"</label>");
+                $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='" + numericalFeatureNames[index].trim().replace(/"/g,"\\\"") + "' checked>" + numericalFeatureNames[index] + "</label>");
             }
             else {
-                $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='"+numericalFeatureNames[index].trim().replace(/"/g,"\\\"")+"'>"+numericalFeatureNames[index]+"</label>");
+                $('#trellis-num-features').append("<label class='checkbox'><input type='checkbox' class='numericalFeatureNames' value='" + numericalFeatureNames[index].trim().replace(/"/g,"\\\"") + "'>" + numericalFeatureNames[index] + "</label>");
             }
         });
 
@@ -892,11 +867,8 @@ function drawTrellisChart() {
 
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/datasets/"+datasetId+"/charts?features="+featureNames.toString(),
+        url: serverUrl + "/api/datasets/" + datasetId + "/charts?features=" + featureNames.toString(),
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
         	/* D3.js Trellis Chart code */
             var width = 960,
@@ -1040,7 +1012,7 @@ function drawTrellisChart() {
             // array for parsets dimensions with categorical feature names
         },
         error : function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
         	handleNotification(errorText, '#notification-area', 'warning');
         }
     });
@@ -1051,8 +1023,8 @@ function drawClusterDiagramBase() {
     $('#cluster-independent, #cluster-dependent').empty();
     $.each(numericalFeatureNames,function(index, feature){
         $('#cluster-independent, #cluster-dependent').append($('<option>', { 
-            value: feature,
-            text : feature
+            value: sanitize(feature),
+            text : sanitize(feature)
         }));
     });
     // make second option selected by default
@@ -1073,10 +1045,7 @@ function drawClusterDiagram() {
     // make ajax call
     $.ajax({        
         type: "GET",
-        url: serverUrl+"/api/datasets/"+datasetId+"/cluster?features="+numericalFeatureIndependent+","+numericalFeatureDependent+"&noOfClusters="+noOfClusters,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
+        url: serverUrl + "/api/datasets/" + datasetId + "/cluster?features=" + numericalFeatureIndependent + "," + numericalFeatureDependent + "&noOfClusters=" + noOfClusters,
         success: function(response) {
             var dataArray = response;
             // transforming response data to array of arrays: [[-5.1, 11.5, 'setosa'],[1.9, 3.0, 'versicolor'],...]

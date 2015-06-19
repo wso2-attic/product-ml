@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/jquery.dataTables.min.css" rel="stylesheet">
@@ -26,7 +27,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %> 
 
 </head>
@@ -255,11 +255,8 @@ $( document ).ready(function() {
     // get numerical feature names
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/filteredFeatures?featureType=NUMERICAL",
+        url: serverUrl + "/api/analyses/" + analysisId + "/filteredFeatures?featureType=NUMERICAL",
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
         	numericalFeatureNames = res;
         },
@@ -272,12 +269,9 @@ $( document ).ready(function() {
     // get response variable
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/responseVariables",
+        url: serverUrl + "/api/analyses/" + analysisId + "/responseVariables",
         async: false,
         dataType: "text",
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
         	responseVariable = res;
         },
@@ -295,13 +289,13 @@ $( document ).ready(function() {
     // get model summary and draw plots    
     $.ajax({
         type: 'GET',
-        url: serverUrl+"/api/models/"+modelId+"/summary",
+        url: serverUrl + "/api/models/" + modelId + "/summary",
         async : false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success: function(res){
-            if (res.algorithm == 'LOGISTIC_REGRESSION' || res.algorithm == 'LOGISTIC_REGRESSION_LBFGS' || res.algorithm == 'SVM') {
+
+            var algorithm = sanitize(res.algorithm);
+
+            if (algorithm == 'LOGISTIC_REGRESSION' || algorithm == 'LOGISTIC_REGRESSION_LBFGS' || algorithm == 'SVM') {
                 if(res.modelAccuracy) {
                     $("#model-summary-title").append(" [Accuracy: " + res.modelAccuracy.toFixed(4)*100 + "%]");    
                 }                
@@ -326,7 +320,7 @@ $( document ).ready(function() {
 	                $.each(features,function(index, feature){
 	                    $('#predicted-actual-x-features, #predicted-actual-y-features').append($('<option>', { 
 	                        value: index,
-	                        text : feature
+	                        text : sanitize(feature)
 	                    }));
 	                });                    
                     $('#predicted-actual-y-features option')[1].selected = true;
@@ -338,7 +332,7 @@ $( document ).ready(function() {
 					$('#predicted-vs-actual').html(getInfo(chartType));
                 }
             }
-            else if (res.algorithm == 'DECISION_TREE' || res.algorithm == 'NAIVE_BAYES') {
+            else if (algorithm == 'DECISION_TREE' || algorithm == 'NAIVE_BAYES') {
                 if(res.modelAccuracy) {
                     $("#model-summary-title").append(" [Accuracy: " + res.modelAccuracy.toFixed(4)*100 + "%]");    
                 }                
@@ -354,7 +348,7 @@ $( document ).ready(function() {
                     $.each(features,function(index, feature){
                         $('#predicted-actual-x-features, #predicted-actual-y-features').append($('<option>', { 
                             value: index,
-                            text : feature
+                            text : sanitize(feature)
                         }));
                     });                    
                     $('#predicted-actual-y-features option')[1].selected = true;
@@ -366,7 +360,7 @@ $( document ).ready(function() {
                     $('#predicted-vs-actual').html(getInfo(chartType));
                 }                    
             }            
-            else if (res.algorithm == 'LINEAR_REGRESSION' || res.algorithm == 'RIDGE_REGRESSION' || res.algorithm == 'LASSO_REGRESSION') {                
+            else if (algorithm == 'LINEAR_REGRESSION' || algorithm == 'RIDGE_REGRESSION' || algorithm == 'LASSO_REGRESSION') {                
                 if($.isNumeric(res.error)) {
                     $("#model-summary-title").append(" [MSE: " + res.error.toExponential(2) + "]");
                 }                
@@ -385,8 +379,8 @@ $( document ).ready(function() {
                     $('#residual-features').empty();
                     $.each(displayFeatures,function(index, feature){
                         $('#residual-features').append($('<option>', { 
-                            value: feature.value,
-                            text : feature.text
+                            value: sanitize(feature.value),
+                            text : sanitize(feature.text)
                         }));
                     });                    
                     // draw residual plot
@@ -397,24 +391,25 @@ $( document ).ready(function() {
                     $('#residual').html(getInfo(chartType));
                 }                    
             }
-            else if (res.algorithm == 'K_MEANS') {
+            else if (algorithm == 'K_MEANS') {
                 // TODO: add cluster diagram
                 $("#roc-graph, #weights-chart, #confusion-matrix, #predicted-vs-actual-chart").closest("div.col-md-6").remove();
                 console.log("K-means");
             }
         },
         error: function(res){
-                var errorText = res.responseText
+            var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }
     });
 
     $('#back-link').on('click', function(e){
         e.preventDefault();
+
         if(fromCompare == 'true') {
-            window.location.href = '../project/compare.jag?projectId='+projectId+'&projectName='+projectName+'&dataseId='+datasetId;
+            window.location.href = '../project/compare.jag?projectId=' + projectId + '&projectName=' + projectName + '&dataseId=' + datasetId;
         } else {
-            window.location.href = 'analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+            window.location.href = 'analysis.jag?analysisId=' + analysisId + '&datasetId=' + datasetId + '&projectName=' + projectName + '&analysisName=' + analysisName;
         }
     });   
 	
@@ -556,40 +551,42 @@ function getInfo(chartType) {
 
 // function to shorten the label
 function shortenLabel (label) {
-    if(label.length > 4)
-        return label.substring(0,4)+'.';
-    else
+    if(label.length > 4) {
+        return label.substring(0, 4)+'.';        
+    }
+    else {
         return label;                       
+    }
 }
 
 // function to draw confusion matrix
 function drawConfusionMatrix (predictedVsActuals, threshold, cssSelector) {
 
 	var confusionMatrixValues = calculateConfusionMatrix (predictedVsActuals, threshold);
-	var confusionMatrixHtml = 	"<table border='1'>"+
-									"<tr>"+
-										"<td colspan='2' rowspan='2' class='header-level-1'>Total</td>"+
-										"<td colspan='2' class='header-level-1'>Predicted</td>"+
+	var confusionMatrixHtml = 	"<table border='1'>" +
+									"<tr>" +
+										"<td colspan='2' rowspan='2' class='header-level-1'>Total</td>" +
+										"<td colspan='2' class='header-level-1'>Predicted</td>" +
+									"</tr>" +
+									"<tr>" +
+										"<td class='header-level-2'>Positive</td>" +
+										"<td class='header-level-2'>Negative</td>" +
+									"</tr>" +
+									"<tr>" +
+										"<td rowspan='2' class='header-level-1'>Actual</td>" +
+										"<td class='header-level-2'>Positive</td>" +
+										"<td>" + confusionMatrixValues[0] + "</td>" +
+										"<td>" + confusionMatrixValues[1] + "</td>" +
 									"</tr>"+
 									"<tr>"+
-										"<td class='header-level-2'>Positive</td>"+
-										"<td class='header-level-2'>Negative</td>"+
+									"<td class='header-level-2'>Negative</td>" +
+										"<td>" + confusionMatrixValues[3] + "</td>" +
+										"<td>" + confusionMatrixValues[2] + "</td>" +
 									"</tr>"+
 									"<tr>"+
-										"<td rowspan='2' class='header-level-1'>Actual</td>"+
-										"<td class='header-level-2'>Positive</td>"+
-										"<td>"+confusionMatrixValues[0]+"</td>"+
-										"<td>"+confusionMatrixValues[1]+"</td>"+
-									"</tr>"+
-									"<tr>"+
-									"<td class='header-level-2'>Negative</td>"+
-										"<td>"+confusionMatrixValues[3]+"</td>"+
-										"<td>"+confusionMatrixValues[2]+"</td>"+
-									"</tr>"+
-									"<tr>"+
-										"<td colspan='3' class='header-level-1'>Accuracy</td>"+
-										"<td>"+confusionMatrixValues[4].toFixed(2)+"%</td>"+
-									"</tr>"+
+										"<td colspan='3' class='header-level-1'>Accuracy</td>" +
+										"<td>" + confusionMatrixValues[4].toFixed(2) + "%</td>" +
+									"</tr>" +
 								"</table>";
 
 	$(cssSelector).html(confusionMatrixHtml);	

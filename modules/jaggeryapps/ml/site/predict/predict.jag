@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -12,7 +13,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %>
     
 </head>
@@ -253,11 +253,11 @@
         // get response variable of this model
         $.ajax({
             type: "GET",
-            url: serverUrl+"/api/analyses/"+analysisId+"/responseVariables",
+            url: serverUrl + "/api/analyses/" + analysisId + "/responseVariables",
             async: false,
             dataType: 'text',
             success: function(data) {
-            	responseVariable = data;
+            	responseVariable = sanitize(data);
             },
             error: function(res) {
                 var errorText = res.responseText
@@ -267,7 +267,7 @@
         // get feature names of this model
         $.ajax({
             type: "GET",
-            url: serverUrl+"/api/models/"+modelId+"/summary",
+            url: serverUrl + "/api/models/" + modelId + "/summary",
             async: false,
             success: function(data) {
                 var modelFeatures = data['features'];
@@ -276,11 +276,11 @@
 
                     if (modelFeatures[i] == responseVariable) continue;
 
-                    inputString =   '<label class="input-label">'+modelFeatures[i]+'</label>' +
+                    inputString =   '<label class="input-label">' + sanitize(modelFeatures[i]) + '</label>' +
     				                '<span class="fld-required">*</span>'+
                                     '<div class="input-control text">' +
-                                        '<input type="text" id="sgd-data-fraction-'+ i +'" value="" placeholder=""/>' +
-                                        '<span class="form-val-error" id="feature-'+ i +'-error"></span>' +
+                                        '<input type="text" id="sgd-data-fraction-' + i + '" value="" placeholder=""/>' +
+                                        '<span class="form-val-error" id="feature-' + i + '-error"></span>' +
                                     '</div>';
 
                     $("#parameter-inputs").append(inputString);
@@ -326,7 +326,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: serverUrl+"/api/models/"+modelId+"/predict",
+                    url: serverUrl + "/api/models/" + modelId + "/predict",
                     contentType: "application/json",
                     data: jsonData,
                     success : function(res){
@@ -347,9 +347,9 @@
         $('#cancel-predict').on('click', function(e){
             e.preventDefault();
             if(fromCompare == 'true') {
-                window.location.href = '../project/compare.jag?projectId='+projectId+'&projectName='+projectName+'&dataseId='+datasetId;
+                window.location.href = '../project/compare.jag?projectId=' + projectId + '&projectName=' + projectName + '&dataseId=' + datasetId;
             } else {
-                window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+                window.location.href = '../analysis/analysis.jag?analysisId=' + analysisId + '&datasetId=' + datasetId + '&projectName=' + projectName + '&analysisName=' + analysisName;
             }
         });
 

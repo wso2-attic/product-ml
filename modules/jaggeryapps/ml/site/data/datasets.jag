@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />    
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -11,7 +12,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %>
 </head>
 
@@ -167,9 +167,9 @@ function buildAccordingHeader(collapseSection, datasetName, numVersions, dataset
 						    '</td>'+
 						    '<td class="c-right">' +			        
 						        '<div>' +
-						        	'<a href="#" id="create-project" class="cu-reg-btn btn-edit" data-dsname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Create project with this Dataset"><span>Create project</span></a>' +
-						        	'<a href="#" id="explore-dataset" class="cu-reg-btn btn-explore" data-dsid="'+ datasetId +'" data-dsname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Explore this Dataset"><span>Explore</span></a>' +
-									'<a href="#" id="delete-dataset" class="cu-reg-btn btn-delete" data-dsid="'+ datasetId +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete Dataset</span></a>' +
+						        	'<a href="#" id="create-project" class="cu-reg-btn btn-edit" data-datasetname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Create project with this Dataset"><span>Create project</span></a>' +
+						        	'<a href="#" id="explore-dataset" class="cu-reg-btn btn-explore" data-datasetid="'+ datasetId +'" data-datasetname="'+ datasetName +'" data-toggle="tooltip" data-original-title="Explore this Dataset"><span>Explore</span></a>' +
+									'<a href="#" id="delete-dataset" class="cu-reg-btn btn-delete" data-datasetid="'+ datasetId +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete Dataset</span></a>' +
 								'</div>' +
 							'</td>'+
 						'</tr>'+
@@ -181,9 +181,11 @@ function buildAccordingHeader(collapseSection, datasetName, numVersions, dataset
 function version(versionNumbers){
 	var versionHtml = "";
     for(var i = 0; i < versionNumbers.length; i++){
+        var version = sanitize(versionNumbers[i].version);    	
+
     	versionHtml +=  '<tr>' +
-			 				'<td class="c-padd"><span class="t-proj-workflow"><span class="glyphicon glyphicon-book"></span> ' + versionNumbers[i].version+'</span></td>' +
-			 				'<td><a href="#" id="delete-dataset-version" class="cu-level2-btn btn-delete-dark" data-versionid="'+ versionNumbers[i].id +'" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete</span></a></td>' +
+			 				'<td class="c-padd"><span class="t-proj-workflow"><span class="glyphicon glyphicon-book"></span> ' + version + '</span></td>' +
+			 				'<td><a href="#" id="delete-dataset-version" class="cu-level2-btn btn-delete-dark" data-versionid="' + versionNumbers[i].id + '" data-toggle="tooltip" data-original-title="Delete this Dataset"><span>Delete</span></a></td>' +
 			 			'</tr>';
     }
     return versionHtml;
@@ -204,7 +206,7 @@ function accordingBody(datasetDescription, versions, datasetName){
 											    			'<input type="text" value="" class="dataset-version f-input-w-md" placeholder="e.g. 1.0.0"/>' +
 											    		'</td>' +
 											    		'<td>' +
-											    			'<a data-dsname="'+ datasetName +'" data-dsdes="'+ datasetDescription+'" href="#" class="create-version cu-level2-btn btn-add-new-dark" data-toggle="tooltip" data-original-title="Create Version"><span>Create Version</span></a>'+
+											    			'<a data-datasetname="'+ datasetName +'" data-datasetdescription="'+ datasetDescription+'" href="#" class="create-version cu-level2-btn btn-add-new-dark" data-toggle="tooltip" data-original-title="Create Version"><span>Create Version</span></a>'+
 											    		'</td>' +
 											    	'</tr>' +
 											    '</table>' +
@@ -225,17 +227,19 @@ function accordiang(datasets){
 	for(var i=0; i<datasets.length; i++){
         var dataset = datasets[i];
         var datasetId = dataset.id;
+        var datasetName = sanitize(dataset.name);
+        var datasetDescription = sanitize(dataset.comments);
         var datasetVersions = dataset.versions;
 
         var datasetHtml = '<div class="panel panel-default">' +
-			    '<div class="panel-heading" role="tab" id="heading_'+i+'">' +
+			    '<div class="panel-heading" role="tab" id="heading_' + i + '">' +
 			      
-			      buildAccordingHeader('collapse_'+i, dataset.name, datasetVersions.length, datasetId) +
+			      buildAccordingHeader('collapse_' + i, datasetName, datasetVersions.length, datasetId) +
 			     
 			    '</div>' +
 			    '<div id="collapse_' + i + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_' + i + '">' +
 			      '<div class="panel-body">' +
-			      accordingBody(dataset.comments, datasetVersions, dataset.name) +
+			      accordingBody(datasetDescription, datasetVersions, datasetName) +
 			      '</div>' +
 			    '</div>' +
 			    '</div>';
@@ -269,15 +273,15 @@ $( document ).ready(function() {
 		e.preventDefault();
 
 		var datasetVersion = $(this).closest("tr").find('.dataset-version').val();
-        var description = $(this).data('dsdes');
-        var name = $(this).data('dsname');
-        window.location = baseUrl + '/ml/site/data/createversion.jag?dscomt=' + description + '&dsnam=' + name + '&datasetVersion=' + datasetVersion;
+        var description = $(this).data('datasetdescription');
+        var datasetName = $(this).data('datasetname');
+        window.location = baseUrl + '/ml/site/data/createversion.jag?datasetName=' + datasetName + '&datasetVersion=' + datasetVersion;
 	});
 	// events to delete a dataset
     $(document).on('click', '#delete-dataset', function(e){ 
         e.preventDefault();
         
-        deleteDatasetId = $(this).data('dsid');        
+        deleteDatasetId = $(this).data('datasetId');        
         operationSelect('delete-dataset');
     });
     $(document).on('click', '#delete-dataset-yes', function(e){ 
@@ -321,15 +325,15 @@ function bindEvents() {
 	
 	$(document).on('click', '#create-project', function(e){
 		e.preventDefault();
-		var datasetName = $(this).data('dsname');
-		window.location = baseUrl + '/ml/site/project/create_project.jag?datasetName='+datasetName+'&fromDatasets=true';
+		var datasetName = $(this).data('datasetname');
+		window.location = baseUrl + '/ml/site/project/create_project.jag?datasetName=' + datasetName + '&fromDatasets=true';
 	});
 
 	$(document).on('click', '#explore-dataset', function(e){
 		e.preventDefault();
-		var datasetId = $(this).data('dsid');
-		var datasetName = $(this).data('dsname');
-		window.location = baseUrl + '/ml/site/data/explore.jag?datasetId='+datasetId+'&datasetName='+datasetName;
+		var datasetId = $(this).data('datasetid');
+		var datasetName = $(this).data('datasetname');
+		window.location = baseUrl + '/ml/site/data/explore.jag?datasetId=' + datasetId + '&datasetName=' + datasetName;
 	});
 }
 
@@ -338,9 +342,6 @@ function loadDatasets() {
         type : 'GET',
         url: baseUrl + '/api/datasets/versions',
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
         	if (res.length == 0) {
         		var accordionPanelNoDatasets = '<h2>You do not have any datasets created at the moment.</h2>';
@@ -361,10 +362,7 @@ function deleteDataset(datasetId) {
 	if(datasetId) {
 	    $.ajax({
 	        type: "DELETE",
-	        url: baseUrl+"/api/datasets/"+datasetId,
-	        /*beforeSend : function(xhr) {
-	            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	        },*/
+	        url: baseUrl + "/api/datasets/" + datasetId,
 	        success : function(res){
 	            $('.panel-group').empty();
 	            loadDatasets();
@@ -381,10 +379,7 @@ function deleteDatasetVersion(versionId) {
 	if(versionId) {
 		$.ajax({
 	        type: "DELETE",
-	        url: baseUrl+"/api/datasets/versions/"+versionId,
-	        /*beforeSend : function(xhr) {
-	            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	        },*/
+	        url: baseUrl + "/api/datasets/versions/" + versionId,
 	        success : function(res){
 	            $('.panel-group').empty();
 	            loadDatasets();
