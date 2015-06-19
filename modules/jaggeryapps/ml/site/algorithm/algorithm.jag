@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -11,7 +12,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %> 
 </head>
 
@@ -178,37 +178,31 @@ $( document ).ready(function() {
     // get previously set response variable
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/responseVariables",
+        url: serverUrl + "/api/analyses/" + analysisId + "/responseVariables",
         async : false,
         dataType: 'text',
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success: function(res) {
-            setResponseVariable = res;
+            setResponseVariable = sanitize(res);
         },
         error: function(res) {
-                var errorText = res.responseText
+            var errorText = res.responseText
             handleNotification(errorText, notificationArea, 'warning');
         }
     });
     // get previously set algorithm name
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/algorithmName",
+        url: serverUrl + "/api/analyses/" + analysisId + "/algorithmName",
         async : false,
         dataType: 'text',
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success: function(res) {
-            var setAlgorithmName = res;
+            var setAlgorithmName = sanitize(res);
             if (setAlgorithmName != '') {
-                $('#algorithm-name option[value='+setAlgorithmName+']').attr('selected','selected');
+                $('#algorithm-name option[value=' + setAlgorithmName + ']').attr('selected','selected');
             }
         },
         error: function(res) {
-                var errorText = res.responseText
+            var errorText = res.responseText
             handleNotification(errorText, notificationArea, 'warning');
         }
     });
@@ -218,17 +212,14 @@ $( document ).ready(function() {
         url: serverUrl+"/api/analyses/"+analysisId+"/trainDataFraction",
         async : false,
         dataType: 'text',
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success: function(res) {
-            var setTrainDataFraction = res;
+            var setTrainDataFraction = sanitize(res);
             if (setTrainDataFraction >= 0) {
                 $('#data-fraction').val(setTrainDataFraction);
             }
         },
         error: function(res) {
-                var errorText = res.responseText
+            var errorText = res.responseText
             handleNotification(errorText, notificationArea, 'warning');
         }
     });
@@ -257,7 +248,8 @@ $( document ).ready(function() {
 	
     $('#prev-btn').on('click', function(e){
         e.preventDefault();
-        window.location.href = '../explore/explore.jag?projectName='+projectName+'&analysisName='+analysisName+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
+
+        window.location.href = '../explore/explore.jag?projectName=' + projectName + '&analysisName=' + analysisName + '&datasetId=' + datasetId + '&fromAnalysis=' + fromAnalysis;
     });
 
     $('#btn-next').on('click', function(e){
@@ -283,14 +275,11 @@ $( document ).ready(function() {
         var jsonData = '[{ "key":"algorithmName","value":"'+algorithmName+'"},{"key":"algorithmType","value":"'+algorithmType+'"},{"key":"responseVariable","value":"'+responseVariable+'"},{"key":"trainDataFraction","value":"'+trainDataFraction+'"}]';
         $.ajax({
             type: 'POST',
-            url: serverUrl+"/api/analyses/"+analysisId+"/configurations",
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },
+            url: serverUrl + "/api/analyses/" + analysisId + "/configurations",
             contentType: "application/json",
             data: jsonData,
             success: function(res){
-                window.location.href = '../parameters/parameters.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
+                window.location.href = '../parameters/parameters.jag?analysisId=' + analysisId + '&projectName=' + projectName + '&analysisName=' + analysisName + '&algorithmName=' + algorithmName + '&algorithmType=' + algorithmType + '&datasetId=' + datasetId + '&fromAnalysis=' + fromAnalysis;
             },
             error: function(res){
                 var errorText = res.responseText
@@ -310,9 +299,6 @@ $( document ).ready(function() {
             $.ajax({
                 type: 'DELETE',
                 url: serverUrl+"/api/analyses/"+analysisId,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success: function(res){
                     window.location.href = '../project/projects.jag';
                 },
@@ -329,24 +315,21 @@ function loadDatasetFeatures(setResponseVariable) {
     $.ajax({
         type: "GET",
         url: serverUrl+"/api/analyses/"+analysisId+"/features",
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success: function(res) {
             var datasetFeatures = res;
             $.each(datasetFeatures,function(index, feature){
                 $('#response-variable').append($('<option>', { 
-                    value: feature,
-                    text : feature
+                    value: sanitize(feature),
+                    text : sanitize(feature)
                 }));
             });
             // set previously selected values when navigating from next page
             if (setResponseVariable != '') {
-                $('#response-variable option[value='+setResponseVariable+']').attr('selected','selected');
+                $('#response-variable option[value=' + setResponseVariable + ']').attr('selected','selected');
             }
         },
         error: function(res) {
-                var errorText = res.responseText
+            var errorText = res.responseText
             handleNotification(errorText, notificationArea, 'warning');
         }
     });

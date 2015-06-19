@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -11,7 +12,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>')
     %> 
 </head>
 
@@ -144,7 +144,7 @@ $( document ).ready(function() {
 
     $('#prev-btn').on('click', function(e){
         e.preventDefault();
-        window.location.href = '../parameters/parameters.jag?analysisId='+analysisId+'&projectName='+projectName+'&analysisName='+analysisName+'&algorithmName='+algorithmName+'&algorithmType='+algorithmType+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
+        window.location.href = '../parameters/parameters.jag?analysisId=' + analysisId + '&projectName=' + projectName + '&analysisName=' + analysisName + '&algorithmName=' + algorithmName + '&algorithmType=' + algorithmType + '&datasetId=' + datasetId + '&fromAnalysis=' + fromAnalysis;
     });
 
     loadDatasetVersions();
@@ -155,20 +155,17 @@ $( document ).ready(function() {
     	var modelName;
     	var datasetVersion = $('#dataset-version').val();
 
-    	jsonData = '{"analysisId":"'+analysisId+'","versionSetId":"'+datasetVersion+'"}';
+    	jsonData = '{"analysisId":"' + analysisId + '","versionSetId":"' + datasetVersion + '"}';
 
         // create model
 	    $.ajax({
             type: 'POST',
-            url: serverUrl+"/api/models",
+            url: serverUrl + "/api/models",
             async: false,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
             contentType: "application/json",
             data: jsonData,
             success: function(res){
-                modelName = res['name'];
+                modelName = sanitize(res['name']);
             },
             error: function(res){
                 var errorText = res.responseText
@@ -181,10 +178,7 @@ $( document ).ready(function() {
         // get model ID        
         $.ajax({
             type: 'GET',
-            url: serverUrl+"/api/models/"+modelName,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
+            url: serverUrl + "/api/models/" + modelName,
             async: false,
             success: function(res){
                 modelId = res['id'];
@@ -198,13 +192,10 @@ $( document ).ready(function() {
         // submit model build job
         $.ajax({
             type: 'POST',
-            url: serverUrl+"/api/models/"+modelId,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
+            url: serverUrl + "/api/models/" + modelId,
             success: function(res){
                 console.log("Model build job successfully submitted.");
-                window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&analysisName='+analysisName+'&projectName='+projectName+'&datasetId='+datasetId;
+                window.location.href = '../analysis/analysis.jag?analysisId=' + analysisId + '&analysisName=' + analysisName + '&projectName=' + projectName + '&datasetId=' + datasetId;
             },
             error: function(res){
                 var errorText = res.responseText
@@ -219,15 +210,12 @@ $( document ).ready(function() {
         e.preventDefault();
         // if navigation is from analysis page do not delete the analysis
         if (fromAnalysis == 'true') {
-            window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+            window.location.href = '../analysis/analysis.jag?analysisId=' + analysisId + '&datasetId=' + datasetId + '&projectName=' + projectName + '&analysisName=' + analysisName;
         }
         else {
             $.ajax({
                 type: 'DELETE',
-                url: serverUrl+"/api/analyses/"+analysisId,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
+                url: serverUrl + "/api/analyses/" + analysisId,
                 success: function(res){
                     window.location.href = '../project/projects.jag';
                 },
@@ -243,10 +231,7 @@ $( document ).ready(function() {
 function loadDatasetVersions() {
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/datasets/"+datasetId+"/versions",
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
+        url: serverUrl + "/api/datasets/" + datasetId + "/versions",
         success: function(res) {
             var datasetVersions = res;
             $.each(datasetVersions, function (i, item) {
@@ -256,8 +241,8 @@ function loadDatasetVersions() {
                 }));
             });
         },
-        error: function(res) { //TODO: display error
-                var errorText = res.responseText
+        error: function(res) {
+            var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');            
         }
     });

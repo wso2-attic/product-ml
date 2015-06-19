@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -12,7 +13,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %>
     
 </head>
@@ -179,7 +179,7 @@
         $(document).on('click', '#delete-project', function(e){ 
             e.preventDefault();
             
-            deleteProjectId = $(this).data('projid');
+            deleteProjectId = $(this).data('projectid');
             operationSelect('delete-project');
         });
         $(document).on('click', '#delete-project-yes', function(e){ 
@@ -200,7 +200,7 @@
         $(document).on('click', '#delete-analysis', function(e){ 
             e.preventDefault();
             
-            deleteAnalysisId = $(this).data('workflowid');
+            deleteAnalysisId = $(this).data('analysisid');
             // get inline notification area element
             deleteNotificationArea = $(this).parents().find('#inline-list-notification-area');
             operationSelect('delete-analysis');
@@ -234,28 +234,25 @@
                 return; 
             }
 
-            var projectId = $(this).data('projid');
+            var projectId = $(this).data('projectid');
             var projectName = $(this).data('projectname');
             var datasetId = $(this).data('datasetid');
 
             // create analysis
             var comments = 'test comment'; //TODO: get actual comment from UI
-            var createAnalysisData = '{"name":"'+analysisName+'","comments":"'+comments+'","projectId":"'+projectId+'"}';
+            var createAnalysisData = '{"name":"' + analysisName + '","comments":"' + comments + '","projectId":"' + projectId + '"}';
             var isError = false;
             $.ajax({
                 type: "POST",
-                url: serverUrl+"/api/analyses",
+                url: serverUrl + "/api/analyses",
                 async : false,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 contentType: "application/json",
                 data: createAnalysisData,
-                success : function(res){
+                success : function(res) {
                     console.log("Analysis created.");                    
                 },
                 error : function(res){
-                                    var errorText = res.responseText;
+                    var errorText = res.responseText;
                     handleNotification(errorText, notificationArea, 'warning');
                     isError = true;
                 }
@@ -265,13 +262,10 @@
                 var analysisId;
                 $.ajax({
                     type: 'GET',
-                    url: serverUrl+"/api/projects/"+projectId+"/analyses/"+analysisName,        
+                    url: serverUrl+"/api/projects/" + projectId + "/analyses/" + analysisName,        
                     async : false,
-                    /*beforeSend : function(xhr) {
-                        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                    },*/
                     success: function(res){
-                        analysisId = res['id'];
+                        analysisId = sanitize(res['id']);
                     },
                     error: function(res){
                 var errorText = res.responseText
@@ -285,14 +279,11 @@
                 var featureDefaultsData = '{"include" : true,"imputeOption": "DISCARD"}';
                 $.ajax({
                     type: 'POST',
-                    url: serverUrl+"/api//analyses/"+analysisId+"/features/defaults",
-                    /*beforeSend : function(xhr) {
-                        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                    },*/
+                    url: serverUrl+"/api//analyses/" + analysisId + "/features/defaults",
                     contentType: "application/json",
                     data: featureDefaultsData,
                     success: function(res){
-                        window.location.href = '../preprocess/preprocess.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId;
+                        window.location.href = '../preprocess/preprocess.jag?projectName=' + projectName + '&analysisName=' + analysisName + '&analysisId=' + analysisId + '&datasetId=' + datasetId;
                     },
                     error: function(res){
                 var errorText = res.responseText
@@ -307,22 +298,23 @@
         $(document).on('click', '#view-analysis', function(e){ 
             e.preventDefault();
 
-            var analysisId = $(this).data('workflowid');
+            var analysisId = $(this).data('analysisid');
             var analysisName = $(this).data('analysisname');
             var projectName = $(this).data('projectname');
             var datasetId = $(this).data('datasetid');
             
-            window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&analysisName='+analysisName+'&projectName='+projectName+'&datasetId='+datasetId;
+            window.location.href = '../analysis/analysis.jag?analysisId=' + analysisId + '&analysisName=' + analysisName + '&projectName=' + projectName + '&datasetId=' + datasetId;
         });        
 
         // compares models
         $(document).on('click', '#compare-models', function(e){ 
             e.preventDefault();
-            var projectId = $(this).data('projid');
+            
+            var projectId = $(this).data('projectid');
             var projectName = $(this).data('projectname');
             var dataseId = $(this).data('dataseid');            
 
-            window.location.href = 'compare.jag?projectId='+projectId+'&projectName='+projectName+'&dataseId='+dataseId;
+            window.location.href = 'compare.jag?projectId=' + projectId + '&projectName=' + projectName + '&dataseId=' + dataseId;
         });
 
         /********** event binding **********/
@@ -360,7 +352,7 @@
                                 '<input type="text" value="" class="analysis-name f-input-w-md" placeholder="e.g. myanalysis"/>' +
                             '</td>' +
                             '<td>' +
-                                '<a data-datasetId="' + datasetId +'" data-projectName="' + projectName +'" data-projId="'+ projectId + '"href="#" id="create-analysis" class="create-analysis cu-level2-btn btn-add-new-dark" data-toggle="tooltip" data-original-title="Create Analysis"><span>Create Analysis</span></a> '+
+                                '<a data-datasetid="' + datasetId + '" data-projectname="' + projectName + '" data-projectid="' + projectId + '"href="#" id="create-analysis" class="create-analysis cu-level2-btn btn-add-new-dark" data-toggle="tooltip" data-original-title="Create Analysis"><span>Create Analysis</span></a> '+
                             '</td>' +
                         '</tr>' +
                     '</table>' +
@@ -373,9 +365,6 @@
         $.ajax({
             type: "GET",
             url: serverUrl+"/api/projects/analyses",
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
             success: function(data) {
                 var tenantProjects = data;
 
@@ -412,31 +401,29 @@
                             workflowString = '<strong>'+noOfAnalyses+'</strong> Analyses available';
                         }
                         
-                        //var projectIDString = "'"+tenantProjects[i]['id']+"'";
-                        var projid = tenantProjects[i]['id'];
-                        var projna = tenantProjects[i]['name'];
-                        var description = tenantProjects[i]['description'];
-                        var datasetId = tenantProjects[i]['datasetId'];
-
-                        //var compareModels = '../workflow/create_workflow.jag?projid='+projid+'&projna='+projna;
+                        var projectId = sanitize(tenantProjects[i]['id']);
+                        var projectName = sanitize(tenantProjects[i]['name']);
+                        var description = sanitize(tenantProjects[i]['description']);                        
+                        var createdTime = sanitize(tenantProjects[i]['createdTime']);                        
+                        var datasetId = sanitize(tenantProjects[i]['datasetId']);
 
                         accordionPanel = '' + 
                             '<div class="panel panel-default">' +
-                                '<div class="panel-heading" role="tab" id="heading'+i+'">' +
+                                '<div class="panel-heading" role="tab" id="heading' + i + '">' +
                                     '<h4 class="panel-title">' +
-                                        '<table class="tbl-projects" projectID="' + tenantProjects[i]['id'] + '">' +
+                                        '<table class="tbl-projects" projectID="' + projectId + '">' +
                                             '<tr>' +
                                                 '<td>' +
-                                                    '<a data-toggle="collapse" data-parent="#accordion" href="#collapse'+i+'" aria-expanded="true" aria-' + 'controls="collapse1" class="ctrl-exp-col">' +
-                                                        '<span class="cu-acc-head-title">' + tenantProjects[i]['name'] + '</span>' +
-                                                        '<span class="cu-acc-head-created">[ created: ' + tenantProjects[i]['createdTime'] + ' ]</span>' +
+                                                    '<a data-toggle="collapse" data-parent="#accordion" href="#collapse' + i + '" aria-expanded="true" aria-' + 'controls="collapse1" class="ctrl-exp-col">' +
+                                                        '<span class="cu-acc-head-title">' + projectName + '</span>' +
+                                                        '<span class="cu-acc-head-created">[ created: ' + createdTime + ' ]</span>' +
                                                         '<span class="cu-acc-head-workflow">' + workflowString + '</span>' +
                                                     '</a>' +
                                                 '</td>' +
                                                 '<td class="c-right">' +
                                                     '<div>' +
-                                                        '<a href="#" data-projid="'+projid+'" data-projectname="'+projna+'" data-dataseid="'+datasetId+'" id="compare-models" class="cu-reg-btn btn-compare '+appendClass(noOfAnalyses)+'" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Compare models</span></a>' +
-                                                        '<a href="#" data-projid="'+projid+'" id="delete-project" class="cu-reg-btn btn-delete">Delete Project</a>' +
+                                                        '<a href="#" data-projectid="' + projectId + '" data-projectname="' + projectName + '" data-dataseid="' + datasetId + '" id="compare-models" class="cu-reg-btn btn-compare ' + appendClass(noOfAnalyses) + '" data-toggle="tooltip" data-original-title="Compare models in this project"><span>Compare models</span></a>' +
+                                                        '<a href="#" data-projectid="' + projectId + '" id="delete-project" class="cu-reg-btn btn-delete">Delete Project</a>' +
                                                     '</div>' +
                                                 '</td>' +
                                             '</tr>' +
@@ -446,16 +433,16 @@
                                 // first panel will be expanded on page load
                                 if(i == 0) {
                                     accordionPanel += '' +
-                                '<div id="collapse'+i+'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'+i+'">';
+                                '<div id="collapse' + i + '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'+i+'">';
                                 }
                                 else {
                                     accordionPanel += '' +
-                                '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">';
+                                '<div id="collapse' + i + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">';
                                 }
                                     accordionPanel += '' +
                                     '<div class="panel-body">';
                                 if (noOfAnalyses == 0) {
-                                    accordionPanel += buildEmptyProjectDisplay(description, projid, projna, datasetId);
+                                    accordionPanel += buildEmptyProjectDisplay(description, projectId, projectName, datasetId);
                                 }
                                 else {
                                     accordionPanel += '' +
@@ -465,23 +452,21 @@
                                                 '<td>';
                                                 // let user to create a new analysis of this project only if the dataset exists
                                                 if (tenantProjects[i]['datasetId'] != 0) {
-                                                    accordionPanel += buildNewAnalysisUx(projid, projna, datasetId)
+                                                    accordionPanel += buildNewAnalysisUx(projectId, projectName, datasetId)
                                                 }
                                     accordionPanel += '' +
                                                     '<div id="inline-list-notification-area"></div>' +
                                                     '<table class="tbl-project-desc" id="table'+i+'">';
                                     for (var j = 0; j < noOfAnalyses; j++) {                                            
-                                        var workflowId = tenantProjects[i]['analyses'][j]['id'];
-                                        var analysisName = tenantProjects[i]['analyses'][j]['name'];
-                                        var wfid = tenantProjects[i]['analyses'][j]['id'];
-                                        //var compareModels = '../workflow/create_workflow.jag?projid='+projid+'&projna='+projna+'&analysisName='+analysisName+'&wfid='+wfid;
+                                        var analysisId = sanitize(tenantProjects[i]['analyses'][j]['id']);
+                                        var analysisName = sanitize(tenantProjects[i]['analyses'][j]['name']);
 
                                         accordionPanel +=   '<tr>' +
                                                                 '<td class="c-padd"><span class="t-proj-workflow"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;'+analysisName+'</span>' +
                                                                 '</td>' +
                                                                 '<td>' +
-                                                                    '<a href="#" id="view-analysis" class="cu-level2-btn btn-view-dark" data-toggle="tooltip" data-original-title="View this model" data-workflowid="'+workflowId+'" data-projId="'+projid+'" data-projectname="'+projna+'" data-analysisname="'+analysisName+'" data-datasetid="'+datasetId+'"><span>View</span></a>' +
-                                                                    '<a href="#" id="delete-analysis" class="del-wf cu-level2-btn btn-delete-dark" data-workflowId="'+workflowId+'">Delete</a>' +
+                                                                    '<a href="#" id="view-analysis" class="cu-level2-btn btn-view-dark" data-toggle="tooltip" data-original-title="View this model" data-analysisid="' + analysisId + '" data-projectid="' + projectId + '" data-projectname="' + projectName + '" data-analysisname="' + analysisName + '" data-datasetid="' + datasetId + '"><span>View</span></a>' +
+                                                                    '<a href="#" id="delete-analysis" class="del-wf cu-level2-btn btn-delete-dark" data-analysisid="' + analysisId + '">Delete</a>' +
                                                                 '</td>' +
                                                             '</tr>';                                                                                                       
                                     };
@@ -523,9 +508,6 @@
             $.ajax({
                 type: "DELETE",
                 url: serverUrl+"/api/projects/"+projectId,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success : function(res){
                     $('#accordion').empty();
                     loadProjects();
@@ -544,9 +526,6 @@
             $.ajax({
                 type: 'DELETE',
                 url: serverUrl+"/api/analyses/"+analysisId,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success: function(res){
                     $('#accordion').empty();
                     loadProjects();
@@ -557,7 +536,7 @@
                 }
             });
         }    
-    }    
+    }
 
 </script>
 
