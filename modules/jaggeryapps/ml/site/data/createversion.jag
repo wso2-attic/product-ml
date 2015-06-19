@@ -114,9 +114,6 @@
 		                        <div id="source-file" class="input-control file info-state" data-role="input-control">
 			       			<input type="file" id="fileInput" name="file"/>
 			    		</div>
-					<div id="source-hdfs-bam" class="input-control text">
-					    <input type="text" value="" placeholder="e.g. file:///home/datasets/iris.csv" id="src-path" name="sourcePath" />
-					</div>
 
 					<div id="not-related-to-bam">
 
