@@ -47,7 +47,7 @@ public class MLIntegrationTestConstants {
 	public static final String ALGORITHM_TYPE = "algorithmType";
 
 	// The time constant
-    public static final long THREAD_SLEEP_TIME_LARGE = 15000;
+    public static final long THREAD_SLEEP_TIME_LARGE = 20000;
 
 	// Constants for Test cases
 	public static final String CLASSIFICATION = "Classification";
