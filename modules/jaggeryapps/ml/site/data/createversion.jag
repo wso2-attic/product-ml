@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />    
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -11,7 +12,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %>    
 </head>
 
@@ -100,17 +100,6 @@
 
 			<form id="datasetVersionCreateForm" method="POST" enctype="multipart/form-data">
 
-				<!--label class="input-label">Dataset Name<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
-				<div class="input-control text">
-				    <input type="text" value="" placeholder="Ex: MyDataProject" class="form-fld-error" id="dataset-name"/>
-				    <span class="form-val-error">* Name for this Dataset is required.</span>
-				</div-->
-
-				<!--label class="input-label">Description<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
-				<div class="input-control text">
-				    <textarea rows="3" id="dataset-desc"></textarea>
-				</div-->
-
 				<label class="input-label">Source Type<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
 					<div class="input-control text">
 						<select class="form-control" id="src-type" name="sourceType">
@@ -125,9 +114,6 @@
 		                        <div id="source-file" class="input-control file info-state" data-role="input-control">
 			       			<input type="file" id="fileInput" name="file"/>
 			    		</div>
-					<div id="source-hdfs-bam" class="input-control text">
-					    <input type="text" value="" placeholder="e.g. file:///home/datasets/iris.csv" id="src-path" name="sourcePath" />
-					</div>
 
 					<div id="not-related-to-bam">
 
@@ -263,7 +249,7 @@ $( document ).ready(function() {
     	});
 
 	// put dataset name to application navigator
-	var name = getParameterByName('dsnam');
+	var name = getParameterByName('datasetName');
 	$('#nav-dataset').text(name);	
 
 	$('#datasetVersionCreateForm').ajaxForm({
@@ -271,14 +257,11 @@ $( document ).ready(function() {
 		    'version' : getParameterByName('datasetVersion')
 		   },
 	    url: baseUrl + '/api/datasets',
-	    /*beforeSend: function(xhr) {
-	        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	    },*/
         success : function(res){
     	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
         },
         error :  function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }                               
 	});

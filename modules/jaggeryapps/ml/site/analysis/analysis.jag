@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -12,7 +13,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %>
     
 </head>
@@ -232,11 +232,9 @@
             type: "GET",
             url: serverUrl+"/api/analyses/"+analysisId+"/models",
             async : false,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
             success: function(data) {
-                var analysisModels = data;
+            	// order models in reverse chronological order
+                var analysisModels = data.sort(sortByTimestamp);
                 
                 if (analysisModels.length == 0) {
                     var accordionPanelNoModels = 
@@ -258,39 +256,42 @@
 
                     for (var i = 0; i < analysisModels.length; i++) {
 
-                        var modelStatus = analysisModels[i]['status'];
+                        var modelId = sanitize(analysisModels[i]['id']);
+                        var modelName = sanitize(analysisModels[i]['name']);
+                        var createdTime = sanitize(analysisModels[i]['createdTime']);                        
+                        var modelStatus = sanitize(analysisModels[i]['status']);
                         // set error message if available
                         var modelError = '';
                         if(analysisModels[i]['error'] != null) {
-                            modelError = buildNotification(analysisModels[i]['error'], 'warning');
+                            modelError = buildNotification(sanitize(analysisModels[i]['error']), 'warning');
                         }
 
                         accordionPanel = '' + 
                             '<div class="panel panel-default">' +
-                                '<div class="panel-heading" role="tab" id="heading'+i+'">' +
+                                '<div class="panel-heading" role="tab" id="heading' + i + '">' +
                                     '<h4 class="panel-title">' +
-                                        '<table class="tbl-projects" projectID="' + analysisModels[i]['id'] + '">' +
+                                        '<table class="tbl-projects" projectID="' + modelId + '">' +
                                             '<tr>' +
                                                 '<td>' +
 						    '<a ' + appendDataToggle(modelStatus) + ' data-parent="#accordion" href="#collapse'+i+'" aria-expanded="true" aria-' + 'controls="collapse1" class="ctrl-exp-col ' + appendLinkDisable(modelStatus) + '">' +
-                                                    '<span class="cu-acc-head-title">' + analysisModels[i]['name'] + '</span>' +
-                                                    '<span class="cu-acc-head-created">[ Created: ' + analysisModels[i]['createdTime'] + ' ]</span>' +
+                                                    '<span class="cu-acc-head-title">' + modelName + '</span>' +
+                                                    '<span class="cu-acc-head-created">[ Created: ' + createdTime + ' ]</span>' +
                                                     '<span class="cu-acc-head-workflow"></span>' +
-                                                    '<span class="cu-acc-head-created">[ Status: ' + analysisModels[i]['status'] + ' <img src="../../images/icons/status-' + appendStatusIcon(modelStatus) + '.png" /> ]</span>' +
+                                                    '<span class="cu-acc-head-created">[ Status: ' + modelStatus + ' <img src="../../images/icons/status-' + appendStatusIcon(modelStatus) + '.png" /> ]</span>' +
                                                     '</a>' +
                                                 '</td>' +
                                                 '<td class="c-right">' +
                                                     '<div>';
                                                     // remove view and and predict links for k-means
-                                                    if(modelStatus == 'Complete' && analysisModels[i].modelSummary.algorithm != 'K_MEANS') {
+                                                    if(modelStatus == 'Complete' && sanitize(analysisModels[i].modelSummary.algorithm) != 'K_MEANS') {
                                                         accordionPanel += '' + 
-                                                        '<a href="#" id="view-model" class="cu-reg-btn btn-view '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>View</span></a>' +
-                                                        '<a href="#" id="predict" class="cu-reg-btn btn-predict '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>Predict</span></a>';
+                                                        '<a href="#" id="view-model" class="cu-reg-btn btn-view ' + appendClass(modelStatus) + '" data-modelname="' + modelName + '" data-modelid="'+ modelId + '"><span>View</span></a>' +
+                                                        '<a href="#" id="predict" class="cu-reg-btn btn-predict ' + appendClass(modelStatus) + '" data-modelname="' + analysisModels[i]['name'] + '" data-modelid="' + modelId + '"><span>Predict</span></a>';
                                                     }
                                                         accordionPanel += '' + 
-                                                        '<a href="'+serverUrl+'/api/models/'+analysisModels[i]['name']+'/export" id="download-model" class="cu-reg-btn btn-download '+appendClass(modelStatus)+'" data-modelname="'+analysisModels[i]['name']+'" data-modelid="'+analysisModels[i]['id']+'"><span>Download</span></a>' +
-                                                        '<a href="#" id="publish" class="cu-reg-btn btn-publish '+appendClass(modelStatus)+'" data-modelid="'+analysisModels[i]['id']+'"><span>Publish</span></a>' +
-                                                        '<a href="#" id="delete-model" class="cu-reg-btn btn-delete" data-modelid="'+analysisModels[i]['id']+'">Delete Model</a>' +
+                                                        '<a href="' + serverUrl + '/api/models/' + modelName + '/export" id="download-model" class="cu-reg-btn btn-download ' + appendClass(modelStatus) + '" data-modelname="' + modelName + '" data-modelid="' + modelId + '"><span>Download</span></a>' +
+                                                        '<a href="#" id="publish" class="cu-reg-btn btn-publish ' + appendClass(modelStatus) + '" data-modelid="' + modelId + '"><span>Publish</span></a>' +
+                                                        '<a href="#" id="delete-model" class="cu-reg-btn btn-delete" data-modelid="' + modelId + '">Delete Model</a>' +
                                                     '</div>' +
                                                 '</td>' +
                                             '</tr>' +
@@ -358,6 +359,20 @@
         return statusIconAppend;
     }
 
+    // compare function for models
+    function sortByTimestamp(a, b) {
+        var sortStatus = 0;
+		timestamp1 = new Date(a.createdTime);
+		timestamp2 = new Date(b.createdTime);
+     
+        if (timestamp1 > timestamp2) {
+            sortStatus = -1;
+        } else if (timestamp1 < timestamp2) {
+            sortStatus = 1;
+        }
+        return sortStatus;
+    }    
+
     function bindEvents() {
 
         $(document).on('click', '#btn-refresh', function(e){
@@ -371,7 +386,7 @@
             
             var modelId = $(this).data('modelid');
             var modelName = $(this).data('modelname');
-            window.location.href = '../predict/predict.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName+'&fromCompare=false';
+            window.location.href = '../predict/predict.jag?analysisId=' + analysisId + '&datasetId=' + datasetId + '&modelId=' + modelId + '&projectName=' + projectName + '&analysisName=' + analysisName + '&modelName=' + modelName + '&fromCompare=false';
         });
 
         $(document).on('click', '#publish', function(e){ 
@@ -381,10 +396,7 @@
 
             $.ajax({
                 type: "POST",
-                url: serverUrl+"/api/models/"+modelId+"/publish",
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },
+                url: serverUrl + "/api/models/" + modelId + "/publish",
                 success : function(res){
                     var successText = 'Model successfully published to registry.';
                     handleNotification(successText, '#notification-area', 'success');
@@ -401,7 +413,7 @@
             
             var modelId = $(this).data('modelid');
             var modelName = $(this).data('modelname');
-            window.location.href = 'view-model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&modelId='+modelId+'&projectName='+projectName+'&analysisName='+analysisName+'&modelName='+modelName+'&fromCompare=false';
+            window.location.href = 'view-model.jag?analysisId=' + analysisId + '&datasetId=' + datasetId + '&modelId=' + modelId + '&projectName=' + projectName + '&analysisName=' + analysisName + '&modelName=' + modelName + '&fromCompare=false';
         });        
 
         $(document).on('click', '#create-model', function(e){ 
@@ -411,14 +423,11 @@
 
             $.ajax({
                 type: "GET",
-                url: serverUrl+"/api/analyses/"+analysisId+"/algorithmName",
+                url: serverUrl + "/api/analyses/" + analysisId + "/algorithmName",
                 async : false,
                 dataType: 'text',
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success : function(res){
-                    algorithmName = res;
+                    algorithmName = sanitize(res);
                 },
                 error : function(res){
                 var errorText = res.responseText
@@ -428,14 +437,11 @@
 
             $.ajax({
                 type: "GET",
-                url: serverUrl+"/api/analyses/"+analysisId+"/algorithmType",
+                url: serverUrl + "/api/analyses/" + analysisId + "/algorithmType",
                 async : false,
                 dataType: 'text',
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success : function(res){
-                    algorithmType = res;
+                    algorithmType = sanitize(res);
                 },
                 error : function(res){
                 var errorText = res.responseText
@@ -443,8 +449,8 @@
                 }
             });
 
-            window.location.href = '../model/model.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName+"&fromAnalysis=true"
-                                    +'&algorithmName='+algorithmName+'&algorithmType='+algorithmType;
+            window.location.href = '../model/model.jag?analysisId=' + analysisId + '&datasetId=' + datasetId + '&projectName=' + projectName + '&analysisName=' + analysisName + "&fromAnalysis=true"
+                                    +'&algorithmName=' + algorithmName + '&algorithmType=' + algorithmType;
         });
     }
 
@@ -453,9 +459,6 @@
             $.ajax({
                 type: "DELETE",
                 url: serverUrl+"/api/models/"+modelId,
-                /*beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                },*/
                 success : function(res){
                     $('#accordion').empty();
                     loadModels();
@@ -464,7 +467,7 @@
                     $('#accordion').pageMe({pagerSelector:'#pagination-list', childSelector:'.panel', showPrevNext:true, hidePageNumbers:false, perPage:panelsPerPage});                
                 },
                 error : function(res){
-                var errorText = res.responseText
+                    var errorText = res.responseText
                     handleNotification(errorText, '#notification-area', 'warning');
                 }
             });        

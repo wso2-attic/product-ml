@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -12,7 +13,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %>
     
 </head>
@@ -323,22 +323,29 @@
     function createAccordionPanels(models, modelType) {
         var accordionPanels = '';
         for (var i = 0; i < models.length; i++) {
+
+            var modelId = sanitize(models[i].id);
+            var modelName = sanitize(models[i].name);
+            var algorithm = sanitize(models[i].modelSummary.algorithm.replace("_", " "));
+            var modelAccuracy = parseFloat(sanitize(models[i].modelSummary.modelAccuracy)).toFixed(4)*100;
+            var meanSquaredError = parseFloat(sanitize(models[i].modelSummary.meanSquaredError)).toExponential(2);
+
             accordionPanels += '' + 
                 '<div class="panel panel-default">' +
-                    '<div class="panel-heading" role="tab" id="heading'+i+'">' +
+                    '<div class="panel-heading" role="tab" id="heading' + i + '">' +
                         '<h4 class="panel-title">' +
-                            '<table class="tbl-projects" projectID="' + models[i].id + '">' +
+                            '<table class="tbl-projects" projectID="' + modelId + '">' +
                                 '<tr>' +
                                     '<td>' +
-                                        '<a data-parent="#'+modelType+'-accordion" href="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" class="ctrl-exp-col reset-hover">' +
-                                            '<span class="cu-acc-head-title">' + models[i].name + '</span>' +
+                                        '<a data-parent="#' + modelType + '-accordion" href="#collapse' + i + '" aria-expanded="true" aria-controls="collapse' + i + '" class="ctrl-exp-col reset-hover">' +
+                                            '<span class="cu-acc-head-title">' + modelName + '</span>' +
                                             '<span class="cu-acc-head-workflow"></span>' +
-                                            '<span class="cu-acc-head-created">[ Algorithm: ' + models[i].modelSummary.algorithm.replace("_", " ") + ' ]</span>';
+                                            '<span class="cu-acc-head-created">[ Algorithm: ' + algorithm + ' ]</span>';
                                             if(modelType == 'classification') {
-                                                accordionPanels += '<span class="cu-acc-head-created">[ Accuracy: <b>' + parseFloat(models[i].modelSummary.modelAccuracy).toFixed(4)*100 + '%</b> ]</span>';
+                                                accordionPanels += '<span class="cu-acc-head-created">[ Accuracy: <b>' + modelAccuracy + '%</b> ]</span>';
                                             }
                                             else if(modelType == 'numerical-prediction') {
-                                                accordionPanels += '<span class="cu-acc-head-created">[ Mean squared error: <b>' + parseFloat(models[i].modelSummary.meanSquaredError).toExponential(2) + '</b> ]</span>';
+                                                accordionPanels += '<span class="cu-acc-head-created">[ Mean squared error: <b>' + meanSquaredError + '</b> ]</span>';
                                             }
                                             else if(modelType == 'clustering') {
                                                 accordionPanels += '<span class="cu-acc-head-created">[ Comparison not supported ]</span>';
@@ -349,8 +356,8 @@
                                         accordionPanels += '' + 
                                     '<td class="c-right">' +
                                         '<div>' +
-                                            '<a href="#" id="view-model" class="cu-reg-btn btn-view" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-analysisid="' + models[i].analysisId + '"><span>View</span></a>' +
-                                            '<a href="#" id="predict" class="cu-reg-btn btn-predict" data-modelname="' + models[i].name + '" data-modelid="' + models[i].id + '" data-analysisid="' + models[i].analysisId + '"><span>Predict</span></a>' +
+                                            '<a href="#" id="view-model" class="cu-reg-btn btn-view" data-modelname="' + modelName + '" data-modelid="' + modelId + '" data-analysisid="' + models[i].analysisId + '"><span>View</span></a>' +
+                                            '<a href="#" id="predict" class="cu-reg-btn btn-predict" data-modelname="' + modelName + '" data-modelid="' + modelId + '" data-analysisid="' + models[i].analysisId + '"><span>Predict</span></a>' +
                                         '</div>' +
                                     '</td>';                                        
                                     }
@@ -363,7 +370,7 @@
                             '</table>' +
                         '</h4>' +
                     '</div>' +
-                    '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">' +
+                    '<div id="collapse' + i + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' + i + '">' +
                         /*'<div class="panel-body">' + buildNotifications(models[i].error) + '</div>' +*/
                     '</div>' +
                 '</div>';
@@ -374,11 +381,8 @@
     function loadModels() {        
         $.ajax({
             type: "GET",
-            url: serverUrl+"/api/projects/"+projectId+"/models",
+            url: serverUrl+"/api/projects/" + projectId + "/models",
             async: false,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
             success: function(data) {
                 var projectModels = data;
                 if (projectModels.length > 0) {

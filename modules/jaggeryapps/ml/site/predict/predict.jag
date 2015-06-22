@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -12,7 +13,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %>
     
 </head>
@@ -94,25 +94,57 @@
                     <div id="notification-area"></div>
                     <div class="wr-form col-lg-5 col-centered">
 
-                        <h1 class="title">Features</h1>
+                        <h1 class="title">Predict</h1>
 
-                        <div id="parameter-inputs"></div>
-                        <!-- <div class="spcr-2"></div> -->
-                        <div class="btn-group-actions">
-                            <button id="predict" class="btn btn-main" type="submit">Predict</button>
-                        </div>
+                        <form id="prediction-form" method="POST" enctype="multipart/form-data">
+
+                            <label class="input-label">Prediction Source<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                            <div class="input-control text">
+                                <select class="form-control" id="prediction-src" name="sourceType">
+                                  <option value="file">File</option>
+                                  <option value="features">Feature values</option>
+                                </select>               
+                            </div>             
+
+                            <!-- inputs for file upload prediction -->
+                            <div id="file-input">
+
+                                <input type="text" value="" id="model-id" name="modelId" hidden/>
+
+                                <label class="input-label">Data File<span class="File Location"></span>  <span><label class="input-label" id="size-limit">(max size: 100MB)</label></span></label>
+                                <span class="fld-required">*</span>
+                                <div id="source-file" class="input-control file info-state" data-role="input-control">
+                                    <input type="file" id="fileInput" name="file"/>
+                                </div>                                                                                 
+
+                                <label class="input-label">Data Format<span class="help-tip glyphicon glyphicon-question-sign"></span></label>
+                                <div class="input-control text">
+                                    <select class="form-control" id="data-format" name="dataFormat">
+                                        <option value="csv">CSV</option>
+                                        <option value="tsv">TSV</option>                    
+                                    </select>               
+                                </div>                            
+                            </div>
+
+                            <!-- inputs for parameter input prediction -->
+                            <div id="parameter-inputs"></div>
+                            
+                            <div class="btn-group-actions">
+                                <button id="file-predict" class="btn btn-main" type="submit">Predict</button>
+                                <button id="feature-predict" class="btn btn-main" type="submit">Predict</button>                                
+                            </div>
+
+                        </form>
+
                         <br/>
                         <div id="prediction"></div>
 
                     </div>
-                        
 
                 </div>
 
             </div>
                 <!-- /content -->
-
-
         </div>
     </div>
         <!-- /content/body -->
@@ -137,6 +169,7 @@
 <script src="../../js/jquery-1.11.1.min.js"></script>
 <script src="../../js/wso2.ml.util.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/jquery.form.min.js"></script> 
 
 <script type="text/javascript">
 
@@ -173,7 +206,36 @@
         $('#nav-analysis').text(" \\ "+analysisName);
         $('#nav-model').text(" \\ "+modelName);
 
+        // load feature input prediction features
         loadFeatures();
+        // display inputs for prediction type selection
+        displayPredictionSource();
+
+        // set model ID to hidden input field
+        $("#model-id").val(modelId);
+        // make predictions for file upload prediction
+        $('#prediction-form').ajaxForm({
+            url: serverUrl + '/api/models/predict',
+            success : function(res){
+                var predictionNotification =   '<div class="wr-instant-response">' +
+                                                    '<label>Predicted Value(s):</label><br>';
+                for(var i = 0; i < res.length; i++) {
+                    // omit comma at end for last value
+                    if(i == (res.length - 1)) {
+                        predictionNotification +=   '<label><span>' + res[i] + '</span></label>';
+                    }
+                    else {
+                        predictionNotification +=   '<label><span>' + res[i] + '</span></label>, ';
+                    }
+                }
+                predictionNotification +=       '</div>';                        
+                $("#prediction").html(predictionNotification);
+            },
+            error :  function(res){
+                var errorText = res.responseText
+                handleNotification(errorText, '#notification-area', 'warning');
+            }                               
+        });
     });
 
     // input validation for feature values
@@ -191,14 +253,11 @@
         // get response variable of this model
         $.ajax({
             type: "GET",
-            url: serverUrl+"/api/analyses/"+analysisId+"/responseVariables",
+            url: serverUrl + "/api/analyses/" + analysisId + "/responseVariables",
             async: false,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
             dataType: 'text',
             success: function(data) {
-            	responseVariable = data;
+            	responseVariable = sanitize(data);
             },
             error: function(res) {
                 var errorText = res.responseText
@@ -208,10 +267,8 @@
         // get feature names of this model
         $.ajax({
             type: "GET",
-            url: serverUrl+"/api/models/"+modelId+"/summary",
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
+            url: serverUrl + "/api/models/" + modelId + "/summary",
+            async: false,
             success: function(data) {
                 var modelFeatures = data['features'];
                 
@@ -219,13 +276,12 @@
 
                     if (modelFeatures[i] == responseVariable) continue;
 
-                    inputString = '' +
-                                '<label class="input-label">'+modelFeatures[i]+'</label>' +
-				'<span class="fld-required">*</span>'+
-                                '<div class="input-control text">' +
-                                    '<input type="text" id="sgd-data-fraction-'+ i +'" value="" placeholder=""/>' +
-                                    '<span class="form-val-error" id="feature-'+ i +'-error"></span>' +
-                                '</div>';
+                    inputString =   '<label class="input-label">' + sanitize(modelFeatures[i]) + '</label>' +
+    				                '<span class="fld-required">*</span>'+
+                                    '<div class="input-control text">' +
+                                        '<input type="text" id="sgd-data-fraction-' + i + '" value="" placeholder=""/>' +
+                                        '<span class="form-val-error" id="feature-' + i + '-error"></span>' +
+                                    '</div>';
 
                     $("#parameter-inputs").append(inputString);
 
@@ -250,12 +306,13 @@
     }
 
     function bindEvents() {
-        // function that predict
-        $(document).on('click', '#predict', function(e){
-            e.preventDefault();
+        // make predictions for feature input prediction
+        $(document).on('click', '#feature-predict', function(e){
+            e.preventDefault();            
+
             var emptyFeatureValues = false;
             var inputArray = [];
-            $('input').each(function(index, item){
+            $('#parameter-inputs input').each(function(index, item){
                 var val = $(item).val();
                 if(isFeatureValueEmpty(val, index)) {
                     emptyFeatureValues = true;
@@ -269,20 +326,18 @@
 
                 $.ajax({
                     type: "POST",
-                    url: serverUrl+"/api/models/"+modelId+"/predict",
+                    url: serverUrl + "/api/models/" + modelId + "/predict",
                     contentType: "application/json",
                     data: jsonData,
-                    /*beforeSend : function(xhr) {
-                        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-                    },*/
                     success : function(res){
-                        var predictionNotification =   '<div class="wr-instant-response">' +
-                                                            '<label>Predicted Value: <span>' + res + '</span></label>' +
+                        var predictionNotification =    '<div class="wr-instant-response">' +
+                                                            '<label>Predicted Value:</label><br>' +
+                                                            '<label><span>' + res + '</span></label>' +
                                                         '</div>';                        
                         $("#prediction").html(predictionNotification);
                     },
                     error : function(res){
-                var errorText = res.responseText
+                        var errorText = res.responseText
                         handleNotification(errorText, '#notification-area', 'warning');
                     }
                 });
@@ -292,12 +347,36 @@
         $('#cancel-predict').on('click', function(e){
             e.preventDefault();
             if(fromCompare == 'true') {
-                window.location.href = '../project/compare.jag?projectId='+projectId+'&projectName='+projectName+'&dataseId='+datasetId;
+                window.location.href = '../project/compare.jag?projectId=' + projectId + '&projectName=' + projectName + '&dataseId=' + datasetId;
             } else {
-                window.location.href = '../analysis/analysis.jag?analysisId='+analysisId+'&datasetId='+datasetId+'&projectName='+projectName+'&analysisName='+analysisName;
+                window.location.href = '../analysis/analysis.jag?analysisId=' + analysisId + '&datasetId=' + datasetId + '&projectName=' + projectName + '&analysisName=' + analysisName;
             }
         });
+
+        // change input fields according to prediction type selection
+        $('#prediction-src').on('change', function(e){
+            displayPredictionSource();
+            $("#prediction").empty();
+        });        
     }        
+
+    // function to change input fields
+    function displayPredictionSource() {
+        var predictionSource = $('#prediction-src option:selected').val();
+        if (predictionSource == 'file') {
+            $('#parameter-inputs').hide();
+            $('#file-input').show();
+
+            $('#feature-predict').hide();
+            $('#file-predict').show();
+        } else if (predictionSource == 'features') {
+            $('#file-input').hide();
+            $('#parameter-inputs').show();
+
+            $('#file-predict').hide();
+            $('#feature-predict').show();
+        }
+    }    
 
 </script>
 

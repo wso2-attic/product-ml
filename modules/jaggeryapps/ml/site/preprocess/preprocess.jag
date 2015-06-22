@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/jquery.dataTables.min.css" rel="stylesheet">
@@ -24,7 +25,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %> 
 
 </head>
@@ -141,6 +141,7 @@ var datasetId = getParameterByName('datasetId');
 var analysisName = getParameterByName('analysisName');
 var analysisId = getParameterByName('analysisId');
 var fromAnalysis = getParameterByName('fromAnalysis');
+var fromAnalysis = getParameterByName('fromAnalysis');
 
 $( document ).ready(function() {
 
@@ -183,15 +184,12 @@ $( document ).ready(function() {
         		"Accept" : "application/json",         
                 "Content-Type": "application/json"   
   			},
-  			url: serverUrl+"/api/analyses/"+analysisId+"/features",
+  			url: serverUrl + "/api/analyses/" + analysisId + "/features",
 	        async : false,            
-	        /*beforeSend : function(xhr) {
-	            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	        },*/
 	        data: JSON.stringify(customizedFeatures),
 	        success: function(res){
 	            console.log("Customized features set.");
-                window.location.href = '../explore/explore.jag?projectName='+projectName+'&analysisName='+analysisName+'&analysisId='+analysisId+'&datasetId='+datasetId+'&fromAnalysis='+fromAnalysis;
+                window.location.href = '../explore/explore.jag?projectName=' + projectName + '&analysisName=' + analysisName + '&analysisId=' + analysisId + '&datasetId=' + datasetId + '&fromAnalysis=' + fromAnalysis;
 	        },
 	        error: function(res){
                 var errorText = res.responseText
@@ -203,20 +201,23 @@ $( document ).ready(function() {
     // function that cancels an analysis
     $('#cancel-analysis').on('click', function(e){
         e.preventDefault();
-        $.ajax({
-            type: 'DELETE',
-            url: serverUrl+"/api/analyses/"+analysisId,
-            /*beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-            },*/
-            success: function(res){
-                window.location.href = '../project/projects.jag';
-            },
-            error: function(res){
-                var errorText = res.responseText
-                handleNotification(errorText, '#notification-area', 'warning');
-            }
-        });
+        // if navigation is from analysis page do not delete the analysis
+        if (fromAnalysis == 'true') {
+            window.location.href = '../analysis/analysis.jag?analysisId=' + analysisId + '&datasetId=' + datasetId + '&projectName=' + projectName + '&analysisName=' + analysisName;
+        }
+        else {
+            $.ajax({
+                type: 'DELETE',
+                url: serverUrl + "/api/analyses/" + analysisId,
+                success: function(res){
+                    window.location.href = '../project/projects.jag';
+                },
+                error: function(res){
+                    var errorText = res.responseText
+                    handleNotification(errorText, '#notification-area', 'warning');
+                }
+            });            
+        }
     });
 
     // redraw summary stats charts when feature type is changed
@@ -226,29 +227,26 @@ $( document ).ready(function() {
 
     $.ajax({
         type: "GET",
-        url: serverUrl+"/api/analyses/"+analysisId+"/summarizedFeatures?limit=0&offset=0",        
+        url: serverUrl + "/api/analyses/" + analysisId + "/summarizedFeatures?limit=0&offset=0",        
         async: false,
-        /*beforeSend : function(xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-        },*/
         success : function(res){
         	var features = res;
             var tableData = "";
             for (var i=0; i<features.length; i++) {
                 
                 tableData += '<tr class="dataRow">' +
-                				'<td><span class="feature">' + features[i]['fieldName'] + '</span></td>' +
+                				'<td><span class="feature">' + sanitize(features[i]['fieldName']) + '</span></td>' +
                 				'<td>'+checkboxRenderer(features[i]['input'])+'</td>' +
-                				'<td>'+listSelectionRenderer({"categorical" : "CATEGORICAL","numerical" : "NUMERICAL"}, features[i]['type'].toString(),"fieldType")+'</td>' +
+                				'<td>'+listSelectionRenderer({"categorical" : "CATEGORICAL","numerical" : "NUMERICAL"}, features[i]['type'].toString(), "fieldType")+'</td>' +
                 				// quote type change to avoid conflict with summaryStats object quotes
                                 "<td><div class='summaryStatistics' data-summarystatistics='" + features[i]["summaryStats"] + "'>" + features[i]["summaryStats"] + "</div></td>" +
-                				'<td>'+listSelectionRenderer({"discard":"DISCARD","regressionImputation":"REGRESSION_IMPUTATION","replaceWithMean":"REPLACE_WTH_MEAN"}, features[i]['imputeOperation'].toString(),"imputeMethod")+'</td>' +
+                				'<td>'+listSelectionRenderer({"discard":"DISCARD", "replaceWithMean":"REPLACE_WTH_MEAN"}, features[i]['imputeOperation'].toString(),"imputeMethod")+'</td>' +
                 			 '</tr>';
             }
             $('#datasetTable tbody').append(tableData);
         },
         error : function(res){
-                var errorText = res.responseText
+            var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }
     });

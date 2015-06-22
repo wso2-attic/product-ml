@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WSO2 Machine Learner</title>
+    <link rel="icon" href="../../images/favicon.png" type="image/x-icon" />    
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/custom.css" rel="stylesheet">
     <link href="../../css/custom-theme.css" rel="stylesheet">
@@ -11,7 +12,6 @@
 
     <%
         include("../../includes/tenantAware.jag");
-        print('<script> var authEncoded = "'+session.get("authEncoded")+'"; </script>');
     %>    
 </head>
 
@@ -129,9 +129,9 @@
 
 					<label class="input-label">Data Source<span class="File Location"></span>  <span><label class="input-label" id="size-limit">(max size: 100MB)</label></span></label>
 					<span class="fld-required">*</span>
-		                        <div id="source-file" class="input-control file info-state" data-role="input-control">
-			       			<input type="file" id="fileInput" name="file"/>
-			    		</div>
+					<div id="source-file" class="input-control file info-state" data-role="input-control">
+			       		<input type="file" id="fileInput" name="file"/>
+			    	</div>
 					<div id="source-hdfs-bam" class="input-control text">
 					</div>
 
@@ -246,14 +246,11 @@ $( document ).ready(function() {
 
     $('#create-dataset-form').ajaxForm({
 	    url: baseUrl + '/api/datasets',
-	    /*beforeSend: function(xhr) {
-	        xhr.setRequestHeader("Authorization", "Basic " + authEncoded);
-	    },*/
         success : function(res){
     	     window.location = baseUrl + '/ml/site/data/datasets.jag';   
         },
         error :  function(res){
-                var errorText = res.responseText
+			var errorText = res.responseText
             handleNotification(errorText, '#notification-area', 'warning');
         }                               
     });
