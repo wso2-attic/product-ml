@@ -105,7 +105,7 @@
 						<select class="form-control" id="src-type" name="sourceType">
 						  <option value="file">File</option>
 						  <option value="hdfs">HDFS</option>
-						  <option value="bam">BAM</option>
+						  <option value="bam">DAS</option>
 						</select>				
 					</div>	
 
