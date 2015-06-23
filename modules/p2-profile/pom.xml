@@ -216,6 +216,9 @@
 				<featureArtifactDef>
     				     org.wso2.carbon.metrics:org.wso2.carbon.metrics.feature:${carbon.metrics.version}
 				</featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.ml:org.wso2.ml.styles.feature:${ml.version}
+                                </featureArtifactDef>
                             </featureArtifacts>
                         </configuration>
                     </execution>
@@ -319,6 +322,10 @@
                                 <feature>
                                     <id>org.wso2.carbon.ml.feature.group</id>
                                     <version>${carbon.ml.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.ml.styles.feature.group</id>
+                                    <version>${ml.version}</version>
                                 </feature>
                                 <!--Jaggery Features-->
                                 <feature>
