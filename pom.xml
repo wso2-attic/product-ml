@@ -839,7 +839,7 @@
 		<carbon.data.version>4.3.1-SNAPSHOT</carbon.data.version>
 		<carbon.analytics.version>1.0.3-SNAPSHOT</carbon.analytics.version>
 		<carbon.metrics.version>1.1.0-SNAPSHOT</carbon.metrics.version>
-        	<carbon.analytics.common.version>1.0.1-SNAPSHOT</carbon.analytics.common.version>
+        	<carbon.analytics.common.version>2.0.0-SNAPSHOT</carbon.analytics.common.version>
         	<carbon.kernel.version>4.4.0</carbon.kernel.version>
 		<carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
 
@@ -887,9 +887,9 @@
 		<derby.version>10.4.2.0</derby.version>
 		<compress.lzf.version>1.0.0</compress.lzf.version>
 		<codahale.metrics.version>3.0.0</codahale.metrics.version>
-		<jackson.version>2.3.1</jackson.version>
+		<jackson.version>2.4.4</jackson.version>
 		<jackson-annotations.version>2.3.0</jackson-annotations.version>
-		<snappy.version>1.0.5.3</snappy.version>
+		<snappy.version>1.1.1.6</snappy.version>
 		<commons-net.version>2.2</commons-net.version>
 		<jetty.version>8.1.14.v20131031</jetty.version>
 		<org.jboss.netty.version>3.8.0.Final</org.jboss.netty.version>

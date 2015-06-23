@@ -192,6 +192,12 @@
                                 <featureArtifactDef>
                                      org.wso2.carbon.analytics-common:org.wso2.carbon.event.output.adapter.server.feature:${carbon.analytics.common.version}
                                 </featureArtifactDef>
+				<featureArtifactDef>
+                                     org.wso2.carbon.analytics-common:org.wso2.carbon.event.output.adapter.email.server.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
+				<featureArtifactDef>
+                                     org.wso2.carbon.analytics-common:org.wso2.carbon.spark.commons.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
 				
 				<!-- WSO2 DAS integration -->
 				<featureArtifactDef>
@@ -367,6 +373,14 @@
                                 <!-- Email Adapter Feature -->
                                 <feature>
                                     <id>org.wso2.carbon.event.output.adapter.server.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
+                                </feature>
+				<feature>
+                                    <id>org.wso2.carbon.event.output.adapter.email.server.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
+                                </feature>
+				<feature>
+                                    <id>org.wso2.carbon.spark.commons.feature.group</id>
                                     <version>${carbon.analytics.common.version}</version>
                                 </feature>
 				
