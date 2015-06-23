@@ -751,11 +751,6 @@
                 <artifactId>org.wso2.ml.styles</artifactId>
                 <version>${ml.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.ml</groupId>
-                <artifactId>org.wso2.stratos.ml.styles</artifactId>
-                <version>${ml.version}</version>
-            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
