@@ -51,6 +51,7 @@ commond to all type of graphs.*/
 	text-align: center;
 	width: 100%;
 	height:200px;
+	table-layout: fixed;
 }
 #confusion-matrix .header-level-1 {
 	font-weight:bold;
@@ -58,6 +59,28 @@ commond to all type of graphs.*/
 #confusion-matrix .header-level-2 {
 	font-style: italic;
 }
+#confusion-matrix .rotate {
+	/* Safari */
+	-webkit-transform: rotate(-90deg);
+
+	/* Firefox */
+	-moz-transform: rotate(-90deg);
+
+	/* IE */
+	-ms-transform: rotate(-90deg);
+
+	/* Opera */
+	-o-transform: rotate(-90deg);
+
+	/* Internet Explorer */
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+#confusion-matrix .correct {
+	background-color: #ECFFEC;
+}
+#confusion-matrix .incorrect {
+	background-color: #FFF0F0;
+} 
 .ui-slider-horizontal {
     width: 100%;
 }

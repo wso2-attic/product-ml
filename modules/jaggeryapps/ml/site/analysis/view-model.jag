@@ -119,11 +119,6 @@
                     <h5>Confusion Matrix</h5>
                     <div class="wr-graph-img">
                         <div id="confusion-matrix"></div>
-                        <br>                
-                        <label class="input-label" for="amount">Threshold:</label>
-                        <input type="text" class="threshold-value" id="amount" readonly>                
-                        <div id="slider"></div>
-                        <br>
                     </div>
                 </div>
 
@@ -219,22 +214,6 @@ $(document).on('change','select[id="residual-features"]',function() {
     drawResidualPlot(testResultDataPointsSample);
 });
 
-/*for threshold slider*/
-$(function() {
-    $("#slider").slider({
-        value: 0.5,
-        min: 0,
-        max: 1,
-        step: 0.1,
-        slide: function(event, ui) {
-            $("#amount").val(ui.value);
-            // redraw table on slider change
-            drawConfusionMatrix(predictedVsActuals, ui.value, "#confusion-matrix");
-        }
-    });
-    $("#amount").val($("#slider").slider("value"));
-});
-
 $( document ).ready(function() {
 
 	$('#nav').affix({
@@ -303,14 +282,18 @@ $( document ).ready(function() {
                 // format data and draw ROC graph
                 var rocData  = JSON.parse(res.roc);
                 var auc  = parseFloat(res.auc).toFixed(3);
-                drawRocGraph(rocData, auc, "#roc-graph");
+                // draw ROC curve only for binary classification models (applies for LOGISTIC_REGRESSION_LBFGS)
+                if(res.multiclassConfusionMatrix.size == 2) {
+                    drawRocGraph(rocData, auc, "#roc-graph");
+                }
+                else {
+                    $("#roc-graph").closest("div.wr-graph-element").remove();
+                }
                 // create data object and draw weights chart
                 var featureImportanceData = [ {'key':'featureImportanceData', 'values': res.featureImportance}];
                 drawWeightsChart(featureImportanceData);
                 // draw confusion matrix	            
-                predictedVsActuals = res.predictedVsActuals;
-        		var threshold = $("#slider").slider("value");
-        		drawConfusionMatrix(predictedVsActuals, threshold, "#confusion-matrix");
+                drawConfusionMatrix(res.multiclassConfusionMatrix.matrix, res.multiclassConfusionMatrix.labels, "#confusion-matrix");                
                 // draw feature select
                 testResultDataPointsSample = res.testResultDataPointsSample;
                 features = res.features;
@@ -337,8 +320,10 @@ $( document ).ready(function() {
                     $("#model-summary-title").append(" [Accuracy: " + res.modelAccuracy.toFixed(4)*100 + "%]");    
                 }                
                 // remove not applicable charts/tables
-                $("#roc-graph, #weights-chart, #confusion-matrix").closest("div.wr-graph-element").remove();
+                $("#roc-graph, #weights-chart").closest("div.wr-graph-element").remove();
                 $("#residual").remove();
+                // draw confusion matrix                
+                drawConfusionMatrix(res.multiclassConfusionMatrix.matrix, res.multiclassConfusionMatrix.labels, "#confusion-matrix");                
                 // draw feature select
                 testResultDataPointsSample = res.testResultDataPointsSample;
                 features = res.features;
@@ -544,7 +529,7 @@ function getDisplayFeatures(features, numericalFeatureNames) {
 }
 
 function getInfo(chartType) {
-    var minNumFeaturesInfoText = 'Minimum of one numerical feature required for '+chartType+'.';
+    var minNumFeaturesInfoText = 'Minimum of one numerical feature required for ' + chartType + '.';
     var minNumFeaturesInfo = buildNotification(minNumFeaturesInfoText, 'info');
     return minNumFeaturesInfo;
 }
@@ -559,77 +544,41 @@ function shortenLabel (label) {
     }
 }
 
-// function to draw confusion matrix
-function drawConfusionMatrix (predictedVsActuals, threshold, cssSelector) {
+// function to draw multiclass confusion matrix
+function drawConfusionMatrix (matrix, labels, cssSelector) {
 
-	var confusionMatrixValues = calculateConfusionMatrix (predictedVsActuals, threshold);
-	var confusionMatrixHtml = 	"<table border='1'>" +
-									"<tr>" +
-										"<td colspan='2' rowspan='2' class='header-level-1'>Total</td>" +
-										"<td colspan='2' class='header-level-1'>Predicted</td>" +
-									"</tr>" +
-									"<tr>" +
-										"<td class='header-level-2'>Positive</td>" +
-										"<td class='header-level-2'>Negative</td>" +
-									"</tr>" +
-									"<tr>" +
-										"<td rowspan='2' class='header-level-1'>Actual</td>" +
-										"<td class='header-level-2'>Positive</td>" +
-										"<td>" + confusionMatrixValues[0] + "</td>" +
-										"<td>" + confusionMatrixValues[1] + "</td>" +
-									"</tr>"+
-									"<tr>"+
-									"<td class='header-level-2'>Negative</td>" +
-										"<td>" + confusionMatrixValues[3] + "</td>" +
-										"<td>" + confusionMatrixValues[2] + "</td>" +
-									"</tr>"+
-									"<tr>"+
-										"<td colspan='3' class='header-level-1'>Accuracy</td>" +
-										"<td>" + confusionMatrixValues[4].toFixed(2) + "%</td>" +
-									"</tr>" +
-								"</table>";
+    var multiclassConfusionMatrixHtml = "<table border='1'>";
+    multiclassConfusionMatrixHtml += "<tr>" +
+                                        "<td class='header-level-1' colspan='2' rowspan='2'>Total</td><td class='header-level-1' colspan="+labels.length+">Predicted</td>" +
+                                     "</tr>";
+    multiclassConfusionMatrixHtml += "<tr>";
+    
+    for(var i = 0; i < labels.length; i++) {
+        multiclassConfusionMatrixHtml += "<td class='header-level-2'>" + labels[i] + "</td>";
+    }    
+    multiclassConfusionMatrixHtml += "</tr>";
+    
+    for(var i = 0; i < matrix.length; i++) {
+        
+        multiclassConfusionMatrixHtml += "<tr>";
+        if (i == 0) {
+            multiclassConfusionMatrixHtml += "<td class='header-level-1 rotate' rowspan='" + labels.length + "'>Actual</td>";            
+        }
+        multiclassConfusionMatrixHtml += "<td class='header-level-2'>" + labels[i] + "</td>";
 
-	$(cssSelector).html(confusionMatrixHtml);	
-}
+        for(var j = 0; j < matrix[i].length; j++){
+            if (i == j) {
+                multiclassConfusionMatrixHtml += "<td class='correct'>" + matrix[i][j] + "</td>";
+            }
+            else {
+                multiclassConfusionMatrixHtml += "<td class='incorrect'>" + matrix[i][j] + "</td>";
+            }            
+        }
+        multiclassConfusionMatrixHtml += "</tr>";
+    }
+    multiclassConfusionMatrixHtml += "</table>";
 
-// function to calculate confusion matrix
-function calculateConfusionMatrix(predictedVsActuals, threshold) {
-	var truePositives = 0;
-	var falsePositives = 0;
-	var trueNegatives = 0;
-	var falseNegatives = 0;
-	var accuracy = 0;
-
-	for (var i = 0; i < predictedVsActuals.length; i++) {
-
-		var actual = predictedVsActuals[i]['actual'];
-		var predicted = labelPredicted(predictedVsActuals[i]['predicted'], threshold);
-
-		if (predicted == 1 && actual == 1) {
-			truePositives++;
-		}
-		else if (predicted == 0 && actual == 1) {
-			falsePositives++;
-		}
-		else if (predicted == 0 && actual == 0) {
-			trueNegatives++;
-		}		
-		else { // predicted == 1 && actual == 0
-			falseNegatives++;
-		}
-	}
-
-	var total = truePositives+falsePositives+trueNegatives+falseNegatives;
-	accuracy = (truePositives+trueNegatives)/total*100;
-
-	var confusionMatrixValues = [];
-	confusionMatrixValues[0] = truePositives;
-	confusionMatrixValues[1] = falsePositives;
-	confusionMatrixValues[2] = trueNegatives;
-	confusionMatrixValues[3] = falseNegatives;
-	confusionMatrixValues[4] = accuracy;
-
-	return confusionMatrixValues;	
+    $(cssSelector).html(multiclassConfusionMatrixHtml);   
 }
 
 // function to get the binary value of a predicted value for given threshold

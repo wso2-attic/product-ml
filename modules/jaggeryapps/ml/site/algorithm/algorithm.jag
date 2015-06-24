@@ -101,7 +101,6 @@
                         </optgroup>                        
 	                    <optgroup label="Binary Classification">
 	                        <option value="LOGISTIC_REGRESSION">LOGISTIC REGRESSION SGD</option>
-	                        <option value="LOGISTIC_REGRESSION_LBFGS">LOGISTIC REGRESSION L-BFGS</option>
 	                        <option value="SVM">SVM</option>
                         </optgroup>
                         <optgroup label="Multiclass Classification">
