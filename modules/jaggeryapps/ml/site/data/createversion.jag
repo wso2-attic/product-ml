@@ -212,7 +212,7 @@ function displayDataSource() {
 	        $('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. hdfs://localhost:9000/home/datasets/iris.csv" id="src-path" name="sourcePath" />');
 	        $('#source-hdfs-bam').show();
 	        $('#not-related-to-bam').show();
-        } else if (dataSourceType == 'BAM') {
+        } else if (dataSourceType == 'DAS') {
             $('#source-file').hide();
             $('#size-limit').hide();
             $('#source-hdfs-bam').html('<input type="text" value="" placeholder="e.g. <table_name>:<col_1_name>,<col_1_type>;<col_2_name>,<col_2_type>" id="src-path" name="sourcePath" />');
