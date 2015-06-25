@@ -102,6 +102,20 @@ public class ConfigurationAPITestCase extends MLBaseTest {
         response.close();
     }
     
+    /**
+     * Test retrieving configs of all DAS tables.
+     * 
+     * @throws MLHttpClientException 
+     * @throws IOException 
+     */
+    @Test(description = "Get all das tables")
+    public void testGetAllDASTables() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/configs/das/tables");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
     @AfterClass(alwaysRun = true)
     public void tearDown() throws MLHttpClientException {
         super.destroy();
