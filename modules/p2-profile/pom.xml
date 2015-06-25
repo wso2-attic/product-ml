@@ -219,6 +219,9 @@
                                 <featureArtifactDef>
                                     org.wso2.ml:org.wso2.ml.styles.feature:${ml.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.ml:org.wso2.carbon.ml.siddhi.extension.feature:${carbon.ml.version}
+                                </featureArtifactDef>
                             </featureArtifacts>
                         </configuration>
                     </execution>
