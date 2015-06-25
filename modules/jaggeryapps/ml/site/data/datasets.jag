@@ -281,7 +281,7 @@ $( document ).ready(function() {
     $(document).on('click', '#delete-dataset', function(e){ 
         e.preventDefault();
         
-        deleteDatasetId = $(this).data('datasetId');        
+        deleteDatasetId = $(this).data('datasetid');        
         operationSelect('delete-dataset');
     });
     $(document).on('click', '#delete-dataset-yes', function(e){ 
