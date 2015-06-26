@@ -137,11 +137,12 @@
 			    	<!-- dynamically loads inputs for HDFS and DAS -->
 			    	<div id="source-hdfs-das"></div>
 
-					<div id="source-das-table">
+					<div id="source-das-table" class="wr-datalookup">
+						<p class="p-note">* Select a table from the below list</p>
 						<table id="datasetTable">
 			                <thead>
 			                    <tr>
-			                        <th></th>
+			                        <th style="width:40px"></th>
 			                        <th>Table name</th>
 			                    </tr>
 			                </thead>							
@@ -296,7 +297,6 @@ $( document ).ready(function() {
 }); 
 
 function loadDataTables() {
-	//oTable.fnDestroy();
 	$.ajax({
         type : 'GET',
         url: baseUrl + '/api/configs/das/tables',

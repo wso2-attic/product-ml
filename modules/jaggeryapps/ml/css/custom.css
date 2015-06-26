@@ -1189,5 +1189,35 @@ a.btn-opr-cancel {
 	font-size:15px;
 }
 
+.p-note {
+	font-size:12px;
+}
 
+.t-fake-input {
+	border:1px solid #999;
+	height:36px;
+}
+.btn-input-inline {
+	position:absolute;
+	right:0;
+}
 
+a.cu-input-inline-btn {
+  color: #333;
+  text-decoration: none;
+  border: 0px solid #ff0000;
+  padding: 7px 10px 10px 40px;
+  font-size: 14px;
+  margin: 0 0 0 0px;
+  font-weight: 200;
+  display: inline-block;
+  text-transform: uppercase;
+  background-size: 26px 26px;
+  background-position: 0.2em 0.3em;
+}
+
+#selected-table {
+	padding-top:7px;
+	padding-left:10px;
+	display:inline-block;
+}
