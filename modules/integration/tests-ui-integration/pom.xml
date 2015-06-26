@@ -296,4 +296,8 @@
 			<artifactId>httpclient</artifactId>
 		</dependency>
 	</dependencies>
+
+    <properties>
+        <skipUiTests>true</skipUiTests>
+    </properties>
 </project>
