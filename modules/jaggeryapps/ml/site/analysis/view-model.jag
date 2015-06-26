@@ -421,9 +421,9 @@ function drawWeightsChart (data) {
 
     nv.addGraph(function() {
         var chart = nv.models.discreteBarChart()
-                        .x(function(d) { return shortenLabel(d.label) })
+                        .x(function(d) { return d.label })
                         .y(function(d) { return d.value })
-                        .staggerLabels(false)
+                        .staggerLabels(true)
                         .tooltips(false)
                         .showValues(false)
                         .color(["#1395ba", "#117899", "#0f5b78", "#0d3c55", "#c02e1d", "#d94e1f", "#f16c20", "#ef8b2c", "#ecaa38", "#ebc844", "a2b86c", "5ca793"]);
