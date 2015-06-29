@@ -570,6 +570,74 @@ $( document ).ready(function() {
 	        });    	
         }
     });
+
+	// functions for chart marker size changes
+	$(".scatter-marker-size").on("click", function (e) {
+		e.preventDefault();
+
+	    var $button = $(this);
+	    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
+
+	    if ($button.data('operator') == "+") {
+	        var newValue = parseFloat(oldValue) + 1;
+	    } else {
+	        // Don't allow decrementing below 1
+	        if (oldValue > 1) {
+	            var newValue = parseFloat(oldValue) - 1;
+	        } else {
+	            newValue = 1;
+	        }
+	    }
+	    scatterMarkerSize = newValue;
+	    $button.closest('.sp-quantity').find("input.quntity-input").val(newValue);
+	    $("#scatter").html("Loading chart...");
+	    drawPlotsAjax();
+	});
+
+	$(".trellis-marker-size").on("click", function (e) {
+		e.preventDefault();
+
+	    var $button = $(this);
+	    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
+
+	    if ($button.data('operator') == "+") {
+	        var newValue = parseFloat(oldValue) + 1;
+	    } else {
+	        // Don't allow decrementing below 1
+	        if (oldValue > 1) {
+	            var newValue = parseFloat(oldValue) - 1;
+	        } else {
+	            newValue = 1;
+	        }
+	    }
+		trellisMarkerSize = newValue;
+	    $button.closest('.sp-quantity').find("input.quntity-input").val(newValue);
+	    $("#trellisChart").html("Loading chart...");
+	    drawTrellisChart();
+	});
+
+	$(".cluster-marker-size").on("click", function (e) {
+		e.preventDefault();
+
+	    var $button = $(this);
+	    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
+
+	    if ($button.data('operator') == "+") {
+	        var newValue = parseFloat(oldValue) + 1;
+	    } else {
+	        // Don't allow decrementing below 1
+	        if (oldValue > 1) {
+	            var newValue = parseFloat(oldValue) - 1;
+	        } else {
+	            newValue = 1;
+	        }
+	    }
+		clusterMarkerSize = newValue;
+	    $button.closest('.sp-quantity').find("input.quntity-input").val(newValue);
+	    $("#clusterDiagram").html("Loading chart...");
+	    redrawClusterDiagram();
+	});
+
 });
 
 // select the active tab based on the feature types
@@ -1096,70 +1164,6 @@ function drawScatterPlot(data, cssClass, xLabel, yLabel, markerSize) {
     scatter.setYAxisText(yLabel);
     scatter.plot(d3.select(cssClass));
 };
-
-// functions for chart marker size changes
-$(".scatter-marker-size").on("click", function () {
-
-    var $button = $(this);
-    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
-
-    if ($button.data('operator') == "+") {
-        var newVal = parseFloat(oldValue) + 1;
-    } else {
-        // Don't allow decrementing below 1
-        if (oldValue > 1) {
-            var newVal = parseFloat(oldValue) - 1;
-        } else {
-            newVal = 1;
-        }
-    }
-    scatterMarkerSize = newVal;
-    $button.closest('.sp-quantity').find("input.quntity-input").val(newVal);
-    $("#scatter").html("Loading chart...");
-    drawPlotsAjax();
-});
-
-$(".trellis-marker-size").on("click", function () {
-
-    var $button = $(this);
-    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
-
-    if ($button.data('operator') == "+") {
-        var newVal = parseFloat(oldValue) + 1;
-    } else {
-        // Don't allow decrementing below 1
-        if (oldValue > 1) {
-            var newVal = parseFloat(oldValue) - 1;
-        } else {
-            newVal = 1;
-        }
-    }
-	trellisMarkerSize = newVal;
-    $button.closest('.sp-quantity').find("input.quntity-input").val(newVal);
-    $("#trellisChart").html("Loading chart...");
-    drawTrellisChart();
-});
-
-$(".cluster-marker-size").on("click", function () {
-
-    var $button = $(this);
-    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
-
-    if ($button.data('operator') == "+") {
-        var newVal = parseFloat(oldValue) + 1;
-    } else {
-        // Don't allow decrementing below 1
-        if (oldValue > 1) {
-            var newVal = parseFloat(oldValue) - 1;
-        } else {
-            newVal = 1;
-        }
-    }
-	clusterMarkerSize = newVal;
-    $button.closest('.sp-quantity').find("input.quntity-input").val(newVal);
-    $("#clusterDiagram").html("Loading chart...");
-    redrawClusterDiagram();
-});
 
 </script>
 
