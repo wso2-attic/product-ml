@@ -19,6 +19,7 @@
 package org.wso2.carbon.ml;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
@@ -58,6 +59,15 @@ public class MLTestUtils extends MLBaseTest {
         // Gets the ID of the dataset.
         int id = responseJson.getInt("id");
         return id;
+    }
+    
+    public static String getJsonArrayAsString(CloseableHttpResponse response) throws IOException, JSONException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        JSONArray responseJson = new JSONArray(bufferedReader.readLine());
+        bufferedReader.close();
+        response.close();
+
+        return responseJson.toString();
     }
     
     /**

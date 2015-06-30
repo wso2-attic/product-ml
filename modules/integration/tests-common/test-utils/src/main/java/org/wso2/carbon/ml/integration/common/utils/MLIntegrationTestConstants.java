@@ -56,20 +56,24 @@ public class MLIntegrationTestConstants {
 	public static final String TRAIN_DATA_FRACTION = "0.7";
 
 	// Constants for locations of datasets - Happy scenario
-	public static final String DIABETES_DATASET_SAMPLE = "data/pIndiansDiabetes.csv";
-	public static final String DIABETES_DATASET_TEST = "data/pIndiansDiabetesTest.csv";
-	public static final String YACHT_DATASET_SAMPLE = "data/yachtHydrodynamics.csv";
-	public static final String BREAST_CANCER_DATASET_SAMPLE = "data/breastCancerWisconsin.csv";
-	public static final String FOREST_FIRES_DATASET_SAMPLE = "data/forestfires.csv";
-    public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = "data/gammaTelescope.csv";
+	public static final String DATASETS_PATH = "artifacts/ML/data/";
+	public static final String DAS_DATASET_SAMPLE = "STREAMING_DATA";
+	public static final String DIABETES_DATASET_SAMPLE = DATASETS_PATH+"pIndiansDiabetes.csv";
+	public static final String DIABETES_DATASET_TEST = DATASETS_PATH+"pIndiansDiabetesTest.csv";
+	public static final String YACHT_DATASET_SAMPLE = DATASETS_PATH+"yachtHydrodynamics.csv";
+	public static final String BREAST_CANCER_DATASET_SAMPLE = DATASETS_PATH+"breastCancerWisconsin.csv";
+	public static final String FOREST_FIRES_DATASET_SAMPLE = DATASETS_PATH+"forestfires.csv";
+    public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = DATASETS_PATH+"gammaTelescope.csv";
 
     // Datasets with missing values and categorical features
-    public static final String AUTOMOBILE_DATASET_SAMPLE = "data/automobile.csv";
-	public static final String AZURE_STREAMING_DATASET_SAMPLE = "data/azure-stream-analytics_entry.csv";
+    public static final String AUTOMOBILE_DATASET_SAMPLE = DATASETS_PATH+"automobile.csv";
+	public static final String AZURE_STREAMING_DATASET_SAMPLE = DATASETS_PATH+"azure-stream-analytics_entry.csv";
 
 	public static final String DATASET_NAME_DIABETES = "Diabetes";
 	public static final int DATASET_ID_DIABETES = 1;
+	public static final int DATASET_ID_DAS = 2;
 
+	public static final String DATASET_NAME_DAS = "das_data";
 	public static final String DATASET_NAME_YACHT = "Yacht_Hydrodynamics";
 	public static final String DATASET_NAME_BREAST_CANCER = "Breast_Cancer";
 	public static final String DATASET_NAME_FOREST_FIRES = "Forest_Fires";
@@ -81,6 +85,7 @@ public class MLIntegrationTestConstants {
 
     // Response attributes for supervised learning
 	public static final String RESPONSE_ATTRIBUTE_DIABETES = "Class";
+	public static final String RESPONSE_ATTRIBUTE_DAS = "value";
 	public static final String RESPONSE_ATTRIBUTE_YACHT = "ResiduaryResistance";
 	public static final String RESPONSE_ATTRIBUTE_BREAST_CANCER = "Class";
 	public static final String RESPONSE_ATTRIBUTE_FOREST_FIRES = "area";
@@ -92,6 +97,7 @@ public class MLIntegrationTestConstants {
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
 	public static final int PROJECT_ID_DIABETES = 1;
 
+	public static final String PROJECT_NAME_DAS = "DAS_Project";
 	public static final String PROJECT_NAME_YACHT = "Yacht_Hydrodynamics_Project";
 	public static final String PROJECT_NAME_BREAST_CANCER = "Breast_Cancer_Project";
 	public static final String PROJECT_NAME_FOREST_FIRES = "Forest_Fires_Project";
@@ -115,7 +121,7 @@ public class MLIntegrationTestConstants {
 
     // Digit recognition dataset.
     // Rename the dataset to "digitRecognition.csv"
-    public static final String DIGIT_RECOGNITION_DATASET_SAMPLE = "data/digitRecognition.csv";
+    public static final String DIGIT_RECOGNITION_DATASET_SAMPLE = DATASETS_PATH+"digitRecognition.csv";
     public static final String DATASET_NAME_DIGITS = "Digit_Recognition";
     public static final String PROJECT_NAME_DIGITS = "Digit_recognition_Project";
 	public static final String RESPONSE_ATTRIBUTE_DIGITS = "label";

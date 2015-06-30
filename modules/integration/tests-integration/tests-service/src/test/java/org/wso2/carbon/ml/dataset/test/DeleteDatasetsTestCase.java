@@ -36,43 +36,48 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 /**
  * Contains test cases related to deletion of datasets
  */
-@Test(groups="deleteDatasets", dependsOnGroups="getDatasets")
+@Test(groups = "deleteDatasets", dependsOnGroups = "getDatasets")
 public class DeleteDatasetsTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
-    
+
     @BeforeClass(alwaysRun = true)
     public void initTest() throws Exception {
         super.init();
         mlHttpclient = getMLHttpClient();
     }
-    
+
     /**
-     * @throws MLHttpClientException 
-     * @throws IOException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
     @Test(description = "Delete a dataset with a known ID")
     public void testDeleteVersionSet() throws MLHttpClientException, IOException, JSONException {
-        CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/datasets/versions/" + MLIntegrationTestConstants
-                    .VERSIONSET_ID);
+        CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/datasets/versions/"
+                + MLIntegrationTestConstants.VERSIONSET_ID);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                    .getStatusCode());
+                .getStatusCode());
         response.close();
     }
 
     /**
-     * @throws MLHttpClientException 
-     * @throws IOException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
     @Test(description = "Delete a dataset with a known ID")
     public void testDeleteDataset() throws MLHttpClientException, IOException, JSONException {
-        CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants
-                    .DATASET_ID_DIABETES);
+        CloseableHttpResponse response = mlHttpclient.doHttpDelete("/api/datasets/"
+                + MLIntegrationTestConstants.DATASET_ID_DIABETES);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                    .getStatusCode());
+                .getStatusCode());
+        response.close();
+
+        response = mlHttpclient.doHttpDelete("/api/datasets/" + MLIntegrationTestConstants.DATASET_ID_DAS);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
         response.close();
     }
-    
+
     @AfterClass(alwaysRun = true)
     public void tearDown() throws MLHttpClientException {
         super.destroy();

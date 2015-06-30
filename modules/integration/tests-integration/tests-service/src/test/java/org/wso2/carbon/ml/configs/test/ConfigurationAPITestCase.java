@@ -24,12 +24,17 @@ import java.io.IOException;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.json.JSONException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.carbon.ml.MLTestUtils;
 import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
+import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
 
 /**
@@ -39,6 +44,7 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 public class ConfigurationAPITestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
+    private static final Log log = LogFactory.getLog(ConfigurationAPITestCase.class);
     
     @BeforeClass(alwaysRun = true)
     public void initTest() throws Exception {
@@ -103,16 +109,19 @@ public class ConfigurationAPITestCase extends MLBaseTest {
     }
     
     /**
-     * Test retrieving configs of all DAS tables.
+     * Test retrieving all DAS tables.
      * 
-     * @throws MLHttpClientException 
-     * @throws IOException 
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
      */
     @Test(description = "Get all das tables")
-    public void testGetAllDASTables() throws MLHttpClientException, IOException {
+    public void testGetAllDASTables() throws MLHttpClientException, IOException, JSONException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/configs/das/tables");
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
+        assertEquals("DAS tables are not populated properly.", true, MLTestUtils.getJsonArrayAsString(response)
+                .contains(MLIntegrationTestConstants.DAS_DATASET_SAMPLE));
         response.close();
     }
     

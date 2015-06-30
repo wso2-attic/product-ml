@@ -190,13 +190,13 @@ public class MLHttpClient {
     /**
      * Upload a sample datatset from resources
      * 
-     * @param DatasetName   Name for the dataset
+     * @param datasetName   Name for the dataset
      * @param version       Version for the dataset
      * @param resourcePath  Relative path the CSV file in resources
      * @return              Response from the backend
      * @throws              MLHttpClientException 
      */
-    public CloseableHttpResponse uploadDatasetFromCSV(String DatasetName, String version, String resourcePath)
+    public CloseableHttpResponse uploadDatasetFromCSV(String datasetName, String version, String resourcePath)
             throws MLHttpClientException {
         CloseableHttpClient httpClient =  HttpClients.createDefault();
         try {
@@ -210,8 +210,8 @@ public class MLHttpClient {
             multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("containsHeader", new StringBody("true", ContentType.TEXT_PLAIN));
 
-            if (DatasetName != null) {
-                multipartEntityBuilder.addPart("datasetName", new StringBody(DatasetName, ContentType.TEXT_PLAIN));
+            if (datasetName != null) {
+                multipartEntityBuilder.addPart("datasetName", new StringBody(datasetName, ContentType.TEXT_PLAIN));
             }
             if (version != null) {
                 multipartEntityBuilder.addPart("version", new StringBody(version, ContentType.TEXT_PLAIN));
@@ -222,10 +222,45 @@ public class MLHttpClient {
             }
             httpPost.setEntity(multipartEntityBuilder.build());
             return httpClient.execute(httpPost);
-        } catch (ClientProtocolException e) {
+        } catch (Exception e) {
             throw new MLHttpClientException("Failed to upload dataset from csv " + resourcePath, e);
-        } catch (IOException e) {
-            throw new MLHttpClientException("Failed to upload dataset from csv " + resourcePath, e);
+        }
+    }
+    
+    /**
+     * Upload a sample datatset from resources
+     * 
+     * @param datasetName   Name for the dataset
+     * @param version       Version for the dataset
+     * @param tableName  Relative path the CSV file in resources
+     * @return              Response from the backend
+     * @throws              MLHttpClientException 
+     */
+    public CloseableHttpResponse uploadDatasetFromDAS(String datasetName, String version, String tableName)
+            throws MLHttpClientException {
+        CloseableHttpClient httpClient =  HttpClients.createDefault();
+        try {
+            HttpPost httpPost = new HttpPost(getServerUrlHttps() + "/api/datasets/");
+            httpPost.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
+
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            multipartEntityBuilder.addPart("description", new StringBody("Sample dataset for Testing", ContentType.TEXT_PLAIN));
+            multipartEntityBuilder.addPart("sourceType", new StringBody("das", ContentType.TEXT_PLAIN));
+            multipartEntityBuilder.addPart("destination", new StringBody("file", ContentType.TEXT_PLAIN));
+            multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
+            multipartEntityBuilder.addPart("sourcePath", new StringBody(tableName, ContentType.TEXT_PLAIN));
+
+            if (datasetName != null) {
+                multipartEntityBuilder.addPart("datasetName", new StringBody(datasetName, ContentType.TEXT_PLAIN));
+            }
+            if (version != null) {
+                multipartEntityBuilder.addPart("version", new StringBody(version, ContentType.TEXT_PLAIN));
+            }
+                multipartEntityBuilder.addBinaryBody("file", new byte[]{}, ContentType.APPLICATION_OCTET_STREAM, "IndiansDiabetes.csv");
+            httpPost.setEntity(multipartEntityBuilder.build());
+            return httpClient.execute(httpPost);
+        } catch (Exception e) {
+            throw new MLHttpClientException("Failed to upload dataset from DAS " + tableName, e);
         }
     }
     
@@ -315,6 +350,22 @@ public class MLHttpClient {
             return doHttpPost("/api/analyses/" + analysisId + "/features/defaults", payload);
         } catch (MLHttpClientException e) {
             throw new MLHttpClientException("Failed to set Feature defaults to analysis: " + analysisId, e);
+        }
+    }
+    
+    /**
+     * Set feature customized for an analysis.
+     * 
+     * @param analysisId    ID of the analysis
+     * @param customizedFeatures customized features json
+     * @return              Response from the back-end
+     * @throws              MLHttpClientException 
+     */
+    public CloseableHttpResponse setFeatureCustomized(int analysisId, String customizedFeatures) throws MLHttpClientException {
+        try {
+            return doHttpPost("/api/analyses/" + analysisId + "/features", customizedFeatures);
+        } catch (MLHttpClientException e) {
+            throw new MLHttpClientException("Failed to set customized features to analysis: " + analysisId, e);
         }
     }
     

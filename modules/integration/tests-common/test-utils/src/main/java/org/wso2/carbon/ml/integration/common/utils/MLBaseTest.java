@@ -108,6 +108,27 @@ public abstract class MLBaseTest {
     }
     
     /**
+     * Creates a dataset with given specification and keep a reference to the id.
+     */
+    protected int createDatasetFromDASTable(String name, String version, String table) throws MLHttpClientException, IOException, JSONException {
+        CloseableHttpResponse response = null;
+        try {
+            response = mlHttpclient.uploadDatasetFromDAS(name, version, table);
+            assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                    .getStatusCode());
+            int id = getId(response);
+            datasetIds.add(id);
+            int versionSetId = getVersionSetId(id, version);
+            datasetVersionIds.add(versionSetId);
+            return id;
+        } finally {
+            if (response != null) {
+                response.close();
+            }
+        }
+    }
+    
+    /**
      * Creates a project with given specification and keep a reference to the id.
      */
     protected int createProject(String name, String datasetName) throws MLHttpClientException, IOException {
