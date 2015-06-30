@@ -20,15 +20,10 @@ package org.wso2.carbon.ml.model.test;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
