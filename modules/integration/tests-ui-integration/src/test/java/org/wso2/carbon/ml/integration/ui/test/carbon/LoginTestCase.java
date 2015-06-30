@@ -47,7 +47,6 @@ public class LoginTestCase extends MLIntegrationUiBaseTest {
         CarbonLoginPage carbonLogin = new CarbonLoginPage(driver);
         CarbonHomePage carbonHome = carbonLogin.loginAs(userInfo.getUserName(),userInfo.getPassword());
         carbonHome.logout();
-        driver.close();
     }
 
     @AfterClass(alwaysRun = true)
