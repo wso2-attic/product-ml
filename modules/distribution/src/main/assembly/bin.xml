@@ -142,14 +142,6 @@
         </fileSet>
 
         <fileSet>
-            <directory>src/main/resources/dbscripts</directory>
-            <outputDirectory>wso2ml-${pom.version}/dbscripts/ml</outputDirectory>
-            <includes>
-                <include>**/**.sql</include>
-            </includes>
-        </fileSet>
-
-        <fileSet>
             <directory>../jaggeryapps</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps</outputDirectory>
             <includes>
@@ -165,6 +157,15 @@
             	<include>**/*.sql</include>
             </includes>
     	</fileSet>
+	<fileSet>
+            <directory>
+                ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/ml/
+            </directory>
+            <outputDirectory>wso2ml-${pom.version}/dbscripts/ml</outputDirectory>
+            <includes>
+                <include>**/*.sql</include>
+            </includes>
+        </fileSet>
     </fileSets>
 	
     <files>
@@ -268,12 +269,12 @@
             <source>src/main/conf/etc/spark-config.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/</outputDirectory>
         </file>
-	    <file>
-            <source>target/database/WSO2ML_DB.h2.db</source>
-            <outputDirectory>wso2ml-${pom.version}/repository/database</outputDirectory>
-            <fileMode>666</fileMode>
+	<file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2ML_DB.h2.db</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/database/</outputDirectory>
+            <fileMode>644</fileMode>
         </file>
-		<file>
+	<file>
             <source>src/main/conf/etc/ml-email-templates.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/email/</outputDirectory>
         </file>

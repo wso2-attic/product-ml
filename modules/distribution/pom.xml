@@ -173,7 +173,7 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
-                    <execution>
+                    <!--execution>
                         <id>Create-ML-Database</id>
                         <phase>package</phase>
                         <goals>
@@ -194,13 +194,13 @@
                                     <classpath>
                                         <path refid="h2.classpath"/>
                                     </classpath>
-                                    <fileset file="${basedir}/src/main/resources/dbscripts/h2.sql"/>
+                                    <fileset file="target/wso2ml-1.0.0-SNAPSHOT/dbscripts/ml/h2.sql"/>
                                 </sql>
                                 <echo
                                         message="##################### END ########################"/>
                             </tasks>
                         </configuration>
-                    </execution>
+                    </execution-->
                 </executions>
             </plugin>
 
