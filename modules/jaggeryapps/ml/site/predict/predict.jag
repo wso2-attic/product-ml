@@ -213,10 +213,11 @@
 
         // set model ID to hidden input field
         $("#model-id").val(modelId);
+
         // make predictions for file upload prediction
-        $('#prediction-form').ajaxForm({
-            url: serverUrl + '/api/models/predict',
-            success : function(res){
+        /*$('#prediction-form').ajaxForm({
+            url: serverUrl + '/api/models/predictionStreams',
+            success : function(res) {
                 var predictionNotification =   '<div class="wr-instant-response">' +
                                                     '<label>Predicted Value(s):</label><br>';
                 for(var i = 0; i < res.length; i++) {
@@ -235,7 +236,13 @@
                 var errorText = res.responseText
                 handleNotification(errorText, '#notification-area', 'warning');
             }                               
-        });
+        });*/
+
+		$(document).on('click', '#file-predict', function(e){
+		    var actionUrl = serverUrl + '/api/models/predictionStreams';
+		    $('#prediction-form').attr('action', actionUrl);
+		});        
+
     });
 
     // input validation for feature values
