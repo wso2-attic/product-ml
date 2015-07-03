@@ -166,7 +166,18 @@
                 <include>**/*.sql</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>
+                ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/
+            </directory>
+            <outputDirectory>wso2ml-${pom.version}/repository/deployment/server/jaggeryapps</outputDirectory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+        </fileSet>
     </fileSets>
+
+
 	
     <files>
         <file>
