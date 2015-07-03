@@ -17,9 +17,8 @@
   ~ under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.wso2.ml</groupId>
@@ -51,8 +50,8 @@
 	</licenses>
 
 	<modules>
-        <module>modules/styles</module>
-        <module>modules/features</module>
+		<module>modules/styles</module>
+		<module>modules/features</module>
 		<module>modules/p2-profile</module>
 		<module>modules/distribution</module>
 		<module>modules/integration</module>
@@ -207,9 +206,9 @@
 				<version>${selenium.version}</version>
 			</dependency>
 			<dependency>
-            			<groupId>org.jacoco</groupId>
-            			<artifactId>org.jacoco.agent</artifactId>
-            			<version>${jacoco.agent.version}</version>
+				<groupId>org.jacoco</groupId>
+				<artifactId>org.jacoco.agent</artifactId>
+				<version>${jacoco.agent.version}</version>
 			</dependency>
 
 			<dependency>
@@ -258,32 +257,18 @@
 			</dependency>
 
 			<!-- Dependencies on WSO2 Carbon ML components -->
-			<dependency>
-				<groupId>org.wso2.carbon.ml</groupId>
-				<artifactId>org.wso2.carbon.ml.core</artifactId>
-				<version>${carbon.ml.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wso2.carbon.ml</groupId>
-				<artifactId>org.wso2.carbon.ml.database</artifactId>
-				<version>${carbon.ml.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wso2.carbon.ml</groupId>
-				<artifactId>org.wso2.carbon.ml.decomposition</artifactId>
-				<version>${carbon.ml.version}</version>
-			</dependency>
+			<!--dependency> <groupId>org.wso2.carbon.ml</groupId> <artifactId>org.wso2.carbon.ml.core</artifactId> 
+				<version>${carbon.ml.version}</version> </dependency> <dependency> <groupId>org.wso2.carbon.ml</groupId> 
+				<artifactId>org.wso2.carbon.ml.database</artifactId> <version>${carbon.ml.version}</version> 
+				</dependency> <dependency> <groupId>org.wso2.carbon.ml</groupId> <artifactId>org.wso2.carbon.ml.decomposition</artifactId> 
+				<version>${carbon.ml.version}</version> </dependency -->
 			<dependency>
 				<groupId>org.wso2.carbon.ml</groupId>
 				<artifactId>org.wso2.carbon.ml.commons</artifactId>
 				<version>${carbon.ml.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.wso2.carbon.ml</groupId>
-				<artifactId>org.wso2.carbon.ml.rest.api</artifactId>
-				<version>${carbon.ml.version}</version>
-				<type>war</type>
-			</dependency>
+			<!--dependency> <groupId>org.wso2.carbon.ml</groupId> <artifactId>org.wso2.carbon.ml.rest.api</artifactId> 
+				<version>${carbon.ml.version}</version> <type>war</type> </dependency -->
 			<!-- End of depencencies on WSO2 Carbon ML components -->
 
 			<!-- Dependencies for Email Notification Sender -->
@@ -314,68 +299,34 @@
 			</dependency>
 
 			<!-- Dependencies for Rest API -->
-			<dependency>
-				<groupId>org.wso2.carbon</groupId>
-				<artifactId>org.wso2.carbon.user.core</artifactId>
-				<version>${carbon.kernel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
-				<version>${apache.cxf.jaxrs.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-core-asl</artifactId>
-				<version>${codehaus.jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>jaxen</groupId>
-				<artifactId>jaxen</artifactId>
-				<version>${jaxen.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-mapper-asl</artifactId>
-				<version>${codehaus.jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-jaxrs</artifactId>
-				<version>${codehaus.jackson.version}</version>
-			</dependency>
+			<!--dependency> <groupId>org.wso2.carbon</groupId> <artifactId>org.wso2.carbon.user.core</artifactId> 
+				<version>${carbon.kernel.version}</version> </dependency> <dependency> <groupId>org.apache.cxf</groupId> 
+				<artifactId>cxf-rt-frontend-jaxrs</artifactId> <version>${apache.cxf.jaxrs.version}</version> 
+				</dependency> <dependency> <groupId>org.codehaus.jackson</groupId> <artifactId>jackson-core-asl</artifactId> 
+				<version>${codehaus.jackson.version}</version> </dependency> <dependency> 
+				<groupId>jaxen</groupId> <artifactId>jaxen</artifactId> <version>${jaxen.version}</version> 
+				<scope>provided</scope> </dependency> <dependency> <groupId>org.codehaus.jackson</groupId> 
+				<artifactId>jackson-mapper-asl</artifactId> <version>${codehaus.jackson.version}</version> 
+				</dependency> <dependency> <groupId>org.codehaus.jackson</groupId> <artifactId>jackson-jaxrs</artifactId> 
+				<version>${codehaus.jackson.version}</version> </dependency -->
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${junit.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.wso2.carbon.governance</groupId>
-				<artifactId>org.wso2.carbon.governance.api</artifactId>
-				<version>${carbon.kernel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wso2.carbon</groupId>
-				<artifactId>org.wso2.carbon.core</artifactId>
-				<version>${carbon.kernel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wso2.carbon</groupId>
-				<artifactId>org.wso2.carbon.registry.core</artifactId>
-				<version>${carbon.kernel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wso2.orbit.org.htrace</groupId>
-    				<artifactId>htrace-core</artifactId>
-    				<version>${orbit.version.htrace}</version>
-			</dependency>
+			<!--dependency> <groupId>org.wso2.carbon.governance</groupId> <artifactId>org.wso2.carbon.governance.api</artifactId> 
+				<version>${carbon.kernel.version}</version> </dependency> <dependency> <groupId>org.wso2.carbon</groupId> 
+				<artifactId>org.wso2.carbon.core</artifactId> <version>${carbon.kernel.version}</version> 
+				</dependency> <dependency> <groupId>org.wso2.carbon</groupId> <artifactId>org.wso2.carbon.registry.core</artifactId> 
+				<version>${carbon.kernel.version}</version> </dependency> <dependency> <groupId>org.wso2.orbit.org.htrace</groupId> 
+				<artifactId>htrace-core</artifactId> <version>${orbit.version.htrace}</version> 
+				</dependency -->
 
-            <dependency>
-                <groupId>org.wso2.ml</groupId>
-                <artifactId>org.wso2.ml.styles</artifactId>
-                <version>${ml.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>org.wso2.ml</groupId>
+				<artifactId>org.wso2.ml.styles</artifactId>
+				<version>${ml.version}</version>
+			</dependency>
 
 			<!-- tests-service dependencies -->
 			<dependency>
@@ -497,8 +448,8 @@
 		<carbon.data.version>4.3.1-SNAPSHOT</carbon.data.version>
 		<carbon.analytics.version>1.0.3-SNAPSHOT</carbon.analytics.version>
 		<carbon.metrics.version>1.1.0-SNAPSHOT</carbon.metrics.version>
-        	<carbon.analytics.common.version>2.0.0-SNAPSHOT</carbon.analytics.common.version>
-        	<carbon.kernel.version>4.4.0</carbon.kernel.version>
+		<carbon.analytics.common.version>2.0.0-SNAPSHOT</carbon.analytics.common.version>
+		<carbon.kernel.version>4.4.0</carbon.kernel.version>
 		<carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
 
 		<!-- Spark dependency versions -->
