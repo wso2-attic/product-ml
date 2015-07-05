@@ -132,6 +132,16 @@
             </includes>
         </fileSet>
 
+	<fileSet>
+            <directory>
+                ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/spark/
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/spark</outputDirectory>
+            <includes>
+                <include>**/**</include>
+            </includes>
+        </fileSet>
+
         <fileSet>
             <directory>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity
             </directory>
