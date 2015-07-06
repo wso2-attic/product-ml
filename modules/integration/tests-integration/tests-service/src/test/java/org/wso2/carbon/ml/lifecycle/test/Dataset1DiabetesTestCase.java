@@ -165,6 +165,22 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         // Predict using built Linear Regression model
         testPredictDiabetes();
     }
+    
+    /**
+     * Creates a test case for creating an analysis, building a Random forest model and predicting using the built model
+     * 
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a Random Forest model and predict for Diabetes dataset", groups = "createRandomForestModelDiabetes", dependsOnGroups = "createDecisionTreeModelDiabetes")
+    public void testBuildRandomForestModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
+        buildModelWithLearningAlgorithm("RANDOM_FOREST", MLIntegrationTestConstants.CLASSIFICATION);
+        // Predict using built Linear Regression model
+        testPredictDiabetes();
+    }
 
     /**
      * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built
@@ -175,7 +191,7 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Logistic Regression model and predict for Diabetes dataset", groups = "createLogisticRegressionDiabetes", dependsOnGroups = "createDecisionTreeModelDiabetes")
+    @Test(description = "Build a Logistic Regression model and predict for Diabetes dataset", groups = "createLogisticRegressionDiabetes", dependsOnGroups = "createRandomForestModelDiabetes")
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
