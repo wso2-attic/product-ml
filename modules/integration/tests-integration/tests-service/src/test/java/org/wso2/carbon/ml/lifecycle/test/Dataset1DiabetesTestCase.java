@@ -178,7 +178,7 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     public void testBuildRandomForestModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         buildModelWithLearningAlgorithm("RANDOM_FOREST", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built Linear Regression model
+        // Predict using built model
         testPredictDiabetes();
     }
 
