@@ -1,0 +1,21 @@
+keystore "file:${user.dir}/repository/resources/security/wso2carbon.jks", "JKS";
+
+// ===================== Platform signed code permissions ========================
+grant signedBy "signFiles" {
+  permission java.security.AllPermission;
+};
+
+// ============================= ML API war ======================================
+grant codeBase "file:${carbon.home}/repository/deployment/server/webapps/api/-" {
+    permission java.security.AllPermission;
+};
+
+// =========================== Carbon Modules ====================================
+grant codeBase "file:${carbon.home}/modules/carbon/-" {
+    permission java.security.AllPermission;
+};
+
+// ============================= ML Jaggery app ==================================
+grant codeBase "file:${carbon.home}/repository/deployment/server/jaggeryapps/ml/-" {
+    permission java.security.AllPermission;
+};
