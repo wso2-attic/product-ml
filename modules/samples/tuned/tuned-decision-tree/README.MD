@@ -4,11 +4,17 @@ WSO2 Machine Learner - Sample Model Generation Flow
 Algorithm: Decision-Tree
 ==============================
 
+Tuned hyper-parameter values
+===========================
+
+Max_Depth : 10
+Max_Bins : 100
+Impurity : entropy
+
 Before Running
 ==============
 
 * Start WSO2 Machine Learner product.
-
 * Make sure jq is installed.
 
 How to Run?

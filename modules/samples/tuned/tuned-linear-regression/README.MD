@@ -4,11 +4,17 @@ WSO2 Machine Learner - Sample Model Generation Flow
 Algorithm: Linear-Regression
 ==============================
 
+Tuned hyper-parameter values
+============================
+
+Iterations : 1000
+Learning_Rate : 0.001
+SGD_Data_Fraction : 1
+
 Before Running
 ==============
 
 * Start WSO2 Machine Learner product.
-
 * Make sure jq is installed.
 
 How to Run?

@@ -4,11 +4,15 @@ WSO2 Machine Learner - Sample Model Generation Flow
 Algorithm: Naive-Bayes
 ==============================
 
+Tuned hyper-parameter values
+============================
+
+Reg_Type : L2
+
 Before Running
 ==============
 
 * Start WSO2 Machine Learner product.
-
 * Make sure jq is installed.
 
 How to Run?
