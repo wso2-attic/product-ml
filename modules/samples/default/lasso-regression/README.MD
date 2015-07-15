@@ -19,4 +19,4 @@ Outcome
 
 * Running the above script will result in a generation of logistic regression model for the provided data-set.
 
-* Model will be stored in the file system at $CARBON_HOME/tmp
+* Model will be stored in the file system at $CARBON_HOME/tmp directory.
