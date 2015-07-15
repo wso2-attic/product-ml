@@ -189,6 +189,20 @@
                 <include>**/*.*</include>
             </includes>
         </fileSet>
+
+        <!--copying samples-->
+        <fileSet>
+            <directory>../../modules/samples</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples</outputDirectory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <!--<excludes>-->
+                <!--<exclude>**/*.iml</exclude>-->
+                <!--<exclude>**/pom.xml</exclude>-->
+                <!--<exclude>**/target/**</exclude>-->
+            <!--</excludes>-->
+        </fileSet>
     </fileSets>
 
 
