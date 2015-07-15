@@ -1,5 +1,5 @@
 {
-"name" : "wso2-ml-logistic-regression-sample-project-2",
-"description" : "test project",
+"name" : "wso2-ml-logistic-regression-with-hdfs-sample-project",
+"description" : "Logistic Regression with HDFS",
 "datasetName" : "diabetes"
 }

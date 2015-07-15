@@ -29,7 +29,7 @@ sleep 2
 
 #getting analysis id
 echo "getting analysis id"
-analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/${projectId}/analyses/wso2-ml-logistic-regression-analysis -k)
+analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/${projectId}/analyses/wso2-ml-logistic-regression-with-hdfs -k)
 sleep 2
 
 analysisId=$(echo "$analysis"|jq '.id')
