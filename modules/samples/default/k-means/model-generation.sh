@@ -6,36 +6,67 @@ path=$(pwd)
 curl -X POST -b cookies  https://localhost:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='seeds' -F version='1.0.0' -F description='Seeds Dataset' -F sourceType='file' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F file=@'/'$path'/seeds.csv' -k
 sleep 5
 
-#get valueset id
-echo "#create a project"
+# creating a project
+echo "#creating a project"
 curl -X POST -d @'create-project' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects -k
 sleep 2
-echo "#get the project id"
-#curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/nirmal1 -k
+
+#getting the project
+echo "#getting the project"
+project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/wso2-ml-kmeans-sample-project -k)
 sleep 2
-#update the create-analysis payload
-echo "#create an analysis"
+
+#update the json file with retrieved values
+projectId=$(echo "$project"|jq '.id')
+datasetId=$(echo "$project"|jq '.datasetId')
+sed -i 's/^\("projectId":"\)[^"]*/\1'$projectId/ create-analysis;
+sleep 2
+
+#creating an analysis
+echo "creating an analysis"
 curl -X POST -d @'create-analysis' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses -k
 sleep 2
-echo "#get analysis id"
-#curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/nirmal-analysis1 -k
+
+#getting analysis id
+echo "getting analysis id"
+analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/${projectId}/analyses/wso2-ml-kmeans-sample-analysis -k)
 sleep 2
+
+analysisId=$(echo "$analysis"|jq '.id')
+
+#setting model configs
 echo "#setting model configs"
-curl -X POST -d @'create-model-config' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/1/configurations -k -v
+curl -X POST -d @'create-model-config' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/${analysisId}/configurations -k -v
 sleep 2
-echo "#add default features with customized options"
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/1/features/defaults -k -v -d @'customized-features'
+
+echo "#adding default features with customized options"
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/${analysisId}/features/defaults -k -v -d @'customized-features'
 sleep 2
-echo "#add default hyper params"
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/1/hyperParams/defaults -k -v
+
+echo "#setting default hyper params"
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/${analysisId}/hyperParams/defaults -k -v
 sleep 2
+
+echo "#getting dataset version"
+datasetVersions=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/datasets/${datasetId}/versions -k)
+sleep 2
+
+#update the json file
+datasetVersionId=$(echo "$datasetVersions"|jq '.[0] .id')
+sed -i 's/^\("analysisId":"\)[^"]*/\1'$analysisId/ create-model;
+sleep 2
+sed -i 's/^\("versionSetId":"\)[^"]*/\1'$datasetVersionId/ create-model;
+sleep 2
+
 echo "#create model"
-curl -X POST -d @'create-model' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models -k
+model=$(curl -X POST -d @'create-model' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models -k)
 sleep 2
-echo "#add model storage information"
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/1/storages -k -v -d @'create-model-storage'
+
+echo "#getting model"
+modelName=$(echo "$model"|jq -r '.name')
+model=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelName} -k)
 sleep 2
-echo "#build model"
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/1 -k -v
-sleep 10
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/1/predict -k -v -d @'prediction-test'
+modelId=$(echo "$model"|jq '.id')
+
+echo "#building the model"
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelId} -k -v

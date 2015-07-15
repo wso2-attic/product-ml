@@ -1,5 +1,5 @@
 {
-"name" : "wso2-ml-model",
-"analysisId" : 1,
-"versionSetId" : 1
+"name" : "wso2-ml-kmeans-sample-model",
+"analysisId":"12",
+"versionSetId":"12"
 }
