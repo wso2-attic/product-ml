@@ -1,0 +1,5 @@
+{
+"name" : "wso2-ml-ridge-regression-sample-analysis",
+"comments" : "Ridge regression for Wine Quality",
+"projectId":"9"
+}
