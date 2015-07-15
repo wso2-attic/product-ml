@@ -196,6 +196,7 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/samples</outputDirectory>
             <includes>
                 <include>**/*.*</include>
+                <include>**/*</include>
             </includes>
         </fileSet>
     </fileSets>
