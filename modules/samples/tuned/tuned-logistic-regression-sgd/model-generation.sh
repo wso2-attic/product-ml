@@ -7,7 +7,7 @@ set -e
 
 echo "#create a dataset"
 path=$(pwd)
-curl -X POST -b cookies  https://localhost:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='indiansDiabetes-logistic-regression-dataset' -F version='1.0.0' -F description='Pima Indians Diabetes Dataset' -F sourceType='file' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F file=@'/'$path'/IndiansDiabetes.csv' -k
+curl -X POST -b cookies  https://localhost:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='indiansDiabetes-logistic-regression-dataset' -F version='2.0.0' -F description='Pima Indians Diabetes Dataset' -F sourceType='file' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F file=@'/'$path'/IndiansDiabetes.csv' -k
 sleep 5
 
 # creating a project

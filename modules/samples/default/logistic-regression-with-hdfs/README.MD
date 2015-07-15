@@ -7,7 +7,8 @@ Algorithm: Logistic-Regression
 Before Running
 ==============
 
-* Start WSO2 Machine Learner product with a fresh database.
+* Start WSO2 Machine Learner product.
+* Make sure jq is installed.
 * Upload the IndiansDiabetes.csv file to your Hadoop server into a */ml* directory.
 * Configure the {ML_HOME}/repository/conf/machine-learner.xml 's */MachineLearner/HdfsURL* element's value as it points to your Hadoop server.
 
