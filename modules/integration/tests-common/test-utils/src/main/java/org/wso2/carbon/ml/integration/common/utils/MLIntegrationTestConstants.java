@@ -64,6 +64,7 @@ public class MLIntegrationTestConstants {
 	public static final String BREAST_CANCER_DATASET_SAMPLE = DATASETS_PATH+"breastCancerWisconsin.csv";
 	public static final String FOREST_FIRES_DATASET_SAMPLE = DATASETS_PATH+"forestfires.csv";
     public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = DATASETS_PATH+"gammaTelescope.csv";
+    public static final String ABALONE_DATASET_SAMPLE = DATASETS_PATH+"abalone.csv";
 
     // Datasets with missing values and categorical features
     public static final String AUTOMOBILE_DATASET_SAMPLE = DATASETS_PATH+"automobile.csv";
@@ -80,6 +81,7 @@ public class MLIntegrationTestConstants {
     public static final String DATASET_NAME_GAMMA_TELESCOPE = "Gamma_Telescope";
     public static final String DATASET_NAME_AUTOMOBILE = "Automobile";
     public static final String DATASET_NAME_AZURE_STREAMING = "Azure_Streaming";
+    public static final String DATASET_NAME_ABALONE = "Abalone";
 
 	public static final int VERSIONSET_ID = 1;
 
@@ -92,6 +94,7 @@ public class MLIntegrationTestConstants {
     public static final String RESPONSE_ATTRIBUTE_GAMMA_TELESCOPE = "class";
 	public static final String RESPONSE_ATTRIBUTE_AUTOMOBILE = "price";
     public static final String RESPONSE_ATTRIBUTE_AZURE_STREAMING = "price";
+    public static final String RESPONSE_ATTRIBUTE_ABALONE = "Sex";
 
     // Projects
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
@@ -104,6 +107,7 @@ public class MLIntegrationTestConstants {
     public static final String PROJECT_NAME_GAMMA_TELESCOPE = "Gamma_Telescope_Project";
     public static final String PROJECT_NAME_AUTOMOBILE = "Automobile_Project";
     public static final String PROJECT_NAME_AZURE_STREAMING = "Azure_Streaming_Project";
+    public static final String PROJECT_NAME_ABALONE = "Abalone_Project";
 
     // Default analysis
 	public static final String ANALYSIS_NAME = "Dummy_Analysis";

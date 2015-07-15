@@ -32,15 +32,16 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientExcepti
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
 
 import javax.ws.rs.core.Response;
+
 import java.io.IOException;
 
 import static org.testng.AssertJUnit.assertEquals;
 
 /**
- * This class contains the entire ML life-cycle for Diabetes dataset
+ * This class contains the entire ML life-cycle for Abalone dataset
  */
-@Test(groups = "diabetesDataset")
-public class Dataset1DiabetesTestCase extends MLBaseTest {
+@Test(groups = "abaloneDataset")
+public class Dataset9AbaloneTestCase extends MLBaseTest {
 
     private MLHttpClient mlHttpclient;
     private static String modelName;
@@ -54,21 +55,22 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         super.init();
         mlHttpclient = getMLHttpClient();
         String version = "1.0";
-        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, version,
-                MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
+        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_ABALONE, version,
+                MLIntegrationTestConstants.ABALONE_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
-        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
-                MLIntegrationTestConstants.DATASET_NAME_DIABETES);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_ABALONE,
+                MLIntegrationTestConstants.DATASET_NAME_ABALONE);
     }
 
     /**
      * A test case for predicting for a given set of data points
-     * 
+     *
      * @throws MLHttpClientException
      * @throws JSONException
      */
-    private void testPredictDiabetes() throws MLHttpClientException, JSONException {
-        String payload = "[[1,89,66,23,94,28.1,0.167,21],[2,197,70,45,543,30.5,0.158,53]]";
+    private void testPredictAbalone() throws MLHttpClientException, JSONException {
+        String payload = "[[0.455,0.365,0.095,0.514,0.2245,0.101,0.15,15],"
+                + "[0.44,0.365,0.125,0.516,0.2155,0.114,0.155,10]]";
         response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
@@ -76,25 +78,10 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         JSONArray predictions = new JSONArray(reply);
         assertEquals(2, predictions.length());
     }
-    
-    /**
-     * A test case for predicting for a given set of data points from a file.
-     * 
-     * @throws MLHttpClientException
-     * @throws JSONException
-     */
-    private void testPredictDiabetesFromFile() throws MLHttpClientException, JSONException {
-        response = mlHttpclient.predictFromCSV(modelId, MLIntegrationTestConstants.DIABETES_DATASET_TEST);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        String reply = mlHttpclient.getResponseAsString(response);
-        JSONArray predictions = new JSONArray(reply);
-        assertEquals(7, predictions.length());
-    }
 
     /**
      * A test case for building a model with the given learning algorithm
-     * 
+     *
      * @param algorithmName Name of the learning algorithm
      * @param algorithmType Type of the learning algorithm
      * @throws MLHttpClientException
@@ -102,11 +89,11 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
+    private boolean buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
         modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
-                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
-                projectId, versionSetId, mlHttpclient);
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_ABALONE,
+                MLIntegrationTestConstants.TRAIN_DATA_FRACTION, projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
@@ -115,103 +102,90 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         // Waiting for model building to end
         boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
                 MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
-        // Checks whether model building completed successfully
-        assertEquals("Model building did not complete successfully", true, status);
+        return status;
     }
 
     /**
      * Creates a test case for creating an analysis, building a Naive Bayes model and predicting using the built model
-     * 
+     *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Naive Bayes model and predict for Diabetes dataset", groups = "createNaiveBayesModelDiabetes")
-    public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException,
-            InterruptedException {
+    @Test(description = "Build a Naive Bayes model and predict for abalone dataset", groups="createNaiveBayesModelAbalone")
+    public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
-        testPredictDiabetes();
+        testPredictAbalone();
     }
 
     /**
-     * Creates a test case for creating an analysis, building a SVM model and predicting using the built model
-     * 
+     * Creates a test case for creating an analysis, building a Random Forest model and predicting using the built model
+     *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a SVM model and predict for Diabetes dataset", groups = "createSVMModelDiabetes", dependsOnGroups = "createNaiveBayesModelDiabetes")
-    public void testBuildSVMModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built Linear Regression model
-        testPredictDiabetes();
-    }
-
-    /**
-     * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model
-     * 
-     * @throws MLHttpClientException
-     * @throws IOException
-     * @throws JSONException
-     * @throws InterruptedException
-     */
-    @Test(description = "Build a Decision Tree model and predict for Diabetes dataset", groups = "createDecisionTreeModelDiabetes", dependsOnGroups = "createSVMModelDiabetes")
-    public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException, JSONException,
-            InterruptedException {
-        buildModelWithLearningAlgorithm("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built Linear Regression model
-        testPredictDiabetes();
-    }
-    
-    /**
-     * Creates a test case for creating an analysis, building a Random forest model and predicting using the built model
-     * 
-     * @throws MLHttpClientException
-     * @throws IOException
-     * @throws JSONException
-     * @throws InterruptedException
-     */
-    @Test(description = "Build a Random Forest model and predict for Diabetes dataset", groups = "createRandomForestModelDiabetes", dependsOnGroups = "createDecisionTreeModelDiabetes")
-    public void testBuildRandomForestModel() throws MLHttpClientException, IOException, JSONException,
-            InterruptedException {
+    @Test(description = "Build a Random Forest model and predict for abalone dataset", groups="createRandomForestModelAbalone")
+    public void testBuildRandomForest() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("RANDOM_FOREST", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built model
-        testPredictDiabetes();
+        // Predict using built Linear Regression model
+        testPredictAbalone();
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built
-     * model
-     * 
+     * Creates a test case for creating an analysis, building a Logistic Regression LBFGS model and predicting using the built model
+     *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Logistic Regression model and predict for Diabetes dataset", groups = "createLogisticRegressionDiabetes", dependsOnGroups = "createRandomForestModelDiabetes")
+    @Test(description = "Build a Logistic Regression LBFGS model and predict for abalone dataset", groups="createLogisticRegressionModelLBFGSAbalone")
+    public void testBuildLogisticRegressionLBFGSModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION_LBFGS", MLIntegrationTestConstants.CLASSIFICATION);
+        // Predict using built Linear Regression model
+        testPredictAbalone();
+    }
+
+    // Following 2 test checks whether model building fails with the algorithms that support only binary classification
+
+    /**
+     * Creates a test case for creating an analysis, building a SVM model and test for failure
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a SVM model and predict for abalone dataset", groups = "createSVMModelAbalone")
+    public void testBuildSVMModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        boolean status = buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
+
+        // Model building should fail since SVM cannot handle multi-class classification
+        assertEquals("Model building did not complete successfully", false, status);
+    }
+
+    /**
+     * Creates a test case for creating an analysis, building a Logistic Regression model and test for failure
+     * model
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a Logistic Regression model and predict for abalone dataset", groups = "createLogisticRegressionAbalone")
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
-        buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built Linear Regression model
-        testPredictDiabetes();
-        testPredictDiabetesFromFile();
+        boolean status = buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
+
+        // Model building should fail since Logistic Regression cannot handle multi-class classification
+        assertEquals("Model building did not complete successfully", false, status);
     }
 
-    /**
-     * Creates a test case for creating an analysis, building a K-Means clustering model
-     * 
-     * @throws MLHttpClientException
-     * @throws IOException
-     * @throws JSONException
-     * @throws InterruptedException
-     */
-    @Test(description = "Build a K-means model", groups = "createKMeansDiabetes", dependsOnGroups = "createLogisticRegressionDiabetes")
-    public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
-    }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {

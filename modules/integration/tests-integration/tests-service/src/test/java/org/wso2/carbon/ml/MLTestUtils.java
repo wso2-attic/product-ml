@@ -124,7 +124,7 @@ public class MLTestUtils extends MLBaseTest {
     }
 
     /**
-     * Sets the configuration of the model to be trained
+     * Create a model with given configurations of the model to be trained
      *
      * @param algorithmName Name of the learning algorithm
      * @param algorithmType Type of the learning algorithm
@@ -134,20 +134,20 @@ public class MLTestUtils extends MLBaseTest {
      * @param versionSetId Additional information about the name
      * @throws MLHttpClientException
      */
-    public static String setConfiguration(String algorithmName, String algorithmType, String response,
-            String trainDataFraction, int projectID, int versionSetId, MLHttpClient mlHttpclient)
+    public static String createModelWithConfigurations(String algorithmName, String algorithmType, String response,
+                                                       String trainDataFraction, int projectID, int versionSetId, MLHttpClient mlHttpclient)
             throws MLHttpClientException, IOException, JSONException {
         analysisName = algorithmName + versionSetId;
 
         // Create an analysis
         mlHttpclient.createAnalysis(analysisName, projectID);
         analysisId = mlHttpclient.getAnalysisId(projectID, analysisName);
-        return setConfiguration(algorithmName, algorithmType, response, trainDataFraction, projectID, versionSetId,
+        return createModelWithConfigurations(algorithmName, algorithmType, response, trainDataFraction, projectID, versionSetId,
                 analysisId, mlHttpclient);
     }
     
     /**
-     * Sets the configuration of the model to be trained
+     * Create a model with given configurations of the model to be trained
      *
      * @param algorithmName     Name of the learning algorithm
      * @param algorithmType     Type of the learning algorithm
@@ -157,17 +157,13 @@ public class MLTestUtils extends MLBaseTest {
      * @param versionSetId     Additional information about the name
      * @throws MLHttpClientException
      */
-    public static String setConfiguration(String algorithmName, String algorithmType, String response,
-                                  String trainDataFraction, int projectID, int versionSetId, int analysisId, MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
+    public static String createModelWithConfigurations(String algorithmName, String algorithmType, String response,
+                                                       String trainDataFraction, int projectID, int versionSetId, int analysisId,
+                                                       MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
         mlHttpclient.setFeatureDefaults(analysisId);
 
         //Set Model Configurations
-        Map<String, String> configurations = new HashMap<String, String>();
-        configurations.put(MLIntegrationTestConstants.ALGORITHM_NAME, algorithmName);
-        configurations.put(MLIntegrationTestConstants.ALGORITHM_TYPE, algorithmType);
-        configurations.put(MLIntegrationTestConstants.RESPONSE, response);
-        configurations.put(MLIntegrationTestConstants.TRAIN_DATA_FRACTION_CONFIG, trainDataFraction);
-        mlHttpclient.setModelConfiguration(analysisId, configurations);
+        mlHttpclient.setModelConfiguration(analysisId, setModelConfigurations(algorithmName, algorithmType, response, trainDataFraction));
 
         //Set default Hyper-parameters
         mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
@@ -181,5 +177,25 @@ public class MLTestUtils extends MLBaseTest {
         mlHttpclient.createFileModelStorage(modelId, getModelStorageDirectory());
 
         return modelName;
+    }
+
+    /**
+     * Sets model configuration
+     *
+     * @param algorithmName         Name of the learning algorithm
+     * @param algorithmType         Type of the learning algorithm
+     * @param response              Response attribute
+     * @param trainDataFraction     Fraction of data from the dataset to be trained with
+     * @return
+     */
+    public static Map<String, String> setModelConfigurations(String algorithmName, String algorithmType, String response,
+                                                             String trainDataFraction){
+        Map<String, String> configurations = new HashMap<String, String>();
+        configurations.put(MLIntegrationTestConstants.ALGORITHM_NAME, algorithmName);
+        configurations.put(MLIntegrationTestConstants.ALGORITHM_TYPE, algorithmType);
+        configurations.put(MLIntegrationTestConstants.RESPONSE, response);
+        configurations.put(MLIntegrationTestConstants.TRAIN_DATA_FRACTION_CONFIG, trainDataFraction);
+
+        return configurations;
     }
 }

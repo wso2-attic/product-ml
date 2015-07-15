@@ -74,7 +74,7 @@ public class Dataset8DASDataTestCase extends MLBaseTest {
      */
     private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
+        modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DAS, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 projectId, versionSetId, mlHttpclient);
         String payload = "[{\"name\" : \"id\",\"tenantId\" : -1234,\"type\" : \"NUMERICAL\",\"include\" : false,\"imputeOption\": \"DISCARD\"}, "
