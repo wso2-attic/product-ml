@@ -1,5 +1,5 @@
 {
-"name" : "wso2-ml-logistic-regression-sample-project",
-"description" : "nirmal test",
-"datasetName" : "diabetes"
+"name" : "wso2-ml-logistic-regression-sample-proj",
+"description" : "This project tests ml workflow for logistic regression",
+"datasetName" : "indiansDiabetes-logistic-regression-dataset"
 }

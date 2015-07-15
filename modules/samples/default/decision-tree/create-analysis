@@ -1,5 +1,5 @@
 {
-"name" : "wso2-ml-decesion-tree-sample-analysis",
-"comments" : "decision-tree analysis test",
-"projectId" : 1
+"name" : "wso2-ml-decision-tree-sample-analysis",
+"comments" : "Decision Tree for Pima Indians Diabetes",
+"projectId":"4"
 }

@@ -1,5 +1,5 @@
 {
 "name" : "wso2-ml-ridge-regression-sample-analysis",
-"comments" : "Linear regression for Boston housing prices",
-"projectId" : 1
+"comments" : "Ridge regression for Wine Quality",
+"projectId":"9"
 }

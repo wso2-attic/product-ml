@@ -1,7 +1,5 @@
 {
-"name" : "wso2-ml-model",
-"analysisId" : 1,
-"versionSetId" : 1,
-"storageType" : "file",
-"storageDirectory" : "/tmp"
+"name" : "wso2-ml-logistic-regression-sample-analysis-model",
+"analysisId":"7",
+"versionSetId":"7"
 }

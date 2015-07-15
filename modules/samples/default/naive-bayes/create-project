@@ -1,5 +1,5 @@
 {
 "name" : "wso2-ml-naive-bayes-sample-project",
-"description" : "naive-bayes test",
-"datasetName" : "diabetes"
+"description" : "This project tests ml workflow for naive bayes",
+"datasetName" : "indiansDiabetes-naive-bayes-dataset"
 }
