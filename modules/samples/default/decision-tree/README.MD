@@ -8,7 +8,6 @@ Before Running
 ==============
 
 * Start WSO2 Machine Learner product.
-
 * Make sure jq is installed.
 
 How to Run?
@@ -19,6 +18,6 @@ How to Run?
 Outcome
 =======
 
-* Running the above script will result in a generation of logistic regression model for the provided data-set.
+* Running the above script will result in a generation of decision tree model for the provided data-set.
 
-* Model will be stored in the file system at {ML_HOME}/tmp directory.
+* Model will be stored in the file system at {ML_HOME}/models directory.
