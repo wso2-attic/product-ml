@@ -67,6 +67,7 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
             Assert.assertTrue(mlUiLoginPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("login.title"))),
                     "This is not the login page.");
             mlUiHomePage = mlUiLoginPage.loginAs(userInfo.getUserName(),userInfo.getPassword());
+            mlUiHomePage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("home.page.projects")));
             // Check whether it redirects to the home page
             Assert.assertTrue(mlUiHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("home.page.projects"))),
                     "Did not redirect to home page.");
@@ -86,6 +87,7 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
     public void testRedirectToDatasetsPage() throws ImportDataTestException {
         try {
             mlDatasetsPage = mlUiHomePage.createDataset();
+            mlDatasetsPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("create.new.dataset")));
             // Check whether its the correct page
             Assert.assertTrue(mlDatasetsPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.dataset"))),
                     "Did not redirect to datasets page.");
@@ -103,6 +105,7 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
     public void testRedirectToCreateDataset() throws ImportDataTestException {
         try {
             dataImportPage = mlDatasetsPage.createDataset();
+            dataImportPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("import.dataset.button")));
             // Check whether its the correct page
             Assert.assertTrue(dataImportPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("import.dataset.button"))),
                     "Did not redirect to Create Dataset page.");
@@ -124,6 +127,7 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
             mlDatasetsPage = dataImportPage.importData(dataFile, MLDataset.getDatasetName(), MLDataset.getVersion(),
                     MLDataset.getDescription(), MLDataset.getSourceType(), MLDataset.getDataFormat(),
                     MLDataset.getColumnHeader(), MLDataset.getDestinationType());
+            mlDatasetsPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("create.new.dataset")));
             // Check whether redirects to the datasets page
             Assert.assertTrue(mlDatasetsPage.isElementPresent(By.xpath(mlUIElementMapper
                     .getElement("create.new.dataset"))), "Did not redirect to Datasets page");
@@ -149,6 +153,7 @@ public class ImportDataTestCase extends MLIntegrationUiBaseTest {
             File dataFile = new File(ImportDataTestCase.class.getResource(MLDataset.getDatasetUrl()).toString());
             mlDatasetsPage = datasetVersionPage.uploadDatasetVersion(dataFile, MLDataset.getSourceType(), MLDataset.getDataFormat(),
                     MLDataset.getColumnHeader(), MLDataset.getDestinationType());
+            mlDatasetsPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("create.new.dataset")));
             Assert.assertTrue(mlDatasetsPage.isElementPresent(By.xpath(mlUIElementMapper
                     .getElement("create.new.dataset"))), "Did not redirect to Datasets page");
             mlDatasetsPage.expandDatasetVersions();

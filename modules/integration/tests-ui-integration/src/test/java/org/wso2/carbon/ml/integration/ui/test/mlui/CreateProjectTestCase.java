@@ -65,6 +65,7 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
             Assert.assertTrue(mlUiLoginPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("login.title"))),
                     "This is not the login page.");
             mlUiHomePage = mlUiLoginPage.loginAs(userInfo.getUserName(),userInfo.getPassword());
+            mlUiHomePage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("home.page.projects")));
             // Check whether it redirects to the home page
             Assert.assertTrue(mlUiHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("home.page.projects"))),
                     "Did not redirect to home page.");
@@ -84,6 +85,7 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
     public void testRedirectToProjectsPage() throws CreateProjectTestException {
         try {
             mlProjectsPage = mlUiHomePage.createProject();
+            mlProjectsPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("create.new.project")));
             // Check whether its the correct page
             Assert.assertTrue(mlProjectsPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.project"))),
                     "Did not redirect to projects page.");
@@ -101,6 +103,7 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
     public void testRedirectToCreateProject() throws CreateProjectTestException {
         try {
             newProjectPage = mlProjectsPage.createProject();
+            newProjectPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("save.project.button")));
             Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("save.project.button"))),
                     "Did not redirect to Create Project page.");
         }  catch (InvalidPageException e) {
@@ -118,6 +121,7 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
     public void testCreateProjectWithEmptyName() throws CreateProjectTestException {
         try {
             newProjectPage.createNewProject("", "", MLProject.getDatasetName());
+            newProjectPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("project.name.error")));
             Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper
                     .getElement("project.name.error"))), "No validation for project name field");
             Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper
@@ -138,6 +142,7 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
         try {
             mlProjectsPage = newProjectPage.createNewProject(MLProject.getProjectName(),
                     MLProject.getProjectDescription(), MLProject.getDatasetName());
+            mlProjectsPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("create.new.project")));
             // Check whether redirects to the projects page
             Assert.assertTrue(mlProjectsPage.isElementPresent(By.xpath(mlUIElementMapper
                     .getElement("create.new.project"))), "Did not redirect to Projects page");
