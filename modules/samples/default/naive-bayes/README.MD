@@ -9,7 +9,7 @@ Before Running
 
 * Start WSO2 Machine Learner product.
 
-* Make sure jq is installed.
+* Make sure jq is installed. (To install jq http://stedolan.github.io/jq/download/)
 
 How to Run?
 ===========

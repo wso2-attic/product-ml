@@ -8,7 +8,7 @@ Before Running
 ==============
 
 * Start WSO2 Machine Learner product.
-* Make sure jq is installed.
+* Make sure jq is installed. (To install jq http://stedolan.github.io/jq/download/)
 * Upload the IndiansDiabetes.csv file to your Hadoop server into a */ml* directory.
 * Configure the {ML_HOME}/repository/conf/machine-learner.xml 's */MachineLearner/HdfsURL* element's value as it points to your Hadoop server.
 
