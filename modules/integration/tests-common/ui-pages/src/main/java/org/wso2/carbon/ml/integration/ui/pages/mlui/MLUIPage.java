@@ -109,5 +109,10 @@ public abstract class MLUIPage {
             totalTime += t;
             isPageFound = isElementPresent(by);
         }
+        if (isPageFound) {
+            logger.info("Time taken for redirection : " + totalTime + " ms");
+        } else {
+            logger.info("Page not found");
+        }
     }
 }
