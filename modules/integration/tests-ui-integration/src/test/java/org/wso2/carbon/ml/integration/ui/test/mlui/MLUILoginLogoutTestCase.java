@@ -62,6 +62,7 @@ public class MLUILoginLogoutTestCase extends MLIntegrationUiBaseTest {
             Assert.assertTrue(mlUiLoginPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("login.title"))),
                     "This is not the login page.");
             mlUIHomePage = mlUiLoginPage.loginAs(userInfo.getUserName(),userInfo.getPassword());
+            mlUIHomePage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("home.page.projects")));
             //Checks whether it redirects to the home page.
             Assert.assertTrue(mlUIHomePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("home.page.projects"))),
                     "Did not redirect to home page.");
@@ -82,6 +83,7 @@ public class MLUILoginLogoutTestCase extends MLIntegrationUiBaseTest {
     public void testLogoutFromMLUI() throws MLUILoginLogoutTestException {
         try {
             MLUILoginPage mlUiLoginPage = mlUIHomePage.logout();
+            mlUiLoginPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("login.title")));
             //Checks whether it redirects to the login page after logout.
             Assert.assertTrue(mlUiLoginPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("login.title"))),
                     "Not redirected to login page after logout.");

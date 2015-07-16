@@ -29,6 +29,8 @@ import org.wso2.carbon.ml.integration.ui.pages.exceptions.MLUIPageCreationExcept
 import java.io.IOException;
 
 public abstract class MLUIPage {
+
+    private static final int MAX_WAIT_TIME = 60001;
     private static final Log logger = LogFactory.getLog(MLUIPage.class);
     protected WebDriver driver;
     protected MlUiElementMapper mlUIElementMapper;
@@ -88,5 +90,29 @@ public abstract class MLUIPage {
      */
     public boolean isEnabled(By by) {
         return this.driver.findElement(by).isEnabled();
+    }
+
+    /**
+     * Sleep till redirected to this page
+     * @param by By element to identify the page
+     */
+    public void sleepTillPageFound(By by) {
+
+        boolean isPageFound = isElementPresent(by);
+        int totalTime = 0;
+        while (!isPageFound && totalTime < MAX_WAIT_TIME) {
+            int t = 500;
+            try {
+                Thread.sleep(t);
+            } catch (InterruptedException ignore) {
+            }
+            totalTime += t;
+            isPageFound = isElementPresent(by);
+        }
+        if (isPageFound) {
+            logger.info("Time taken for redirection : " + totalTime + " ms");
+        } else {
+            logger.info("Page not found");
+        }
     }
 }

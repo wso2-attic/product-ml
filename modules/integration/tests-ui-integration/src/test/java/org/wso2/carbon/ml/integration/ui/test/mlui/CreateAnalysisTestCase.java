@@ -68,6 +68,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
             MLUILoginPage mlUiLoginPage = new MLUILoginPage(driver);
             mlUiHomePage = mlUiLoginPage.loginAs(userInfo.getUserName(),userInfo.getPassword());
             mlProjectsPage = mlUiHomePage.createProject();
+            mlProjectsPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("create.new.analysis")));
             // Check whether the previously created project is there and allow create analysis
             Assert.assertTrue(mlProjectsPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.new.analysis"))),
                     "Previously created project not found");
@@ -87,6 +88,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testCreateAnalysisEmptyName() throws CreateAnalysisTestException {
         try {
             mlProjectsPage.createAnalysis("");
+            mlProjectsPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("analysis.input.validation.message")));
             Assert.assertTrue(mlProjectsPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("analysis.input.validation.message"))),
                     "No input validation for Analysis Name field");
         }  catch (InvalidPageException e) {
@@ -103,6 +105,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testCreateAnalysis() throws CreateAnalysisTestException {
         try {
             preprocessPage = mlProjectsPage.createAnalysis(MLAnalysis.getAnalysisName());
+            preprocessPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("preprocess.page.title")));
             Assert.assertTrue(preprocessPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("preprocess.page.title"))),
                     "Did not redirect to Preprocess page");
         }  catch (InvalidPageException e) {
@@ -119,6 +122,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testPreprocess() throws CreateAnalysisTestException {
         try {
             explorePage = preprocessPage.next();
+            explorePage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("explore.scatter.plot")));
             Assert.assertTrue(explorePage.isElementPresent(By.xpath(mlUIElementMapper.getElement("explore.scatter.plot"))),
                     "Did not redirect to Explore page");
         }  catch (InvalidPageException e) {
@@ -135,6 +139,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testExplore() throws CreateAnalysisTestException {
         try {
             algorithmPage = explorePage.next();
+            algorithmPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("algorithm.page.title")));
             Assert.assertTrue(algorithmPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("algorithm.page.title"))),
                     "Did not redirect to Algorithms page");
         }  catch (InvalidPageException e) {
@@ -151,6 +156,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testAlgorithm() throws CreateAnalysisTestException {
         try {
             parametersPage = algorithmPage.next();
+            parametersPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("parameters.page.title")));
             Assert.assertTrue(parametersPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("parameters.page.title"))),
                     "Did not redirect to Parameters page");
         }  catch (InvalidPageException e) {
@@ -167,6 +173,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testParameters() throws CreateAnalysisTestException {
         try {
             modelPage = parametersPage.next();
+            modelPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("model.page.title")));
             Assert.assertTrue(modelPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("model.page.title"))),
                     "Did not redirect to Model page");
         }  catch (InvalidPageException e) {
@@ -183,6 +190,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testModelPage() throws CreateAnalysisTestException {
         try {
             analysisPage = modelPage.next(MLDataset.getDatasetName() + "-" + MLDataset.getVersion());
+            analysisPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("create.model")));
             Assert.assertTrue(analysisPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("create.model"))),
                     "Did not redirect to Analysis page");
         }  catch (InvalidPageException e) {
@@ -199,6 +207,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testCreateModelFromExistingAnalysis() throws CreateAnalysisTestException {
         try {
             modelPage = analysisPage.createModel();
+            modelPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("model.page.title")));
             Assert.assertTrue(modelPage.isElementPresent(By.xpath(mlUIElementMapper.getElement("model.page.title"))),
                     "Did not redirect to Model page");
         }  catch (InvalidPageException e) {
@@ -216,6 +225,7 @@ public class CreateAnalysisTestCase extends MLIntegrationUiBaseTest {
     public void testForDisabledInputFields() throws CreateAnalysisTestException {
         try {
             parametersPage = modelPage.previous();
+            parametersPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("parameters.page.title")));
             Assert.assertFalse(parametersPage.isEnabled(By.xpath(mlUIElementMapper.getElement("parameters.iterations"))),
                     "Parameters-Iterations input field is not disabled");
             Assert.assertFalse(parametersPage.isEnabled(By.xpath(mlUIElementMapper.getElement("parameters.learning.rate"))),
