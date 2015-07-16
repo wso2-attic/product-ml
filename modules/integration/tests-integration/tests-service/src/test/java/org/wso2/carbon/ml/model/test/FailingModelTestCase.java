@@ -96,7 +96,7 @@ public class FailingModelTestCase extends MLBaseTest {
      */
     private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
+        modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 projectId, versionSetId, analysisId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);

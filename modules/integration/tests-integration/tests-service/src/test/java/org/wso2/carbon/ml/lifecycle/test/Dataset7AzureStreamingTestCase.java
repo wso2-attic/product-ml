@@ -73,7 +73,7 @@ public class Dataset7AzureStreamingTestCase extends MLBaseTest {
      */
     private void buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        modelName = MLTestUtils.setConfiguration(algorithmName, algorithmType,
+        modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_AZURE_STREAMING,
                 MLIntegrationTestConstants.TRAIN_DATA_FRACTION, projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
