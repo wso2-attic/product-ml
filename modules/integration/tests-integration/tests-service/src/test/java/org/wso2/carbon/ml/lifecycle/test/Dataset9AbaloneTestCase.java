@@ -150,7 +150,7 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
         testPredictAbalone();
     }
 
-    // Following 2 test checks whether model building fails with the algorithms that support only binary classification
+    // Following 2 tests check whether model building fails with the algorithms that support only binary classification
 
     /**
      * Creates a test case for creating an analysis, building a SVM model and test for failure
@@ -160,7 +160,7 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a SVM model and predict for abalone dataset", groups = "createSVMModelAbalone")
+    @Test(description = "Build a SVM model for abalone dataset", groups = "createSVMModelAbalone")
     public void testBuildSVMModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         boolean status = buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
 
@@ -177,7 +177,7 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Logistic Regression model and predict for abalone dataset", groups = "createLogisticRegressionAbalone")
+    @Test(description = "Build a Logistic Regression model for abalone dataset", groups = "createLogisticRegressionAbalone")
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         boolean status = buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
@@ -186,6 +186,26 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
         assertEquals("Model building did not complete successfully", false, status);
     }
 
+    // Following test checks whether model building fails when a categorical response variable is used with numerical
+    // prediction.
+
+    /**
+     * Creates a test case for creating an analysis, building a Linear Regression model and test for failure
+     * model
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a Linear Regression model for abalone dataset", groups = "createLinearRegressionAbalone")
+    public void testBuildLinearRegressionModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
+        boolean status = buildModelWithLearningAlgorithm("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
+
+        // Model building should fail since Linear Regression cannot handle categorical response variables
+        assertEquals("Model building did not complete successfully", false, status);
+    }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
