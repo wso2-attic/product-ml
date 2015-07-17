@@ -290,6 +290,7 @@ do
     -Dcom.atomikos.icatch.file="$CARBON_HOME/lib/transactions.properties" \
     -Dcom.atomikos.icatch.hide_init_file_path=true \
     -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true \
+    -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false \
     -Dcom.sun.jndi.ldap.connect.pool.authentication=simple  \
     -Dcom.sun.jndi.ldap.connect.pool.timeout=3000  \
     -Dorg.terracotta.quartz.skipUpdateCheck=true \
