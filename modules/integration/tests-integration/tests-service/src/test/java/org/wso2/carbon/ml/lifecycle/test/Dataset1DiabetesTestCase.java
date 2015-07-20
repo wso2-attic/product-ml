@@ -76,6 +76,19 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         JSONArray predictions = new JSONArray(reply);
         assertEquals(2, predictions.length());
     }
+
+    /**
+     * A test case for predicting with a dataset incompatible with the trained dataset
+     *
+     * @throws MLHttpClientException
+     * @throws JSONException
+     */
+    private void testPredictDiabetesInvalid() throws MLHttpClientException, JSONException {
+        String payload = "[[1,89,66,23,94,28.1,0.167],[2,197,70,45,543,30.5,0.158]]";
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+    }
     
     /**
      * A test case for predicting for a given set of data points from a file.
@@ -133,6 +146,9 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictDiabetes();
+
+        // Predict for a incompatible dataset
+        testPredictDiabetesInvalid();
     }
 
     /**
