@@ -7,10 +7,9 @@ Welcome to the WSO2 Machine Learner 1.0.0 release
 WSO2 Machine Learner provides a user friendly wizard like interface, which guides users through
 a set of steps to find and configure machine learning algorithms. The outcome of this process is a
 model that can be deployed in multiple WSO2 products, such as WSO2 Enterprise Service Bus (ESB),
-WSO2 Complex Event Processor (CEP), WSO2 Business Activity Monitor (BAM) etc.
+WSO2 Complex Event Processor (CEP), etc.
 This is based on the revolutionary WSO2 Carbon framework.
-All the major features have been developed as pluggable Carbon
-components.
+All the major features have been developed as pluggable Carbon components.
 
 Key Features of WSO2 Machine Learner
 ==================================
@@ -32,13 +31,13 @@ System Requirements
 
 
 Installation & Running
-==================================
+======================
 
 1. Extract the wso2ml-1.0.0.zip and go to the extracted directory
 2. Run the wso2server.sh or wso2server.bat as appropriate
 3. Point your favourite browser to
 
-    https://localhost:9443/mlUI
+    https://localhost:9443/ml
 
 4. Use the following username and password to login
 
@@ -46,74 +45,81 @@ Installation & Running
     password : admin
 
 
-WSO2 Machine Learner 0.1.0 distribution directory structure
-=============================================
+WSO2 Machine Learner 1.0.0 distribution directory structure
+===========================================================
 
 	CARBON_HOME
-		|- bin <folder>
-		|- dbscripts <folder>
-		|- lib <folder>
-		|- repository <folder>
-			|-- logs <folder>
-		|--- conf <folder>
-		|--- database <folder>
-		|- resources <folder>
-		|- samples <folder>
-		|- tmp <folder>
-		|- LICENSE.txt <file>
-		|- README.txt <file>
-		|- INSTALL.txt <file>		
-		|- release-notes.html <file>
+		|-- bin <folder>
+		|-- dbscripts <folder>
+		|-- lib <folder>
+		|-- models <folder>
+		|-- repository <folder>
+		|-- |- components <folder>
+		|-- |- conf <folder>
+		|-- |- database <folder>
+		|-- |- logs <folder>
+		|-- |- resources <folder>
+		|-- samples <folder>
+		|-- tmp <folder>
+		|-- LICENSE.txt <file>
+		|-- README.txt <file>
+		|-- INSTALL.txt <file>
+		|-- release-notes.html <file>
 
     - bin
-	  Contains various scripts .sh & .bat scripts
-
-	- conf
-	  Contains configuration files
-
-	- database
-      Contains the database
+      Contains various scripts .sh & .bat scripts.
 
     - dbscripts
-      Contains all the database scripts
+      Contains all the database scripts.
 
     - lib
-	  Contains the basic set of libraries required to startup Machine Learner
-	  in standalone mode
+      Contains the basic set of libraries required to startup Machine Learner.
+      in standalone mode
 
-	- repository
-	  The repository where services and modules deployed in WSO2 Machine Learner
-	  are stored. In addition to this the components directory inside the
-	  repository directory contains the carbon runtime and the user added
-	  jar files including mediators third party libraries and so on..
+    - models
+      Contains the generated ML models.
 
-	- logs
-	  Contains all log files created during execution
+    - repository
+      The repository where services and modules deployed in WSO2 Machine Learner
+      are stored. In addition to this the components directory inside the
+      repository directory contains the carbon runtime and the user added
+      jar files including mediators third party libraries and so on.
 
-	- resources
-	  Contains additional resources that may be required, including sample
-	  configuration and sample resources
+        - components
+          Contains all OSGi related libraries and configurations.
 
-	- samples
-	  Contains some sample services and client applications that demonstrate
-	  the functionality and capabilities of WSO2 Machine Learner
+        - conf
+          Contains configuration files.
 
-	- tmp
-	  Used for storing temporary files, and is pointed to by the
-	  java.io.tmpdir System property
+        - database
+          Contains the database.
 
-	- LICENSE.txt
-	  Apache License 2.0 and the relevant other licenses under which
-	  WSO2 Machine Learner is distributed.
+        - logs
+          Contains all log files created during execution.
 
-	- README.txt
-	  This document.
+        - resources
+          Contains additional resources that may be required.
+
+    - samples
+      Contains some sample scripts that demonstrate
+      the functionality and capabilities of WSO2 Machine Learner.
+
+    - tmp
+      Used for storing temporary files, and is pointed to by the
+      java.io.tmpdir System property.
+
+    - LICENSE.txt
+      Apache License 2.0 and the relevant other licenses under which
+      WSO2 Machine Learner is distributed.
+
+    - README.txt
+      This document.
 
     - INSTALL.txt
-      This document will contain information on installing WSO2 Machine Learner
+      This document will contain information on installing WSO2 Machine Learner.
 
-	- release-notes.html
-	  Release information for WSO2 Machine Learner 0.1.0
+    - release-notes.html
+      Release information for WSO2 Machine Learner 1.0.0
 
 Support
 ==================================
@@ -164,5 +170,5 @@ Crypto Notice
    Bouncycastle     : http://www.bouncycastle.org/
 
 --------------------------------------------------------------------------------
-(c) Copyright 2014 WSO2 Inc.
+(c) Copyright 2015 WSO2 Inc.
 
