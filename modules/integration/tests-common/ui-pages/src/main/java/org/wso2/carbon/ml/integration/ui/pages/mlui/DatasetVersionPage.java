@@ -48,23 +48,20 @@ public class DatasetVersionPage extends MLUIPage {
      * @param sourceType
      * @param dataFormat
      * @param columnHeader
-     * @param destinationType
      * @return
      * @throws org.wso2.carbon.ml.integration.ui.pages.exceptions.InvalidPageException
      */
-    public MLDatasetsPage uploadDatasetVersion(File dataFile, String sourceType, String dataFormat, String columnHeader, String destinationType) throws InvalidPageException {
+    public MLDatasetsPage uploadDatasetVersion(File dataFile, String sourceType, String dataFormat, String columnHeader) throws InvalidPageException {
         try {
             WebElement sourceTypeElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.source.type")));
             WebElement pathElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.path")));
             WebElement dataFormatElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.data.format")));
             WebElement columnHeaderElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.column.header")));
-            WebElement destinationTypeElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.destination.type")));
 
             sourceTypeElement.sendKeys(sourceType);
             pathElement.sendKeys(dataFile.getPath());
             dataFormatElement.sendKeys(dataFormat);
             columnHeaderElement.sendKeys(columnHeader);
-            destinationTypeElement.sendKeys(destinationType);
 
             driver.findElement(By.xpath(mlUIElementMapper.getElement("create.dataset.version.button"))).click();
             return new MLDatasetsPage(driver);
