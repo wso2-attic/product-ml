@@ -50,12 +50,11 @@ public class DataImportPage extends MLUIPage {
      * @param sourceType
      * @param dataFormat
      * @param columnHeader
-     * @param destinationType
      * @return
      * @throws InvalidPageException
      */
     public MLDatasetsPage importData(File dataFile, String datasetName, String version,
-            String description, String sourceType, String dataFormat, String columnHeader, String destinationType) throws InvalidPageException {
+            String description, String sourceType, String dataFormat, String columnHeader) throws InvalidPageException {
         try {
 
             WebElement datasetNameElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.name")));
@@ -65,7 +64,6 @@ public class DataImportPage extends MLUIPage {
             WebElement pathElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.path")));
             WebElement dataFormatElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.data.format")));
             WebElement columnHeaderElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.column.header")));
-            WebElement destinationTypeElement = driver.findElement(By.xpath(mlUIElementMapper.getElement("dataset.destination.type")));
 
             datasetNameElement.sendKeys(datasetName);
             datasetVerionElement.sendKeys(version);
@@ -74,7 +72,6 @@ public class DataImportPage extends MLUIPage {
             pathElement.sendKeys(dataFile.getPath());
             dataFormatElement.sendKeys(dataFormat);
             columnHeaderElement.sendKeys(columnHeader);
-            destinationTypeElement.sendKeys(destinationType);
 
             driver.findElement(By.xpath(mlUIElementMapper.getElement("import.dataset.button"))).click();
             return new MLDatasetsPage(driver);

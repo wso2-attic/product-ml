@@ -31,7 +31,6 @@ public class MLDataset {
     private static final String SOURCE_TYPE = "file";
     private static final String DATA_FORMAT = "csv";
     private static final String COLUMN_HEADER = "yes";
-    private static final String DESTINATION_TYPE = "file";
 
     public static String getDatasetUrl() {
         return DATASET_URL;
@@ -59,10 +58,6 @@ public class MLDataset {
 
     public static String getColumnHeader() {
         return COLUMN_HEADER;
-    }
-
-    public static String getDestinationType() {
-        return DESTINATION_TYPE;
     }
 
     public static String getVersion2() {
