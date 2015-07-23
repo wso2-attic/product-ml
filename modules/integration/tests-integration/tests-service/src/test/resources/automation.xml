@@ -141,24 +141,25 @@
             </tenant>
         </superTenant>
         <tenants>
-            <tenant domain="wso2.com" key="wso2">
-                <admin>
-                    <user key="admin">
-                        <userName>admin</userName>
-                        <password>admin</password>
-                    </user>
-                </admin>
-                <users>
-                    <user key="user1">
-                        <userName>testuser11</userName>
-                        <password>testuser11</password>
-                    </user>
-                    <user key="user2">
-                        <userName>testuser21</userName>
-                        <password>testuser21</password>
-                    </user>
-                </users>
-            </tenant>
+            <!-- Commenting out multitenancy features since ML does not support it -->
+            <!--<tenant domain="wso2.com" key="wso2">-->
+                <!--<admin>-->
+                    <!--<user key="admin">-->
+                        <!--<userName>admin</userName>-->
+                        <!--<password>admin</password>-->
+                    <!--</user>-->
+                <!--</admin>-->
+                <!--<users>-->
+                    <!--<user key="user1">-->
+                        <!--<userName>testuser11</userName>-->
+                        <!--<password>testuser11</password>-->
+                    <!--</user>-->
+                    <!--<user key="user2">-->
+                        <!--<userName>testuser21</userName>-->
+                        <!--<password>testuser21</password>-->
+                    <!--</user>-->
+                <!--</users>-->
+            <!--</tenant>-->
         </tenants>
     </userManagement>
     <!--

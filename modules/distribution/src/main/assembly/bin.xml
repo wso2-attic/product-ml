@@ -87,20 +87,22 @@
             </includes>
             <fileMode>755</fileMode>
         </fileSet>
+
+        <!-- Commenting out multitenancy features since ML does not support it -->
         
         <!--Multitenancy related file -->
-        <fileSet>
-            <directory>
-                ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/multitenancy</outputDirectory>
-            <includes>
-                <include>**/stratos.xml</include>
-                <include>**/multitenancy-packages.xml</include>
-                <include>**/usage-throttling-agent-config.xml</include>
-                <include>**/cloud-services-desc.xml</include>
-            </includes>
-        </fileSet>
+        <!--<fileSet>-->
+            <!--<directory>-->
+                <!--../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/-->
+            <!--</directory>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/multitenancy</outputDirectory>-->
+            <!--<includes>-->
+                <!--<include>**/stratos.xml</include>-->
+                <!--<include>**/multitenancy-packages.xml</include>-->
+                <!--&lt;!&ndash;<include>**/usage-throttling-agent-config.xml</include>&ndash;&gt;-->
+                <!--<include>**/cloud-services-desc.xml</include>-->
+            <!--</includes>-->
+        <!--</fileSet>-->
 
         <fileSet>
             <directory>
@@ -262,12 +264,15 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <fileMode>644</fileMode>
         </file>
-        <file>
-            <source>
-                ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/tenant-mgt.xml
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
-        </file>
+
+        <!-- Commenting out multitenancy features since ML does not support it -->
+
+        <!--<file>-->
+            <!--<source>-->
+                <!--../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/tenant-mgt.xml-->
+            <!--</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>-->
+        <!--</file>-->
         <file>
             <source>
                 src/main/conf/master-datasources.xml
