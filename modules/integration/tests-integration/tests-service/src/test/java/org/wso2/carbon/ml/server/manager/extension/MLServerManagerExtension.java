@@ -19,7 +19,6 @@ package org.wso2.carbon.ml.server.manager.extension;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import javax.xml.xpath.XPathExpressionException;
 
@@ -55,11 +54,8 @@ public class MLServerManagerExtension extends ExecutionListenerExtension {
         if (getParameters().get(ExtensionConstants.SERVER_STARTUP_PORT_OFFSET_COMMAND) == null) {
             getParameters().put(ExtensionConstants.SERVER_STARTUP_PORT_OFFSET_COMMAND, "0");
         }
-        Map<String, String> parameters = getParameters();
-        // Informing DAS components not to initialize SparkContext
-        parameters.put("-DdisableAnalyticsSparkCtx", "true");
 
-        mlServerManager = new TestServerManager(context, null, parameters) {
+        mlServerManager = new TestServerManager(context, null, getParameters()) {
             public void configureServer() throws AutomationFrameworkException {
 
                 // path to DAS DBs
