@@ -78,9 +78,9 @@
                 <strong>On the web : </strong><a href="http://docs.wso2.org/wiki/display/@product.version.docs@/Getting+Started">http://docs.wso2.org/wiki/display/@product.version.docs@/Installation</a></li>
         </ol>
 
-        <h2>Known Issues</h2>
+        <!--<h2>Known Issues</h2>-->
 
-        <p><a href="https://wso2.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=@known.issue.filter@">@product.name@ Issue Tracker</a></p>
+        <!--<p><a href="https://wso2.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=@known.issue.filter@">@product.name@ Issue Tracker</a></p>-->
 
         <h2>Reporting Problems</h2>
         Issues can be reported using the public JIRA available at  <a href="https://wso2.org/jira/browse/ML">https://wso2.org/jira/browse/ML</a>
