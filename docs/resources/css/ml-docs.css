@@ -2,7 +2,7 @@ body {
     color: #000;
     font-size: 11px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    /*background-image: url( ../images/ml-docs-bg.png );*/
+    background-image: url( ../images/ml-docs-bg.png );
     background-repeat: repeat-x;
     background-attachment: scroll;
     background-position: left top;

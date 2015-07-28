@@ -66,34 +66,6 @@
                 <li>Data exploration utility</li>
             </ul>
 
-        <!--<h2>Open Source Components of @product.name@</h2>-->
-
-        <!--<ul>-->
-            <!--<li>WSO2 Carbon</li>-->
-            <!--<li>Apache Abdera</li>-->
-            <!--<li>Apache Ant</li>-->
-            <!--<li>Apache Axiom (High performance XML Object Model)</li>-->
-            <!--<li>Apache Axis2 (SOAP)</li>-->
-            <!--<li>Apache Axis2 (WS-Addressing)</li>-->
-            <!--<li>Apache Directory Studio</li>-->
-            <!--<li>Apache Felix</li>-->
-            <!--<li>Apache Geronimo</li>-->
-            <!--<li>Apache Jackrabbit</li>-->
-            <!--<li>Apache Lucene</li>-->
-            <!--<li>Apache Maven</li>-->
-            <!--<li>Apache Neethi (WS-Policy)</li>-->
-            <!--<li>Apache Rampart/Apache WSS4J (WS-Security)</li>-->
-            <!--<li>Apache Shindig</li>-->
-            <!--<li>Apache Solr</li>-->
-            <!--<li>Apache Synapse</li>-->
-            <!--<li>Apache Tiles</li>-->
-            <!--<li>Apache Tomcat (Embedded)</li>-->
-            <!--<li>Apache XML Schema</li>-->
-            <!--<li>Atomikos</li>-->
-            <!--<li>Eclipse Equinox</li>-->
-            <!--<li>Eclipse WSDL Validator</li>-->
-        <!--</ul>-->
-
         <h2>@product.name@ - Documentation</h2>
 
         <p>See the <a href="http://docs.wso2.org/display/ML100/">Wiki docs of v@product.version@</a>for instructions on
