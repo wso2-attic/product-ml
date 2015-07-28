@@ -2,7 +2,7 @@ body {
     color: #000;
     font-size: 11px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    background-image: url( ../images/ml-docs-bg.png );
+    background-image: url( ../images/ml-docs-header-bg.gif );
     background-repeat: repeat-x;
     background-attachment: scroll;
     background-position: left top;
@@ -103,8 +103,7 @@ body, td, select, input, li  {
 }
 
 h1 {
-    /*color: #333;*/
-    color: #fff;
+    color: #333;
     font-size: 18px;
     font-weight: bold;
     font-style: normal;
@@ -120,8 +119,7 @@ h1 {
 }
 
 h2 {
-    /*color: black;*/
-    color: #fff;
+    color: black;
     font-size: 15px;
     font-weight: bold;
     line-height: 24px;
