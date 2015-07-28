@@ -25,8 +25,26 @@
     <fileSets>
         <fileSet>
             <directory>target/site</directory>
-            <outputDirectory>wso2ml-${pom.version}-docs</outputDirectory>
-            <fileMode>755</fileMode>
+            <outputDirectory>${pom.artifactId}-${pom.version}-docs</outputDirectory>
+            <excludes>
+                <exclude>release-notes.html</exclude>
+                <exclude>index.html</exclude>
+            </excludes>
+            <fileMode>644</fileMode>
         </fileSet>
     </fileSets>
+    <files>
+        <file>
+            <source>target/site/release-notes.html</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}-docs/</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>target/site/index.html</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}-docs/</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+    </files>
 </assembly>

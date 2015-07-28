@@ -71,6 +71,42 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>target</outputDirectory>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.ml</groupId>
+                                    <artifactId>org.wso2.carbon.ml.core</artifactId>
+                                    <classifier>docs</classifier>
+                                    <version>${carbon.ml.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.ml</groupId>
+                                    <artifactId>org.wso2.carbon.ml.commons</artifactId>
+                                    <classifier>docs</classifier>
+                                    <version>${carbon.ml.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.ml</groupId>
+                                    <artifactId>org.wso2.carbon.ml.database</artifactId>
+                                    <classifier>docs</classifier>
+                                    <version>${carbon.ml.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.ml</groupId>
+                                    <artifactId>org.wso2.carbon.ml.rest.api</artifactId>
+                                    <classifier>docs</classifier>
+                                    <version>${carbon.ml.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
@@ -150,6 +186,18 @@
                                         <include name="**/images/*.*"/>
                                     </fileset>
                                 </copy>
+                                <copy todir="target/site/apidocs/ml/core" overwrite="false" includeemptydirs="false">
+                                    <fileset dir="target/org.wso2.carbon.ml.core-${carbon.ml.version}-docs/" />
+                                </copy>
+                                <copy todir="target/site/apidocs/ml/commons" overwrite="false" includeemptydirs="false">
+                                    <fileset dir="target/org.wso2.carbon.ml.commons-${carbon.ml.version}-docs/" />
+                                </copy>
+                                <copy todir="target/site/apidocs/ml/database" overwrite="false" includeemptydirs="false">
+                                    <fileset dir="target/org.wso2.carbon.ml.database-${carbon.ml.version}-docs/" />
+                                </copy>
+                                <copy todir="target/site/apidocs/ml/restapi" overwrite="false" includeemptydirs="false">
+                                    <fileset dir="target/org.wso2.carbon.ml.rest.api-${carbon.ml.version}-docs/" />
+                                </copy>
                                 <delete dir="${tempdir}"/>
                             </tasks>
                         </configuration>
@@ -163,6 +211,10 @@
                                 <delete dir="target/dependency-maven-plugin-markers"/>
                                 <delete dir="target/maven-archiver"/>
                                 <delete dir="target/wso2carbon-core-${carbon.kernel.version}"/>
+                                <delete dir="target/org.wso2.carbon.ml.core-${carbon.ml.version}-docs"/>
+                                <delete dir="target/org.wso2.carbon.ml.commons-${carbon.ml.version}-docs"/>
+                                <delete dir="target/org.wso2.carbon.ml.database-${carbon.ml.version}-docs"/>
+                                <delete dir="target/org.wso2.carbon.ml.rest.api-${carbon.ml.version}-docs"/>
                                 <delete dir="target/sources"/>
                                 <delete dir="target/site"/>
                                 <delete dir="target/database"/>
@@ -218,6 +270,7 @@
                                 <reportSet>
                                     <reports>
                                         <report>index</report>
+                                        <report>scm</report>
                                     </reports>
                                 </reportSet>
                             </reportSets>
@@ -229,6 +282,30 @@
                         <phase>package</phase>
                         <goals>
                             <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.0-beta-3</version>
+                <configuration>
+                    <buildNumberPropertyName>copyright.year</buildNumberPropertyName>
+                    <format>{0, date, yyyy}</format>
+                    <timestampFormat>{0, date, dd MMMM yyyy}</timestampFormat>
+                    <items>
+                        <item>timestamp</item>
+                    </items>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -265,6 +342,22 @@
                             </filters>
                             <descriptors>
                                 <descriptor>src/main/assembly/bin.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>docs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>true</appendAssemblyId>
+                            <filters>
+                                <filter>${basedir}/src/main/assembly/filter.properties</filter>
+                            </filters>
+                            <descriptors>
+                                <descriptor>src/main/assembly/docs.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>

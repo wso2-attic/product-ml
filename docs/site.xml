@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
   ~ WSO2 Inc. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
@@ -19,21 +19,6 @@
 
 <project name="WSO2 Machine Learner">
 
-    <!--<bannerLeft>-->
-    <!--<name>WSO2 ESB</name>-->
-    <!--<src>http://www.apache.org/images/asf_logo_wide.png</src>-->
-    <!--<href>http://ws.apache.org/axis2/</href>-->
-    <!--</bannerLeft>-->
-
-    <!--<bannerRight>-->
-    <!--<src>http://ws.apache.org/axis2/images/axis.jpg</src>-->
-    <!--</bannerRight>-->
-
-    <poweredBy>
-        <logo name="Apache Synapse" href="http://synapse.apache.org/"
-              img="images/synapse-PBX.jpg"/>
-    </poweredBy>
-
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-default-skin</artifactId>
@@ -41,6 +26,19 @@
     </skin>
 
     <body>
+        <head>
+            <script type="text/javascript">
+                window.onload = function() {
+                    var links = document.getElementsByTagName('a');
+                    for (var i = 0; i &lt; links.length; i++) {
+                        if('externalLink' == links[i].getAttribute('class')) {
+                            links[i].setAttribute('target', '_blank');
+                        }
+                    }
+                }
+            </script>
+        </head>
+
         <links>
             <item name="WSO2.org" href="http://wso2.org/"/>
         </links>
@@ -48,25 +46,28 @@
         <menu name="Overview">
             <item name="Home" href="index.html"/>
             <item name="Release Note" href="release-notes.html"/>
-            <item name="License"
-                  href="http://www.apache.org/licenses/LICENSE-2.0.html"/>
-            <item name="Contents" href="docs_index.html"/>
         </menu>
         <menu name="Downloads">
-            <item name="Releases"
-                  href="http://wso2.org/downloads/ml/"/>
+            <item name="Releases" href="https://github.com/wso2/product-ml/releases"/>
         </menu>
-        <menu name="Documentation">
+        <menu name="Java Docs">
+            <item name="ML Core" href="apidocs/ml/core/index.html"/>
+            <item name="ML Commons" href="apidocs/ml/commons/index.html"/>
+            <item name="ML Database" href="apidocs/ml/database/index.html"/>
+            <item name="ML Rest API" href="apidocs/ml/restapi/index.html"/>
         </menu>
-        <menu name="Community">
-            <item name="Forum" href="http://wso2.org/forum/187"/>
-            <item name="Mailing Lists" href="mail-lists.html"/>
+        <menu name="Getting Help">
+            <item name="Mailing Lists" href="http://wso2.com/mail/"/>
+            <item name="Wiki" href="http://docs.wso2.org/display/ML100/"/>
+            <item name="Forum" href="http://stackoverflow.com/questions/tagged/wso2ml"/>
         </menu>
-        <menu name="Project Info">
+        <menu name="Get Involved">
+            <item name="Checkout the Source" href="source-repository.html"/>
+            <item name="Mailing Lists" href="http://wso2.com/mail/"/>
+        </menu>
+        <menu name="Project Information">
             <item name="Issue Tracking" href="issue-tracking.html"/>
-            <item name="Dependencies" href="dependencies.html"/>
-            <!--<item name="Dependency Coverage" href="dependency-convergence.html"/>-->
+            <item name="License" href="http://www.apache.org/licenses/LICENSE-2.0.html"/>
         </menu>
-
     </body>
 </project>
