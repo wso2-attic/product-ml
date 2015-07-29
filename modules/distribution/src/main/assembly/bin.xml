@@ -200,6 +200,10 @@
                 <include>**/*.*</include>
                 <include>**/*</include>
             </includes>
+            <excludes>
+                <exclude>**/*.iml</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
         </fileSet>
     </fileSets>
 
