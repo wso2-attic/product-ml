@@ -116,9 +116,38 @@ public class MLProjectsTestCase extends MLBaseTest {
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(priority = 5, description = "Retrieve a project")
+    @Test(priority = 5, description = "Retrieve all projects")
     public void testGetAllProjects() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+    
+    /**
+     * Test retrieving all projects with analyses.
+     * 
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(priority = 5, description = "Retrieve all projects with analyses")
+    public void testGetAllProjectsWithAnalyses() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/analyses");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+    }
+
+    /**
+     * Test retrieving projects of a dataset with analyses.
+     * 
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(priority = 5, description = "Retrieve projects of a dataset with analyses")
+    public void testGetProjectsOfDatasetWithAnalyses() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/analyses?datasetName="
+                + MLIntegrationTestConstants.DATASET_NAME_DIABETES);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
