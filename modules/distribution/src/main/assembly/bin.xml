@@ -38,6 +38,7 @@
                 <exclude>**/cache.xml</exclude>
                 <!--exclude>**/master-datasources.xml</exclude-->
                 <exclude>**/bin/ciphertool.sh</exclude>
+                <exclude>**/log4j.properties</exclude>
             </excludes>
         </fileSet>
 
@@ -200,13 +201,10 @@
         </fileSet>
     </fileSets>
 
-
-	
     <files>
         <file>
-            <source>src/main/conf/log4j.properties</source>
-            <outputDirectory>wso2ml-${pom.version}/repository/conf</outputDirectory>
-            <destName>log4j.properties</destName>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/log4j.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
