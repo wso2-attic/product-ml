@@ -37,14 +37,7 @@
                 <exclude>**/carbon.xml</exclude>
                 <exclude>**/cache.xml</exclude>
                 <!--exclude>**/master-datasources.xml</exclude-->
-                <!-- Excluding these files since they seem to be copied twice.
-                     TODO Need to investigate properly and fix once kernel-4.3.0 is released-->
-                <exclude>**/bin/java2wsdl.sh</exclude>
-                <exclude>**/bin/carbondump.sh</exclude>
-                <exclude>**/bin/chpasswd.sh</exclude>
-                <exclude>**/bin/tcpmon.sh</exclude>
                 <exclude>**/bin/ciphertool.sh</exclude>
-                <exclude>**/bin/wsdl2java.sh</exclude>
             </excludes>
         </fileSet>
 
