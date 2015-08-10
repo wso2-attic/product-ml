@@ -242,6 +242,12 @@
             <fileMode>644</fileMode>
         </file>
         <file>
+            <source>release-notes.html</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
+            <destName>release-notes.html</destName>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/bin/README.txt</source>
             <outputDirectory>wso2ml-${pom.version}/bin/</outputDirectory>
             <filtered>true</filtered>
