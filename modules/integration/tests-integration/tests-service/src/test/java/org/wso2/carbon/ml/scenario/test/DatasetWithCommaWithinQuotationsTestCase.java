@@ -59,6 +59,7 @@ public class DatasetWithCommaWithinQuotationsTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_TITANIC, version,
                 MLIntegrationTestConstants.TITANIC_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_TITANIC,
                 MLIntegrationTestConstants.DATASET_NAME_TITANIC);
     }

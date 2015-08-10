@@ -58,6 +58,7 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES, version,
                 MLIntegrationTestConstants.FOREST_FIRES_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_FOREST_FIRES,
                 MLIntegrationTestConstants.DATASET_NAME_FOREST_FIRES);
     }

@@ -58,6 +58,7 @@ public class Dataset8DASDataTestCase extends MLBaseTest {
         int datasetId = createDatasetFromDASTable(MLIntegrationTestConstants.DATASET_NAME_DAS, version,
                 MLIntegrationTestConstants.DAS_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DAS,
                 MLIntegrationTestConstants.DATASET_NAME_DAS);
     }

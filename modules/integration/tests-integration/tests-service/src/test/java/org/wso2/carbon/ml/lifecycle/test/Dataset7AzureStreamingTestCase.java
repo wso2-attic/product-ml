@@ -57,6 +57,7 @@ public class Dataset7AzureStreamingTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_AZURE_STREAMING, version,
                 MLIntegrationTestConstants.AZURE_STREAMING_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_AZURE_STREAMING,
                 MLIntegrationTestConstants.DATASET_NAME_AZURE_STREAMING);
     }

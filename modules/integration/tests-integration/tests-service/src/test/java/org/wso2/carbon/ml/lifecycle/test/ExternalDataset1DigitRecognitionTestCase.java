@@ -63,6 +63,7 @@ public class ExternalDataset1DigitRecognitionTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIGITS, version,
                 MLIntegrationTestConstants.DIGIT_RECOGNITION_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIGITS,
                 MLIntegrationTestConstants.DATASET_NAME_DIGITS);
     }

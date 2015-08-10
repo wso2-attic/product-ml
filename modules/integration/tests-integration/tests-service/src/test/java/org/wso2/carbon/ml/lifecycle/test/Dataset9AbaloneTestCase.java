@@ -58,6 +58,7 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_ABALONE, version,
                 MLIntegrationTestConstants.ABALONE_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_ABALONE,
                 MLIntegrationTestConstants.DATASET_NAME_ABALONE);
     }

@@ -49,6 +49,7 @@ public class FeatureProcessingTestCase extends MLBaseTest {
         mlHttpclient = getMLHttpClient();
         createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, "1.0",
                 MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
+        isDatasetProcessed(getVersionSetIds().get(0), MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES);
         analysisId = createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME, projectId);

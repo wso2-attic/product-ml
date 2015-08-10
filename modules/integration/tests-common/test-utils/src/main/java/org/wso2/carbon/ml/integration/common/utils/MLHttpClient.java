@@ -26,8 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -57,7 +56,6 @@ public class MLHttpClient {
     
     private User userInfo;
     private Instance mlInstance;
-    private static final Log logger = LogFactory.getLog(MLHttpClient.class);
     
     public MLHttpClient(Instance mlInstance, User userInfo) {
         this.mlInstance = mlInstance;
@@ -351,6 +349,36 @@ public class MLHttpClient {
         } catch (MLHttpClientException e) {
             throw new MLHttpClientException("Failed to set Feature defaults to analysis: " + analysisId, e);
         }
+    }
+    
+    /**
+     * Check the status of a dataset.
+     * @param versionSetId
+     * @param timeout
+     * @param frequency
+     * @return true if the status is completed and false if it is not.
+     * @throws MLHttpClientException
+     * @throws JSONException
+     * @throws IOException
+     */
+    public boolean checkDatasetStatus(int versionSetId, long timeout, int frequency) throws MLHttpClientException, IOException {
+        boolean status = false;
+        int totalTime = 0;
+        while (!status && timeout >= totalTime) {
+            CloseableHttpResponse response = doHttpGet("/versions/" + versionSetId + "/sample");
+            int statusCode = response.getStatusLine().getStatusCode();
+            response.close();
+
+            // Checks whether status is not 404
+            status = statusCode != HttpStatus.SC_NOT_FOUND;
+            try {
+                Thread.sleep(frequency);
+            } catch (InterruptedException ignore) {
+            }
+
+            totalTime += frequency;
+        }
+        return status;
     }
     
     /**

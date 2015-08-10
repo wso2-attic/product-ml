@@ -57,6 +57,7 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_YACHT, version,
                 MLIntegrationTestConstants.YACHT_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_YACHT,
                 MLIntegrationTestConstants.DATASET_NAME_YACHT);
     }
