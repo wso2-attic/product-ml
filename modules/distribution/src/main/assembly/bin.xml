@@ -39,6 +39,7 @@
                 <!--exclude>**/master-datasources.xml</exclude-->
                 <exclude>**/bin/ciphertool.sh</exclude>
                 <exclude>**/log4j.properties</exclude>
+                <exclude>**/repository/conf/README</exclude>
             </excludes>
         </fileSet>
 
@@ -358,6 +359,11 @@
     	</file>
         <file>
             <source>src/main/conf/sec.policy</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>src/main/conf/README</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <fileMode>644</fileMode>
         </file>
