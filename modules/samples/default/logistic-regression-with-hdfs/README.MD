@@ -1,6 +1,8 @@
 WSO2 Machine Learner - Sample Model Generation Flow with HDFS
 =============================================================
 
+Note : This sample only works in Unix environment
+
 Algorithm: Logistic-Regression
 ==============================
 
