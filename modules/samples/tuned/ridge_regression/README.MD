@@ -9,8 +9,8 @@ Algorithm: Ridge-Regression
 Tuned hyper-parameter values
 ============================
 
-Iterations : 1000
-Learning_Rate : 0.001
+Iterations : 100
+Learning_Rate : 0.01
 Reg_Parameter : 0.001
 SGD_Data_Fraction : 1
 

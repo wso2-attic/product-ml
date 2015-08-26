@@ -1,11 +1,11 @@
 [
 {
 "key":"Iterations",
-"value":"1000"
+"value":"100"
 },
 {
 "key":"Learning_Rate",
-"value":"0.001"
+"value":"0.01"
 },
 {
 "key":"Reg_Parameter",

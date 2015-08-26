@@ -5,7 +5,7 @@
 },
 {
 "key":"Learning_Rate",
-"value":"0.001"
+"value":"0.01"
 },
 {
 "key":"SGD_Data_Fraction",

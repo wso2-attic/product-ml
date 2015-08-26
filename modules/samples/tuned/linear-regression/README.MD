@@ -10,7 +10,7 @@ Tuned hyper-parameter values
 ============================
 
 Iterations : 1000
-Learning_Rate : 0.001
+Learning_Rate : 0.01
 SGD_Data_Fraction : 1
 
 Before Running
