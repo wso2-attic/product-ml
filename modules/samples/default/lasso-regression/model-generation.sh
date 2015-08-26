@@ -5,6 +5,8 @@ echo "testing Lasso Regression workflow"
 # Die on any error:
 set -e
 
+DIR="${BASH_SOURCE%/*}"; if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi; source "$DIR/../../base.sh"
+
 echo "#create a dataset"
 path=$(pwd)
 curl -X POST -b cookies  https://localhost:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='abalone-lasso-regression-dataset' -F version='1.0.0' -F description='Abalone Dataset' -F sourceType='file' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F file=@'/'$path'/abalone.csv' -k
@@ -22,7 +24,7 @@ sleep 2
 #update the json file with retrieved values
 projectId=$(echo "$project"|jq '.id')
 datasetId=$(echo "$project"|jq '.datasetId')
-sed -i 's/^\("projectId":"\)[^"]*/\1'$projectId/ create-analysis;
+${SED} -i 's/^\("projectId":"\)[^"]*/\1'$projectId/ create-analysis;
 sleep 2
 
 #creating an analysis
@@ -56,9 +58,9 @@ sleep 2
 
 #update the json file
 datasetVersionId=$(echo "$datasetVersions"|jq '.[0] .id')
-sed -i 's/^\("analysisId":"\)[^"]*/\1'$analysisId/ create-model;
+${SED} -i 's/^\("analysisId":"\)[^"]*/\1'$analysisId/ create-model;
 sleep 2
-sed -i 's/^\("versionSetId":"\)[^"]*/\1'$datasetVersionId/ create-model;
+${SED} -i 's/^\("versionSetId":"\)[^"]*/\1'$datasetVersionId/ create-model;
 sleep 2
 
 echo "#create model"
