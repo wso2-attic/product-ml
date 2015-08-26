@@ -1,5 +1,5 @@
 {
 "name" : "wso2-ml-lasso-regression-sample-analysis",
-"comments" : "Lasso regression for Wine Quality",
+"comments" : "Lasso regression for Age of Abalone",
 "projectId":"3"
 }

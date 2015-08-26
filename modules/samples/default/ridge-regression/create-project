@@ -1,5 +1,5 @@
 {
 "name" : "wso2-ml-ridge-regression-sample-project",
 "description" : "This project tests ml workflow for ridge regression",
-"datasetName" : "winequality-ridge-regression-dataset"
+"datasetName" : "abalone-ridge-regression-dataset"
 }
