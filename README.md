@@ -29,6 +29,11 @@ This is based on the revolutionary WSO2 Carbon framework.
 All the major features have been developed as pluggable Carbon
 components.
 
+Overview
+========
+
+![alt tag](docs/resources/images/ml-overview.png)
+
 Key Features of WSO2 Machine Learner
 ====================================
 
