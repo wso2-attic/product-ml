@@ -24,7 +24,7 @@ Welcome to the WSO2 Machine Learner
 WSO2 Machine Learner provides a user friendly wizard like interface, which guides users through
 a set of steps to find and configure machine learning algorithms. The outcome of this process is a
 model that can be deployed in multiple WSO2 products, such as WSO2 Enterprise Service Bus (ESB),
-WSO2 Complex Event Processor (CEP), WSO2 Business Activity Monitor (BAM) etc.
+WSO2 Complex Event Processor (CEP). WSO2 ML can be integrated with WSO2 Data Analytics Server (DAS) in order to analyse summarized published data.
 This is based on the revolutionary WSO2 Carbon framework.
 All the major features have been developed as pluggable Carbon
 components.
@@ -32,9 +32,10 @@ components.
 Key Features of WSO2 Machine Learner
 ====================================
 
-1. Wizard like pipeline
-2. Assisted model building
-3. Data exploration utility
+1. Data exploration
+2. Model generation
+3. Model comparison
+4. Prediction
 
 System Requirements
 ===================
@@ -85,14 +86,14 @@ WSO2 Machine Learner 1.0.0-SNAPSHOT distribution directory structure
     - bin
 	  Contains various scripts .sh & .bat scripts
 
-	- conf
+    - conf
 	  Contains configuration files
 
-	- database
-      Contains the database
+    - database
+          Contains the database
 
     - dbscripts
-      Contains all the database scripts
+          Contains all the database scripts
 
     - lib
 	  Contains the basic set of libraries required to startup Machine Learner
@@ -147,8 +148,8 @@ For more information on WSO2 Machine Learner, visit the WSO2 Oxygen Tank (http:/
 Issue Tracker
 =============
 
-  https://wso2.org/jira/browse/CARBON  
   https://wso2.org/jira/browse/ML
+  https://wso2.org/jira/browse/CARBON  
 
 Crypto Notice
 =============
