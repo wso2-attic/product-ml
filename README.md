@@ -53,6 +53,10 @@ System Requirements
      On Windows Server 2003, it is not allowed to go below the medium
      security level in Internet Explorer 6.x.
 
+Documentation
+=============
+
+WSO2 ML documentation can be found at https://docs.wso2.com/display/ML100/WSO2+Machine+Learner+Documentation
 
 Installation & Running
 ==================================
