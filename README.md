@@ -154,7 +154,8 @@ Issue Tracker
 =============
 
   https://wso2.org/jira/browse/ML
-  https://wso2.org/jira/browse/CARBON  
+  
+  https://wso2.org/jira/browse/CARBON
 
 Crypto Notice
 =============
