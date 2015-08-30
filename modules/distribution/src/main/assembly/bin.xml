@@ -199,6 +199,7 @@
                 <exclude>**/*.iml</exclude>
                 <exclude>**/target/**</exclude>
             </excludes>
+            <fileMode>755</fileMode>
         </fileSet>
     </fileSets>
 
