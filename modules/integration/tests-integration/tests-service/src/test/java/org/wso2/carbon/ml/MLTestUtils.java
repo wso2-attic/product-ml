@@ -93,8 +93,10 @@ public class MLTestUtils extends MLBaseTest {
             bufferedReader.close();
             response.close();
 
-            // Checks whether status is equal to Complete.
-            status = responseJson.getString("status").equals("Complete");
+            // Checks whether status is equal to Complete or Failed.
+            if(responseJson.getString("status").equals("Complete") || responseJson.getString("status").equals("Failed")){
+                status = true;
+            }
             try {
                 Thread.sleep(frequency);
             } catch (InterruptedException ignore) {}
