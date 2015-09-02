@@ -36,15 +36,10 @@
                 <exclude>**/INSTALL.txt</exclude>
                 <exclude>**/carbon.xml</exclude>
                 <exclude>**/cache.xml</exclude>
-                <exclude>**/master-datasources.xml</exclude>
-                <!-- Excluding these files since they seem to be copied twice.
-                     TODO Need to investigate properly and fix once kernel-4.3.0 is released-->
-                <exclude>**/bin/java2wsdl.sh</exclude>
-                <exclude>**/bin/carbondump.sh</exclude>
-                <exclude>**/bin/chpasswd.sh</exclude>
-                <exclude>**/bin/tcpmon.sh</exclude>
+                <!--exclude>**/master-datasources.xml</exclude-->
                 <exclude>**/bin/ciphertool.sh</exclude>
-                <exclude>**/bin/wsdl2java.sh</exclude>
+                <exclude>**/log4j.properties</exclude>
+                <exclude>**/repository/conf/README</exclude>
             </excludes>
         </fileSet>
 
@@ -200,16 +195,18 @@
                 <include>**/*.*</include>
                 <include>**/*</include>
             </includes>
+            <excludes>
+                <exclude>**/*.iml</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+            <fileMode>755</fileMode>
         </fileSet>
     </fileSets>
 
-
-	
     <files>
         <file>
-            <source>src/main/conf/log4j.properties</source>
-            <outputDirectory>wso2ml-${pom.version}/repository/conf</outputDirectory>
-            <destName>log4j.properties</destName>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/log4j.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
@@ -235,6 +232,12 @@
             <source>INSTALL.txt</source>
             <outputDirectory>wso2ml-${pom.version}</outputDirectory>
             <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>release-notes.html</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
+            <destName>release-notes.html</destName>
             <fileMode>644</fileMode>
         </file>
         <file>
@@ -273,12 +276,16 @@
             <!--</source>-->
             <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>-->
         <!--</file>-->
-        <file>
+        <!--file>
             <source>
                 src/main/conf/master-datasources.xml
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/datasources/</outputDirectory>
             <fileMode>644</fileMode>
+        </file-->
+	<file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/datasources/ml-datasources.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/datasources/</outputDirectory>
         </file>
         <file>
             <source>
@@ -353,6 +360,11 @@
     	</file>
         <file>
             <source>src/main/conf/sec.policy</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>src/main/conf/README</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <fileMode>644</fileMode>
         </file>

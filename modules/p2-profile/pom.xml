@@ -209,6 +209,9 @@
 				<featureArtifactDef>
                                      org.wso2.carbon.data:org.wso2.carbon.datasource.reader.hadoop.server.feature:${carbon.data.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.data:org.wso2.carbon.datasource.reader.cassandra.server.feature:${carbon.data.version}
+                                </featureArtifactDef>
 				<featureArtifactDef>
 				     org.wso2.carbon.analytics:org.wso2.carbon.analytics.api.client.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
@@ -415,6 +418,10 @@
                                 </feature>
 				<feature>
                                     <id>org.wso2.carbon.datasource.reader.hadoop.server.feature.group</id>
+                                    <version>${carbon.data.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.datasource.reader.cassandra.server.feature.group</id>
                                     <version>${carbon.data.version}</version>
                                 </feature>
 				<!-- carbon metrics -->

@@ -51,6 +51,7 @@ public class CreateModelTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, version,
                 MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES);
         analysisId = createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME, projectId);

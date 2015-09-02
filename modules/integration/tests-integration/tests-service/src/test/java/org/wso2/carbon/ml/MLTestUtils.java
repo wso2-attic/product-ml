@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.ml;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,7 +103,7 @@ public class MLTestUtils extends MLBaseTest {
         }
         return status;
     }
-
+    
     /**
      *
      * @param modelName         Name of the built model

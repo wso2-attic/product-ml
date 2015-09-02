@@ -65,6 +65,7 @@ public class MLIntegrationTestConstants {
 	public static final String FOREST_FIRES_DATASET_SAMPLE = DATASETS_PATH+"forestfires.csv";
     public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = DATASETS_PATH+"gammaTelescope.csv";
     public static final String ABALONE_DATASET_SAMPLE = DATASETS_PATH+"abalone.csv";
+    public static final String TITANIC_DATASET_SAMPLE = DATASETS_PATH + "titanic.csv";
 
     // Datasets with missing values and categorical features
     public static final String AUTOMOBILE_DATASET_SAMPLE = DATASETS_PATH+"automobile.csv";
@@ -82,6 +83,7 @@ public class MLIntegrationTestConstants {
     public static final String DATASET_NAME_AUTOMOBILE = "Automobile";
     public static final String DATASET_NAME_AZURE_STREAMING = "Azure_Streaming";
     public static final String DATASET_NAME_ABALONE = "Abalone";
+    public static final String DATASET_NAME_TITANIC = "Titanic";
 
 	public static final int VERSIONSET_ID = 1;
 
@@ -95,6 +97,7 @@ public class MLIntegrationTestConstants {
 	public static final String RESPONSE_ATTRIBUTE_AUTOMOBILE = "price";
     public static final String RESPONSE_ATTRIBUTE_AZURE_STREAMING = "price";
     public static final String RESPONSE_ATTRIBUTE_ABALONE = "Sex";
+    public static final String RESPONSE_ATTRIBUTE_TITANIC = "Survived";
 
     // Projects
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
@@ -108,6 +111,7 @@ public class MLIntegrationTestConstants {
     public static final String PROJECT_NAME_AUTOMOBILE = "Automobile_Project";
     public static final String PROJECT_NAME_AZURE_STREAMING = "Azure_Streaming_Project";
     public static final String PROJECT_NAME_ABALONE = "Abalone_Project";
+    public static final String PROJECT_NAME_TITANIC = "Titanic_Project";
 
     // Default analysis
 	public static final String ANALYSIS_NAME = "Dummy_Analysis";

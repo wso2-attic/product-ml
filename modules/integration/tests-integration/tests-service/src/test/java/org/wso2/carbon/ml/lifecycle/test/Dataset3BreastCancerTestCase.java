@@ -58,6 +58,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER, version,
                 MLIntegrationTestConstants.BREAST_CANCER_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_BREAST_CANCER,
                 MLIntegrationTestConstants.DATASET_NAME_BREAST_CANCER);
     }

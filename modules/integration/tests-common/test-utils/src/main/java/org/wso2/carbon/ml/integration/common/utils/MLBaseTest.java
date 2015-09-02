@@ -186,6 +186,16 @@ public abstract class MLBaseTest {
         }
     }
     
+    protected boolean isDatasetProcessed(int versionSetId, long timeout, int frequency) {
+        try {
+            return mlHttpclient.checkDatasetStatus(versionSetId, timeout, frequency);
+        } catch (MLHttpClientException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+    
     protected int getModelId(String modelName) throws MLHttpClientException {
         return mlHttpclient.getModelId(modelName);
     }
@@ -312,6 +322,10 @@ public abstract class MLBaseTest {
             modelFileStorage.mkdirs();
         }
         return modelFileStorage.getAbsolutePath();
+    }
+    
+    protected List<Integer> getVersionSetIds() {
+        return datasetVersionIds;
     }
     
     protected void destroy() throws MLHttpClientException {

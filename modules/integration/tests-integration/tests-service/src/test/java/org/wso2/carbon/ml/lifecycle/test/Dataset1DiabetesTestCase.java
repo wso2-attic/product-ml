@@ -57,6 +57,7 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, version,
                 MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
+        isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES);
     }
@@ -78,13 +79,28 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     }
 
     /**
-     * A test case for predicting with a dataset incompatible with the trained dataset
+     * A test case for predicting with a dataset incompatible with the trained dataset in terms of number of features
      *
      * @throws MLHttpClientException
      * @throws JSONException
      */
-    private void testPredictDiabetesInvalid() throws MLHttpClientException, JSONException {
+    private void testPredictDiabetesInvalidNumberOfFeatures() throws MLHttpClientException, JSONException {
         String payload = "[[1,89,66,23,94,28.1,0.167],[2,197,70,45,543,30.5,0.158]]";
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+    }
+
+    /**
+     * A test case for predicting with a dataset incompatible with the trained dataset in terms of numerical feature
+     * type
+     *
+     * @throws MLHttpClientException
+     * @throws JSONException
+     */
+    private void testPredictDiabetesInvalidNumericalFeatures() throws MLHttpClientException, JSONException {
+        // One of the values is non-numerical
+        String payload = "[[1,89,66,23,94,28afdc.1,0.167,21],[2,197,70,45,543,30.5,0.158,53]]";
         response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
         assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 response.getStatusLine().getStatusCode());
@@ -148,7 +164,7 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         testPredictDiabetes();
 
         // Predict for a incompatible dataset
-        testPredictDiabetesInvalid();
+        testPredictDiabetesInvalidNumberOfFeatures();
     }
 
     /**
@@ -164,6 +180,9 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictDiabetes();
+
+        // Predict for dataset with incompatible numerical feature
+        testPredictDiabetesInvalidNumericalFeatures();
     }
 
     /**

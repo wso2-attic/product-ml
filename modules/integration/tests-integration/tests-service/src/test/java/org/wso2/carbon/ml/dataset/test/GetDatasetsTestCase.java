@@ -51,6 +51,8 @@ public class GetDatasetsTestCase extends MLBaseTest {
     public void initTest() throws Exception {
         super.init();
         mlHttpclient = getMLHttpClient();
+        isDatasetProcessed(MLIntegrationTestConstants.VERSIONSET_ID,
+                MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
     }
 
     /**
@@ -280,8 +282,10 @@ public class GetDatasetsTestCase extends MLBaseTest {
                     .getStatusCode());
         // Check whether the correct dataset is returned.
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        JSONArray responseJson = new JSONArray(bufferedReader.readLine());
-        assertEquals("Categorical feature names was not returned.", true, responseJson.length() != 0);
+        String x = bufferedReader.readLine();
+        System.out.println("###"+x);
+        JSONArray responseJson = new JSONArray(x);
+        assertEquals("Categorical feature names was not returned. #"+x, true, responseJson.length() != 0);
         bufferedReader.close();
         response.close();
     }
