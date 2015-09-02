@@ -82,7 +82,7 @@ public class MLTestUtils extends MLBaseTest {
      * @throws JSONException
      * @throws IOException
      */
-    public static boolean checkModelStatus(String modelName, MLHttpClient mlHttpclient, long timeout, int frequency)
+    public static boolean checkModelStatusCompleted(String modelName, MLHttpClient mlHttpclient, long timeout, int frequency)
             throws MLHttpClientException, JSONException, IOException {
         boolean status = false;
         int totalTime = 0;
