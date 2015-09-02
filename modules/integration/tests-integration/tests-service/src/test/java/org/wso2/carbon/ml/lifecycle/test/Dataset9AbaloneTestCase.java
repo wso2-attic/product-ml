@@ -101,7 +101,7 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
                 .getStatusCode());
         response.close();
         // Waiting for model building to end
-        boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
+        boolean status = MLTestUtils.checkModelStatusCompleted(modelName, mlHttpclient,
                 MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         return status;
     }
