@@ -5,7 +5,7 @@ set -e
 DIR="${BASH_SOURCE%/*}"; if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi; source "$DIR/../../base.sh"
 
 echo "#create a dataset"
-curl -X POST -b cookies  https://localhost:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='diabetes' -F version='1.0.0' -F description='Diabetes Dataset' -F sourceType='hdfs' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F sourcePath='hdfs://localhost:9000/ml/IndiansDiabetes.csv' -k
+curl -X POST -b cookies  https://localhost:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='diabetes' -F version='1.0.0' -F description='Diabetes Dataset' -F sourceType='hdfs' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F sourcePath='hdfs://localhost:9000/ml/IndiansDiabetes.csv' -F file='hdfs://localhost:9000/ml/IndiansDiabetes.csv' -k
 sleep 10
 
 # creating a project
@@ -15,7 +15,7 @@ sleep 2
 
 #getting the project
 echo "#getting the project"
-project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/wso2-ml-logistic-regression-sample-proj -k)
+project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/wso2-ml-logistic-regression-with-hdfs-sample-project -k)
 sleep 2
 
 #update the json file with retrieved values
