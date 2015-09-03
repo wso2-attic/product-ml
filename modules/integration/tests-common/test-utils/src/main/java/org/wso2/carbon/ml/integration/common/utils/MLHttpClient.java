@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -181,7 +182,8 @@ public class MLHttpClient {
      */
     public String getBasicAuthKey() {
         String token = this.userInfo.getUserName() + ":" + userInfo.getPassword();
-        String encodedToken = new String(Base64.encodeBase64(token.getBytes()));
+        byte[] tokenBytes = token.getBytes(StandardCharsets.UTF_8);
+        String encodedToken = new String(Base64.encodeBase64(tokenBytes), StandardCharsets.UTF_8);
         return (MLIntegrationTestConstants.BASIC + encodedToken);
     }
     
@@ -430,7 +432,7 @@ public class MLHttpClient {
         CloseableHttpResponse response;
         try {
             response = doHttpGet("/api/projects/" + projectName);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -451,7 +453,7 @@ public class MLHttpClient {
         CloseableHttpResponse response;
         try {
             response = doHttpGet("/api/projects/"+projectId+"/analyses/" + analysisName);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -474,9 +476,11 @@ public class MLHttpClient {
         try {
             response = doHttpGet("/api/datasets/" + datasetId + "/versions");
             // Get the Id of the first dataset
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
             JSONArray responseJson = new JSONArray(bufferedReader.readLine());
             JSONObject datsetVersionJson = (JSONObject) responseJson.get(0);
+            bufferedReader.close();
+            response.close();
             return datsetVersionJson.getInt("id");
         } catch (Exception e) {
             throw new MLHttpClientException("Failed to get a version set ID of dataset: " + datasetId, e);
@@ -495,7 +499,7 @@ public class MLHttpClient {
         CloseableHttpResponse response;
         try {
             response = doHttpGet("/api/datasets/" + datasetId + "/versions/"+version);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
             String line = bufferedReader.readLine();
             JSONObject responseJson = new JSONObject(line);
             bufferedReader.close();
@@ -537,7 +541,7 @@ public class MLHttpClient {
         }
         String reply = null;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
             String line = bufferedReader.readLine();
             try {
                 JSONObject responseJson = new JSONObject(line);
@@ -564,7 +568,7 @@ public class MLHttpClient {
             return null;
         }
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -585,7 +589,7 @@ public class MLHttpClient {
         CloseableHttpResponse response;
         try {
             response = doHttpGet("/api/models/" + modelName);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -631,7 +635,7 @@ public class MLHttpClient {
      */
     public String getModelName(CloseableHttpResponse response) throws MLHttpClientException {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
