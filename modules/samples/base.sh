@@ -1,7 +1,7 @@
 #!/bin/bash
 # Die on any error:
 set -e
-if [ "$(uname)" = "Darwin" ]; then
+if [ "$(uname)" == "Darwin" ]; then
     # Do something under Mac OS X platform  
 	SED=`which gsed` && : || (echo "Command 'gsed' is not installed."; exit 10;)
 else
