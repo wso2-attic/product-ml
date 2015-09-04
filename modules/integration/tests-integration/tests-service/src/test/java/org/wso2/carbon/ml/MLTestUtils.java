@@ -209,9 +209,6 @@ public class MLTestUtils extends MLBaseTest {
         modelName = mlHttpclient.getModelName(httpResponse);
         modelId = mlHttpclient.getModelId(modelName);
 
-        //Set storage location for model
-        mlHttpclient.createFileModelStorage(modelId, getModelStorageDirectory());
-
         return modelName;
     }
 
