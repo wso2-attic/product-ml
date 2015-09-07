@@ -5,7 +5,7 @@ echo "testing Logistic Regression LBFGS workflow"
 # Die on any error:
 set -e
 
-DIR="${BASH_SOURCE%/*}"; if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi; source "$DIR/../../base.sh"
+DIR="${BASH_SOURCE%/*}"; if [ ! -d "$DIR" ]; then DIR="$PWD"; fi; . "$DIR/../../base.sh"
 
 echo "#create a dataset"
 path=$(pwd)
