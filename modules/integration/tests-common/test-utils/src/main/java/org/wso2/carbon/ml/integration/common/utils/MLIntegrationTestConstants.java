@@ -47,7 +47,7 @@ public class MLIntegrationTestConstants {
 	public static final String ALGORITHM_TYPE = "algorithmType";
 
 	// The time constant
-    public static final long THREAD_SLEEP_TIME_LARGE = 60000;
+    public static final long THREAD_SLEEP_TIME_LARGE = 20000;
 
 	// Constants for Test cases
 	public static final String CLASSIFICATION = "Classification";
@@ -60,7 +60,6 @@ public class MLIntegrationTestConstants {
 	public static final String DAS_DATASET_SAMPLE = "STREAMING_DATA";
 	public static final String DIABETES_DATASET_SAMPLE = DATASETS_PATH+"pIndiansDiabetes.csv";
 	public static final String DIABETES_DATASET_TEST = DATASETS_PATH+"pIndiansDiabetesTest.csv";
-    public static final String DIABETES_DATASET_TEST_WITH_RESPONSE_COLUMN = DATASETS_PATH+"pIndiansDiabetesTestWithResponseColumn.csv";
 	public static final String YACHT_DATASET_SAMPLE = DATASETS_PATH+"yachtHydrodynamics.csv";
 	public static final String BREAST_CANCER_DATASET_SAMPLE = DATASETS_PATH+"breastCancerWisconsin.csv";
 	public static final String FOREST_FIRES_DATASET_SAMPLE = DATASETS_PATH+"forestfires.csv";
