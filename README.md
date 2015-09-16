@@ -19,6 +19,15 @@
 WSO2 Machine Learner (ML)
 ================================================================================
 
+---
+
+|  Branch | Build Status |
+| :------------ |:-------------
+| master      | [![Build Status](https://wso2.org/jenkins/job/product-ml/badge/icon)](https://wso2.org/jenkins/job/product-ml) |
+
+
+---
+
 Welcome to the WSO2 Machine Learner 
 
 WSO2 Machine Learner provides a user friendly wizard like interface, which guides users through
