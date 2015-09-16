@@ -28,7 +28,7 @@ WSO2 Machine Learner (ML)
 
 ---
 
-Welcome to the WSO2 Machine Learner 
+**Welcome to the WSO2 Machine Learner!**
 
 WSO2 Machine Learner provides a user friendly wizard like interface, which guides users through
 a set of steps to find and configure machine learning algorithms. The outcome of this process is a
