@@ -254,7 +254,7 @@
                                     <classpath>
                                         <path refid="h2.classpath"/>
                                     </classpath>
-                                    <fileset file="target/wso2ml-1.0.0-SNAPSHOT/dbscripts/ml/h2.sql"/>
+                                    <fileset file="target/${project.artifactId}-${ml.version}/dbscripts/ml/h2.sql"/>
                                 </sql>
                                 <echo
                                         message="##################### END ########################"/>
