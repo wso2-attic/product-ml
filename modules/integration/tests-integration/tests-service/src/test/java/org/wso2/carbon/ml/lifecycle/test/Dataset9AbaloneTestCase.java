@@ -93,15 +93,31 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
     private boolean buildModelWithLearningAlgorithm(String algorithmName, String algorithmType)
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
         modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
-                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_ABALONE,
-                MLIntegrationTestConstants.TRAIN_DATA_FRACTION, projectId, versionSetId, mlHttpclient);
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_ABALONE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
         // Waiting for model building to end
-        boolean status = MLTestUtils.checkModelStatus(modelName, mlHttpclient,
+        boolean status = MLTestUtils.checkModelStatusCompleted(modelName, mlHttpclient,
+                MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
+        return status;
+    }
+
+    private boolean buildModelWithLearningAlgorithmExpectingFailure(String algorithmName, String algorithmType)
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
+                MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_ABALONE, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
+                projectId, versionSetId, mlHttpclient);
+        modelId = mlHttpclient.getModelId(modelName);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
+                .getStatusCode());
+        response.close();
+        // Waiting for model building to end
+        boolean status = MLTestUtils.checkModelStatusFailed(modelName, mlHttpclient,
                 MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
         return status;
     }
@@ -114,8 +130,9 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Naive Bayes model and predict for abalone dataset", groups="createNaiveBayesModelAbalone")
-    public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+    @Test(description = "Build a Naive Bayes model and predict for abalone dataset", groups = "createNaiveBayesModelAbalone")
+    public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
         buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictAbalone();
@@ -129,7 +146,7 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Random Forest model and predict for abalone dataset", groups="createRandomForestModelAbalone")
+    @Test(description = "Build a Random Forest model and predict for abalone dataset", groups = "createRandomForestModelAbalone")
     public void testBuildRandomForest() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("RANDOM_FOREST", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
@@ -137,15 +154,17 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Logistic Regression LBFGS model and predicting using the built model
+     * Creates a test case for creating an analysis, building a Logistic Regression LBFGS model and predicting using the
+     * built model
      *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Logistic Regression LBFGS model and predict for abalone dataset", groups="createLogisticRegressionModelLBFGSAbalone")
-    public void testBuildLogisticRegressionLBFGSModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
+    @Test(description = "Build a Logistic Regression LBFGS model and predict for abalone dataset", groups = "createLogisticRegressionModelLBFGSAbalone")
+    public void testBuildLogisticRegressionLBFGSModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION_LBFGS", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictAbalone();
@@ -163,15 +182,15 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
      */
     @Test(description = "Build a SVM model for abalone dataset", groups = "createSVMModelAbalone")
     public void testBuildSVMModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
-        boolean status = buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
+        boolean status = buildModelWithLearningAlgorithmExpectingFailure("SVM",
+                MLIntegrationTestConstants.CLASSIFICATION);
 
         // Model building should fail since SVM cannot handle multi-class classification
-        assertEquals("Model building did not complete successfully", false, status);
+        assertEquals("Model building did not fail as expected.", true, status);
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Logistic Regression model and test for failure
-     * model
+     * Creates a test case for creating an analysis, building a Logistic Regression model and test for failure model
      *
      * @throws MLHttpClientException
      * @throws IOException
@@ -181,18 +200,18 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
     @Test(description = "Build a Logistic Regression model for abalone dataset", groups = "createLogisticRegressionAbalone")
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
-        boolean status = buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
+        boolean status = buildModelWithLearningAlgorithmExpectingFailure("LOGISTIC_REGRESSION",
+                MLIntegrationTestConstants.CLASSIFICATION);
 
         // Model building should fail since Logistic Regression cannot handle multi-class classification
-        assertEquals("Model building did not complete successfully", false, status);
+        assertEquals("Model building did not fail as expected.", true, status);
     }
 
     // Following test checks whether model building fails when a categorical response variable is used with numerical
     // prediction.
 
     /**
-     * Creates a test case for creating an analysis, building a Linear Regression model and test for failure
-     * model
+     * Creates a test case for creating an analysis, building a Linear Regression model and test for failure model
      *
      * @throws MLHttpClientException
      * @throws IOException
@@ -202,10 +221,11 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
     @Test(description = "Build a Linear Regression model for abalone dataset", groups = "createLinearRegressionAbalone")
     public void testBuildLinearRegressionModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
-        boolean status = buildModelWithLearningAlgorithm("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
+        boolean status = buildModelWithLearningAlgorithmExpectingFailure("LINEAR_REGRESSION",
+                MLIntegrationTestConstants.NUMERICAL_PREDICTION);
 
         // Model building should fail since Linear Regression cannot handle categorical response variables
-        assertEquals("Model building did not complete successfully", false, status);
+        assertEquals("Model building did not fail as expected.", true, status);
     }
 
     @AfterClass(alwaysRun = true)

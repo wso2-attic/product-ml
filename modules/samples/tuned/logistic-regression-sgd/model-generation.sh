@@ -5,7 +5,7 @@ echo "testing Logistic Regression SGD workflow"
 # Die on any error:
 set -e
 
-DIR="${BASH_SOURCE%/*}"; if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi; source "$DIR/../../base.sh"
+DIR="${BASH_SOURCE%/*}"; if [ ! -d "$DIR" ]; then DIR="$PWD"; fi; . "$DIR/../../base.sh"
 
 echo "#create a dataset"
 path=$(pwd)
@@ -76,7 +76,7 @@ modelId=$(echo "$model"|jq '.id')
 
 echo "#building the model"
 curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelId} -k -v
-sleep 40
+sleep 80
 
 echo "#predict using model"
 curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelId}/predict -k -v -d @'prediction-test'

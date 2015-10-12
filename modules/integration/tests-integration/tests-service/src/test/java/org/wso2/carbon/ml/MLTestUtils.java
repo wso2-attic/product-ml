@@ -82,7 +82,7 @@ public class MLTestUtils extends MLBaseTest {
      * @throws JSONException
      * @throws IOException
      */
-    public static boolean checkModelStatus(String modelName, MLHttpClient mlHttpclient, long timeout, int frequency)
+    public static boolean checkModelStatusCompleted(String modelName, MLHttpClient mlHttpclient, long timeout, int frequency)
             throws MLHttpClientException, JSONException, IOException {
         boolean status = false;
         int totalTime = 0;
@@ -103,6 +103,41 @@ public class MLTestUtils extends MLBaseTest {
         }
         return status;
     }
+
+    /**
+     *
+     * @param modelName
+     * @param mlHttpclient
+     * @param timeout - max time to check the status
+     * @param frequency - time interval
+     * @return
+     * @throws MLHttpClientException
+     * @throws JSONException
+     * @throws IOException
+     */
+
+    public static boolean checkModelStatusFailed(String modelName, MLHttpClient mlHttpclient, long timeout, int frequency)
+            throws MLHttpClientException, JSONException, IOException {
+        boolean status = false;
+        int totalTime = 0;
+        while (!status && timeout >= totalTime) {
+            CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            JSONObject responseJson = new JSONObject(bufferedReader.readLine());
+            bufferedReader.close();
+            response.close();
+
+            // Checks whether status is equal to Failed.
+            status = responseJson.getString("status").equals("Failed");
+            try {
+                Thread.sleep(frequency);
+            } catch (InterruptedException ignore) {}
+
+            totalTime += frequency;
+        }
+        return status;
+    }
+
     
     /**
      *
@@ -173,9 +208,6 @@ public class MLTestUtils extends MLBaseTest {
         CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, versionSetId);
         modelName = mlHttpclient.getModelName(httpResponse);
         modelId = mlHttpclient.getModelId(modelName);
-
-        //Set storage location for model
-        mlHttpclient.createFileModelStorage(modelId, getModelStorageDirectory());
 
         return modelName;
     }
