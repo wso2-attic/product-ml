@@ -58,65 +58,72 @@ public class GetAnalysesTestCase extends MLBaseTest {
     /**
      * Test retrieving all analyzes.
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
     @Test(description = "Get all analyses")
-    public void testGetAllAnalyzes() throws MLHttpClientException {
+    public void testGetAllAnalyzes() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
      * Test retrieving all analyzes from project API.
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
     @Test(description = "Get all analyses")
-    public void testGetAllAnalyzesFromProject() throws MLHttpClientException {
+    public void testGetAllAnalyzesFromProject() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/analyses");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
      * Test retrieving all analyzes.
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
     @Test(description = "Get all analyses")
-    public void testGetAllAnalyzesOfProject() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/"+projectId+"/analyses");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    public void testGetAllAnalyzesOfProject() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/" + projectId + "/analyses");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
      * Test retrieving an analysis by name.
      * 
-     * @throws MLHttpClientException 
-     * @throws IOException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
     @Test(description = "Retrieve an analysis by name")
-    public void testGetAnalysis() throws MLHttpClientException, IOException  {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/"+projectId+ "/analyses/" + MLIntegrationTestConstants
-                .ANALYSIS_NAME);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    public void testGetAnalysis() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient
+                .doHttpGet("/api/projects/" + projectId + "/analyses/" + MLIntegrationTestConstants.ANALYSIS_NAME);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
         response.close();
     }
-    
+
     /**
      * Test retrieving a non-existing analysis.
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
      * @throws IOException
      */
     @Test(description = "Retrieve a non-existing analysis")
     public void testGetNonExistingAnalysis() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/projects/"+projectId+ "/analyses/" + "nonExistingAnalysisName");
-        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+        CloseableHttpResponse response = mlHttpclient
+                .doHttpGet("/api/projects/" + projectId + "/analyses/" + "nonExistingAnalysisName");
+        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(),
+                response.getStatusLine().getStatusCode());
         response.close();
     }
     
