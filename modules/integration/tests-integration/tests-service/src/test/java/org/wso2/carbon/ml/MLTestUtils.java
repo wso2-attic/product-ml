@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  This class contains the utility methods required to create tests
+ * This class contains the utility methods required to create tests
  */
 public class MLTestUtils extends MLBaseTest {
 
@@ -46,6 +46,7 @@ public class MLTestUtils extends MLBaseTest {
 
     /**
      * Extracts the value of key: "id" from a response
+     * 
      * @param response
      * @return
      * @throws IOException
@@ -61,7 +62,7 @@ public class MLTestUtils extends MLBaseTest {
         int id = responseJson.getInt("id");
         return id;
     }
-    
+
     public static String getJsonArrayAsString(CloseableHttpResponse response) throws IOException, JSONException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         JSONArray responseJson = new JSONArray(bufferedReader.readLine());
@@ -70,7 +71,7 @@ public class MLTestUtils extends MLBaseTest {
 
         return responseJson.toString();
     }
-    
+
     /**
      * 
      * @param modelName
@@ -82,13 +83,14 @@ public class MLTestUtils extends MLBaseTest {
      * @throws JSONException
      * @throws IOException
      */
-    public static boolean checkModelStatusCompleted(String modelName, MLHttpClient mlHttpclient, long timeout, int frequency)
-            throws MLHttpClientException, JSONException, IOException {
+    public static boolean checkModelStatusCompleted(String modelName, MLHttpClient mlHttpclient, long timeout,
+            int frequency) throws MLHttpClientException, JSONException, IOException {
         boolean status = false;
         int totalTime = 0;
         while (!status && timeout >= totalTime) {
             CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -97,8 +99,9 @@ public class MLTestUtils extends MLBaseTest {
             status = responseJson.getString("status").equals("Complete");
             try {
                 Thread.sleep(frequency);
-            } catch (InterruptedException ignore) {}
-            
+            } catch (InterruptedException ignore) {
+            }
+
             totalTime += frequency;
         }
         return status;
@@ -116,13 +119,14 @@ public class MLTestUtils extends MLBaseTest {
      * @throws IOException
      */
 
-    public static boolean checkModelStatusFailed(String modelName, MLHttpClient mlHttpclient, long timeout, int frequency)
-            throws MLHttpClientException, JSONException, IOException {
+    public static boolean checkModelStatusFailed(String modelName, MLHttpClient mlHttpclient, long timeout,
+            int frequency) throws MLHttpClientException, JSONException, IOException {
         boolean status = false;
         int totalTime = 0;
         while (!status && timeout >= totalTime) {
             CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -131,23 +135,24 @@ public class MLTestUtils extends MLBaseTest {
             status = responseJson.getString("status").equals("Failed");
             try {
                 Thread.sleep(frequency);
-            } catch (InterruptedException ignore) {}
+            } catch (InterruptedException ignore) {
+            }
 
             totalTime += frequency;
         }
         return status;
     }
 
-    
     /**
      *
-     * @param modelName         Name of the built model
-     * @return status           Whether status of the model is complete or not.
+     * @param modelName Name of the built model
+     * @return status Whether status of the model is complete or not.
      * @throws MLHttpClientException
      * @throws JSONException
      * @throws IOException
      */
-    public static boolean checkModelStatus(String modelName, MLHttpClient mlHttpclient) throws MLHttpClientException, JSONException, IOException {
+    public static boolean checkModelStatus(String modelName, MLHttpClient mlHttpclient)
+            throws MLHttpClientException, JSONException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelName);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         JSONObject responseJson = new JSONObject(bufferedReader.readLine());
@@ -171,37 +176,68 @@ public class MLTestUtils extends MLBaseTest {
      * @throws MLHttpClientException
      */
     public static String createModelWithConfigurations(String algorithmName, String algorithmType, String response,
-                                                       String trainDataFraction, int projectID, int versionSetId, MLHttpClient mlHttpclient)
-            throws MLHttpClientException, IOException, JSONException {
+            String trainDataFraction, int projectID, int versionSetId, MLHttpClient mlHttpclient)
+                    throws MLHttpClientException, IOException, JSONException {
         analysisName = algorithmName + versionSetId;
 
         // Create an analysis
         mlHttpclient.createAnalysis(analysisName, projectID);
         analysisId = mlHttpclient.getAnalysisId(projectID, analysisName);
-        return createModelWithConfigurations(algorithmName, algorithmType, response, trainDataFraction, projectID, versionSetId,
-                analysisId, mlHttpclient);
+        return createModelWithConfigurations(algorithmName, algorithmType, response, trainDataFraction, projectID,
+                versionSetId, analysisId, mlHttpclient);
     }
-    
+
+    /**
+     * Create a model with given configurations of the model to be trained (Anomaly Detection model)
+     *
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param response Response attribute
+     * @param trainDataFraction Fraction of data from the dataset to be trained with
+     * @param normalLabels normal label values
+     * @param newNormalLabel normal label
+     * @param newAnomalyLabel anomaly label
+     * @param normalization normalization option
+     * @param projectID ID of the project
+     * @param versionSetId Additional information about the name
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static String createModelWithConfigurations(String algorithmName, String algorithmType, String response,
+            String trainDataFraction, String normalLabels, String newNormalLabel, String newAnomalyLabel,
+            boolean normalization, int projectID, int versionSetId, MLHttpClient mlHttpclient)
+                    throws MLHttpClientException, IOException, JSONException {
+        analysisName = algorithmName + versionSetId;
+
+        // Create an analysis
+        mlHttpclient.createAnalysis(analysisName, projectID);
+        analysisId = mlHttpclient.getAnalysisId(projectID, analysisName);
+        return createModelWithConfigurations(algorithmName, algorithmType, response, trainDataFraction, normalLabels,
+                newNormalLabel, newAnomalyLabel, normalization, projectID, versionSetId, analysisId, mlHttpclient);
+    }
+
     /**
      * Create a model with given configurations of the model to be trained
      *
-     * @param algorithmName     Name of the learning algorithm
-     * @param algorithmType     Type of the learning algorithm
-     * @param response          Response attribute
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param response Response attribute
      * @param trainDataFraction Fraction of data from the dataset to be trained with
-     * @param projectID         ID of the project
-     * @param versionSetId     Additional information about the name
+     * @param projectID ID of the project
+     * @param versionSetId Additional information about the name
      * @throws MLHttpClientException
      */
     public static String createModelWithConfigurations(String algorithmName, String algorithmType, String response,
-                                                       String trainDataFraction, int projectID, int versionSetId, int analysisId,
-                                                       MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
+            String trainDataFraction, int projectID, int versionSetId, int analysisId, MLHttpClient mlHttpclient)
+                    throws MLHttpClientException, IOException, JSONException {
         mlHttpclient.setFeatureDefaults(analysisId);
 
-        //Set Model Configurations
-        mlHttpclient.setModelConfiguration(analysisId, setModelConfigurations(algorithmName, algorithmType, response, trainDataFraction));
+        // Set Model Configurations
+        mlHttpclient.setModelConfiguration(analysisId,
+                setModelConfigurations(algorithmName, algorithmType, response, trainDataFraction));
 
-        //Set default Hyper-parameters
+        // Set default Hyper-parameters
         mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
 
         // Create a model
@@ -213,16 +249,56 @@ public class MLTestUtils extends MLBaseTest {
     }
 
     /**
+     * Create a model with given configurations of the model to be trained
+     *
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param response Response attribute
+     * @param trainDataFraction Fraction of data from the dataset to be trained with
+     * @param normalLabels normal label values
+     * @param newNormalLabel normal label
+     * @param newAnomalyLabel anomaly label
+     * @param normalization normalization option
+     * @param projectID ID of the project
+     * @param versionSetId Additional information about the name
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static String createModelWithConfigurations(String algorithmName, String algorithmType, String response,
+            String trainDataFraction, String normalLabels, String newNormalLabel, String newAnomalyLabel,
+            boolean normalization, int projectID, int versionSetId, int analysisId, MLHttpClient mlHttpclient)
+                    throws MLHttpClientException, IOException, JSONException {
+        mlHttpclient.setFeatureDefaults(analysisId);
+
+        // Set Model Configurations
+        mlHttpclient.setModelConfiguration(analysisId, setModelConfigurations(algorithmName, algorithmType, response,
+                        trainDataFraction, normalLabels, newNormalLabel, newAnomalyLabel),
+                setModelConfigurations(normalization));
+
+        // Set default Hyper-parameters
+        mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
+
+        // Create a model
+        CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, versionSetId);
+
+        modelName = mlHttpclient.getModelName(httpResponse);
+        modelId = mlHttpclient.getModelId(modelName);
+
+        return modelName;
+    }
+
+    /**
      * Sets model configuration
      *
-     * @param algorithmName         Name of the learning algorithm
-     * @param algorithmType         Type of the learning algorithm
-     * @param response              Response attribute
-     * @param trainDataFraction     Fraction of data from the dataset to be trained with
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param response Response attribute
+     * @param trainDataFraction Fraction of data from the dataset to be trained with
      * @return
      */
-    public static Map<String, String> setModelConfigurations(String algorithmName, String algorithmType, String response,
-                                                             String trainDataFraction){
+    public static Map<String, String> setModelConfigurations(String algorithmName, String algorithmType,
+            String response, String trainDataFraction) {
         Map<String, String> configurations = new HashMap<String, String>();
         configurations.put(MLIntegrationTestConstants.ALGORITHM_NAME, algorithmName);
         configurations.put(MLIntegrationTestConstants.ALGORITHM_TYPE, algorithmType);
@@ -231,4 +307,46 @@ public class MLTestUtils extends MLBaseTest {
 
         return configurations;
     }
+
+    /**
+     * Sets model configuration (Anomaly detection model)
+     *
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param response Response attribute
+     * @param trainDataFraction Fraction of data from the dataset to be trained with
+     * @param normalLabels normal label values
+     * @param newNormalLabel normal label
+     * @param newAnomalyLabel anomaly label
+     * @return
+     */
+    public static Map<String, String> setModelConfigurations(String algorithmName, String algorithmType,
+            String response, String trainDataFraction, String normalLabels, String newNormalLabel,
+            String newAnomalyLabel) {
+        Map<String, String> configurations = new HashMap<String, String>();
+        configurations.put(MLIntegrationTestConstants.ALGORITHM_NAME, algorithmName);
+        configurations.put(MLIntegrationTestConstants.ALGORITHM_TYPE, algorithmType);
+        configurations.put(MLIntegrationTestConstants.RESPONSE, response);
+        configurations.put(MLIntegrationTestConstants.TRAIN_DATA_FRACTION_CONFIG, trainDataFraction);
+        configurations.put(MLIntegrationTestConstants.NORMAL_LABELS_CONFIG, normalLabels);
+        configurations.put(MLIntegrationTestConstants.NEW_NORMAL_LABEL_CONFIG, newNormalLabel);
+        configurations.put(MLIntegrationTestConstants.NEW_ANOMALY_LABEL_CONFIG, newAnomalyLabel);
+
+        return configurations;
+    }
+
+    /**
+     * Sets boolean model configuration (Anomaly detection model)
+     *
+     * @param normalization
+     * @return
+     */
+    public static Map<String, Boolean> setModelConfigurations(boolean normalization) {
+
+        Map<String, Boolean> configurations = new HashMap<String, Boolean>();
+        configurations.put(MLIntegrationTestConstants.NORMALIZATION_CONFIG, normalization);
+
+        return configurations;
+    }
+
 }

@@ -107,8 +107,7 @@ public class MLHttpClient {
     
     /**
      * Send a HTTP GET request to the given URI and return the response.
-     * 
-     * @param uri   End-point URI
+     *
      * @return      Response from the endpoint
      * @throws      MLHttpClientException 
      */
@@ -130,8 +129,7 @@ public class MLHttpClient {
     
     /**
      * Send a HTTP GET request to the given URI and return the response.
-     * 
-     * @param uri               End-point URI
+     *
      * @param parametersJson    Payload JSON string
      * @return                  Response from the endpoint
      * @throws                  MLHttpClientException 
@@ -155,8 +153,7 @@ public class MLHttpClient {
     }
     
     /**
-     * 
-     * @param uri   End-point URI
+     *
      * @return      Response from the endpoint
      * @throws      MLHttpClientException 
      */
@@ -420,6 +417,34 @@ public class MLHttpClient {
             throw new MLHttpClientException("Failed to set model configurations to analysis: " + analysisId, e);
         }
     }
+
+    /**
+     * Set Model Configurations of an analysis (Anomaly detection model)
+     *
+     * @param analysisId        ID of the analysis
+     * @param configurations    Map of configurations
+     * @param otherConfigurations    Map of boolean configurations
+     * @return                  Response from the back-end
+     * @throws                  MLHttpClientException
+     */
+    public CloseableHttpResponse setModelConfiguration(int analysisId, Map<String, String> configurations,
+            Map<String, Boolean> otherConfigurations) throws MLHttpClientException {
+        try {
+            String payload = "[";
+            for (Entry<String, String> property : configurations.entrySet()) {
+                payload = payload + "{\"key\":\"" + property.getKey() + "\",\"value\":\"" + property.getValue()
+                        + "\"},";
+            }
+            for (Entry<String, Boolean> property : otherConfigurations.entrySet()) {
+                payload = payload + "{\"key\":\"" + property.getKey() + "\",\"value\":\"" + property.getValue()
+                        + "\"},";
+            }
+            payload = payload.substring(0, payload.length() - 1) + "]";
+            return doHttpPost("/api/analyses/" + analysisId + "/configurations", payload);
+        } catch (MLHttpClientException e) {
+            throw new MLHttpClientException("Failed to set model configurations to analysis: " + analysisId, e);
+        }
+    }
     
     /**
      * Get the ID of the project from the name
@@ -512,8 +537,7 @@ public class MLHttpClient {
 
     /**
      * Create a Model
-     * 
-     * @param name          Name of the model
+     *
      * @param analysisId    ID of the  analysis associated with the model
      * @param versionSetId  ID of the version set to be used for the model
      * @return              Response from the back-end
