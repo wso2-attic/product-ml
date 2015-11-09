@@ -367,7 +367,7 @@ public class MLHttpClient {
         boolean status = false;
         int totalTime = 0;
         while (!status && timeout >= totalTime) {
-            CloseableHttpResponse response = doHttpGet("/versions/" + versionSetId + "/sample");
+            CloseableHttpResponse response = doHttpGet("/api/datasets/versions/" + versionSetId + "/sample");
             int statusCode = response.getStatusLine().getStatusCode();
             response.close();
 
