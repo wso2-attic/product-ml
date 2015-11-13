@@ -154,6 +154,7 @@ public class PostModelCreationTestCase extends MLBaseTest {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/models/" + modelId+"/summary");
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
+        response.close();
     }
     
     /**

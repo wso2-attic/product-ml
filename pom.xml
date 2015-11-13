@@ -436,7 +436,7 @@
 		<ml.version>1.0.1-SNAPSHOT</ml.version>
 		<ml.imp.pkg.version>[1.0.1, 1.1.0)</ml.imp.pkg.version>
 
-		<carbon.ml.version>1.0.2</carbon.ml.version>
+		<carbon.ml.version>1.0.3-SNAPSHOT</carbon.ml.version>
 		<carbon.integration.version>4.3.0</carbon.integration.version>
 
 		<carbon.registry.version>4.4.8</carbon.registry.version>

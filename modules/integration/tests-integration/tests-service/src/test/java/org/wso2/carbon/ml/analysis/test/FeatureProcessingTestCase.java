@@ -86,57 +86,68 @@ public class FeatureProcessingTestCase extends MLBaseTest {
     
     /**
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=3, description = "Get all features")
-    public void testGetAllFeatures() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/features");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 3, description = "Get all features")
+    public void testGetAllFeatures() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/features");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=3, description = "Get all summarized features")
-    public void testGetSummarizedFeatures() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/summarizedFeatures");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 3, description = "Get all summarized features")
+    public void testGetSummarizedFeatures() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/summarizedFeatures");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=3, description = "Get all filtered features")
-    public void testGetFilteredFeatures() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/filteredFeatures?featureType=CATEGORICAL");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 3, description = "Get all filtered features")
+    public void testGetFilteredFeatures() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient
+                .doHttpGet("/api/analyses/" + analysisId + "/filteredFeatures?featureType=CATEGORICAL");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=4, description = "Get summary stats - without providing a feature")
-    public void testGetSummaryStatsWithoutFeature() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/stats");
-        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 4, description = "Get summary stats - without providing a feature")
+    public void testGetSummaryStatsWithoutFeature() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/stats");
+        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=4, description = "Get summary stats - with feature")
-    public void testGetSummaryStatsWithFeature() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/stats?feature=Class");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 4, description = "Get summary stats - with feature")
+    public void testGetSummaryStatsWithFeature() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/stats?feature=Class");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
     
     @AfterClass(alwaysRun = true)

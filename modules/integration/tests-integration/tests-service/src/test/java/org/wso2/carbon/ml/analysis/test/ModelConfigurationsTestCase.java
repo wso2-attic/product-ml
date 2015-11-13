@@ -83,70 +83,82 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
     }
     
     /**
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=2, description = "Get response variable of the analyses")
-    public void testGetResponseVariable() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/responseVariables");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 2, description = "Get response variable of the analyses")
+    public void testGetResponseVariable() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/responseVariables");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
-     * @throws MLHttpClientException 
-     * @throws NamingException 
+     * @throws MLHttpClientException
+     * @throws NamingException
+     * @throws IOException
      */
-    @Test(priority=2, description = "Get response variable for malformed analysis id")
-    public void testGetResponseVariableForMalformedAnalysisId() throws MLHttpClientException, NamingException {
+    @Test(priority = 2, description = "Get response variable for malformed analysis id")
+    public void testGetResponseVariableForMalformedAnalysisId()
+            throws MLHttpClientException, NamingException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/abc/responseVariables");
-        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=2, description = "Get algorithm of the analyses")
-    public void testGetAlgorithm() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/algorithmName");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 2, description = "Get algorithm of the analyses")
+    public void testGetAlgorithm() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/algorithmName");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=2, description = "Get algorithm type of the analyses")
-    public void testGetAlgorithmType() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/algorithmType");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 2, description = "Get algorithm type of the analyses")
+    public void testGetAlgorithmType() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/algorithmType");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=2, description = "Get train data fraction of the analyses")
-    public void testGetTrainDataFractionType() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/trainDataFraction");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 2, description = "Get train data fraction of the analyses")
+    public void testGetTrainDataFractionType() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/trainDataFraction");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
      * Test setting default values to hyper-parameters of an analysis.
      * 
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(priority=3, description = "Set default values to hyperparameters")
+    @Test(priority = 3, description = "Set default values to hyperparameters")
     public void testSetDefaultHyperparameters() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+        CloseableHttpResponse response = mlHttpclient
+                .doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
         response.close();
     }
-    
+
     /**
      * Test setting default values to hyper-parameters of an analysis with an unknown algorithm
      * 
@@ -161,11 +173,11 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
         configurations.put(MLConstants.RESPONSE, "Class");
         configurations.put(MLConstants.TRAIN_DATA_FRACTION, "0.7");
         CloseableHttpResponse response = mlHttpclient.setModelConfiguration(analysisId2, configurations);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
         response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId2 + "/hyperParams/defaults", null);
-        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response
-                .getStatusLine().getStatusCode());
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatusLine().getStatusCode());
         response.close();
     }
 
@@ -177,46 +189,52 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
      */
     @Test(priority = 3, description = "Set default values to hyperparameters without setting model configs.")
     public void testSetDefaultHyperparametersWithoutModelConfigs() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId2
-                + "/hyperParams/defaults", null);
-        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response
-                .getStatusLine().getStatusCode());
+        CloseableHttpResponse response = mlHttpclient
+                .doHttpPost("/api/analyses/" + analysisId2 + "/hyperParams/defaults", null);
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatusLine().getStatusCode());
         response.close();
     }
-    
+
     /**
      * Test setting customized hyper-parameters of an analysis.
      * 
      * @throws IOException
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
      */
-    @Test(priority=3, description = "Set customized hyperparameters", dependsOnMethods = "testSetDefaultHyperparameters")
+    @Test(priority = 3, description = "Set customized hyperparameters", dependsOnMethods = "testSetDefaultHyperparameters")
     public void testSetCustomizedHyperParameters() throws IOException, MLHttpClientException {
-        String payload ="[{\"key\" :\"Learning_Rate\",\"value\" : \"0.1\"},{\"key\":\"Iterations\",\"value\":\"100\"}]";
-        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams", payload);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+        String payload = "[{\"key\" :\"Learning_Rate\",\"value\" : \"0.1\"},{\"key\":\"Iterations\",\"value\":\"100\"}]";
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams",
+                payload);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
         response.close();
     }
-    
+
     /**
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=4, description = "Get hyper parameters of the analyses")
-    public void testGetHyperParameters() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/hyperParameters");
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 4, description = "Get hyper parameters of the analyses")
+    public void testGetHyperParameters() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/" + analysisId + "/hyperParameters");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
-    
+
     /**
-     * @throws MLHttpClientException 
+     * @throws MLHttpClientException
+     * @throws IOException
      */
-    @Test(priority=4, description = "Get hyper parameters of the analyses and of a algorithm")
-    public void testGetHyperParametersOfAlgorithm() throws MLHttpClientException {
-        CloseableHttpResponse response = mlHttpclient.doHttpGet("/api/analyses/"+analysisId+"/hyperParameters?algorithmName="+ALGORITHM_NAME);
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
+    @Test(priority = 4, description = "Get hyper parameters of the analyses and of a algorithm")
+    public void testGetHyperParametersOfAlgorithm() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient
+                .doHttpGet("/api/analyses/" + analysisId + "/hyperParameters?algorithmName=" + ALGORITHM_NAME);
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
     }
     
     @AfterClass(alwaysRun = true)
