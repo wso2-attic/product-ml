@@ -65,7 +65,7 @@ public class MLIntegrationTestConstants {
 	public static final String NORMAL_LABELS = "0";
 	public static final String NEW_NORMAL_LABEL = "normal";
 	public static final String NEW_ANOMALY_LABEL = "anomaly";
-	public static final boolean NORMALIZATION = false;
+	public static final String NORMALIZATION = "false";
 
 	// Constants for locations of datasets - Happy scenario
 	public static final String DATASETS_PATH = "artifacts/ML/data/";
@@ -84,6 +84,7 @@ public class MLIntegrationTestConstants {
 	public static final String AZURE_STREAMING_DATASET_SAMPLE = DATASETS_PATH+"azure-stream-analytics_entry.csv";
 
 	public static final String DATASET_NAME_DIABETES = "Diabetes";
+	public static final String DATASET_NAME_DIABETES_ANOMALY = "Diabetes_Anomaly";
 	public static final int DATASET_ID_DIABETES = 1;
 	public static final int DATASET_ID_DAS = 2;
 
@@ -113,6 +114,7 @@ public class MLIntegrationTestConstants {
 
     // Projects
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
+	public static final String PROJECT_NAME_DIABETES_ANOMALY = "Diabetes_Anomaly_Detection_Project";
 	public static final int PROJECT_ID_DIABETES = 1;
 
 	public static final String PROJECT_NAME_DAS = "DAS_Project";

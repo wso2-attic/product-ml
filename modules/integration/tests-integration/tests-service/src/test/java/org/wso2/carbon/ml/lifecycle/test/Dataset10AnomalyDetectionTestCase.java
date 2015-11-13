@@ -16,15 +16,11 @@
  * under the License.
  */
 
-
 package org.wso2.carbon.ml.lifecycle.test;
 
 import static org.testng.AssertJUnit.assertEquals;
-
 import java.io.IOException;
-
 import javax.ws.rs.core.Response;
-
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +33,6 @@ import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
-
 
 /**
  * This class contains the Anomaly detection ML life-cycle for Diabetes dataset
@@ -58,16 +53,15 @@ public class Dataset10AnomalyDetectionTestCase extends MLBaseTest {
         super.init();
         mlHttpclient = getMLHttpClient();
         String version = "1.0";
-        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES, version,
+        int datasetId = createDataset(MLIntegrationTestConstants.DATASET_NAME_DIABETES_ANOMALY, version,
                 MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
         versionSetId = getVersionSetId(datasetId, version);
         isDatasetProcessed(versionSetId, MLIntegrationTestConstants.THREAD_SLEEP_TIME_LARGE, 1000);
-        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES,
-                MLIntegrationTestConstants.DATASET_NAME_DIABETES);
+        projectId = createProject(MLIntegrationTestConstants.PROJECT_NAME_DIABETES_ANOMALY,
+                MLIntegrationTestConstants.DATASET_NAME_DIABETES_ANOMALY);
     }
 
-
-/**
+    /**
      * A test case for predicting for a given set of data points
      *
      * @throws MLHttpClientException
@@ -78,21 +72,25 @@ public class Dataset10AnomalyDetectionTestCase extends MLBaseTest {
 
         String payload = "";
         if (algorithmName.equals("K_MEANS_ANOMALY_DETECTION_WITH_UNLABELED_DATA")) {
-            payload = "[[1,89,66,23,94,28.1,0.167,21,0],[2,197,70,45,543,30.5,0.158,53,1]]";
+            payload = "[[1,89,66,23,94,28.1,0.167,21,0],[50,166,72,19,500,25.8,0.587,510,1]]";
         } else if (algorithmName.equals("K_MEANS_ANOMALY_DETECTION_WITH_LABELED_DATA")) {
-            payload = "[[1,89,66,23,94,28.1,0.167,21],[2,197,70,45,543,30.5,0.158,53]]";
+            payload = "[[1,89,66,23,94,28.1,0.167,21],[50,166,72,19,500,25.8,0.587,510]]";
         }
 
-        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict?percentile=98", payload);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict?percentile=95", payload);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
                 response.getStatusLine().getStatusCode());
         String reply = mlHttpclient.getResponseAsString(response);
         JSONArray predictions = new JSONArray(reply);
+        //check number of predictions
         assertEquals(2, predictions.length());
+        //check normal prediction
+        assertEquals("normal", predictions.getString(0));
+        //check anomaly prediction
+        assertEquals("anomaly", predictions.getString(1));
     }
 
-
-/**
+    /**
      * A test case for building a model with the given learning algorithm
      *
      * @param algorithmName Name of the learning algorithm
@@ -133,8 +131,7 @@ public class Dataset10AnomalyDetectionTestCase extends MLBaseTest {
         assertEquals("Model building did not complete successfully", true, status);
     }
 
-
-/**
+    /**
      * Creates a test case for creating an analysis, building a Anomaly detection model and predicting using the built
      * model
      *
@@ -150,31 +147,30 @@ public class Dataset10AnomalyDetectionTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("K_MEANS_ANOMALY_DETECTION_WITH_UNLABELED_DATA",
                 MLIntegrationTestConstants.ANOMALY_DETECTION);
         // Predict using built Anomaly detection model model
-//        testPredictDiabetes("K_MEANS_ANOMALY_DETECTION_WITH_UNLABELED_DATA");
+        testPredictDiabetes("K_MEANS_ANOMALY_DETECTION_WITH_UNLABELED_DATA");
     }
 
+    /**
+     * Creates a test case for creating an analysis, building a Anomaly detection model and predicting using the built
+     * model
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
 
-///**
-//     * Creates a test case for creating an analysis, building a Anomaly detection model and predicting using the built
-//     * model
-//     *
-//     * @throws MLHttpClientException
-//     * @throws IOException
-//     * @throws JSONException
-//     * @throws InterruptedException
-//
-//    @Test(description = "Build a Labeled anomaly detection model and predict for Diabetes dataset", groups = "createLabeledAnomalyDetectionDiabetes", dependsOnGroups = "createUnlabeledAnomalyDetectionDiabetes")
-//    public void testBuildLabeledAnomalyDetectionModel()
-//            throws MLHttpClientException, IOException, JSONException, InterruptedException {
-//        buildModelWithLearningAlgorithm("K_MEANS_ANOMALY_DETECTION_WITH_LABELED_DATA",
-//                MLIntegrationTestConstants.ANOMALY_DETECTION);
-//        // Predict using built Anomaly detection model model
-//        testPredictDiabetes("K_MEANS_ANOMALY_DETECTION_WITH_LABELED_DATA");
-//    }*/
+    @Test(description = "Build a Labeled anomaly detection model and predict for Diabetes dataset", groups = "createLabeledAnomalyDetectionDiabetes", dependsOnGroups = "createUnlabeledAnomalyDetectionDiabetes")
+    public void testBuildLabeledAnomalyDetectionModel()
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        buildModelWithLearningAlgorithm("K_MEANS_ANOMALY_DETECTION_WITH_LABELED_DATA",
+                MLIntegrationTestConstants.ANOMALY_DETECTION);
+        // Predict using built Anomaly detection model model
+        testPredictDiabetes("K_MEANS_ANOMALY_DETECTION_WITH_LABELED_DATA");
+    }
 
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
         super.destroy();
     }
 }
-

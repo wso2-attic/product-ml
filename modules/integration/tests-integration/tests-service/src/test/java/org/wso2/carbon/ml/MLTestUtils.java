@@ -18,7 +18,6 @@
 
 package org.wso2.carbon.ml;
 
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -206,7 +205,7 @@ public class MLTestUtils extends MLBaseTest {
      */
     public static String createModelWithConfigurations(String algorithmName, String algorithmType, String response,
             String trainDataFraction, String normalLabels, String newNormalLabel, String newAnomalyLabel,
-            boolean normalization, int projectID, int versionSetId, MLHttpClient mlHttpclient)
+            String normalization, int projectID, int versionSetId, MLHttpClient mlHttpclient)
                     throws MLHttpClientException, IOException, JSONException {
         analysisName = algorithmName + versionSetId;
 
@@ -267,14 +266,13 @@ public class MLTestUtils extends MLBaseTest {
      */
     public static String createModelWithConfigurations(String algorithmName, String algorithmType, String response,
             String trainDataFraction, String normalLabels, String newNormalLabel, String newAnomalyLabel,
-            boolean normalization, int projectID, int versionSetId, int analysisId, MLHttpClient mlHttpclient)
+            String normalization, int projectID, int versionSetId, int analysisId, MLHttpClient mlHttpclient)
                     throws MLHttpClientException, IOException, JSONException {
         mlHttpclient.setFeatureDefaults(analysisId);
 
         // Set Model Configurations
-        mlHttpclient.setModelConfiguration(analysisId, setModelConfigurations(algorithmName, algorithmType, response,
-                        trainDataFraction, normalLabels, newNormalLabel, newAnomalyLabel),
-                setModelConfigurations(normalization));
+        mlHttpclient.setModelConfiguration(analysisId, setAnomalyDetectionModelConfigurations(algorithmName, algorithmType, response,
+                        trainDataFraction, normalLabels, newNormalLabel, newAnomalyLabel, normalization));
 
         // Set default Hyper-parameters
         mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
@@ -320,30 +318,14 @@ public class MLTestUtils extends MLBaseTest {
      * @param newAnomalyLabel anomaly label
      * @return
      */
-    public static Map<String, String> setModelConfigurations(String algorithmName, String algorithmType,
+    public static Map<String, String> setAnomalyDetectionModelConfigurations(String algorithmName, String algorithmType,
             String response, String trainDataFraction, String normalLabels, String newNormalLabel,
-            String newAnomalyLabel) {
-        Map<String, String> configurations = new HashMap<String, String>();
-        configurations.put(MLIntegrationTestConstants.ALGORITHM_NAME, algorithmName);
-        configurations.put(MLIntegrationTestConstants.ALGORITHM_TYPE, algorithmType);
-        configurations.put(MLIntegrationTestConstants.RESPONSE, response);
-        configurations.put(MLIntegrationTestConstants.TRAIN_DATA_FRACTION_CONFIG, trainDataFraction);
+            String newAnomalyLabel, String normalization) {
+        Map<String, String> configurations = setModelConfigurations(algorithmName, algorithmType, response,
+                trainDataFraction);
         configurations.put(MLIntegrationTestConstants.NORMAL_LABELS_CONFIG, normalLabels);
         configurations.put(MLIntegrationTestConstants.NEW_NORMAL_LABEL_CONFIG, newNormalLabel);
         configurations.put(MLIntegrationTestConstants.NEW_ANOMALY_LABEL_CONFIG, newAnomalyLabel);
-
-        return configurations;
-    }
-
-    /**
-     * Sets boolean model configuration (Anomaly detection model)
-     *
-     * @param normalization
-     * @return
-     */
-    public static Map<String, Boolean> setModelConfigurations(boolean normalization) {
-
-        Map<String, Boolean> configurations = new HashMap<String, Boolean>();
         configurations.put(MLIntegrationTestConstants.NORMALIZATION_CONFIG, normalization);
 
         return configurations;

@@ -57,13 +57,13 @@
 		</packages>
 	</test>
 	<test name="ML Life-cycle-Tests" preserve-order="true" verbose="2"
-		parallel="false">
+		parallel="classes" thread-count="1">
 		<packages>
 			<package name="org.wso2.carbon.ml.lifecycle.test" />
 		</packages>
-		 <!--  classes> <class name="org.wso2.carbon.ml.lifecycle.test.Dataset1DiabetesTestCase"/> 
-			<class name="org.wso2.carbon.ml.lifecycle.test.Dataset2YachtHydrodynamicsTestCase"/> 
-			</classes-->
+<!--		 <classes> <class name="org.wso2.carbon.ml.lifecycle.test.Dataset1DiabetesTestCase"/>
+			<class name="org.wso2.carbon.ml.lifecycle.test.Dataset10AnomalyDetectionTestCase"/>
+			</classes>-->
 	</test>
 	<test name="Scenario-Tests" preserve-order="true" verbose="2"
 		parallel="false">
