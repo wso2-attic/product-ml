@@ -45,6 +45,13 @@ public class MLIntegrationTestConstants {
 	public static final String RESPONSE = "responseVariable";
 	public static final String ALGORITHM_NAME = "algorithmName";
 	public static final String ALGORITHM_TYPE = "algorithmType";
+	public static final String NORMAL_LABELS_CONFIG = "normalLabels";
+	public static final String NEW_NORMAL_LABEL_CONFIG = "newNormalLabel";
+	public static final String NEW_ANOMALY_LABEL_CONFIG = "newAnomalyLabel";
+	public static final String NORMALIZATION_CONFIG = "normalization";
+	public static final String RESPONSE_ATTRIBUTE_DEFAULT = "";
+	public static final String TRAIN_DATA_FRACTION_DEFAULT = "1.0";
+	public static final String NORMAL_LABELS_DEFAULT = "";
 
 	// The time constant
     public static final long THREAD_SLEEP_TIME_LARGE = 20000;
@@ -53,7 +60,12 @@ public class MLIntegrationTestConstants {
 	public static final String CLASSIFICATION = "Classification";
 	public static final String NUMERICAL_PREDICTION = "Numerical_Prediction";
 	public static final String CLUSTERING = "Clustering";
+	public static final String ANOMALY_DETECTION = "Anomaly_Detection";
 	public static final String TRAIN_DATA_FRACTION = "0.7";
+	public static final String NORMAL_LABELS = "0";
+	public static final String NEW_NORMAL_LABEL = "normal";
+	public static final String NEW_ANOMALY_LABEL = "anomaly";
+	public static final String NORMALIZATION = "false";
 
 	// Constants for locations of datasets - Happy scenario
 	public static final String DATASETS_PATH = "artifacts/ML/data/";
@@ -72,6 +84,7 @@ public class MLIntegrationTestConstants {
 	public static final String AZURE_STREAMING_DATASET_SAMPLE = DATASETS_PATH+"azure-stream-analytics_entry.csv";
 
 	public static final String DATASET_NAME_DIABETES = "Diabetes";
+	public static final String DATASET_NAME_DIABETES_ANOMALY = "Diabetes_Anomaly";
 	public static final int DATASET_ID_DIABETES = 1;
 	public static final int DATASET_ID_DAS = 2;
 
@@ -101,6 +114,7 @@ public class MLIntegrationTestConstants {
 
     // Projects
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
+	public static final String PROJECT_NAME_DIABETES_ANOMALY = "Diabetes_Anomaly_Detection_Project";
 	public static final int PROJECT_ID_DIABETES = 1;
 
 	public static final String PROJECT_NAME_DAS = "DAS_Project";
