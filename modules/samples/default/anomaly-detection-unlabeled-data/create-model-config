@@ -8,16 +8,8 @@
 "value":"Anomaly_Detection"
 },
 {
-"key":"responseVariable",
-"value":""
-},
-{
 "key":"trainDataFraction",
 "value":"1.0"
-},
-{
-"key":"normalLabels",
-"value":""
 },
 {
 "key":"normalization", 

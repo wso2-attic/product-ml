@@ -49,9 +49,7 @@ public class MLIntegrationTestConstants {
 	public static final String NEW_NORMAL_LABEL_CONFIG = "newNormalLabel";
 	public static final String NEW_ANOMALY_LABEL_CONFIG = "newAnomalyLabel";
 	public static final String NORMALIZATION_CONFIG = "normalization";
-	public static final String RESPONSE_ATTRIBUTE_DEFAULT = "";
 	public static final String TRAIN_DATA_FRACTION_DEFAULT = "1.0";
-	public static final String NORMAL_LABELS_DEFAULT = "";
 
 	// The time constant
     public static final long THREAD_SLEEP_TIME_LARGE = 20000;

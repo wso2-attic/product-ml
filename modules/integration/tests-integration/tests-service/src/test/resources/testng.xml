@@ -57,7 +57,7 @@
 		</packages>
 	</test>
 	<test name="ML Life-cycle-Tests" preserve-order="true" verbose="2"
-		parallel="classes" thread-count="1">
+		parallel="false">
 		<packages>
 			<package name="org.wso2.carbon.ml.lifecycle.test" />
 		</packages>

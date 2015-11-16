@@ -105,12 +105,10 @@ public class Dataset10AnomalyDetectionTestCase extends MLBaseTest {
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
 
         if (algorithmName.equals("K_MEANS_ANOMALY_DETECTION_WITH_UNLABELED_DATA")) {
-            modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
-                    MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DEFAULT,
-                    MLIntegrationTestConstants.TRAIN_DATA_FRACTION_DEFAULT,
-                    MLIntegrationTestConstants.NORMAL_LABELS_DEFAULT, MLIntegrationTestConstants.NEW_NORMAL_LABEL,
-                    MLIntegrationTestConstants.NEW_ANOMALY_LABEL, MLIntegrationTestConstants.NORMALIZATION, projectId,
-                    versionSetId, mlHttpclient);
+            modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType, "",
+                    MLIntegrationTestConstants.TRAIN_DATA_FRACTION_DEFAULT, "",
+                    MLIntegrationTestConstants.NEW_NORMAL_LABEL, MLIntegrationTestConstants.NEW_ANOMALY_LABEL,
+                    MLIntegrationTestConstants.NORMALIZATION, projectId, versionSetId, mlHttpclient);
         } else if (algorithmName.equals("K_MEANS_ANOMALY_DETECTION_WITH_LABELED_DATA")) {
             modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
                     MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES,
