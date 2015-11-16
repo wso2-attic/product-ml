@@ -33,6 +33,7 @@
 					</suiteXmlFiles>
 
 					<skipTests>false</skipTests>
+					<parallel>false</parallel>
 
 					<systemProperties>
 						<property>
@@ -63,7 +64,6 @@
 							<name>usedefaultlisteners</name>
 							<value>false</value>
 						</property>
-
 
 						<sec.verifier.dir>${basedir}/target/security-verifier/</sec.verifier.dir>
 						<instr.file>${basedir}/src/test/resources/instrumentation.txt</instr.file>
