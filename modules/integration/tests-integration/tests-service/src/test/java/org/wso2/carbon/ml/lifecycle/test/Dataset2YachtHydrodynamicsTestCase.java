@@ -120,6 +120,8 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Linear Regression model
         testPredictYacht();
+        testExportAsPMML();
+        testPublishAsPMML();
     }
 
     /**
@@ -137,6 +139,8 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Ridge Regression model
         testPredictYacht();
+        testExportAsPMML();
+        testPublishAsPMML();
     }
 
     /**
@@ -154,6 +158,34 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Lasso Regression model
         testPredictYacht();
+        //Export as PMML
+        testExportAsPMML();
+        //Publish PMML model to registry
+        testPublishAsPMML();
+    }
+
+    /**
+     * A test case for exporting a model in pmml format
+     *
+     * @throws MLHttpClientException
+     */
+    private void testExportAsPMML() throws MLHttpClientException {
+        response = mlHttpclient.exportAsPMML(modelId);
+        assertEquals("Pmml download has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+
+    }
+
+    /**
+     * A test case for publishing a model to registry in pmml format
+     *
+     * @throws MLHttpClientException
+     */
+    private void testPublishAsPMML() throws MLHttpClientException {
+        response = mlHttpclient.doHttpPost("/api/models/"+modelId+"/publish?mode=pmml", null);
+        assertEquals("Pmml publish has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+
     }
 
     @AfterClass(alwaysRun = true)

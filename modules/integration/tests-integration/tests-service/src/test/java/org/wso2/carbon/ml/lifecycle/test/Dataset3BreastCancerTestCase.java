@@ -120,7 +120,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictBreastCancer();
-    }
+}
 
     /**
      * Creates a test case for creating an analysis, building a SVM model and predicting using the built model
@@ -135,6 +135,8 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictBreastCancer();
+        testExportAsPMML();
+        testPublishAsPMML();
     }
 
     /**
@@ -168,6 +170,8 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictBreastCancer();
+        testExportAsPMML();
+        testPublishAsPMML();
     }
 
     /**
@@ -181,6 +185,31 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     @Test(description = "Build a K-means model", groups = "createKMeansBreastCancer", dependsOnGroups = "createLogisticRegressionBreastCancer")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
+        testExportAsPMML();
+        testPublishAsPMML();
+    }
+    /**
+     * A test case for exporting a model in pmml format
+     *
+     * @throws MLHttpClientException
+     */
+    private void testExportAsPMML() throws MLHttpClientException {
+        response = mlHttpclient.exportAsPMML(modelId);
+        assertEquals("Pmml download has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+
+    }
+
+    /**
+     * A test case for publishing a model to registry in pmml format
+     *
+     * @throws MLHttpClientException
+     */
+    private void testPublishAsPMML() throws MLHttpClientException {
+        response = mlHttpclient.doHttpPost("/api/models/"+modelId+"/publish?mode=pmml", null);
+        assertEquals("Pmml publish has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+
     }
 
     @AfterClass(alwaysRun = true)

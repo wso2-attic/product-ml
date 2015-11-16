@@ -187,6 +187,8 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
 
         // Model building should fail since SVM cannot handle multi-class classification
         assertEquals("Model building did not fail as expected.", true, status);
+        testExportAsPMML();
+        testPublishAsPMML();
     }
 
     /**
@@ -205,6 +207,8 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
 
         // Model building should fail since Logistic Regression cannot handle multi-class classification
         assertEquals("Model building did not fail as expected.", true, status);
+        testExportAsPMML();
+        testPublishAsPMML();
     }
 
     // Following test checks whether model building fails when a categorical response variable is used with numerical
@@ -226,6 +230,33 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
 
         // Model building should fail since Linear Regression cannot handle categorical response variables
         assertEquals("Model building did not fail as expected.", true, status);
+        testExportAsPMML();
+        testPublishAsPMML();
+    }
+
+    /**
+     * A test case for exporting a model in pmml format
+     *
+     * @throws MLHttpClientException
+     */
+    private void testExportAsPMML() throws MLHttpClientException {
+        response = mlHttpclient.exportAsPMML(modelId);
+        // Pmml download should fail
+        assertEquals("PMML download did not fail as expected", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+
+    }
+
+    /**
+     * A test case for publishing a model to registry in pmml format
+     *
+     * @throws MLHttpClientException
+     */
+    private void testPublishAsPMML() throws MLHttpClientException {
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/publish?mode=pmml", null);
+        assertEquals("Pmml publish did not fail as expected", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+
     }
 
     @AfterClass(alwaysRun = true)
