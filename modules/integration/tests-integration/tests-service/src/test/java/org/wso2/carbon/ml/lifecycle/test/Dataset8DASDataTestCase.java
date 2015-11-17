@@ -98,7 +98,7 @@ public class Dataset8DASDataTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Linear Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException

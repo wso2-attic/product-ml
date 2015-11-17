@@ -123,7 +123,8 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
 }
 
     /**
-     * Creates a test case for creating an analysis, building a SVM model and predicting using the built model
+     * Creates a test case for creating an analysis, building a SVM model and predicting using the built model,
+     * exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -140,7 +141,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model
+     * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model,
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -175,7 +176,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating an analysis, building a K-Means clustering model
+     * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException

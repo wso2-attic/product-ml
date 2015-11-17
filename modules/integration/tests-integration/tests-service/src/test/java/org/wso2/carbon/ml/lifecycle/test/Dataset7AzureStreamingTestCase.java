@@ -90,7 +90,8 @@ public class Dataset7AzureStreamingTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating an analysis, building a K-Means clustering
+     * Creates a test case for creating an analysis, building a K-Means clustering, exporting and publishing the model
+     * in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException

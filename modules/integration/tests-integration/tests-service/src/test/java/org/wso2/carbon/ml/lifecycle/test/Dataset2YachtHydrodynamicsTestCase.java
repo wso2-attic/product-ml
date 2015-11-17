@@ -107,7 +107,7 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Linear Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -126,7 +126,7 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Ridge Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -145,7 +145,7 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Lasso Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -158,9 +158,7 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Lasso Regression model
         testPredictYacht();
-        //Export as PMML
         testExportAsPMML();
-        //Publish PMML model to registry
         testPublishAsPMML();
     }
 

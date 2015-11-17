@@ -215,7 +215,9 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
     // prediction.
 
     /**
-     * Creates a test case for creating an analysis, building a Linear Regression model and test for failure model
+     * Creates a test case for creating an analysis, building a Linear Regression model and test for failure model,
+     * exporting and publishing the model in PMML format
+     *
      *
      * @throws MLHttpClientException
      * @throws IOException
