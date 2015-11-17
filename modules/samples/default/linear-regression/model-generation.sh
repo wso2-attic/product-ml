@@ -83,5 +83,3 @@ curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW
 
 echo "#exporting model to pmml"
 curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelId}/export?mode=pmml -k
-
-

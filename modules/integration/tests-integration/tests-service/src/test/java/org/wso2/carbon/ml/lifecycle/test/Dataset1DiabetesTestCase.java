@@ -242,7 +242,8 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the model in PMML format
+     * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the
+     * model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
