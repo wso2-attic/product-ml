@@ -606,7 +606,7 @@ public class MLHttpClient {
     public CloseableHttpResponse createFileModelStorage(int modelId, String folderName) throws MLHttpClientException {
         String payload ="{\"type\":\"file\",\"location\":\"" + folderName + "\"}";
         try {
-            return doHttpPost("/api/models/" + modelId + "/storages", payload);
+            return doHttpPost("/api/models/"+ modelId + "/storages", payload);
         } catch (MLHttpClientException e) {
             throw new MLHttpClientException("Failed to file storage for model: " + modelId, e);
         }

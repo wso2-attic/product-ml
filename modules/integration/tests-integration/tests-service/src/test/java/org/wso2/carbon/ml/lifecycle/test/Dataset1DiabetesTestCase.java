@@ -121,7 +121,6 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         assertEquals(7, predictions.length());
     }
 
-
     /**
      * A test case for building a model with the given learning algorithm
      * 
