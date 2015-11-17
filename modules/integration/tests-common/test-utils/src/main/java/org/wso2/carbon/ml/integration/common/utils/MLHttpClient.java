@@ -640,4 +640,21 @@ public class MLHttpClient {
             throw new MLHttpClientException("Failed to get the name of model" , e);
         }
     }
+
+
+    /**
+     * Download an existing serialized model in PMML format
+     * @param modelId
+     * @return
+     * @throws MLHttpClientException
+     */
+    public CloseableHttpResponse exportAsPMML(int modelId) throws MLHttpClientException {
+        CloseableHttpResponse response;
+        try {
+            response = doHttpGet("/api/models/" + modelId + "/export?mode=pmml");
+            return response;
+        } catch (MLHttpClientException e) {
+            throw new MLHttpClientException("Failed to download model as PMML for model [id] "+ modelId, e);
+        }
+    }
 }

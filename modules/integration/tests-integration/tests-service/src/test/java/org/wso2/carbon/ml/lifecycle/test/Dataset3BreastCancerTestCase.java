@@ -120,10 +120,11 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictBreastCancer();
-    }
+}
 
     /**
-     * Creates a test case for creating an analysis, building a SVM model and predicting using the built model
+     * Creates a test case for creating an analysis, building a SVM model and predicting using the built model,
+     * exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -135,10 +136,12 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictBreastCancer();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model
+     * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model,
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -168,10 +171,12 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictBreastCancer();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
-     * Creates a test case for creating an analysis, building a K-Means clustering model
+     * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -181,6 +186,8 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     @Test(description = "Build a K-means model", groups = "createKMeansBreastCancer", dependsOnGroups = "createLogisticRegressionBreastCancer")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     @AfterClass(alwaysRun = true)

@@ -362,6 +362,28 @@ public abstract class MLBaseTest {
         datasetVersionIds = null;
         datasetIds = null;
     }
+
+    /**
+     * A test case for exporting a model in pmml format
+     *
+     * @throws MLHttpClientException
+     */
+    protected void testExportAsPMML(int modelId) throws MLHttpClientException {
+        CloseableHttpResponse response = mlHttpclient.exportAsPMML(modelId);
+        assertEquals("Pmml download has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+    }
+
+    /**
+     * A test case for publishing a model to registry in pmml format
+     *
+     * @throws MLHttpClientException
+     */
+    protected void testPublishAsPMML(int modelId) throws MLHttpClientException {
+        CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/publish?mode=pmml", null);
+        assertEquals("Pmml publish has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+    }
     
     
 }

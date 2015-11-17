@@ -107,7 +107,7 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Linear Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -120,11 +120,13 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Linear Regression model
         testPredictYacht();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
      * Creates a test case for creating an analysis, building a Ridge Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -137,11 +139,13 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Ridge Regression model
         testPredictYacht();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
      * Creates a test case for creating an analysis, building a Lasso Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -154,6 +158,8 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Lasso Regression model
         testPredictYacht();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     @AfterClass(alwaysRun = true)

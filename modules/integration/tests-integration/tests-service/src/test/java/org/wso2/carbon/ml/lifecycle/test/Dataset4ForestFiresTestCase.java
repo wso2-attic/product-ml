@@ -108,7 +108,7 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Linear Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -121,11 +121,13 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Linear Regression model
         testPredictForestFires();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
      * Creates a test case for creating an analysis, building a Ridge Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -138,11 +140,13 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("RIDGE_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Ridge Regression model
         testPredictForestFires();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
      * Creates a test case for creating an analysis, building a Lasso Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -155,10 +159,13 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LASSO_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Lasso Regression model
         testPredictForestFires();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
-     * Creates a test case for creating an analysis, building a K-Means clustering model
+     * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the
+     * model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -168,6 +175,8 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
     @Test(description = "Build a K-means model", groups = "createKMeansForestFires", dependsOnGroups = "createLassoRegressionModelForestFires")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     @AfterClass(alwaysRun = true)

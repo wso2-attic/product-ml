@@ -168,8 +168,9 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating an analysis, building a SVM model and predicting using the built model
-     * 
+     * Creates a test case for creating an analysis, building a SVM model, predicting using the built model,
+     * exporting and publishing the model in PMML format
+     *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
@@ -183,10 +184,13 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
 
         // Predict for dataset with incompatible numerical feature
         testPredictDiabetesInvalidNumericalFeatures();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
-     * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model
+     * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model,
+     * exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -219,7 +223,7 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built
-     * model
+     * model, exporting and publishing the model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -233,10 +237,13 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         // Predict using built Linear Regression model
         testPredictDiabetes();
         testPredictDiabetesFromFile();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
-     * Creates a test case for creating an analysis, building a K-Means clustering model
+     * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the
+     * model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -246,6 +253,8 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     @Test(description = "Build a K-means model", groups = "createKMeansDiabetes", dependsOnGroups = "createLogisticRegressionDiabetes")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     @AfterClass(alwaysRun = true)

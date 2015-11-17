@@ -90,7 +90,8 @@ public class Dataset7AzureStreamingTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating an analysis, building a K-Means clustering
+     * Creates a test case for creating an analysis, building a K-Means clustering, exporting and publishing the model
+     * in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -100,6 +101,8 @@ public class Dataset7AzureStreamingTestCase extends MLBaseTest {
     @Test(description = "Build a K-means model", groups = "createKMeansAzureStreaming")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     @AfterClass(alwaysRun = true)

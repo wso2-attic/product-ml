@@ -90,7 +90,8 @@ public class Dataset6AutomobileTestCase extends MLBaseTest {
     }
 
     /**
-     * Creates a test case for creating an analysis, building a K-Means clustering model
+     * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the
+     * model in PMML format
      * 
      * @throws MLHttpClientException
      * @throws IOException
@@ -100,6 +101,8 @@ public class Dataset6AutomobileTestCase extends MLBaseTest {
     @Test(description = "Build a K-means model", groups = "createKMeansAutomobile")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     @AfterClass(alwaysRun = true)

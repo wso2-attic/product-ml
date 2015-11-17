@@ -176,7 +176,7 @@ public class PostModelCreationTestCase extends MLBaseTest {
     @Test(priority=3, description = "Publish a non-existing Model")
     public void testPublishNonExistingModel() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/"+999+"/publish", null);
-        assertEquals("Unexpected response received", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatusLine()
+        assertEquals("Unexpected response received", Response.Status.NOT_FOUND.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
     }
