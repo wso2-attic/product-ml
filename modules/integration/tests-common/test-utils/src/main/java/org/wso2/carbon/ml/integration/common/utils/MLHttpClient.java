@@ -107,8 +107,7 @@ public class MLHttpClient {
     
     /**
      * Send a HTTP GET request to the given URI and return the response.
-     * 
-     * @param uri   End-point URI
+     *
      * @return      Response from the endpoint
      * @throws      MLHttpClientException 
      */
@@ -130,8 +129,7 @@ public class MLHttpClient {
     
     /**
      * Send a HTTP GET request to the given URI and return the response.
-     * 
-     * @param uri               End-point URI
+     *
      * @param parametersJson    Payload JSON string
      * @return                  Response from the endpoint
      * @throws                  MLHttpClientException 
@@ -155,8 +153,7 @@ public class MLHttpClient {
     }
     
     /**
-     * 
-     * @param uri   End-point URI
+     *
      * @return      Response from the endpoint
      * @throws      MLHttpClientException 
      */
@@ -512,8 +509,7 @@ public class MLHttpClient {
 
     /**
      * Create a Model
-     * 
-     * @param name          Name of the model
+     *
      * @param analysisId    ID of the  analysis associated with the model
      * @param versionSetId  ID of the version set to be used for the model
      * @return              Response from the back-end
