@@ -654,7 +654,7 @@ public class MLHttpClient {
             response = doHttpGet("/api/models/" + modelId + "/export?mode=pmml");
             return response;
         } catch (MLHttpClientException e) {
-            throw new MLHttpClientException("Failed to download model as PMML", e);
+            throw new MLHttpClientException("Failed to download model as PMML for model [id] "+ modelId, e);
         }
     }
 }

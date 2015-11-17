@@ -237,7 +237,7 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
     }
 
     /**
-     * A test case for exporting a model in pmml format
+     * A test case for exporting a model in pmml format for failure model
      *
      * @throws MLHttpClientException
      */
@@ -249,7 +249,7 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
     }
 
     /**
-     * A test case for publishing a model to registry in pmml format
+     * A test case for publishing a model to registry in pmml format for failure model
      *
      * @throws MLHttpClientException
      */

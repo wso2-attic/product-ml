@@ -184,8 +184,8 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
 
         // Predict for dataset with incompatible numerical feature
         testPredictDiabetesInvalidNumericalFeatures();
-        testExportAsPMML();
-        testPublishAsPMML();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
@@ -237,8 +237,8 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         // Predict using built Linear Regression model
         testPredictDiabetes();
         testPredictDiabetesFromFile();
-        testExportAsPMML();
-        testPublishAsPMML();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
@@ -253,30 +253,8 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     @Test(description = "Build a K-means model", groups = "createKMeansDiabetes", dependsOnGroups = "createLogisticRegressionDiabetes")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
-        testExportAsPMML();
-        testPublishAsPMML();
-    }
-
-    /**
-     * A test case for exporting a model in pmml format
-     *
-     * @throws MLHttpClientException
-     */
-    private void testExportAsPMML() throws MLHttpClientException {
-        response = mlHttpclient.exportAsPMML(modelId);
-        assertEquals("Pmml download has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
-                response.getStatusLine().getStatusCode());
-    }
-
-    /**
-     * A test case for publishing a model to registry in pmml format
-     *
-     * @throws MLHttpClientException
-     */
-    private void testPublishAsPMML() throws MLHttpClientException {
-        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/publish?mode=pmml", null);
-        assertEquals("Pmml publish has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
-                response.getStatusLine().getStatusCode());
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     @AfterClass(alwaysRun = true)

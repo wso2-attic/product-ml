@@ -111,8 +111,8 @@ public class Dataset8DASDataTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LINEAR_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
         // Predict using built Linear Regression model
         testPredictDAS();
-        testExportAsPMML();
-        testPublishAsPMML();
+        testExportAsPMML(modelId);
+        testPublishAsPMML(modelId);
     }
 
     /**
@@ -131,29 +131,7 @@ public class Dataset8DASDataTestCase extends MLBaseTest {
         assertEquals(2, predictions.length());
     }
 
-    /**
-     * A test case for exporting a model in pmml format
-     *
-     * @throws MLHttpClientException
-     */
-    private void testExportAsPMML() throws MLHttpClientException {
-        response = mlHttpclient.exportAsPMML(modelId);
-        assertEquals("Pmml download has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
-                response.getStatusLine().getStatusCode());
-    }
-
-    /**
-     * A test case for publishing a model to registry in pmml format
-     *
-     * @throws MLHttpClientException
-     */
-    private void testPublishAsPMML() throws MLHttpClientException {
-        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/publish?mode=pmml", null);
-        assertEquals("Pmml publish has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
-                response.getStatusLine().getStatusCode());
-    }
-
-        @AfterClass(alwaysRun = true)
+    @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
         super.destroy();
     }
