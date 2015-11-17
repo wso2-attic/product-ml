@@ -246,7 +246,6 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
         // Pmml download should fail
         assertEquals("PMML download did not fail as expected", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 response.getStatusLine().getStatusCode());
-
     }
 
     /**
@@ -258,7 +257,6 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
         response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/publish?mode=pmml", null);
         assertEquals("Pmml publish did not fail as expected", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 response.getStatusLine().getStatusCode());
-
     }
 
     @AfterClass(alwaysRun = true)

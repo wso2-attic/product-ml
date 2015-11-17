@@ -266,7 +266,6 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         response = mlHttpclient.exportAsPMML(modelId);
         assertEquals("Pmml download has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
                 response.getStatusLine().getStatusCode());
-
     }
 
     /**
@@ -275,10 +274,9 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
      * @throws MLHttpClientException
      */
     private void testPublishAsPMML() throws MLHttpClientException {
-        response = mlHttpclient.doHttpPost("/api/models/"+modelId+"/publish?mode=pmml", null);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/publish?mode=pmml", null);
         assertEquals("Pmml publish has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
                 response.getStatusLine().getStatusCode());
-
     }
 
     @AfterClass(alwaysRun = true)
