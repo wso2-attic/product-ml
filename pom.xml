@@ -23,7 +23,7 @@
 	<groupId>org.wso2.ml</groupId>
 	<artifactId>ml-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>WSO2 Machine Learner - Aggregator Module</name>
 	<url>http://wso2.com/products/machine-learner</url>
 	<description>WSO2 Machine Learner (WSO2 ML)</description>
@@ -433,10 +433,10 @@
 		<project.scm.id>my-scm-server</project.scm.id>
 
 		<!-- Product ML version -->
-		<ml.version>1.0.1-SNAPSHOT</ml.version>
+		<ml.version>1.1.0-SNAPSHOT</ml.version>
 		<ml.imp.pkg.version>[1.0.1, 1.1.0)</ml.imp.pkg.version>
 
-		<carbon.ml.version>1.0.3-SNAPSHOT</carbon.ml.version>
+		<carbon.ml.version>1.0.3</carbon.ml.version>
 		<carbon.integration.version>4.3.0</carbon.integration.version>
 
 		<carbon.registry.version>4.4.8</carbon.registry.version>
