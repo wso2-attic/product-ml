@@ -297,6 +297,33 @@
 				<version>${axis2.version}</version>
 			</dependency>
 
+			<!-- Deeplearning dependencies -->
+			<!--<dependency>-->
+				<!--<groupId>org.wso2.orbit.ai.h2o</groupId>-->
+				<!--<artifactId>h2o-app</artifactId>-->
+				<!--<version>${h2o.version}</version>-->
+			<!--</dependency>-->
+			<!--<dependency>-->
+				<!--<groupId>org.wso2.orbit.ai.h2o</groupId>-->
+				<!--<artifactId>h2o-core</artifactId>-->
+				<!--<version>${h2o.version}</version>-->
+			<!--</dependency>-->
+			<!--<dependency>-->
+				<!--<groupId>org.wso2.orbit.ai.h2o</groupId>-->
+				<!--<artifactId>h2o-algos</artifactId>-->
+				<!--<version>${h2o.version}</version>-->
+			<!--</dependency>-->
+			<!--<dependency>-->
+				<!--<groupId>org.wso2.orbit.ai.h2o</groupId>-->
+				<!--<artifactId>h2o-genmodel</artifactId>-->
+				<!--<version>${h2o.version}</version>-->
+			<!--</dependency>-->
+			<dependency>
+				<groupId>org.wso2.orbit.ai.h2o</groupId>
+				<artifactId>h2o</artifactId>
+				<version>${h2o.version}</version>
+			</dependency>
+
 			<!-- Dependencies for Rest API -->
 			<!--dependency> <groupId>org.wso2.carbon</groupId> <artifactId>org.wso2.carbon.user.core</artifactId> 
 				<version>${carbon.kernel.version}</version> </dependency> <dependency> <groupId>org.apache.cxf</groupId> 
@@ -475,7 +502,8 @@
 		<akka.version>2.3.4-spark</akka.version>
 		<typesafe.version>1.2.0</typesafe.version>
 
-
+		<!-- H2O dependency versions -->
+		<h2o.version>3.2.0.wso2v1</h2o.version>
 
 		<!-- Jaggery dependency versions -->
 		<jaggery.version>0.11.0</jaggery.version>
