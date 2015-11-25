@@ -18,6 +18,12 @@
 
 package org.wso2.carbon.ml.lifecycle.test;
 
+import static org.testng.AssertJUnit.assertEquals;
+
+import java.io.IOException;
+
+import javax.ws.rs.core.Response;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,12 +36,6 @@ import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
-
-import javax.ws.rs.core.Response;
-
-import java.io.IOException;
-
-import static org.testng.AssertJUnit.assertEquals;
 
 /**
  * This class contains the entire ML life-cycle for Gamma Telescope dataset
@@ -165,6 +165,23 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
     }
 
     /**
+     * Creates a test case for creating an analysis, building a Stacked Autoencoders model and predicting using the
+     * built model
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a Stacked Autoencoders model and predict for gamma telescope dataset", groups = "createStackedAutoencodersGammaTelescope", dependsOnGroups = "createDecisionTreeModelGammaTelescope")
+    public void testBuildStackedAutoencodersModel()
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        buildModelWithLearningAlgorithm("STACKED_AUTOENCODERS", MLIntegrationTestConstants.DEEP_LEARNING);
+        // Predict using built Linear Regression model
+        testPredictGammaTelescope();
+    }
+
+    /**
      * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built
      * model, exporting and publishing the model in PMML format
      * 
@@ -173,7 +190,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Logistic Regression model and predict for gamma telescope dataset", groups = "createLogisticRegressionGammaTelescope", dependsOnGroups = "createDecisionTreeModelGammaTelescope")
+    @Test(description = "Build a Logistic Regression model and predict for gamma telescope dataset", groups = "createLogisticRegressionGammaTelescope", dependsOnGroups = "createStackedAutoencodersGammaTelescope")
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);

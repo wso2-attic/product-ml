@@ -18,6 +18,12 @@
 
 package org.wso2.carbon.ml.lifecycle.test;
 
+import static org.testng.AssertJUnit.assertEquals;
+
+import java.io.IOException;
+
+import javax.ws.rs.core.Response;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,12 +36,6 @@ import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
-
-import javax.ws.rs.core.Response;
-
-import java.io.IOException;
-
-import static org.testng.AssertJUnit.assertEquals;
 
 /**
  * This class contains the entire ML life-cycle for Breast Cancer dataset
@@ -118,7 +118,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     public void testBuildNaiveBayesModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         buildModelWithLearningAlgorithm("NAIVE_BAYES", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built Linear Regression model
+        // Predict using built Naive Bayes model
         testPredictBreastCancer();
 }
 
@@ -134,7 +134,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     @Test(description = "Build a SVM model and predict for breast cancer dataset", groups = "createSVMModelBreastCancer", dependsOnGroups = "createNaiveBayesModelBreastCancer")
     public void testBuildSVMModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("SVM", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built Linear Regression model
+        // Predict using built SVM model
         testPredictBreastCancer();
         testExportAsPMML(modelId);
         testPublishAsPMML(modelId);
@@ -152,7 +152,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         buildModelWithLearningAlgorithm("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built Linear Regression model
+        // Predict using built Decision Tree model
         testPredictBreastCancer();
     }
 
@@ -169,10 +169,28 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
-        // Predict using built Linear Regression model
+        // Predict using built Logistic Regression model
         testPredictBreastCancer();
         testExportAsPMML(modelId);
         testPublishAsPMML(modelId);
+    }
+
+    /**
+     * Creates a test case for creating an analysis, building a Stacked Autoencoders model and predicting using the
+     * built
+     * model
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a Stacked Autoencoders model and predict for breast cancer dataset", groups = "createStackedAutoencodersBreastCancer", dependsOnGroups = "createLogisticRegressionBreastCancer")
+    public void testBuildStackedAutoencodersModel()
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        buildModelWithLearningAlgorithm("STACKED_AUTOENCODERS", MLIntegrationTestConstants.DEEP_LEARNING);
+        // Predict using built Stacked Autoencoders model
+        testPredictBreastCancer();
     }
 
     /**
@@ -183,7 +201,7 @@ public class Dataset3BreastCancerTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a K-means model", groups = "createKMeansBreastCancer", dependsOnGroups = "createLogisticRegressionBreastCancer")
+    @Test(description = "Build a K-means model", groups = "createKMeansBreastCancer", dependsOnGroups = "createStackedAutoencodersBreastCancer")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
         testExportAsPMML(modelId);
