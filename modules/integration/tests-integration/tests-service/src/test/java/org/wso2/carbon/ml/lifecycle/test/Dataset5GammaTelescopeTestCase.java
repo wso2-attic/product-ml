@@ -65,7 +65,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * A test case for predicting for a given set of data points
-     *
+     * 
      * @throws MLHttpClientException
      * @throws JSONException
      */
@@ -82,7 +82,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * A test case for building a model with the given learning algorithm
-     *
+     * 
      * @param algorithmName Name of the learning algorithm
      * @param algorithmType Type of the learning algorithm
      * @throws MLHttpClientException
@@ -133,7 +133,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
     /**
      * Creates a test case for creating an analysis, building a SVM model and predicting using the built model,
      * exporting and publishing the model in PMML format
-     *
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
@@ -150,7 +150,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model
-     *
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
@@ -167,7 +167,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
     /**
      * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built
      * model, exporting and publishing the model in PMML format
-     *
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
@@ -186,7 +186,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
     /**
      * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the
      * model in PMML format
-     *
+     * 
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
