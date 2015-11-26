@@ -18,6 +18,12 @@
 
 package org.wso2.carbon.ml.lifecycle.test;
 
+import static org.testng.AssertJUnit.assertEquals;
+
+import java.io.IOException;
+
+import javax.ws.rs.core.Response;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,11 +36,6 @@ import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
-
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-
-import static org.testng.AssertJUnit.assertEquals;
 
 /**
  * This class contains the entire ML life-cycle for Diabetes dataset
@@ -222,6 +223,23 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     }
 
     /**
+     * Creates a test case for creating an analysis, building a Stacked Autoencoders model and predicting using the built
+     * model
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a Stacked Autoencoders model and predict for Diabetes dataset", groups = "createStackedAutoencodersModelDiabetes", dependsOnGroups = "createRandomForestModelDiabetes")
+    public void testBuildStackedAutoencodersModel()
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
+        buildModelWithLearningAlgorithm("STACKED_AUTOENCODERS", MLIntegrationTestConstants.DEEP_LEARNING);
+        // Predict using built model
+        testPredictDiabetes();
+    }
+
+    /**
      * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built
      * model, exporting and publishing the model in PMML format
      * 
@@ -230,9 +248,9 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Logistic Regression model and predict for Diabetes dataset", groups = "createLogisticRegressionDiabetes", dependsOnGroups = "createRandomForestModelDiabetes")
-    public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
-            InterruptedException {
+    @Test(description = "Build a Logistic Regression model and predict for Diabetes dataset", groups = "createLogisticRegressionDiabetes", dependsOnGroups = "createStackedAutoencodersModelDiabetes")
+    public void testBuildLogisticRegressionModel()
+            throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictDiabetes();

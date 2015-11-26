@@ -59,6 +59,7 @@ public class MLIntegrationTestConstants {
 	public static final String NUMERICAL_PREDICTION = "Numerical_Prediction";
 	public static final String CLUSTERING = "Clustering";
 	public static final String ANOMALY_DETECTION = "Anomaly_Detection";
+	public static final String DEEP_LEARNING = "Deeplearning";
 	public static final String TRAIN_DATA_FRACTION = "0.7";
 	public static final String NORMAL_LABELS = "0";
 	public static final String NEW_NORMAL_LABEL = "normal";
