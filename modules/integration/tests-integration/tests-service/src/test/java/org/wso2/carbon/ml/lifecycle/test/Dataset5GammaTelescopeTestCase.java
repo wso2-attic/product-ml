@@ -18,12 +18,6 @@
 
 package org.wso2.carbon.ml.lifecycle.test;
 
-import static org.testng.AssertJUnit.assertEquals;
-
-import java.io.IOException;
-
-import javax.ws.rs.core.Response;
-
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +30,12 @@ import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTestException;
+
+import javax.ws.rs.core.Response;
+
+import java.io.IOException;
+
+import static org.testng.AssertJUnit.assertEquals;
 
 /**
  * This class contains the entire ML life-cycle for Gamma Telescope dataset
@@ -65,7 +65,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * A test case for predicting for a given set of data points
-     * 
+     *
      * @throws MLHttpClientException
      * @throws JSONException
      */
@@ -82,7 +82,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * A test case for building a model with the given learning algorithm
-     * 
+     *
      * @param algorithmName Name of the learning algorithm
      * @param algorithmType Type of the learning algorithm
      * @throws MLHttpClientException
@@ -133,7 +133,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
     /**
      * Creates a test case for creating an analysis, building a SVM model and predicting using the built model,
      * exporting and publishing the model in PMML format
-     * 
+     *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
@@ -150,7 +150,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
 
     /**
      * Creates a test case for creating an analysis, building a Decision tree model and predicting using the built model
-     * 
+     *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
@@ -164,27 +164,10 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
         testPredictGammaTelescope();
     }
 
-//    /**
-//     * Creates a test case for creating an analysis, building a Stacked Autoencoders model and predicting using the
-//     * built model
-//     *
-//     * @throws MLHttpClientException
-//     * @throws IOException
-//     * @throws JSONException
-//     * @throws InterruptedException
-//     */
-//    @Test(description = "Build a Stacked Autoencoders model and predict for gamma telescope dataset", groups = "createStackedAutoencodersGammaTelescope", dependsOnGroups = "createDecisionTreeModelGammaTelescope")
-//    public void testBuildStackedAutoencodersModel()
-//            throws MLHttpClientException, IOException, JSONException, InterruptedException {
-//        buildModelWithLearningAlgorithm("STACKED_AUTOENCODERS", MLIntegrationTestConstants.DEEP_LEARNING);
-//        // Predict using built Linear Regression model
-//        testPredictGammaTelescope();
-//    }
-
     /**
      * Creates a test case for creating an analysis, building a Logistic Regression model and predicting using the built
      * model, exporting and publishing the model in PMML format
-     * 
+     *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
@@ -203,7 +186,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
     /**
      * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the
      * model in PMML format
-     * 
+     *
      * @throws MLHttpClientException
      * @throws IOException
      * @throws JSONException
