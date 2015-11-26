@@ -190,7 +190,7 @@ public class Dataset5GammaTelescopeTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a Logistic Regression model and predict for gamma telescope dataset", groups = "createLogisticRegressionGammaTelescope", dependsOnGroups = "createSVMModelGammaTelescope")
+    @Test(description = "Build a Logistic Regression model and predict for gamma telescope dataset", groups = "createLogisticRegressionGammaTelescope", dependsOnGroups = "createDecisionTreeModelGammaTelescope")
     public void testBuildLogisticRegressionModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
