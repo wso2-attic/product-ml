@@ -49,6 +49,10 @@ public class MLIntegrationTestConstants {
 	public static final String NEW_NORMAL_LABEL_CONFIG = "newNormalLabel";
 	public static final String NEW_ANOMALY_LABEL_CONFIG = "newAnomalyLabel";
 	public static final String NORMALIZATION_CONFIG = "normalization";
+    public static final String USER_VARIABLE = "userVariable";
+    public static final String PRODUCT_VARIABLE = "productVariable";
+    public static final String RATING_VARIABLE = "ratingVariable";
+    public static final String OBSERVATIONS = "observationList";
 	public static final String TRAIN_DATA_FRACTION_DEFAULT = "1.0";
 
 	// The time constant
@@ -60,6 +64,7 @@ public class MLIntegrationTestConstants {
 	public static final String CLUSTERING = "Clustering";
 	public static final String ANOMALY_DETECTION = "Anomaly_Detection";
 	public static final String DEEP_LEARNING = "Deeplearning";
+    public static final String RECOMMENDATION = "Recommendation";
 	public static final String TRAIN_DATA_FRACTION = "0.7";
 	public static final String NORMAL_LABELS = "0";
 	public static final String NEW_NORMAL_LABEL = "normal";
@@ -77,6 +82,7 @@ public class MLIntegrationTestConstants {
     public static final String GAMMA_TELESCOPE_DATASET_SAMPLE = DATASETS_PATH+"gammaTelescope.csv";
     public static final String ABALONE_DATASET_SAMPLE = DATASETS_PATH+"abalone.csv";
     public static final String TITANIC_DATASET_SAMPLE = DATASETS_PATH + "titanic.csv";
+    public static final String RECOMMENDATION_DATASET_SAMPLE = DATASETS_PATH + "dummyRecommendation.csv";
 
     // Datasets with missing values and categorical features
     public static final String AUTOMOBILE_DATASET_SAMPLE = DATASETS_PATH+"automobile.csv";
@@ -96,6 +102,7 @@ public class MLIntegrationTestConstants {
     public static final String DATASET_NAME_AZURE_STREAMING = "Azure_Streaming";
     public static final String DATASET_NAME_ABALONE = "Abalone";
     public static final String DATASET_NAME_TITANIC = "Titanic";
+    public static final String DATASET_NAME_RECOMMENDATION = "Recommendation";
 
 	public static final int VERSIONSET_ID = 1;
 
@@ -110,6 +117,10 @@ public class MLIntegrationTestConstants {
     public static final String RESPONSE_ATTRIBUTE_AZURE_STREAMING = "price";
     public static final String RESPONSE_ATTRIBUTE_ABALONE = "Sex";
     public static final String RESPONSE_ATTRIBUTE_TITANIC = "Survived";
+    public static final String PRODUCT_ID_RECOMMENDATION = "PRODUCT_ID";
+    public static final String RATING_RECOMMENDATION = "RATING";
+    public static final String USER_ID_RECOMMENDATION = "USER_ID";
+    public static final String OBSERVATION_LIST_RECOMMENDATION = "2,3";
 
     // Projects
 	public static final String PROJECT_NAME_DIABETES = "Diabetes_Project";
@@ -125,6 +136,7 @@ public class MLIntegrationTestConstants {
     public static final String PROJECT_NAME_AZURE_STREAMING = "Azure_Streaming_Project";
     public static final String PROJECT_NAME_ABALONE = "Abalone_Project";
     public static final String PROJECT_NAME_TITANIC = "Titanic_Project";
+    public static final String PROJECT_NAME_RECOMMENDATION = "Recommendation_Project";
 
     // Default analysis
 	public static final String ANALYSIS_NAME = "Dummy_Analysis";

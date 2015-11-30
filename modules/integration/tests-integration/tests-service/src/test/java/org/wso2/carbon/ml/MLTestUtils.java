@@ -18,6 +18,12 @@
 
 package org.wso2.carbon.ml;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,12 +32,6 @@ import org.wso2.carbon.ml.integration.common.utils.MLBaseTest;
 import org.wso2.carbon.ml.integration.common.utils.MLHttpClient;
 import org.wso2.carbon.ml.integration.common.utils.MLIntegrationTestConstants;
 import org.wso2.carbon.ml.integration.common.utils.exception.MLHttpClientException;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class contains the utility methods required to create tests
@@ -217,6 +217,31 @@ public class MLTestUtils extends MLBaseTest {
     }
 
     /**
+     * Create a model with given configurations of the model to be trained (Collaborative Filtering)
+     *
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param userVariable User ID column name
+     * @param productVariable Product ID column name
+     * @param observations Observations: Rating column name or list of observation columns
+     * @param trainDataFraction Fraction of data from the dataset to be trained with
+     * @param projectID ID of the project
+     * @param versionSetId Additional information about the name
+     * @throws MLHttpClientException
+     */
+    public static String createModelWithConfigurations(String algorithmName, String algorithmType, String userVariable,
+            String productVariable, String observations, String type, String trainDataFraction, int projectID, int versionSetId,
+            MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
+        analysisName = algorithmName + versionSetId;
+
+        // Create an analysis
+        mlHttpclient.createAnalysis(analysisName, projectID);
+        analysisId = mlHttpclient.getAnalysisId(projectID, analysisName);
+        return createModelWithConfigurations(algorithmName, algorithmType, userVariable, productVariable,
+                observations, type, trainDataFraction, projectID, versionSetId, analysisId, mlHttpclient);
+    }
+
+    /**
      * Create a model with given configurations of the model to be trained
      *
      * @param algorithmName Name of the learning algorithm
@@ -287,6 +312,39 @@ public class MLTestUtils extends MLBaseTest {
     }
 
     /**
+     * Create a model with given configurations of the model to be trained (Collaborative Filtering)
+     *
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param userVariable User ID column name
+     * @param productVariable Product ID column name
+     * @param observations Observations: Rating column name or list of observation columns
+     * @param trainDataFraction Fraction of data from the dataset to be trained with
+     * @param projectID ID of the project
+     * @param versionSetId Additional information about the name
+     * @throws MLHttpClientException
+     */
+    public static String createModelWithConfigurations(String algorithmName, String algorithmType, String userVariable,
+            String productVariable, String observations, String type, String trainDataFraction, int projectID, int versionSetId,
+            int analysisId, MLHttpClient mlHttpclient) throws MLHttpClientException, IOException, JSONException {
+        mlHttpclient.setFeatureDefaults(analysisId);
+
+        // Set Model Configurations
+        mlHttpclient.setModelConfiguration(analysisId, setModelConfigurations(algorithmName, algorithmType,
+                userVariable, productVariable, observations, type, trainDataFraction));
+
+        // Set default Hyper-parameters
+        mlHttpclient.doHttpPost("/api/analyses/" + analysisId + "/hyperParams/defaults", null);
+
+        // Create a model
+        CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, versionSetId);
+        modelName = mlHttpclient.getModelName(httpResponse);
+        modelId = mlHttpclient.getModelId(modelName);
+
+        return modelName;
+    }
+
+    /**
      * Sets model configuration
      *
      * @param algorithmName Name of the learning algorithm
@@ -327,6 +385,34 @@ public class MLTestUtils extends MLBaseTest {
         configurations.put(MLIntegrationTestConstants.NEW_NORMAL_LABEL_CONFIG, newNormalLabel);
         configurations.put(MLIntegrationTestConstants.NEW_ANOMALY_LABEL_CONFIG, newAnomalyLabel);
         configurations.put(MLIntegrationTestConstants.NORMALIZATION_CONFIG, normalization);
+
+        return configurations;
+    }
+
+    /**
+     * Sets model configuration (Collaborative Filtering)
+     *
+     * @param algorithmName Name of the learning algorithm
+     * @param algorithmType Type of the learning algorithm
+     * @param userVariable User ID column name
+     * @param productVariable Product ID column name
+     * @param observations Observations: Rating column name or list of observation columns
+     * @param trainDataFraction Fraction of data from the dataset to be trained with
+     * @return
+     */
+    public static Map<String, String> setModelConfigurations(String algorithmName, String algorithmType,
+            String userVariable, String productVariable, String observations, String type, String trainDataFraction) {
+        Map<String, String> configurations = new HashMap<String, String>();
+        configurations.put(MLIntegrationTestConstants.ALGORITHM_NAME, algorithmName);
+        configurations.put(MLIntegrationTestConstants.ALGORITHM_TYPE, algorithmType);
+        configurations.put(MLIntegrationTestConstants.USER_VARIABLE, userVariable);
+        configurations.put(MLIntegrationTestConstants.PRODUCT_VARIABLE, productVariable);
+        if (type == "explicit") {
+            configurations.put(MLIntegrationTestConstants.RATING_VARIABLE, observations);
+        } else {
+            configurations.put(MLIntegrationTestConstants.OBSERVATIONS, observations);
+        }
+        configurations.put(MLIntegrationTestConstants.TRAIN_DATA_FRACTION_CONFIG, trainDataFraction);
 
         return configurations;
     }
