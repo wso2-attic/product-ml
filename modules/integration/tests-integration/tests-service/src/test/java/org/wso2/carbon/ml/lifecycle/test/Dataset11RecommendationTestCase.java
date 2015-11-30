@@ -25,6 +25,7 @@ import java.io.IOException;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -102,6 +103,38 @@ public class Dataset11RecommendationTestCase extends MLBaseTest {
     }
 
     /**
+     * A test case for getting user recommendations for given product.
+     *
+     * @throws MLHttpClientException
+     * @throws JSONException
+     */
+    private void testGetUserRecommendation() throws MLHttpClientException, JSONException {
+        response = mlHttpclient
+                .doHttpGet("/api/models/" + modelId + "/user-recommendations?product-id=123&no-of-users=2");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        String reply = mlHttpclient.getResponseAsString(response);
+        JSONArray recommendations = new JSONArray(reply);
+        assertEquals(2, recommendations.length());
+    }
+
+    /**
+     * A test case for getting product recommendations for given user.
+     *
+     * @throws MLHttpClientException
+     * @throws JSONException
+     */
+    private void testGetProductRecommendation() throws MLHttpClientException, JSONException {
+        response = mlHttpclient
+                .doHttpGet("/api/models/" + modelId + "/product-recommendations?user-id=1&no-of-products=3");
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        String reply = mlHttpclient.getResponseAsString(response);
+        JSONArray recommendations = new JSONArray(reply);
+        assertEquals(3, recommendations.length());
+    }
+
+    /**
      * Creates a test case for creating an analysis, building a Collaborative Filtering explicit model
      * model
      *
@@ -115,6 +148,9 @@ public class Dataset11RecommendationTestCase extends MLBaseTest {
     public void testBuildCollaborativeFilteringExplicit()
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("COLLABORATIVE_FILTERING", MLIntegrationTestConstants.RECOMMENDATION);
+        // Get recommendations for products and users
+        testGetProductRecommendation();
+        testGetUserRecommendation();
     }
 
     /**
@@ -131,6 +167,9 @@ public class Dataset11RecommendationTestCase extends MLBaseTest {
     public void testBuildCollaborativeFilteringImplicit()
             throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("COLLABORATIVE_FILTERING_IMPLICIT", MLIntegrationTestConstants.RECOMMENDATION);
+        // Get recommendations for products and users
+        testGetProductRecommendation();
+        testGetUserRecommendation();
     }
 
     @AfterClass(alwaysRun = true)
