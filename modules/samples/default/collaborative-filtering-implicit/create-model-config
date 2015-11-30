@@ -1,7 +1,7 @@
 [
 {
 "key":"algorithmName",
-"value":"COLLABORATIVE_FILTERING"
+"value":"COLLABORATIVE_FILTERING_IMPLICIT"
 },
 {
 "key":"algorithmType",
