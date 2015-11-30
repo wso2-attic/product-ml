@@ -135,6 +135,30 @@ public class Dataset11RecommendationTestCase extends MLBaseTest {
     }
 
     /**
+     * A test case for getting product recommendations from invalid model ID.
+     *
+     * @throws MLHttpClientException
+     * @throws JSONException
+     */
+    private void testGetProductRecommendationInvalidModelId() throws MLHttpClientException, JSONException {
+        response = mlHttpclient.doHttpGet("/api/models/" + 999 + "/product-recommendations?user-id=1&no-of-products=3");
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+    }
+
+    /**
+     * A test case for getting user recommendations from invalid model ID.
+     *
+     * @throws MLHttpClientException
+     * @throws JSONException
+     */
+    private void testGetUserRecommendationInvalidModelId() throws MLHttpClientException, JSONException {
+        response = mlHttpclient.doHttpGet("/api/models/" + 999 + "/user-recommendations?product-id=123&no-of-users=2");
+        assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+    }
+
+    /**
      * Creates a test case for creating an analysis, building a Collaborative Filtering explicit model
      * model
      *
@@ -151,6 +175,9 @@ public class Dataset11RecommendationTestCase extends MLBaseTest {
         // Get recommendations for products and users
         testGetProductRecommendation();
         testGetUserRecommendation();
+
+        // Get product recommendation for invalid model ID
+        testGetProductRecommendationInvalidModelId();
     }
 
     /**
@@ -170,6 +197,9 @@ public class Dataset11RecommendationTestCase extends MLBaseTest {
         // Get recommendations for products and users
         testGetProductRecommendation();
         testGetUserRecommendation();
+
+        // Get user recommendation for invalid model ID
+        testGetUserRecommendationInvalidModelId();
     }
 
     @AfterClass(alwaysRun = true)
