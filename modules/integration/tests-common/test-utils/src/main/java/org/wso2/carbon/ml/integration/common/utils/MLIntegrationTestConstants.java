@@ -56,7 +56,7 @@ public class MLIntegrationTestConstants {
 	public static final String TRAIN_DATA_FRACTION_DEFAULT = "1.0";
 
 	// The time constant
-    public static final long THREAD_SLEEP_TIME_LARGE = 20000;
+    public static final long THREAD_SLEEP_TIME_LARGE = 120000;
 
 	// Constants for Test cases
 	public static final String CLASSIFICATION = "Classification";
