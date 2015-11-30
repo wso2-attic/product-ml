@@ -73,7 +73,7 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
         Map <String,String> configurations = new HashMap<String,String>();
         configurations.put(MLConstants.ALGORITHM_NAME, ALGORITHM_NAME);
         configurations.put(MLConstants.ALGORITHM_TYPE, "Classification");
-        configurations.put(MLConstants.RESPONSE, "Class");
+        configurations.put(MLConstants.RESPONSE_VARIABLE, "Class");
         configurations.put(MLConstants.TRAIN_DATA_FRACTION, "0.7");
         CloseableHttpResponse response = mlHttpclient.setModelConfiguration(analysisId,
                 configurations);
@@ -170,7 +170,7 @@ public class ModelConfigurationsTestCase extends MLBaseTest {
         Map<String, String> configurations = new HashMap<String, String>();
         configurations.put(MLConstants.ALGORITHM_NAME, "ABC");
         configurations.put(MLConstants.ALGORITHM_TYPE, "Classification");
-        configurations.put(MLConstants.RESPONSE, "Class");
+        configurations.put(MLConstants.RESPONSE_VARIABLE, "Class");
         configurations.put(MLConstants.TRAIN_DATA_FRACTION, "0.7");
         CloseableHttpResponse response = mlHttpclient.setModelConfiguration(analysisId2, configurations);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
