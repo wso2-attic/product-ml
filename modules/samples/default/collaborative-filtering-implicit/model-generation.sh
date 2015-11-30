@@ -78,4 +78,12 @@ echo "#building the model"
 curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelId} -k -v
 sleep 30
 
+echo "#recommend products"
+curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -k -v "https://localhost:9443/api/models/{modelId}/product-recommendations?user-id=1&no-of-products=3"
+sleep 5
+
+echo "#recommend users"
+curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -k -v "https://localhost:9443/api/models/1{modelId}/user-recommendations?product-id=123&no-of-users=2"
+sleep 5
+
 
