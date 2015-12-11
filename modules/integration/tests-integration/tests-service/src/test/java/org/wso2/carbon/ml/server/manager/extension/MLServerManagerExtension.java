@@ -93,8 +93,6 @@ public class MLServerManagerExtension extends ExecutionListenerExtension {
             mlServerManager.startServer();
         } catch (IOException e) {
             throw new AutomationFrameworkException("Error while starting server", e);
-        } catch (XPathExpressionException e) {
-            throw new AutomationFrameworkException("Error while starting server", e);
         }
     }
 
