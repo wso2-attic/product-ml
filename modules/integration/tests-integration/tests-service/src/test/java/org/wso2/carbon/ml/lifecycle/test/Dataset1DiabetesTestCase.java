@@ -70,13 +70,24 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
      * @throws JSONException
      */
     private void testPredictDiabetes() throws MLHttpClientException, JSONException {
+        testPredictDiabetes(false);
+    }
+    
+    private void testPredictDiabetes(boolean skipDecoding) throws MLHttpClientException, JSONException {
         String payload = "[[1,89,66,23,94,28.1,0.167,21],[2,197,70,45,543,30.5,0.158,53]]";
-        response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/predict", payload);
+        String url = skipDecoding ? "/api/models/" + modelId + "/predict?skipDecoding=true" : "/api/models/" + modelId + "/predict";
+        response = mlHttpclient.doHttpPost(url, payload);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         String reply = mlHttpclient.getResponseAsString(response);
         JSONArray predictions = new JSONArray(reply);
-        assertEquals(2, predictions.length());
+        assertEquals("Expected 2 predictions but received only " + predictions.length(), 2, predictions.length());
+        if (skipDecoding) {
+            assertEquals("Expected a double value but found " + predictions.get(0), true,
+                    predictions.get(0) instanceof Double);
+            assertEquals("Expected a double value but found " + predictions.get(1), true,
+                    predictions.get(1) instanceof Double);
+        }
     }
 
     /**
@@ -254,6 +265,7 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
         buildModelWithLearningAlgorithm("LOGISTIC_REGRESSION", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built Linear Regression model
         testPredictDiabetes();
+        testPredictDiabetes(true);
         testPredictDiabetesFromFile();
         testExportAsPMML(modelId);
         testPublishAsPMML(modelId);
