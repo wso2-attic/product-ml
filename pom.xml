@@ -455,7 +455,7 @@
 		<carbon.analytics.version>1.0.3</carbon.analytics.version>
 		<carbon.metrics.version>1.1.0</carbon.metrics.version>
 		<carbon.analytics.common.version>5.0.2</carbon.analytics.common.version>
-		<carbon.kernel.version>4.4.1</carbon.kernel.version>
+		<carbon.kernel.version>4.4.3</carbon.kernel.version>
 		<carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
 
 		<!-- Spark dependency versions -->
@@ -529,7 +529,7 @@
 		<log4j.version>${version.log4j}</log4j.version>
 		<commons.logging.version>1.1.1</commons.logging.version>
 		<!-- Integration Test Dependency versions -->
-		<carbon.automation.version>4.4.1</carbon.automation.version>
+		<carbon.automation.version>4.4.3</carbon.automation.version>
 		<carbon.automation.utils.version>4.4.1</carbon.automation.utils.version>
 		<json.version>2.0.0.wso2v1</json.version>
 		<testng.version>6.8.5</testng.version>
@@ -541,7 +541,7 @@
 		<guava.version>14.0.1</guava.version>
 		<zookeeper.version>3.4.5</zookeeper.version>
 		<selenium.version>2.41.0</selenium.version>
-		<jacoco.agent.version>0.7.4.201502262128</jacoco.agent.version>
+		<jacoco.agent.version>0.7.5.201505241946</jacoco.agent.version>
 		<orbit.version.asm>3.1.wso2v1</orbit.version.asm>
 		<axis2.transport.mail.version>1.0.0</axis2.transport.mail.version>
 		<axis2.transport.base.version>1.0.0</axis2.transport.base.version>
