@@ -124,8 +124,8 @@ public class CreateProjectTestCase extends MLIntegrationUiBaseTest {
             newProjectPage.sleepTillPageFound(By.xpath(mlUIElementMapper.getElement("project.name.error")));
             Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper
                     .getElement("project.name.error"))), "No validation for project name field");
-            Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper
-                    .getElement("project.description.error"))), "No validation for project description field");
+            /*Assert.assertTrue(newProjectPage.isElementPresent(By.xpath(mlUIElementMapper
+                    .getElement("project.description.error"))), "No validation for project description field");*/
         } catch (InvalidPageException e) {
             throw new CreateProjectTestException("Failed to validate input fields: ", e);
         }
