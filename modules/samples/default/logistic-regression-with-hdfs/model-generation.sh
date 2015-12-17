@@ -1,21 +1,28 @@
 #!/bin/bash
+
+# check performance test mode
+mode="$1"
+
+# server IP source
+. ../../server.conf
+
 # Die on any error:
 set -e
 
 DIR="${BASH_SOURCE%/*}"; if [ ! -d "$DIR" ]; then DIR="$PWD"; fi; . "$DIR/../../base.sh"
 
 echo "#create a dataset"
-curl -X POST -b cookies  https://localhost:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='diabetes' -F version='1.0.0' -F description='Diabetes Dataset' -F sourceType='hdfs' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F sourcePath='hdfs://localhost:9000/ml/IndiansDiabetes.csv' -F file='hdfs://localhost:9000/ml/IndiansDiabetes.csv' -k
+curl -X POST -b cookies  https://$SEVER_IP:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='diabetes' -F version='1.0.0' -F description='indiansDiabetes-logistic-regression-hdfs-dataset' -F sourceType='hdfs' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F sourcePath='hdfs://$SEVER_IP:9000/ml/IndiansDiabetes.csv' -F file='hdfs://$SEVER_IP:9000/ml/IndiansDiabetes.csv' -k
 sleep 10
 
 # creating a project
 echo "#creating a project"
-curl -X POST -d @'create-project' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects -k
+curl -X POST -d @'create-project' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects -k
 sleep 2
 
 #getting the project
 echo "#getting the project"
-project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/wso2-ml-logistic-regression-with-hdfs-sample-project -k)
+project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/wso2-ml-logistic-regression-with-hdfs-sample-project -k)
 sleep 2
 
 #update the json file with retrieved values
@@ -26,31 +33,31 @@ sleep 2
 
 #creating an analysis
 echo "creating an analysis"
-curl -X POST -d @'create-analysis' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses -k
+curl -X POST -d @'create-analysis' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses -k
 sleep 2
 
 #getting analysis id
 echo "getting analysis id"
-analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/projects/${projectId}/analyses/wso2-ml-logistic-regression-with-hdfs -k)
+analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/${projectId}/analyses/wso2-ml-logistic-regression-with-hdfs -k)
 sleep 2
 
 analysisId=$(echo "$analysis"|jq '.id')
 
 #setting model configs
 echo "#setting model configs"
-curl -X POST -d @'create-model-config' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/${analysisId}/configurations -k -v
+curl -X POST -d @'create-model-config' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/configurations -k -v
 sleep 2
 
 echo "#adding default features with customized options"
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/${analysisId}/features/defaults -k -v -d @'customized-features'
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/features/defaults -k -v -d @'customized-features'
 sleep 2
 
 echo "#setting default hyper params"
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/analyses/${analysisId}/hyperParams/defaults -k -v
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams/defaults -k -v
 sleep 2
 
 echo "#getting dataset version"
-datasetVersions=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/datasets/${datasetId}/versions -k)
+datasetVersions=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/datasets/${datasetId}/versions -k)
 sleep 2
 
 #update the json file
@@ -60,22 +67,37 @@ sleep 2
 ${SED} -i 's/^\("versionSetId":"\)[^"]*/\1'$datasetVersionId/ create-model;
 sleep 2
 
-echo "#create model"
-model=$(curl -X POST -d @'create-model' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models -k)
-sleep 2
+# build only one model for default case and warm-tests
+# build three models for performance tests
+modelCount=1
+if [ "$mode" = "perf" ]; then
+	modelCount=3
+fi
 
-echo "#getting model"
-modelName=$(echo "$model"|jq -r '.name')
-model=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelName} -k)
-sleep 2
-modelId=$(echo "$model"|jq '.id')
+for i in `seq $modelCount`; do
+	echo "#create model"
+	model=$(curl -X POST -d @'create-model' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models -k)
+	sleep 2
 
-echo "#building the model"
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelId} -k -v
-sleep 40
+	echo "#getting model"
+	modelName=$(echo "$model"|jq -r '.name')
+	model=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelName} -k)
+	sleep 2
+	modelId=$(echo "$model"|jq '.id')
 
-echo "#predict using model"
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelId}/predict -k -v -d @'prediction-test'
+	echo "#building the model"
+	curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelId} -k -v
+	sleep 40
 
-echo "#exporting model to pmml"
-curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://localhost:9443/api/models/${modelId}/export?mode=pmml -k
+	echo "#predict using model"
+	curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelId}/predict -k -v -d @'prediction-test'
+
+	echo "#exporting model to pmml"
+	curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelId}/export?mode=pmml -k
+done
+
+# delete project and dataset when running warm-up tests
+if [ "$mode" = "wmp" ]; then
+	curl -s -X DELETE -H "Authorization: Basic YWRtaW46YWRtaW4=" https://$SEVER_IP:9443/api/projects/${projectId} -k
+	curl -s -X DELETE -H "Authorization: Basic YWRtaW46YWRtaW4=" https://$SEVER_IP:9443/api/datasets/${datasetId} -k	
+fi

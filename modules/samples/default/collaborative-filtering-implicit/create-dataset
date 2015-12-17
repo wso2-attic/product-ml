@@ -1,5 +1,5 @@
 {
-"name" : "recommendation",
+"name" : "recommendation-collaborative-filtering-implicit-dataset",
 "dataSourceType" : "file",
 "dataTargetType" : "file",
 "sourcePath" : "file://PATH/dummyRecommendation.csv",

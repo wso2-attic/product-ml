@@ -1,5 +1,5 @@
 {
-"name" : "diabetes",
+"name" : "indiansDiabetes-anomaly-detection-labeled-dataset",
 "dataSourceType" : "file",
 "dataTargetType" : "file",
 "sourcePath" : "file://PATH/IndiansDiabetes.csv",

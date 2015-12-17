@@ -1,5 +1,5 @@
 {
-"name" : "diabetes",
+"name" : "indiansDiabetes-logistic-regression-hdfs-dataset",
 "dataSourceType" : "hdfs",
 "dataTargetType" : "file",
 "sourcePath" : "hdfs://localhost:9000/ml/IndiansDiabetes.csv",
