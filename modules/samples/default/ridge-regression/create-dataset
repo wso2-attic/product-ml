@@ -1,5 +1,5 @@
 {
-"name" : "abalone",
+"name" : "abalone-ridge-regression-dataset",
 "dataSourceType" : "file",
 "dataTargetType" : "file",
 "sourcePath" : "file://PATH/abalone.csv",

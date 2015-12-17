@@ -1,5 +1,5 @@
 {
-"name" : "seeds",
+"name" : "seeds-kmeans-dataset",
 "dataSourceType" : "file",
 "dataTargetType" : "file",
 "sourcePath" : "file://PATH/seeds.csv",

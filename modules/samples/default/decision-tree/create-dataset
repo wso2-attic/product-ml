@@ -1,5 +1,5 @@
 {
-"name" : "diabetes",
+"name" : "indiansDiabetes-decision-tree-dataset",
 "dataSourceType" : "file",
 "dataTargetType" : "file",
 "sourcePath" : "file://PATH/IndiansDiabetes.csv",
