@@ -229,12 +229,6 @@
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>INSTALL.txt</source>
-            <outputDirectory>wso2ml-${pom.version}</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
             <source>release-notes.html</source>
             <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
             <destName>release-notes.html</destName>

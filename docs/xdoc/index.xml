@@ -58,17 +58,19 @@
             other WSO2 products.
         </p>
 
-        <h2>Key Features</h2>
+        <h2>New Features in this release</h2>
 
             <ul>
-                <li>Wizard like pipeline</li>
-                <li>Assisted model building</li>
-                <li>Data exploration utility</li>
+		<li>Deep learning algorithm support.</li>
+		<li>Anomaly detection algorithm support.</li>
+		<li>Recommendation algorithm support.</li>
+		<li>Supports the PMML format when downloading models</li>
+		<li>UI improvements.</li>
             </ul>
 
         <h2>@product.name@ - Documentation</h2>
 
-        <p>See the <a href="http://docs.wso2.org/display/ML100/">Wiki docs of v@product.version@</a>for instructions on
+        <p>See the <a href="http://docs.wso2.org/display/ML110/">Wiki docs of v@product.version@</a>for instructions on
             installation, administration and running samples with @product.name@, v@product.version@</p>
 
     </body>
