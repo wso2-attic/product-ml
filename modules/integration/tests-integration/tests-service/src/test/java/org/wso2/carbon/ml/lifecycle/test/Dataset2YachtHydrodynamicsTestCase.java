@@ -162,6 +162,24 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         testPublishAsPMML(modelId);
     }
 
+    /**
+     * Creates a test case for creating an analysis, building a Random Forest Regression model and predicting using the built
+     * model
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a Random Forest regression model and predict for yacht dataset", groups = "createRandomForestRegressionModelYacht")
+    public void testBuildRandomForestRegressionModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
+        buildModelWithLearningAlgorithm("RANDOM_FOREST_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
+        // Predict using built Random Forest Regression model
+        testPredictYacht();
+
+    }
+
     @AfterClass(alwaysRun = true)
     public void tearDown() throws InterruptedException, MLHttpClientException {
         super.destroy();

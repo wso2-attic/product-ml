@@ -164,6 +164,23 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
     }
 
     /**
+     * Creates a test case for creating an analysis, building a Random Forest Regression model and predicting using the built
+     * model
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     * @throws JSONException
+     * @throws InterruptedException
+     */
+    @Test(description = "Build a Random Forest regression model and predict for forest fires dataset", groups = "createRandomForestRegressionModelForestFires", dependsOnGroups = "createLassoRegressionModelForestFires")
+    public void testBuildRandomForestRegressionModel() throws MLHttpClientException, IOException, JSONException,
+            InterruptedException {
+        buildModelWithLearningAlgorithm("RANDOM_FOREST_REGRESSION", MLIntegrationTestConstants.NUMERICAL_PREDICTION);
+        // Predict using built Random Forest Regression model
+        testPredictForestFires();
+    }
+
+    /**
      * Creates a test case for creating an analysis, building a K-Means clustering model, exporting and publishing the
      * model in PMML format
      * 
@@ -172,7 +189,7 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
      * @throws JSONException
      * @throws InterruptedException
      */
-    @Test(description = "Build a K-means model", groups = "createKMeansForestFires", dependsOnGroups = "createLassoRegressionModelForestFires")
+    @Test(description = "Build a K-means model", groups = "createKMeansForestFires", dependsOnGroups = "createRandomForestRegressionModelForestFires")
     public void testBuildKMeansModel() throws MLHttpClientException, IOException, JSONException, InterruptedException {
         buildModelWithLearningAlgorithm("K_MEANS", MLIntegrationTestConstants.CLUSTERING);
         testExportAsPMML(modelId);
