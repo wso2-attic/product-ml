@@ -3,8 +3,8 @@ WSO2 Machine Learner - Sample Model Generation Flow
 
 Note : This sample only works in Unix environment
 
-Algorithm: Random Forest
-========================
+Algorithm: Random Forest Classification
+=======================================
 
 Tuned hyper-parameter values
 ============================
