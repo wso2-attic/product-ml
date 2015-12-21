@@ -1,5 +1,5 @@
 {
-"name" : "wso2-ml-random-forest-sample-analysis",
-"comments" : "Random Forest for Pima Indians Diabetes",
+"name" : "wso2-ml-random-forest-classification-sample-analysis",
+"comments" : "Random Forest Classification for Pima Indians Diabetes",
 "projectId":"4"
 }

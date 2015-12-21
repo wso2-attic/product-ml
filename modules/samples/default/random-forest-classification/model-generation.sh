@@ -3,7 +3,7 @@
 # check performance test mode
 mode="$1"
 
-echo "testing Random Forest workflow"
+echo "testing Random Forest Classification workflow"
 
 # server IP source
 . ../../server.conf
@@ -15,7 +15,7 @@ DIR="${BASH_SOURCE%/*}"; if [ ! -d "$DIR" ]; then DIR="$PWD"; fi; . "$DIR/../../
 
 echo "#create a dataset"
 path=$(pwd)
-curl -X POST -b cookies  https://$SEVER_IP:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='indiansDiabetes-random-forest-dataset' -F version='1.0.0' -F description='Pima Indians Diabetes Dataset' -F sourceType='file' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F file=@'/'$path'/IndiansDiabetes.csv' -k
+curl -X POST -b cookies  https://$SEVER_IP:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='indiansDiabetes-random-forest-classification-dataset' -F version='1.0.0' -F description='Pima Indians Diabetes Dataset' -F sourceType='file' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F file=@'/'$path'/IndiansDiabetes.csv' -k
 sleep 5
 
 # creating a project
@@ -25,7 +25,7 @@ sleep 2
 
 #getting the project
 echo "#getting the project"
-project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/wso2-ml-random-forest-sample-project -k)
+project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/wso2-ml-random-forest-classification-sample-project -k)
 sleep 2
 
 #update the json file with retrieved values
@@ -41,7 +41,7 @@ sleep 2
 
 #getting analysis id
 echo "getting analysis id"
-analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/${projectId}/analyses/wso2-ml-random-forest-sample-analysis -k)
+analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/${projectId}/analyses/wso2-ml-random-forest-classification-sample-analysis -k)
 sleep 2
 
 analysisId=$(echo "$analysis"|jq '.id')
