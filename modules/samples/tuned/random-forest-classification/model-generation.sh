@@ -3,7 +3,7 @@
 # check performance test mode
 mode="$1"
 
-echo "testing Random Forest workflow"
+echo "testing Random Forest Classification workflow"
 
 # server IP source
 . ../../server.conf
@@ -15,7 +15,7 @@ DIR="${BASH_SOURCE%/*}"; if [ ! -d "$DIR" ]; then DIR="$PWD"; fi; . "$DIR/../../
 
 echo "#create a dataset"
 path=$(pwd)
-curl -X POST -b cookies  https://$SEVER_IP:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='breastCancerWisconsin-random-forest-dataset' -F version='2.0.0' -F description='Breast Cancer Wisconsin Dataset' -F sourceType='file' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F file=@'/'$path'/breastCancerWisconsin.csv' -k
+curl -X POST -b cookies  https://$SEVER_IP:9443/api/datasets -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "Content-Type: multipart/form-data" -F datasetName='breastCancerWisconsin-random-forest-classification-dataset' -F version='2.0.0' -F description='Breast Cancer Wisconsin Dataset' -F sourceType='file' -F destination='file' -F dataFormat='CSV' -F containsHeader='true' -F file=@'/'$path'/breastCancerWisconsin.csv' -k
 sleep 5
 
 # creating a project
@@ -25,7 +25,7 @@ sleep 2
 
 #getting the project
 echo "#getting the project"
-project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/wso2-ml-random-forest-tuned-sample-project -k)
+project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/wso2-ml-random-forest-classification-tuned-sample-project -k)
 sleep 2
 
 #update the json file with retrieved values
@@ -41,7 +41,7 @@ sleep 2
 
 #getting analysis id
 echo "getting analysis id"
-analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/${projectId}/analyses/wso2-ml-random-forest-tuned-sample-analysis -k)
+analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/${projectId}/analyses/wso2-ml-random-forest-classification-tuned-sample-analysis -k)
 sleep 2
 
 analysisId=$(echo "$analysis"|jq '.id')
@@ -56,7 +56,7 @@ curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW
 sleep 2
 
 echo "#setting tuned hyper params"
-curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=RANDOM_FOREST -k -v
+curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=RANDOM_FOREST_CLASSIFICATION -k -v
 sleep 2
 
 echo "#getting dataset version"

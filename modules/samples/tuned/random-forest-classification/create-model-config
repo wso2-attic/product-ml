@@ -1,7 +1,7 @@
 [
 {
 "key":"algorithmName",
-"value":"RANDOM_FOREST"
+"value":"RANDOM_FOREST_CLASSIFICATION"
 },
 {
 "key":"algorithmType",
