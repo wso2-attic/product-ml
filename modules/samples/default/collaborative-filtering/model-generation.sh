@@ -90,7 +90,19 @@ for i in `seq $modelCount`; do
 
 	echo "#building the model"
 	curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelId} -k -v
-	sleep 30
+
+ 	while [ 1 ]
+        do
+        model=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelName} -k)
+        sleep 2
+        model_status=$(echo "$model"|jq '.status')
+        if [[ $model_status == *"Complete"* ]]
+        then
+           echo "Model building has completed."
+           break
+        fi
+        sleep 10
+        done
 
 	echo "#recommend products"
 	curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -k -v "https://$SEVER_IP:9443/api/models/${modelId}/product-recommendations?user-id=1&no-of-products=3"
