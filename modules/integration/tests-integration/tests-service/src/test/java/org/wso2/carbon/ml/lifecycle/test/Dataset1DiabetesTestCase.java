@@ -228,7 +228,7 @@ public class Dataset1DiabetesTestCase extends MLBaseTest {
     @Test(description = "Build a Random Forest model and predict for Diabetes dataset", groups = "createRandomForestModelDiabetes", dependsOnGroups = "createDecisionTreeModelDiabetes")
     public void testBuildRandomForestModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
-        buildModelWithLearningAlgorithm("RANDOM_FOREST", MLIntegrationTestConstants.CLASSIFICATION);
+        buildModelWithLearningAlgorithm("RANDOM_FOREST_CLASSIFICATION", MLIntegrationTestConstants.CLASSIFICATION);
         // Predict using built model
         testPredictDiabetes();
     }
