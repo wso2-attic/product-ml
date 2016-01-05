@@ -368,10 +368,11 @@ public abstract class MLBaseTest {
      *
      * @throws MLHttpClientException
      */
-    protected void testExportAsPMML(int modelId) throws MLHttpClientException {
+    protected void testExportAsPMML(int modelId) throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.exportAsPMML(modelId);
         assertEquals("Pmml download has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
                 response.getStatusLine().getStatusCode());
+        response.close();
     }
 
     /**
@@ -379,10 +380,11 @@ public abstract class MLBaseTest {
      *
      * @throws MLHttpClientException
      */
-    protected void testPublishAsPMML(int modelId) throws MLHttpClientException {
+    protected void testPublishAsPMML(int modelId) throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/publish?mode=pmml", null);
         assertEquals("Pmml publish has failed. Unexpected response received", Response.Status.OK.getStatusCode(),
                 response.getStatusLine().getStatusCode());
+        response.close();
     }
     
     

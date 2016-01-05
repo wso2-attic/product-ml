@@ -241,11 +241,12 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
      *
      * @throws MLHttpClientException
      */
-    private void testExportAsPMML() throws MLHttpClientException {
+    private void testExportAsPMML() throws MLHttpClientException, IOException {
         response = mlHttpclient.exportAsPMML(modelId);
         // Pmml download should fail
         assertEquals("PMML download did not fail as expected", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 response.getStatusLine().getStatusCode());
+        response.close();
     }
 
     /**
@@ -253,10 +254,11 @@ public class Dataset9AbaloneTestCase extends MLBaseTest {
      *
      * @throws MLHttpClientException
      */
-    private void testPublishAsPMML() throws MLHttpClientException {
+    private void testPublishAsPMML() throws MLHttpClientException, IOException {
         response = mlHttpclient.doHttpPost("/api/models/" + modelId + "/publish?mode=pmml", null);
         assertEquals("Pmml publish did not fail as expected", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 response.getStatusLine().getStatusCode());
+        response.close();
     }
 
     @AfterClass(alwaysRun = true)
