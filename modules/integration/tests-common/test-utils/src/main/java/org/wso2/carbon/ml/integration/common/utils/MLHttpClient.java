@@ -128,7 +128,7 @@ public class MLHttpClient {
     }
     
     /**
-     * Send a HTTP GET request to the given URI and return the response.
+     * Send a HTTP POST request to the given URI and return the response.
      *
      * @param parametersJson    Payload JSON string
      * @return                  Response from the endpoint
@@ -150,6 +150,17 @@ public class MLHttpClient {
         } catch (IOException e) {
             throw new MLHttpClientException("Failed to post to " + resourcePath, e);
         }
+    }
+
+    /**
+     * Send a HTTP POST request to the given URI  with null parameters and return the response.
+     *
+     * @param resourcePath path of the api resource
+     * @return Response from the endpoint
+     * @throws MLHttpClientException
+     */
+    public CloseableHttpResponse doHttpPost(String resourcePath) throws MLHttpClientException {
+        return doHttpPost(resourcePath, null);
     }
     
     /**
@@ -641,9 +652,9 @@ public class MLHttpClient {
         }
     }
 
-
     /**
      * Download an existing serialized model in PMML format
+     *
      * @param modelId
      * @return
      * @throws MLHttpClientException
@@ -654,7 +665,7 @@ public class MLHttpClient {
             response = doHttpGet("/api/models/" + modelId + "/export?mode=pmml");
             return response;
         } catch (MLHttpClientException e) {
-            throw new MLHttpClientException("Failed to download model as PMML for model [id] "+ modelId, e);
+            throw new MLHttpClientException("Failed to download model as PMML for model [id] " + modelId, e);
         }
     }
 }
