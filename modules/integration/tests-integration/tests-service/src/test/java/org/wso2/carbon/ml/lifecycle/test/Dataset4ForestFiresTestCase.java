@@ -95,7 +95,7 @@ public class Dataset4ForestFiresTestCase extends MLBaseTest {
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_FOREST_FIRES,
                 MLIntegrationTestConstants.TRAIN_DATA_FRACTION, projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
-        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
