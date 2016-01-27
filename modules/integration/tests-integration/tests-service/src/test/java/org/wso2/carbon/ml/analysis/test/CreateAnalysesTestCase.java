@@ -66,6 +66,22 @@ public class CreateAnalysesTestCase extends MLBaseTest {
                 .getStatusCode());
         response.close();
     }
+
+    /**
+     * Test creating an analysis with CORS.
+     *
+     * @throws MLHttpClientException
+     * @throws IOException
+     */
+    @Test(priority = 1, description = "Create an analysis with CORS")
+    public void testCreateAnalysisCrossOrigin() throws MLHttpClientException, IOException {
+        CloseableHttpResponse response = mlHttpclient
+                .createAnalysisCrossOrigin(MLIntegrationTestConstants.ANALYSIS_NAME_2,
+                        mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
+        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
+                response.getStatusLine().getStatusCode());
+        response.close();
+    }
     
     /**
      * Test creating an existing analysis.

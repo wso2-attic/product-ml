@@ -153,6 +153,34 @@ public class MLHttpClient {
     }
 
     /**
+     * Send a cross origin HTTP POST request to the given URI and return the response.
+     *
+     * @param parametersJson Payload JSON string
+     * @return Response from the endpoint
+     * @throws MLHttpClientException
+     */
+    public CloseableHttpResponse doHttpPostCrossOrigin(String resourcePath, String parametersJson)
+            throws MLHttpClientException {
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            HttpPost post = new HttpPost(getServerUrlHttps() + resourcePath);
+            post.setHeader(MLIntegrationTestConstants.CONTENT_TYPE,
+                    MLIntegrationTestConstants.CONTENT_TYPE_APPLICATION_JSON);
+            post.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
+            post.setHeader(MLIntegrationTestConstants.ORIGIN_HEADER, MLIntegrationTestConstants.ORIGIN_HEADER_VALUE);
+            if (parametersJson != null) {
+                StringEntity params = new StringEntity(parametersJson);
+                post.setEntity(params);
+            }
+            return httpClient.execute(post);
+        } catch (ClientProtocolException e) {
+            throw new MLHttpClientException("Failed to do a CROS post to " + resourcePath, e);
+        } catch (IOException e) {
+            throw new MLHttpClientException("Failed to do a CORS post to " + resourcePath, e);
+        }
+    }
+
+    /**
      * Send a HTTP POST request to the given URI  with null parameters and return the response.
      *
      * @param resourcePath path of the api resource
@@ -342,6 +370,32 @@ public class MLHttpClient {
             return doHttpPost("/api/analyses", payload);
         } catch (MLHttpClientException e) {
             throw new MLHttpClientException("Failed to create analysis: " + AnalysisName + " in project: " + ProjectId, e);
+        }
+    }
+
+    /**
+     * Create an Analysis with CORS
+     *
+     * @param AnalysisName Name for the Analysis
+     * @return response from the backend
+     * @throws MLHttpClientException
+     */
+    public CloseableHttpResponse createAnalysisCrossOrigin(String AnalysisName, int ProjectId)
+            throws MLHttpClientException {
+        try {
+            String payload;
+            if (AnalysisName == null) {
+                payload = "{\"comments\":\"Test Analysis\",\"projectId\":" + ProjectId + "}";
+            } else if (ProjectId == -1) {
+                payload = "{\"name\":\"" + AnalysisName + "\",\"comments\":\"Test Analysis\"}";
+            } else {
+                payload = "{\"name\":\"" + AnalysisName + "\",\"comments\":\"Test Analysis\",\"projectId\":" + ProjectId
+                        + "}";
+            }
+            return doHttpPostCrossOrigin("/api/analyses", payload);
+        } catch (MLHttpClientException e) {
+            throw new MLHttpClientException("Failed to create analysis: " + AnalysisName + " in project: " + ProjectId,
+                    e);
         }
     }
     
