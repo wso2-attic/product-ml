@@ -39,6 +39,8 @@ public class MLIntegrationTestConstants {
 	public static final String BASIC = "Basic ";
 	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
+	public static final String ORIGIN_HEADER = "Origin";
+	public static final String ORIGIN_HEADER_VALUE = "http://example.com";
 
 	// Constants related to configuring models
 	public static final String TRAIN_DATA_FRACTION_CONFIG = "trainDataFraction";
