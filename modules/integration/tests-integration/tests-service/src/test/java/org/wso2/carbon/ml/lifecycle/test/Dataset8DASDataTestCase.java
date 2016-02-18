@@ -85,7 +85,7 @@ public class Dataset8DASDataTestCase extends MLBaseTest {
         int analysisId = mlHttpclient.getAnalysisId(projectId, algorithmName + versionSetId);
         mlHttpclient.setFeatureCustomized(analysisId, payload);
         modelId = mlHttpclient.getModelId(modelName);
-        response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
+        response = mlHttpclient.doHttpPost("/api/models/" + modelId);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();

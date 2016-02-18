@@ -85,7 +85,7 @@ public class CreateDatasetTestCase extends MLBaseTest {
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(description = "Create a new version of an existing dataset", dependsOnMethods = "testCreateDatasetFromFile")
+    /*@Test(description = "Create a new version of an existing dataset", dependsOnMethods = "testCreateDatasetFromFile")
     public void testCreateNewDatasetVersion() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(
                 MLIntegrationTestConstants.DATASET_NAME_DIABETES, "2.0",
@@ -93,7 +93,7 @@ public class CreateDatasetTestCase extends MLBaseTest {
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
         response.close();
-    }
+    }*/
 
     /**
      * Test Creating a new version of an existing dataset
@@ -101,10 +101,10 @@ public class CreateDatasetTestCase extends MLBaseTest {
      * @throws MLHttpClientException
      * @throws IOException
      */
-    @Test(description = "Create a duplicate version of an existing dataset", dependsOnMethods = "testCreateNewDatasetVersion")
+    @Test(description = "Create a duplicate version of an existing dataset", dependsOnMethods = "testCreateDatasetFromFile")
     public void testCreateDuplicateDatasetVersion() throws MLHttpClientException, IOException {
         CloseableHttpResponse response = mlHttpclient.uploadDatasetFromCSV(
-                MLIntegrationTestConstants.DATASET_NAME_DIABETES, "2.0",
+                MLIntegrationTestConstants.DATASET_NAME_DIABETES, "1.0",
                 MLIntegrationTestConstants.DIABETES_DATASET_SAMPLE);
         assertEquals("Unexpected response received", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response
                 .getStatusLine().getStatusCode());
