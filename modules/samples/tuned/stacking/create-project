@@ -1,0 +1,6 @@
+{
+"name" : "wso2-ml-stacking-tuned-sample-project",
+"description" : "This project tests ml workflow for stacking with tuned hyper-parameters",
+"datasetName" : "breastCancerWisconsin-stacking-dataset"
+}
+
