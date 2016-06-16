@@ -25,6 +25,6 @@ How to Run?
 Outcome
 =======
 
-* Running the above script will result in a generation of random forest model for the provided data-set.
+* Running the above script will result in a generation of stacking model for the provided data-set.
 
 * Model will be stored in the file system at {ML_HOME}/models directory.
