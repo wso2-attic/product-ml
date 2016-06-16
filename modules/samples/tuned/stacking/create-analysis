@@ -1,5 +1,5 @@
 {
 "name" : "wso2-ml-stacking-tuned-sample-analysis",
-"comments" : "Random Forest for Breast Cancer Wisconsin",
-"projectId":"9"
+"comments" : "Stacking Model for Breast Cancer Wisconsin",
+"projectId":"5"
 }
