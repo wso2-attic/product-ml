@@ -3,7 +3,7 @@
 # check performance test mode
 mode="$1"
 
-echo "testing Random Forest Classification workflow"
+echo "testing Stacking workflow"
 
 # server IP source
 . ../../server.conf
@@ -29,8 +29,8 @@ project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRt
 sleep 2
 
 #update the json file with retrieved values
-projectId=$(echo "$project"|jq '.id')
-datasetId=$(echo "$project"|jq '.datasetId')
+projectId=$(echo "$project"|./jq '.id')
+datasetId=$(echo "$project"|./jq '.datasetId')
 ${SED} -i 's/^\("projectId":"\)[^"]*/\1'$projectId/ create-analysis;
 sleep 2
 
@@ -44,7 +44,7 @@ echo "getting analysis id"
 analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/${projectId}/analyses/wso2-ml-stacking-tuned-sample-analysis -k)
 sleep 2
 
-analysisId=$(echo "$analysis"|jq '.id')
+analysisId=$(echo "$analysis"|./jq '.id')
 
 #setting model configs
 echo "#setting model configs"
@@ -57,8 +57,10 @@ sleep 2
 
 echo "#setting tuned hyper params"
 curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=STACKING -k -v
-curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?Name_of_Base_Algorithm_0=DECISION_TREE -k -v
-curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?Name_of_Base_Algorithm_1=RANDOM_FOREST_CLASSIFICATION -k -v
+curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName= Name_of_Base_Algorithm_0 -k -v
+curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName= Name_of_Base_Algorithm_1 -k -v
+curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName= Name_of_Base_Algorithm_2 -k -v
+curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName= Name_of_Meta_Algorithm -k -v
 
 sleep 2
 
@@ -67,7 +69,7 @@ datasetVersions=$(curl -H "Content-Type: application/json" -H "Authorization: Ba
 sleep 2
 
 #update the json file
-datasetVersionId=$(echo "$datasetVersions"|jq '.[0] .id')
+datasetVersionId=$(echo "$datasetVersions"|./jq '.[0] .id')
 ${SED} -i 's/^\("analysisId":"\)[^"]*/\1'$analysisId/ create-model;
 sleep 2
 ${SED} -i 's/^\("versionSetId":"\)[^"]*/\1'$datasetVersionId/ create-model;
@@ -86,10 +88,10 @@ for i in `seq $modelCount`; do
 	sleep 2
 
 	echo "#getting model"
-	modelName=$(echo "$model"|jq -r '.name')
+	modelName=$(echo "$model"|./jq -r '.name')
 	model=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelName} -k)
 	sleep 2
-	modelId=$(echo "$model"|jq '.id')
+	modelId=$(echo "$model"|./jq '.id')
 
 	echo "#building the model"
 	curl -X POST -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelId} -k -v
@@ -98,7 +100,7 @@ for i in `seq $modelCount`; do
         do
         model=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelName} -k)
         sleep 2
-        model_status=$(echo "$model"|jq '.status')
+        model_status=$(echo "$model"|./jq '.status')
         if [[ $model_status == *"Complete"* ]]
         then
            echo "Model building has completed."
