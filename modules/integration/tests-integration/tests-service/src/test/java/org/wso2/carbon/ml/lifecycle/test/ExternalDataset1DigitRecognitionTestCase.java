@@ -104,7 +104,7 @@ public class ExternalDataset1DigitRecognitionTestCase extends MLBaseTest {
      * @throws InterruptedException
      */
     @Test(description = "Build a Decision tree model", groups = "createDecisionTreeDigitRecognition")
-    public void testBuildDecistionTreeModel() throws MLHttpClientException, IOException, JSONException,
+    public void testBuildDecisionTreeModel() throws MLHttpClientException, IOException, JSONException,
             InterruptedException {
         buildModelWithLearningAlgorithm("DECISION_TREE", MLIntegrationTestConstants.CLASSIFICATION);
     }
