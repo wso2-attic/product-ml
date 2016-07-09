@@ -201,7 +201,8 @@ public class MLHttpClient {
         HttpDelete delete;
         try {
             delete = new HttpDelete(getServerUrlHttps() + resourcePath);
-            delete.setHeader(MLIntegrationTestConstants.CONTENT_TYPE, MLIntegrationTestConstants.CONTENT_TYPE_APPLICATION_JSON);
+            delete.setHeader(MLIntegrationTestConstants.CONTENT_TYPE, 
+                    MLIntegrationTestConstants.CONTENT_TYPE_APPLICATION_JSON);
             delete.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
             return httpClient.execute(delete);
         } catch (ClientProtocolException e) {
@@ -240,7 +241,8 @@ public class MLHttpClient {
             httpPost.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
 
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-            multipartEntityBuilder.addPart("description", new StringBody("Sample dataset for Testing", ContentType.TEXT_PLAIN));
+            multipartEntityBuilder.addPart("description", new StringBody("Sample dataset for Testing", 
+                        ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("sourceType", new StringBody("file", ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("destination", new StringBody("file", ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
@@ -254,7 +256,8 @@ public class MLHttpClient {
             }
             if (resourcePath != null) {
                 File file = new File(getResourceAbsolutePath(resourcePath));
-                multipartEntityBuilder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, "IndiansDiabetes.csv");
+                multipartEntityBuilder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, 
+                        "IndiansDiabetes.csv");
             }
             httpPost.setEntity(multipartEntityBuilder.build());
             return httpClient.execute(httpPost);
@@ -278,21 +281,21 @@ public class MLHttpClient {
         try {
             HttpPost httpPost = new HttpPost(getServerUrlHttps() + "/api/datasets/");
             httpPost.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
-
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-            multipartEntityBuilder.addPart("description", new StringBody("Sample dataset for Testing", ContentType.TEXT_PLAIN));
+            multipartEntityBuilder.addPart("description", new StringBody("Sample dataset for Testing", 
+                    ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("sourceType", new StringBody("das", ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("destination", new StringBody("file", ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("sourcePath", new StringBody(tableName, ContentType.TEXT_PLAIN));
-
             if (datasetName != null) {
                 multipartEntityBuilder.addPart("datasetName", new StringBody(datasetName, ContentType.TEXT_PLAIN));
             }
             if (version != null) {
                 multipartEntityBuilder.addPart("version", new StringBody(version, ContentType.TEXT_PLAIN));
             }
-                multipartEntityBuilder.addBinaryBody("file", new byte[]{}, ContentType.APPLICATION_OCTET_STREAM, "IndiansDiabetes.csv");
+            multipartEntityBuilder.addBinaryBody("file", new byte[]{}, ContentType.APPLICATION_OCTET_STREAM, 
+                    "IndiansDiabetes.csv");
             httpPost.setEntity(multipartEntityBuilder.build());
             return httpClient.execute(httpPost);
         } catch (Exception e) {
@@ -308,11 +311,9 @@ public class MLHttpClient {
         try {
             HttpPost httpPost = new HttpPost(getServerUrlHttps() + "/api/models/predict");
             httpPost.setHeader(MLIntegrationTestConstants.AUTHORIZATION_HEADER, getBasicAuthKey());
-
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
             multipartEntityBuilder.addPart("modelId", new StringBody(modelId + "", ContentType.TEXT_PLAIN));
             multipartEntityBuilder.addPart("dataFormat", new StringBody("CSV", ContentType.TEXT_PLAIN));
-
             if (resourcePath != null) {
                 File file = new File(getResourceAbsolutePath(resourcePath));
                 multipartEntityBuilder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM,
@@ -369,7 +370,8 @@ public class MLHttpClient {
             }
             return doHttpPost("/api/analyses", payload);
         } catch (MLHttpClientException e) {
-            throw new MLHttpClientException("Failed to create analysis: " + AnalysisName + " in project: " + ProjectId, e);
+            throw new MLHttpClientException("Failed to create analysis: " + AnalysisName + " in project: " +
+                    ProjectId, e);
         }
     }
 
@@ -425,14 +427,14 @@ public class MLHttpClient {
      * @throws JSONException
      * @throws IOException
      */
-    public boolean checkDatasetStatus(int versionSetId, long timeout, int frequency) throws MLHttpClientException, IOException {
+    public boolean checkDatasetStatus(int versionSetId, long timeout, int frequency) throws MLHttpClientException, 
+            IOException {
         boolean status = false;
         int totalTime = 0;
         while (!status && timeout >= totalTime) {
             CloseableHttpResponse response = doHttpGet("/api/datasets/versions/" + versionSetId + "/sample");
             int statusCode = response.getStatusLine().getStatusCode();
             response.close();
-
             // Checks whether status is not 404
             status = statusCode != HttpStatus.SC_NOT_FOUND;
             try {
@@ -453,7 +455,8 @@ public class MLHttpClient {
      * @return              Response from the back-end
      * @throws              MLHttpClientException 
      */
-    public CloseableHttpResponse setFeatureCustomized(int analysisId, String customizedFeatures) throws MLHttpClientException {
+    public CloseableHttpResponse setFeatureCustomized(int analysisId, String customizedFeatures) throws 
+            MLHttpClientException {
         try {
             return doHttpPost("/api/analyses/" + analysisId + "/features", customizedFeatures);
         } catch (MLHttpClientException e) {
@@ -494,7 +497,8 @@ public class MLHttpClient {
         CloseableHttpResponse response;
         try {
             response = doHttpGet("/api/projects/" + projectName);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+                    StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -515,7 +519,8 @@ public class MLHttpClient {
         CloseableHttpResponse response;
         try {
             response = doHttpGet("/api/projects/"+projectId+"/analyses/" + analysisName);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+                    StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -538,7 +543,8 @@ public class MLHttpClient {
         try {
             response = doHttpGet("/api/datasets/" + datasetId + "/versions");
             // Get the Id of the first dataset
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+                    StandardCharsets.UTF_8));
             JSONArray responseJson = new JSONArray(bufferedReader.readLine());
             JSONObject datsetVersionJson = (JSONObject) responseJson.get(0);
             bufferedReader.close();
@@ -561,7 +567,8 @@ public class MLHttpClient {
         CloseableHttpResponse response;
         try {
             response = doHttpGet("/api/datasets/" + datasetId + "/versions/"+version);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+                    StandardCharsets.UTF_8));
             String line = bufferedReader.readLine();
             JSONObject responseJson = new JSONObject(line);
             bufferedReader.close();
@@ -602,7 +609,8 @@ public class MLHttpClient {
         }
         String reply = null;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+                    StandardCharsets.UTF_8));
             String line = bufferedReader.readLine();
             try {
                 JSONObject responseJson = new JSONObject(line);
@@ -629,7 +637,8 @@ public class MLHttpClient {
             return null;
         }
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+                    StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -650,7 +659,8 @@ public class MLHttpClient {
         CloseableHttpResponse response;
         try {
             response = doHttpGet("/api/models/" + modelName);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+                    StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();
@@ -696,7 +706,8 @@ public class MLHttpClient {
      */
     public String getModelName(CloseableHttpResponse response) throws MLHttpClientException {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+                    StandardCharsets.UTF_8));
             JSONObject responseJson = new JSONObject(bufferedReader.readLine());
             bufferedReader.close();
             response.close();

@@ -1,0 +1,42 @@
+{
+  "name": "STREAMING_DATA",
+  "version": "1.0.0",
+  "nickName": "",
+  "description": "",
+  "metaData": [
+    {
+      "name": "type",
+      "type": "STRING"
+    }
+  ],
+  "payloadData": [
+    {
+      "name": "id",
+      "type": "INT"
+    },
+    {
+      "name": "timeStamp",
+      "type": "LONG"
+    },
+    {
+      "name": "value",
+      "type": "FLOAT"
+    },
+    {
+      "name": "property",
+      "type": "STRING"
+    },
+    {
+      "name": "householdId",
+      "type": "INT"
+    },
+    {
+      "name": "plugId",
+      "type": "INT"
+    },
+    {
+      "name": "houseId",
+      "type": "INT"
+    }
+  ]
+}
