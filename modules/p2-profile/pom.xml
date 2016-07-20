@@ -77,7 +77,7 @@
                                 </featureArtifactDef>
                                 <!--Start Remote User Management Client features -->
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.um.ws.service.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity:org.wso2.carbon.um.ws.service.feature:${carbon.identity.um.version}
                                 </featureArtifactDef>
                                 <!--End Remote User Management Client features -->
                                 <featureArtifactDef>
@@ -249,7 +249,7 @@
                                 <!--Start Remote User Management Client features -->
                                 <feature>
                                     <id>org.wso2.carbon.um.ws.service.feature.group</id>
-                                    <version>${carbon.identity.version}</version>
+                                    <version>${carbon.identity.um.version}</version>
                                 </feature>
 
                                 <!--End Remote User Management Client features -->
