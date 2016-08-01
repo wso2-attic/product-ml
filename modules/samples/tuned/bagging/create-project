@@ -1,0 +1,6 @@
+{
+"name" : "wso2-ml-bagging-tuned-sample-project",
+"description" : "This project tests ml workflow for bagging with tuned hyper-parameters",
+"datasetName" : "breastCancerWisconsin-bagging-dataset"
+}
+

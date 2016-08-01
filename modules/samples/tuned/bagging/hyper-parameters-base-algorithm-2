@@ -1,0 +1,10 @@
+[
+{
+"key":"algorithmName",
+"value":"NAIVE_BAYES"
+},
+{
+"key":"Lambda",
+"value":"1"
+}
+]
