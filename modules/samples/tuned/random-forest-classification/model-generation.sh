@@ -26,6 +26,7 @@ sleep 2
 #getting the project
 echo "#getting the project"
 project=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/wso2-ml-random-forest-classification-tuned-sample-project -k)
+echo "$project" > "/tmp/projectoutput.txt"
 sleep 2
 
 #update the json file with retrieved values
@@ -42,6 +43,7 @@ sleep 2
 #getting analysis id
 echo "getting analysis id"
 analysis=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/projects/${projectId}/analyses/wso2-ml-random-forest-classification-tuned-sample-analysis -k)
+echo "$analysis" > "/tmp/analysisoutput.txt"
 sleep 2
 
 analysisId=$(echo "$analysis"|jq '.id')
@@ -80,11 +82,14 @@ fi
 for i in `seq $modelCount`; do
 	echo "#create model"
 	model=$(curl -X POST -d @'create-model' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models -k)
+	echo "$model" > "/tmp/modeloutput.txt"
 	sleep 2
 
 	echo "#getting model"
 	modelName=$(echo "$model"|jq -r '.name')
+	echo "$modelName" > "/tmp/modelnameoutput.txt"
 	model=$(curl -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/models/${modelName} -k)
+    echo "$model" > "/tmp/model2output.txt"
 	sleep 2
 	modelId=$(echo "$model"|jq '.id')
 

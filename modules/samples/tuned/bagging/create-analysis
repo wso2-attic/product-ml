@@ -1,5 +1,5 @@
 {
 "name" : "wso2-ml-bagging-tuned-sample-analysis",
 "comments" : "Bagging Model for Breast Cancer Wisconsin",
-"projectId":"2"
+"projectId":"1"
 }
