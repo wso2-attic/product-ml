@@ -57,10 +57,10 @@ sleep 2
 
 echo "#setting tuned hyper params"
 curl -X POST -d @'hyper-parameters' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=STACKING -k -v
-curl -X POST -d @'hyper-parameters-base-algorithm-0' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=Name_of_Base_Algorithm_0 -k -v
-curl -X POST -d @'hyper-parameters-base-algorithm-1' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=Name_of_Base_Algorithm_1 -k -v
-curl -X POST -d @'hyper-parameters-base-algorithm-2' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=Name_of_Base_Algorithm_2 -k -v
-curl -X POST -d @'hyper-parameters-meta-algorithm' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=Name_of_Meta_Algorithm -k -v
+curl -X POST -d @'hyper-parameters-base-algorithm-0' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=Base_Algorithm_Name_0 -k -v
+curl -X POST -d @'hyper-parameters-base-algorithm-1' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=Base_Algorithm_Name_1 -k -v
+#curl -X POST -d @'hyper-parameters-base-algorithm-2' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=Base_Algorithm_Name_2 -k -v
+curl -X POST -d @'hyper-parameters-meta-algorithm' -H "Content-Type: application/json" -H "Authorization: Basic YWRtaW46YWRtaW4=" -v https://$SEVER_IP:9443/api/analyses/${analysisId}/hyperParams?algorithmName=Meta_Algorithm_Name -k -v
 
 sleep 2
 
