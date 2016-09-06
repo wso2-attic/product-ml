@@ -355,5 +355,10 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
             <fileMode>644</fileMode>
         </file>
+        <file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/bundle-config/com.typesafe.config/reference.conf</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/bundle-config/com.typesafe.config/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
     </files>
 </assembly>
