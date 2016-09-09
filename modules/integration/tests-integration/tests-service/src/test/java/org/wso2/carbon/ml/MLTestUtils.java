@@ -268,6 +268,7 @@ public class MLTestUtils extends MLBaseTest {
         CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, versionSetId);
         modelName = mlHttpclient.getModelName(httpResponse);
         modelId = mlHttpclient.getModelId(modelName);
+        httpResponse.close();
 
         return modelName;
     }
@@ -307,6 +308,7 @@ public class MLTestUtils extends MLBaseTest {
 
         modelName = mlHttpclient.getModelName(httpResponse);
         modelId = mlHttpclient.getModelId(modelName);
+        httpResponse.close();
 
         return modelName;
     }
@@ -340,6 +342,7 @@ public class MLTestUtils extends MLBaseTest {
         CloseableHttpResponse httpResponse = mlHttpclient.createModel(analysisId, versionSetId);
         modelName = mlHttpclient.getModelName(httpResponse);
         modelId = mlHttpclient.getModelId(modelName);
+        httpResponse.close();
 
         return modelName;
     }
