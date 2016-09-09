@@ -128,20 +128,6 @@
             </includes>
         </fileSet>
 
-	<fileSet>
-            <directory>
-                ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/spark/
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/spark</outputDirectory>
-            <includes>
-                <include>**/**</include>
-            </includes>
-	    <excludes>
-		<exclude>**/spark-defaults.conf</exclude>
-	    </excludes>
-
-        </fileSet>
-
         <fileSet>
             <directory>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity
             </directory>
@@ -158,16 +144,16 @@
                 <include>**/**</include>
             </includes>
         </fileSet>
-	<fileSet>
+        <fileSet>
             <directory>
-            	../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/metrics/
+                ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/metrics/
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/metrics</outputDirectory>
             <includes>
-            	<include>**/*.sql</include>
+                <include>**/*.sql</include>
             </includes>
-    	</fileSet>
-	<fileSet>
+        </fileSet>
+        <fileSet>
             <directory>
                 ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/ml/
             </directory>
@@ -185,8 +171,8 @@
                 <include>**/*.*</include>
             </includes>
         </fileSet>
-
-        <!--copying samples-->
+    
+        <!--copying samples -->
         <fileSet>
             <directory>../../modules/samples</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/samples</outputDirectory>
@@ -254,7 +240,7 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
             <fileMode>644</fileMode>
         </file>
-	<file>
+	   <file>
             <source>
                 ../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/machine-learner.xml
             </source>
@@ -277,7 +263,7 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/datasources/</outputDirectory>
             <fileMode>644</fileMode>
         </file-->
-	<file>
+        <file>
             <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/datasources/ml-datasources.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/datasources/</outputDirectory>
         </file>
@@ -307,25 +293,18 @@
             <filtered>true</filtered>
         </file>
         <file>
-            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/spark-config.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/</outputDirectory>
-        </file>
-        <file>
             <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/h2o-config.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/</outputDirectory>
         </file>
-	<file>
-            <source>src/main/conf/spark/spark-defaults.conf</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/spark/</outputDirectory>
-        </file>
-	<file>
+	   <file>
             <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2ML_DB.h2.db</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/database/</outputDirectory>
             <fileMode>644</fileMode>
         </file>
-	<file>
-            <source>src/main/conf/etc/ml-email-templates.xml</source>
+        <file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/ml-email-templates.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/email/</outputDirectory>
+            <fileMode>644</fileMode>
         </file>
         <file>
             <source>
@@ -336,7 +315,7 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-	<file>
+	   <file>
             <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/metrics.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <filtered>false</filtered>
@@ -364,6 +343,21 @@
         <file>
             <source>src/main/conf/README</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/multitenancy-packages.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/multitenancy/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/identity.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/bundle-config/com.typesafe.config/reference.conf</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/bundle-config/com.typesafe.config/</outputDirectory>
             <fileMode>644</fileMode>
         </file>
     </files>

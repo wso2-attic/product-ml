@@ -111,19 +111,6 @@ public class CreateDatasetTestCase extends MLBaseTest {
         response.close();
     }
 
-    /**
-     * Test creating a dataset from a non-existing csv file.
-     * 
-     * @throws MLHttpClientException
-     * @throws IOException
-     */
-    /*
-     * @Test(description = "Create a dataset from a non-existing CSV file") public void
-     * testCreateDatasetFromNonExistingFile() throws MLHttpClientException, IOException { CloseableHttpResponse response
-     * = mlHttpclient.uploadDatasetFromCSV(MLIntegrationTestConstants.DATASET_NAME_DIABETES, "1.0", "data/xxx.csv");
-     * assertEquals("Unexpected response recieved", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response
-     * .getStatusLine().getStatusCode()); response.close(); }
-     */
 
     /**
      * Test creating a dataset without name.
