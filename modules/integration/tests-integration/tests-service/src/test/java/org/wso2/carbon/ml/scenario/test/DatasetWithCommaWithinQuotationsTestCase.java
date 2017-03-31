@@ -34,6 +34,8 @@ import org.wso2.carbon.ml.integration.common.utils.exception.MLIntegrationBaseTe
 import javax.ws.rs.core.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -80,6 +82,9 @@ public class DatasetWithCommaWithinQuotationsTestCase extends MLBaseTest {
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_TITANIC, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 projectId, versionSetId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
+        addModelId(modelId);
+        String analysisName = algorithmName + versionSetId;
+        addAnalysisId(mlHttpclient.getAnalysisId(projectId, analysisName));
         response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());
