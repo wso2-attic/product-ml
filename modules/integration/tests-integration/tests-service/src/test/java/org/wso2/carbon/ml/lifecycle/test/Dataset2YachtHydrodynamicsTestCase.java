@@ -93,7 +93,10 @@ public class Dataset2YachtHydrodynamicsTestCase extends MLBaseTest {
         modelName = MLTestUtils.createModelWithConfigurations(algorithmName, algorithmType,
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_YACHT, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 projectId, versionSetId, mlHttpclient);
+        String analysisName = algorithmName + versionSetId;
+        addAnalysisId(mlHttpclient.getAnalysisId(projectId, analysisName));
         modelId = mlHttpclient.getModelId(modelName);
+        addModelId(modelId);
         response = mlHttpclient.doHttpPost("/api/models/" + modelId);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());

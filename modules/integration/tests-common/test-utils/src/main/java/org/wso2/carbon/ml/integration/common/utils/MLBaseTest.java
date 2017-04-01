@@ -386,6 +386,12 @@ public abstract class MLBaseTest {
                 response.getStatusLine().getStatusCode());
         response.close();
     }
-    
-    
+
+    public void addModelId(int modelId) {
+        modelIds.add(modelId);
+    }
+
+    public void addAnalysisId(int analysisId) {
+        analysisIds.add(analysisId);
+    }
 }

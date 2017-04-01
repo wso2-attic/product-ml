@@ -101,6 +101,7 @@ public class FailingModelTestCase extends MLBaseTest {
                 MLIntegrationTestConstants.RESPONSE_ATTRIBUTE_DIABETES, MLIntegrationTestConstants.TRAIN_DATA_FRACTION,
                 projectId, versionSetId, analysisId, mlHttpclient);
         modelId = mlHttpclient.getModelId(modelName);
+        addModelId(modelId);
         CloseableHttpResponse response = mlHttpclient.doHttpPost("/api/models/" + modelId, null);
         assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
                 .getStatusCode());

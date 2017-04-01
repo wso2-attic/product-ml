@@ -60,11 +60,8 @@ public class CreateAnalysesTestCase extends MLBaseTest {
      */
     @Test(priority=1, description = "Create an analysis")
     public void testCreateAnalysis() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient.createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
+        createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME,
                 mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(), response.getStatusLine()
-                .getStatusCode());
-        response.close();
     }
 
     /**
@@ -75,12 +72,8 @@ public class CreateAnalysesTestCase extends MLBaseTest {
      */
     @Test(priority = 1, description = "Create an analysis with CORS")
     public void testCreateAnalysisCrossOrigin() throws MLHttpClientException, IOException {
-        CloseableHttpResponse response = mlHttpclient
-                .createAnalysisCrossOrigin(MLIntegrationTestConstants.ANALYSIS_NAME_2,
-                        mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
-        assertEquals("Unexpected response received", Response.Status.OK.getStatusCode(),
-                response.getStatusLine().getStatusCode());
-        response.close();
+        createAnalysis(MLIntegrationTestConstants.ANALYSIS_NAME_2,
+                mlHttpclient.getProjectId(MLIntegrationTestConstants.PROJECT_NAME_DIABETES));
     }
     
     /**
