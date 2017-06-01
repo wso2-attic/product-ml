@@ -18,13 +18,11 @@
 
 WSO2 Machine Learner (ML)
 ================================================================================
-
 ---
 
-|  Branch | Build Status |
-| :------------ |:-------------
-| master      | [![Build Status](https://wso2.org/jenkins/job/product-ml/badge/icon)](https://wso2.org/jenkins/job/product-ml) |
+## Note
 
+We have discontinued WSO2 Machine Learner Product and as a result this repository has been deprecated. We still support machine learning model integration with WSO2 Data Analytics Server (https://github.com/wso2/product-das).
 
 ---
 
